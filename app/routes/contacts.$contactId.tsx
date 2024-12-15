@@ -1,27 +1,27 @@
-import type { FunctionComponent } from "react";
-import { json } from "@remix-run/node";
-import { Form, useFetcher, useLoaderData } from "@remix-run/react";
-import { getContact, updateContact } from "../data";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import invariant from "tiny-invariant";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { FunctionComponent } from 'react';
+import { json } from '@remix-run/node';
+import { Form, useFetcher, useLoaderData } from '@remix-run/react';
+import invariant from 'tiny-invariant';
+import { getContact, updateContact } from '~/data';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  invariant(params.contactId, "Missing contactId param");
+  invariant(params.contactId, 'Missing contactId param');
   const contact = await getContact(params.contactId);
+
   if (!contact) {
-    throw new Response("Not Found", { status: 404 });
+    throw new Response('Not Found', { status: 404 });
   }
+
   return json({ contact });
 };
 
-export const action = async ({
-  params,
-  request,
-}: ActionFunctionArgs) => {
-  invariant(params.contactId, "Missing contactId param");
+export const action = async ({ params, request }: ActionFunctionArgs) => {
+  invariant(params.contactId, 'Missing contactId param');
   const formData = await request.formData();
+
   return updateContact(params.contactId, {
-    favorite: formData.get("favorite") === "true",
+    favorite: formData.get('favorite') === 'true',
   });
 };
 
@@ -31,11 +31,7 @@ export default function Contact() {
   return (
     <div id="contact">
       <div>
-        <img
-          alt={`${contact.first} ${contact.last} avatar`}
-          key={contact.avatar}
-          src={contact.avatar}
-        />
+        <img key={contact.avatar} alt={`${contact.first} ${contact.last} avatar`} src={contact.avatar} />
       </div>
 
       <div>
@@ -52,9 +48,7 @@ export default function Contact() {
 
         {contact.twitter ? (
           <p>
-            <a href={`https://twitter.com/${contact.twitter}`}>
-              {contact.twitter}
-            </a>
+            <a href={`https://twitter.com/${contact.twitter}`}>{contact.twitter}</a>
           </p>
         ) : null}
 
@@ -69,9 +63,8 @@ export default function Contact() {
             action="destroy"
             method="post"
             onSubmit={(event) => {
-              const response = confirm(
-                "Please confirm you want to delete this record."
-              );
+              const response = confirm('Please confirm you want to delete this record.');
+
               if (!response) {
                 event.preventDefault();
               }
@@ -89,18 +82,16 @@ const Favorite: FunctionComponent<{
   contact: Record<string, unknown>;
 }> = ({ contact }) => {
   const fetcher = useFetcher();
-  const favorite = fetcher.formData
-  ? fetcher.formData.get("favorite") === "true"
-  : contact.favorite;
+  const favorite = fetcher.formData ? fetcher.formData.get('favorite') === 'true' : contact.favorite;
 
   return (
     <fetcher.Form method="post">
       <button
-        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+        aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
         name="favorite"
-        value={favorite ? "false" : "true"}
+        value={favorite ? 'false' : 'true'}
       >
-        {favorite ? "★" : "☆"}
+        {favorite ? '★' : '☆'}
       </button>
     </fetcher.Form>
   );

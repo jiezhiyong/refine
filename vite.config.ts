@@ -1,15 +1,15 @@
-import { vitePlugin as remix } from "@remix-run/dev";
-import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
-import react from '@vitejs/plugin-react'
+import { vitePlugin as remix } from '@remix-run/dev';
+import { defineConfig, mergeConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig as defineVitestConfig } from 'vitest/config';
 
-declare module "@remix-run/node" {
+declare module '@remix-run/node' {
   interface Future {
     v3_singleFetch: true;
   }
 }
 
-export default defineConfig({
+const viteConfig = defineConfig({
   plugins: [
     remix({
       future: {
@@ -20,8 +20,21 @@ export default defineConfig({
         v3_lazyRouteDiscovery: true,
       },
     }),
-    react(),
     tsconfigPaths(),
   ],
 });
 
+const vitestConfig = defineVitestConfig({
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./test/setup.ts'],
+    include: ['./app/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+    },
+  },
+});
+
+export default mergeConfig(viteConfig, vitestConfig);

@@ -1,2 +1,34 @@
-**/node_modules
-**/pnpm-lock.yaml
+# 依赖相关
+node_modules
+pnpm-lock.yaml
+
+# 构建输出
+build
+dist
+.cache
+
+# 其他生成的文件
+coverage
+.env
+.env.*
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 编辑器和系统文件
+.DS_Store
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Remix 特定文件
+/public/build
+.cache

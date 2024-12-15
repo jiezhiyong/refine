@@ -1,11 +1,14 @@
-import { Button } from '@nextui-org/button';
+import { Button } from '~/components/ui/button';
 
 export default function Index() {
   return (
-    <p id="index-page">
-      This is a demo for Remix.
-      <br />
-      Check out <a href="https://remix.run">the docs at remix.run</a>.<Button>Press me</Button>
-    </p>
+    <>
+      <p id="index-page">
+        This is a demo for Remix.
+        <br />
+        Check out <a href="https://remix.run">the docs at remix.run</a>.
+      </p>
+      <Button>Press me</Button>
+    </>
   );
 }

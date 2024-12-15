@@ -1,3 +1,4 @@
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import {
   Form,
   json,
@@ -11,38 +12,25 @@ import {
   useLoaderData,
   useNavigation,
   useSubmit,
-} from "@remix-run/react";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import {NextUIProvider} from "@nextui-org/react";
+} from '@remix-run/react';
+import './tailwind.css';
+import { useEffect } from 'react';
+import appStylesHref from './app.css?url';
+import { createEmptyContact, getContacts } from './data';
 
-import "./tailwind.css";
-import appStylesHref from "./app.css?url";
-import { useEffect } from "react";
-import { createEmptyContact, getContacts } from "./data";
-
-export const links: LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-  { rel: "stylesheet", href: appStylesHref },
-];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: appStylesHref }];
 
 export const action = async () => {
   const contact = await createEmptyContact();
+
   return redirect(`/contacts/${contact.id}/edit`);
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
-  const q = url.searchParams.get("q");
+  const q = url.searchParams.get('q');
   const contacts = await getContacts(q);
+
   return json({ contacts, q });
 };
 
@@ -50,14 +38,13 @@ export default function App() {
   const { contacts, q } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const submit = useSubmit();
-  const searching =
-    navigation.location &&
-    new URLSearchParams(navigation.location.search).has("q");
+  const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
 
   useEffect(() => {
-    const searchField = document.getElementById("q");
+    const searchField = document.getElementById('q');
+
     if (searchField instanceof HTMLInputElement) {
-      searchField.value = q || "";
+      searchField.value = q || '';
     }
   }, [q]);
 
@@ -65,82 +52,74 @@ export default function App() {
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
         <Meta />
         <Links />
       </head>
-      <body>
-        <NextUIProvider className="flex size-full">
-          <div id="sidebar">
-            <h1>Remix Contacts</h1>
-            <div>
-              <Form
-                id="search-form"
-                role="search"
-                onChange={(event) => {
-                  const isFirstSearch = q === null;
-                  submit(event.currentTarget, {
-                    replace: !isFirstSearch,
-                  });
-                }}
-              >
-                <input
-                  className={searching ? "loading" : ""}
-                  id="q"
-                  defaultValue={q || ""}
-                  aria-label="Search contacts"
-                  placeholder="Search"
-                  type="search"
-                  name="q"
-                />
-                <div id="search-spinner" hidden={!searching} aria-hidden />
-              </Form>
-              <Form method="post">
-                <button type="submit">New</button>
-              </Form>
-            </div>
-            <nav>
-              {contacts.length ? (
-                <ul>
-                  {contacts.map((contact) => (
-                    <li key={contact.id}>
-                      <NavLink
-                        className={({ isActive, isPending }) =>
-                          isActive ? "active" : isPending ? "pending" : ""
-                        }
-                        to={`contacts/${contact.id}`}
-                      >
-                        {contact.first || contact.last ? (
-                          <>
-                            {contact.first} {contact.last}
-                          </>
-                        ) : (
-                          <i>No Name</i>
-                        )}
-                        {contact.favorite ? <span>★</span> : null}
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>
-                  <i>No contacts</i>
-                </p>
-              )}
-            </nav>
-          </div>
+      <body className={`bg-background text-foreground`}>
+        <div id="sidebar">
+          <h1>Remix Contacts</h1>
+          <div>
+            <Form
+              id="search-form"
+              role="search"
+              onChange={(event) => {
+                const isFirstSearch = q === null;
 
-          <div
-            id="detail"
-            className={
-              navigation.state === "loading" && !searching ? "loading" : ""
-            }
-          >
-            <Outlet />
+                submit(event.currentTarget, {
+                  replace: !isFirstSearch,
+                });
+              }}
+            >
+              <input
+                aria-label="Search contacts"
+                className={searching ? 'loading' : ''}
+                defaultValue={q || ''}
+                id="q"
+                name="q"
+                placeholder="Search"
+                type="search"
+              />
+              <div aria-hidden hidden={!searching} id="search-spinner" />
+            </Form>
+            <Form method="post">
+              <button type="submit">New</button>
+            </Form>
           </div>
-          <ScrollRestoration />
-          <Scripts />
-        </NextUIProvider>
+          <nav>
+            {contacts.length ? (
+              <ul>
+                {contacts.map((contact) => (
+                  <li key={contact.id}>
+                    <NavLink
+                      className={({ isActive, isPending }) => (isActive ? 'active' : isPending ? 'pending' : '')}
+                      to={`contacts/${contact.id}`}
+                    >
+                      {contact.first || contact.last ? (
+                        <>
+                          {contact.first} {contact.last}
+                        </>
+                      ) : (
+                        <i>No Name</i>
+                      )}
+                      {contact.favorite ? <span>★</span> : null}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                <i>No contacts</i>
+              </p>
+            )}
+          </nav>
+        </div>
+
+        <div className={navigation.state === 'loading' && !searching ? 'loading' : ''} id="detail">
+          <Outlet />
+        </div>
+        <ScrollRestoration />
+        <Scripts />
       </body>
     </html>
   );
