@@ -13,6 +13,7 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import {NextUIProvider} from "@nextui-org/react";
 
 import "./tailwind.css";
 import appStylesHref from "./app.css?url";
@@ -69,76 +70,77 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <div id="sidebar">
-          <h1>Remix Contacts</h1>
-          <div>
-            <Form
-              id="search-form"
-              role="search"
-              onChange={(event) => {
-                const isFirstSearch = q === null;
-                submit(event.currentTarget, {
-                  replace: !isFirstSearch,
-                });
-              }}
-            >
-              <input
-                className={searching ? "loading" : ""}
-                id="q"
-                defaultValue={q || ""}
-                aria-label="Search contacts"
-                placeholder="Search"
-                type="search"
-                name="q"
-              />
-              <div id="search-spinner" hidden={!searching} aria-hidden />
-            </Form>
-            <Form method="post">
-              <button type="submit">New</button>
-            </Form>
+        <NextUIProvider className="flex size-full">
+          <div id="sidebar">
+            <h1>Remix Contacts</h1>
+            <div>
+              <Form
+                id="search-form"
+                role="search"
+                onChange={(event) => {
+                  const isFirstSearch = q === null;
+                  submit(event.currentTarget, {
+                    replace: !isFirstSearch,
+                  });
+                }}
+              >
+                <input
+                  className={searching ? "loading" : ""}
+                  id="q"
+                  defaultValue={q || ""}
+                  aria-label="Search contacts"
+                  placeholder="Search"
+                  type="search"
+                  name="q"
+                />
+                <div id="search-spinner" hidden={!searching} aria-hidden />
+              </Form>
+              <Form method="post">
+                <button type="submit">New</button>
+              </Form>
+            </div>
+            <nav>
+              {contacts.length ? (
+                <ul>
+                  {contacts.map((contact) => (
+                    <li key={contact.id}>
+                      <NavLink
+                        className={({ isActive, isPending }) =>
+                          isActive ? "active" : isPending ? "pending" : ""
+                        }
+                        to={`contacts/${contact.id}`}
+                      >
+                        {contact.first || contact.last ? (
+                          <>
+                            {contact.first} {contact.last}
+                          </>
+                        ) : (
+                          <i>No Name</i>
+                        )}
+                        {contact.favorite ? <span>★</span> : null}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>
+                  <i>No contacts</i>
+                </p>
+              )}
+            </nav>
           </div>
-          <nav>
-            {contacts.length ? (
-              <ul>
-                {contacts.map((contact) => (
-                  <li key={contact.id}>
-                    <NavLink
-                      className={({ isActive, isPending }) =>
-                        isActive ? "active" : isPending ? "pending" : ""
-                      }
-                      to={`contacts/${contact.id}`}
-                    >
-                      {contact.first || contact.last ? (
-                        <>
-                          {contact.first} {contact.last}
-                        </>
-                      ) : (
-                        <i>No Name</i>
-                      )}
-                      {contact.favorite ? <span>★</span> : null}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>
-                <i>No contacts</i>
-              </p>
-            )}
-          </nav>
-        </div>
 
-        <div
-          id="detail"
-          className={
-            navigation.state === "loading" && !searching ? "loading" : ""
-          }
-        >
-          <Outlet />
-        </div>
-
-        <ScrollRestoration />
-        <Scripts />
+          <div
+            id="detail"
+            className={
+              navigation.state === "loading" && !searching ? "loading" : ""
+            }
+          >
+            <Outlet />
+          </div>
+          <ScrollRestoration />
+          <Scripts />
+        </NextUIProvider>
       </body>
     </html>
   );
