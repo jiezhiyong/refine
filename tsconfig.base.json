@@ -16,8 +16,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"],
-      "@shadcn-ui/*": ["./app/components/ui/*"]
+      "~/*": ["./app/*"]
     }
   },
   "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],

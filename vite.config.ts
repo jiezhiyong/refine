@@ -3,15 +3,16 @@ import { defineConfig, mergeConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig as defineVitestConfig } from 'vitest/config';
 
-declare module '@remix-run/node' {
-  interface Future {
-    v3_singleFetch: true;
-  }
-}
+// declare module '@remix-run/node' {
+//   interface Future {
+//     v3_singleFetch: true;
+//   }
+// }
 
 const viteConfig = defineConfig({
   plugins: [
     remix({
+      basename: '/',
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
@@ -19,6 +20,12 @@ const viteConfig = defineConfig({
         v3_singleFetch: true,
         v3_lazyRouteDiscovery: true,
       },
+      ignoredRouteFiles: ['**/*.css'],
+      routes: undefined,
+      buildDirectory: 'build',
+      serverBuildFile: 'index.js',
+      manifest: true,
+      ssr: true,
     }),
     tsconfigPaths(),
   ],

@@ -76,6 +76,7 @@ module.exports = {
         checksVoidReturn: false,
       },
     ],
+    '@typescript-eslint/only-throw-error': 'off',
 
     // React
     'react/prop-types': 'off',

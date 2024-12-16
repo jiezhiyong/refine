@@ -1,11 +1,15 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { Form, useLoaderData, useNavigate } from '@remix-run/react';
+import { Form, useFetcher, useLoaderData, useNavigate, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
+import { Button } from '~/components-shadcn/Button';
 import { getContact, updateContact } from '~/data';
+import { prisma } from '~/.server/db';
 
+/** 操作器 */
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   invariant(params.contactId, 'Missing contactId param');
+
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
 
@@ -14,20 +18,25 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   return redirect(`/contacts/${params.contactId}`);
 };
 
+/** 加载器 */
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  invariant(params.contactId, 'Missing contactId param');
-  const contact = await getContact(params.contactId);
+  const { contact } = params;
+
+  invariant(contactId, 'Missing contactId param');
+  const user = await prisma.user.findOne({ where: { id: contactId } });
 
   if (!contact) {
     throw new Response('Not Found', { status: 404 });
   }
 
-  return json({ contact });
+  return json({ user });
 };
 
 export default function EditContact() {
+  const navigation = useNavigation();
   const { contact } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  const isSubmitting = navigation.state === 'submitting';
 
   return (
     <Form key={contact.id} id="contact-form" method="post">
@@ -55,10 +64,12 @@ export default function EditContact() {
         <textarea defaultValue={contact.notes} name="notes" rows={6} />
       </label>
       <p>
-        <button type="submit">Save</button>
-        <button type="button" onClick={() => navigate(-1)}>
+        <Button disabled={isSubmitting} type="submit">
+          Save
+        </Button>
+        <Button type="button" onClick={() => navigate(-1)}>
           Cancel
-        </button>
+        </Button>
       </p>
     </Form>
   );
