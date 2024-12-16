@@ -1,5 +1,11 @@
-import type { HeadersFunction, LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import type { MetaFunction } from '@remix-run/react';
+import type {
+  ActionFunction,
+  HeadersFunction,
+  LinksFunction,
+  LoaderFunction,
+  LoaderFunctionArgs,
+} from '@remix-run/node';
+import type { MetaFunction, ShouldRevalidateFunction, ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import type { ErrorResponse } from 'react-router-dom';
 import {
   json,
@@ -25,7 +31,7 @@ import appStylesHref from './app.css?url';
 import { createEmptyContact } from './data';
 
 /** 元数据 */
-export const meta: MetaFunction = (_metaArgs) => {
+export const meta: MetaFunction = () => {
   return [
     { title: 'Very cool app | Remix' },
     { property: 'og:title', content: 'Very cool app' },
@@ -40,19 +46,19 @@ export const links: LinksFunction = () => [
 ];
 
 /** 自定义 HTTP 标头 */
-export const headers: HeadersFunction = (_headersArgs) => ({
+export const headers: HeadersFunction = () => ({
   'X-Powered-By': 'Hugs',
 });
 
 /** 操作器 */
-export const action = async () => {
+export const action: ActionFunction = async () => {
   const contact = await createEmptyContact();
 
   return redirect(`/contacts/${contact.id}/edit`);
 };
 
 /** 加载器 */
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const cookie = request.headers.get('Cookie');
 
   if (!cookie) {
@@ -62,9 +68,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const query = url.searchParams.get('query');
 
-  const users = await prisma.user.findMany();
+  const USER = await prisma.user.findMany();
 
-  return json(users);
+  return json({
+    USER,
+    ENV: {
+      CLOUDINARY_ACCT: process.env.CLOUDINARY_ACCT,
+      STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+    },
+  });
 };
 
 /** 根组件 */
@@ -98,15 +110,15 @@ export function Layout({ children: children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <Scripts />
         <ScrollRestoration />
+        <Scripts crossOrigin="anonymous" />
         <LiveReload />
       </body>
     </html>
   );
 }
 
-/** 回退 */
+/** 回退处理 */
 export function HydrateFallback() {
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -141,6 +153,11 @@ export function ErrorBoundary() {
   }
 
   return <h1>Unknown Error</h1>;
+}
+
+/** 重新验证处理 */
+export function shouldRevalidate({ defaultShouldRevalidate }: ShouldRevalidateFunctionArgs) {
+  return defaultShouldRevalidate;
 }
 
 // export default function App() {

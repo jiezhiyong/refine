@@ -1,13 +1,15 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import type { FunctionComponent } from 'react';
 import { json, defer } from '@remix-run/node';
-import { Form, useFetcher, useLoaderData, Await, useAsyncValue } from '@remix-run/react';
+import { Form, useFetcher, useLoaderData, Await, useAsyncValue, useAsyncError } from '@remix-run/react';
 import { Suspense } from 'react';
 import invariant from 'tiny-invariant';
 import { Button } from '~/components-shadcn/Button';
 import { getContact, updateContact } from '~/data';
 import type { ContactRecord } from '~/data';
 import { sleep } from '~/lib/utils';
+import { mergeMeta } from '~/utils/merge-meta';
 
 export const loader = ({ params }: LoaderFunctionArgs) => {
   const { contactId } = params;
@@ -35,28 +37,13 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   });
 };
 
-const Skeleton = () => {
-  return (
-    <div id="contact">
-      <div>
-        <img alt="" />
-      </div>
-      <div>
-        <h1>
-          <i>Loading...</i>
-        </h1>
-      </div>
-    </div>
-  );
-};
-
 export default function Contact() {
   const { contact } = useLoaderData<typeof loader>();
 
   return (
     <div id="contact">
-      <Suspense fallback={<Skeleton />}>
-        <Await resolve={contact}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Await errorElement={<div>Oops!</div>} resolve={contact}>
           <ContactDetails />
         </Await>
       </Suspense>
@@ -66,6 +53,7 @@ export default function Contact() {
 
 function ContactDetails() {
   const contact = useAsyncValue() as ContactRecord;
+  const error = useAsyncError() as Error | null;
 
   return (
     <>
@@ -94,7 +82,7 @@ function ContactDetails() {
         {contact.notes ? <p>{contact.notes}</p> : null}
 
         <div>
-          <Form action="edit">
+          <Form action="edit" fetcherKey="my-key" navigate={false}>
             <Button type="submit">Edit</Button>
           </Form>
 
@@ -137,3 +125,17 @@ const Favorite: FunctionComponent<{
     </fetcher.Form>
   );
 };
+
+/** 重新验证处理 */
+export function shouldRevalidate({
+  currentParams,
+  nextParams,
+  formMethod,
+  defaultShouldRevalidate,
+}: ShouldRevalidateFunctionArgs) {
+  if (formMethod === 'GET' && currentParams.projectId === nextParams.projectId) {
+    return false;
+  }
+
+  return defaultShouldRevalidate;
+}
