@@ -1,19 +1,29 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import type { FunctionComponent } from 'react';
-import { json } from '@remix-run/node';
-import { Form, useFetcher, useLoaderData } from '@remix-run/react';
+import { json, defer } from '@remix-run/node';
+import { Form, useFetcher, useLoaderData, Await, useAsyncValue } from '@remix-run/react';
+import { Suspense } from 'react';
 import invariant from 'tiny-invariant';
+import { Button } from '~/components-shadcn/Button';
 import { getContact, updateContact } from '~/data';
+import type { ContactRecord } from '~/data';
+import { sleep } from '~/lib/utils';
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
-  invariant(params.contactId, 'Missing contactId param');
-  const contact = await getContact(params.contactId);
+export const loader = ({ params }: LoaderFunctionArgs) => {
+  const { contactId } = params;
 
-  if (!contact) {
-    throw new Response('Not Found', { status: 404 });
-  }
+  invariant(contactId, 'Missing contactId param');
+  const promise = prisma.user.findOne({ where: { id: contactId } }).then(async (user) => {
+    if (!user) {
+      throw new Response('Not Found', { status: 404 });
+    }
 
-  return json({ contact });
+    return user;
+  });
+
+  return defer({
+    user: promise,
+  });
 };
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -25,11 +35,40 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   });
 };
 
+const Skeleton = () => {
+  return (
+    <div id="contact">
+      <div>
+        <img alt="" />
+      </div>
+      <div>
+        <h1>
+          <i>Loading...</i>
+        </h1>
+      </div>
+    </div>
+  );
+};
+
 export default function Contact() {
   const { contact } = useLoaderData<typeof loader>();
 
   return (
     <div id="contact">
+      <Suspense fallback={<Skeleton />}>
+        <Await resolve={contact}>
+          <ContactDetails />
+        </Await>
+      </Suspense>
+    </div>
+  );
+}
+
+function ContactDetails() {
+  const contact = useAsyncValue() as ContactRecord;
+
+  return (
+    <>
       <div>
         <img key={contact.avatar} alt={`${contact.first} ${contact.last} avatar`} src={contact.avatar} />
       </div>
@@ -56,7 +95,7 @@ export default function Contact() {
 
         <div>
           <Form action="edit">
-            <button type="submit">Edit</button>
+            <Button type="submit">Edit</Button>
           </Form>
 
           <Form
@@ -70,11 +109,11 @@ export default function Contact() {
               }
             }}
           >
-            <button type="submit">Delete</button>
+            <Button type="submit">Delete</Button>
           </Form>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -83,16 +122,18 @@ const Favorite: FunctionComponent<{
 }> = ({ contact }) => {
   const fetcher = useFetcher();
   const favorite = fetcher.formData ? fetcher.formData.get('favorite') === 'true' : contact.favorite;
+  const isSubmitting = fetcher.state === 'submitting';
 
   return (
     <fetcher.Form method="post">
-      <button
+      <Button
         aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
+        disabled={isSubmitting}
         name="favorite"
         value={favorite ? 'false' : 'true'}
       >
         {favorite ? '★' : '☆'}
-      </button>
+      </Button>
     </fetcher.Form>
   );
 };
