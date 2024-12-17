@@ -8,6 +8,7 @@ type SessionFlashData = {
   error: string;
 };
 
+/** 用户登录 Session */
 const { getSession, commitSession, destroySession } = createCookieSessionStorage<SessionData, SessionFlashData>({
   cookie: {
     name: '__session',
@@ -20,6 +21,7 @@ const { getSession, commitSession, destroySession } = createCookieSessionStorage
   },
 });
 
+/** 校验用户登录 Session */
 const requireUserSession = async (request: Request) => {
   const cookie = request.headers.get('cookie');
   const session = await getSession(cookie);

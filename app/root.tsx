@@ -1,7 +1,5 @@
-import type { CookiePreferences } from './cookies.server';
 import type { ActionFunction, HeadersFunction, LinksFunction, LoaderFunction } from '@remix-run/node';
 import type { MetaFunction, ShouldRevalidateFunctionArgs } from '@remix-run/react';
-import type { ErrorResponse } from 'react-router-dom';
 import {
   Links,
   Meta,
@@ -20,6 +18,7 @@ import {
   json,
   useSearchParams,
 } from '@remix-run/react';
+import type { CookiePreferences } from './cookies.server';
 import appStylesHref from './app.css?url';
 import { signedCookie } from './cookies.server';
 import { getSession } from './session';
@@ -28,13 +27,11 @@ import { getSession } from './session';
 import './tailwind.css';
 
 /** 元数据 */
-export const meta: MetaFunction = () => {
-  return [
-    { title: 'Very cool app | Remix' },
-    { property: 'og:title', content: 'Very cool app' },
-    { name: 'description', content: 'This app is the best' },
-  ];
-};
+export const meta: MetaFunction = () => [
+  { title: 'Very cool app | Remix' },
+  { property: 'og:title', content: 'Very cool app' },
+  { name: 'description', content: 'This app is the best' },
+];
 
 /** 链接 */
 export const links: LinksFunction = () => [
@@ -62,17 +59,17 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   // const USER = await prisma.user.findMany();
 
-  return json({
+  return {
     theme: cookie?.theme,
     sidebarIsOpen: cookie?.sidebarIsOpen,
     ENV: {
       CLOUDINARY_ACCT: process.env.CLOUDINARY_ACCT,
       STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
     },
-  });
+  };
 };
 
-/** 操作器 */
+/** 操作函数 */
 export const action: ActionFunction = async ({ request }) => {
   const cookieHeader = request.headers.get('Cookie');
   const cookie = (await signedCookie.parse(cookieHeader)) as CookiePreferences;
@@ -95,7 +92,7 @@ export default function App() {
 }
 
 /** 布局 */
-export function Layout({ children: children }: { children: React.ReactNode }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const routeLoaderData = useRouteLoaderData('root');
   const routeError = useRouteError() as ErrorResponse | Error;

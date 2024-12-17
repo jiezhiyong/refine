@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import escapeHtml from 'escape-html';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -12,13 +11,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const data = await res.json();
 
-  const prunedData = data.map((record) => {
-    return {
-      id: record.id,
-      title: record.title,
-      formattedBody: escapeHtml(record.content),
-    };
-  });
+  const prunedData = data.map((record) => ({
+    id: record.id,
+    title: record.title,
+    formattedBody: escapeHtml(record.content),
+  }));
 
-  return json(prunedData);
+  return prunedData;
 }

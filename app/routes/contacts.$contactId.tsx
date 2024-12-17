@@ -20,6 +20,7 @@ import { sleep } from '~/lib/utils';
 import { requireUserSession } from '~/session';
 import { mergeMeta } from '~/utils/merge-meta';
 
+/** 加载器 - 处理`GET`请求 */
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const session = await requireUserSession(request);
 
@@ -39,6 +40,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   };
 };
 
+/** 操作函数 - 处理`POST、PUT、PATCH、DELETE`请求 */
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   invariant(params.contactId, 'Missing contactId param');
   const formData = await request.formData();
@@ -63,7 +65,7 @@ export default function Contact() {
   );
 }
 
-const ContactDetails = () => {
+function ContactDetails() {
   const contact = useAsyncValue() as ContactRecord;
   const error = useAsyncError() as Error | null;
 
@@ -115,7 +117,7 @@ const ContactDetails = () => {
       </div>
     </>
   );
-};
+}
 
 const Favorite: FunctionComponent<{
   contact: Record<string, unknown>;

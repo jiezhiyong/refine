@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { redirect, json } from '@remix-run/node';
+import { redirect, json, data } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getSession, commitSession, requireUserSession } from '~/session';
 
@@ -11,9 +11,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect('/');
   }
 
-  const data = { error: session.get('error') };
+  const res = { error: session.get('error') };
 
-  return json(data, {
+  return data(res, {
     headers: {
       'Set-Cookie': await commitSession(session),
     },

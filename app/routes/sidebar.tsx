@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { data } from '@remix-run/node';
 import { prefs } from '~/prefs';
 import type { CookiePreferences } from '~/prefs';
 
@@ -13,7 +13,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   cookie.sidebarIsOpen = isOpen;
 
-  return json(
+  return data(
     { sidebarIsOpen: isOpen },
     {
       headers: {

@@ -37,13 +37,8 @@ module.exports = {
       version: 'detect',
     },
     'import/resolver': {
-      typescript: {
-        alwaysTryTypes: true,
-        project: ['./tsconfig.eslint.json'],
-      },
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
+      typescript: { alwaysTryTypes: true, project: ['./tsconfig.eslint.json'] },
+      node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     },
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
@@ -56,117 +51,9 @@ module.exports = {
     ],
   },
   rules: {
-    // TypeScript
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      {
-        args: 'after-used',
-        ignoreRestSiblings: false,
-        argsIgnorePattern: '^_.*?$',
-        varsIgnorePattern: '^_.*?$',
-      },
-    ],
-    '@typescript-eslint/consistent-type-imports': [
-      'warn',
-      {
-        prefer: 'type-imports',
-        fixStyle: 'inline-type-imports',
-      },
-    ],
-    '@typescript-eslint/no-misused-promises': [
-      'error',
-      {
-        checksVoidReturn: false,
-      },
-    ],
-    '@typescript-eslint/only-throw-error': 'off',
-
-    // React
-    'react/prop-types': 'off',
-    'react/jsx-uses-react': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/self-closing-comp': 'warn',
-    'react/jsx-sort-props': [
-      'warn',
-      {
-        callbacksLast: true,
-        shorthandFirst: true,
-        noSortAlphabetically: false,
-        reservedFirst: true,
-        multiline: 'last',
-      },
-    ],
-    'react/function-component-definition': [
-      'error',
-      {
-        namedComponents: 'arrow-function',
-        unnamedComponents: 'arrow-function',
-      },
-    ],
-    'react/require-default-props': 'off',
-
-    // Hooks
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
-
-    // Import
-    'import/order': [
-      'warn',
-      {
-        groups: ['type', 'builtin', 'object', 'external', 'internal', 'parent', 'sibling', 'index'],
-        pathGroups: [
-          {
-            pattern: '~/**',
-            group: 'external',
-            position: 'after',
-          },
-          {
-            pattern: '@/**',
-            group: 'external',
-            position: 'after',
-          },
-        ],
-        distinctGroup: false,
-        'newlines-between': 'never',
-        alphabetize: {
-          order: 'asc',
-          caseInsensitive: true,
-        },
-      },
-    ],
-    'import/no-duplicates': 'warn',
-    'import/consistent-type-specifier-style': ['warn', 'prefer-top-level'],
+    '@typescript-eslint/lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     'import/prefer-default-export': 'off',
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ],
-
-    // General
-    'no-console': ['warn', { allow: ['warn', 'error'] }],
-    'padding-line-between-statements': [
-      'warn',
-      { blankLine: 'always', prev: '*', next: 'return' },
-      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
-      { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
-    ],
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['../*'],
-            message: 'Relative imports are not allowed. Use absolute imports instead.',
-          },
-        ],
-      },
-    ],
+    'jsx-props-no-spreading': 'off',
   },
-  ignorePatterns: ['node_modules', 'build', 'public/build', '*.css', '*.scss', '.cache', 'coverage'],
+  ignorePatterns: ['node_modules', 'build', 'public', '*.css', '*.scss', '.cache', 'coverage'],
 };
