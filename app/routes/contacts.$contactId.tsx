@@ -1,17 +1,28 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import type { FunctionComponent } from 'react';
-import { json, defer } from '@remix-run/node';
-import { Form, useFetcher, useLoaderData, Await, useAsyncValue, useAsyncError } from '@remix-run/react';
+import { json } from '@remix-run/node';
+import {
+  Form,
+  useFetcher,
+  useLoaderData,
+  Await,
+  useAsyncValue,
+  useAsyncError,
+  useSearchParams,
+} from '@remix-run/react';
 import { Suspense } from 'react';
 import invariant from 'tiny-invariant';
 import { Button } from '~/components-shadcn/Button';
 import { getContact, updateContact } from '~/data';
 import type { ContactRecord } from '~/data';
 import { sleep } from '~/lib/utils';
+import { requireUserSession } from '~/session';
 import { mergeMeta } from '~/utils/merge-meta';
 
-export const loader = ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const session = await requireUserSession(request);
+
   const { contactId } = params;
 
   invariant(contactId, 'Missing contactId param');
@@ -23,9 +34,9 @@ export const loader = ({ params }: LoaderFunctionArgs) => {
     return user;
   });
 
-  return defer({
+  return {
     user: promise,
-  });
+  };
 };
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -38,6 +49,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 };
 
 export default function Contact() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { contact } = useLoaderData<typeof loader>();
 
   return (
@@ -51,7 +63,7 @@ export default function Contact() {
   );
 }
 
-function ContactDetails() {
+const ContactDetails = () => {
   const contact = useAsyncValue() as ContactRecord;
   const error = useAsyncError() as Error | null;
 
@@ -103,7 +115,7 @@ function ContactDetails() {
       </div>
     </>
   );
-}
+};
 
 const Favorite: FunctionComponent<{
   contact: Record<string, unknown>;

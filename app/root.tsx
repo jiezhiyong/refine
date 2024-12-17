@@ -1,14 +1,8 @@
-import type {
-  ActionFunction,
-  HeadersFunction,
-  LinksFunction,
-  LoaderFunction,
-  LoaderFunctionArgs,
-} from '@remix-run/node';
-import type { MetaFunction, ShouldRevalidateFunction, ShouldRevalidateFunctionArgs } from '@remix-run/react';
+import type { CookiePreferences } from './cookies.server';
+import type { ActionFunction, HeadersFunction, LinksFunction, LoaderFunction } from '@remix-run/node';
+import type { MetaFunction, ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import type { ErrorResponse } from 'react-router-dom';
 import {
-  json,
   Links,
   Meta,
   Outlet,
@@ -23,12 +17,15 @@ import {
   useFetcher,
   useSubmit,
   useNavigation,
-  useLoaderData,
+  json,
+  useSearchParams,
 } from '@remix-run/react';
-import './tailwind.css';
-import { prisma } from '~/.server/db';
 import appStylesHref from './app.css?url';
-import { createEmptyContact } from './data';
+import { signedCookie } from './cookies.server';
+import { getSession } from './session';
+
+/** 全局样式 */
+import './tailwind.css';
 
 /** 元数据 */
 export const meta: MetaFunction = () => {
@@ -50,31 +47,44 @@ export const headers: HeadersFunction = () => ({
   'X-Powered-By': 'Hugs',
 });
 
-/** 操作器 */
-export const action: ActionFunction = async () => {
-  const contact = await createEmptyContact();
-
-  return redirect(`/contacts/${contact.id}/edit`);
-};
-
 /** 加载器 */
 export const loader: LoaderFunction = async ({ request }) => {
-  const cookie = request.headers.get('Cookie');
+  const cookieHeader = request.headers.get('Cookie');
+  const session = await getSession(cookieHeader);
+  const cookie = (await signedCookie.parse(cookieHeader)) as CookiePreferences;
 
-  if (!cookie) {
+  if (!session.has('userId')) {
     throw redirect('/login', 302);
   }
 
   const url = new URL(request.url);
-  const query = url.searchParams.get('query');
+  const query = url.searchParams.get('query'); // .getAll('brand')
 
-  const USER = await prisma.user.findMany();
+  // const USER = await prisma.user.findMany();
 
   return json({
-    USER,
+    theme: cookie?.theme,
+    sidebarIsOpen: cookie?.sidebarIsOpen,
     ENV: {
       CLOUDINARY_ACCT: process.env.CLOUDINARY_ACCT,
       STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+    },
+  });
+};
+
+/** 操作器 */
+export const action: ActionFunction = async ({ request }) => {
+  const cookieHeader = request.headers.get('Cookie');
+  const cookie = (await signedCookie.parse(cookieHeader)) as CookiePreferences;
+  const bodyParams = await request.formData();
+
+  if (bodyParams.get('sidebarIsOpen') === 'false') {
+    cookie.sidebarIsOpen = false;
+  }
+
+  return redirect('/', {
+    headers: {
+      'Set-Cookie': await signedCookie.serialize(cookie),
     },
   });
 };
@@ -86,10 +96,9 @@ export default function App() {
 
 /** 布局 */
 export function Layout({ children: children }: { children: React.ReactNode }) {
-  const routeLoaderData = useRouteLoaderData('root') as Record<string, unknown> & { theme?: string };
+  const [searchParams, setSearchParams] = useSearchParams();
+  const routeLoaderData = useRouteLoaderData('root');
   const routeError = useRouteError() as ErrorResponse | Error;
-
-  const { ok } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const submit = useSubmit();
   const sidebarFetcher = useFetcher();
@@ -130,29 +139,40 @@ export function HydrateFallback() {
   );
 }
 
-/** 错误边界处理 */
+/** 全局错误边界处理 */
 export function ErrorBoundary() {
   const error = useRouteError() as ErrorResponse | Error;
 
-  if (isRouteErrorResponse(error)) {
-    return (
-      <>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </>
-    );
-  } else if (error instanceof Error) {
-    return (
-      <>
-        <h1>Error!</h1>
-        <p>{error.message}</p>
-      </>
-    );
-  }
+  return (
+    <html lang="en">
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {isRouteErrorResponse(error) && (
+          <>
+            <h1>
+              {error.status} {error.statusText}
+            </h1>
+            <p>{error.data}</p>
+          </>
+        )}
 
-  return <h1>Unknown Error</h1>;
+        {error instanceof Error && (
+          <>
+            <h1>Error!</h1>
+            <p>{error.message}</p>
+          </>
+        )}
+
+        {!isRouteErrorResponse(error) && !(error instanceof Error) && <h1>Unknown Error</h1>}
+
+        <Scripts />
+      </body>
+    </html>
+  );
 }
 
 /** 重新验证处理 */

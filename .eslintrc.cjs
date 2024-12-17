@@ -13,10 +13,13 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    project: ['./tsconfig.eslint.json'], // 使用专门的 ESLint TypeScript 配置
+    project: ['./tsconfig.eslint.json'],
     tsconfigRootDir: __dirname,
   },
   extends: [
+    'airbnb',
+    'airbnb-typescript',
+    'airbnb/hooks',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
@@ -93,6 +96,14 @@ module.exports = {
         multiline: 'last',
       },
     ],
+    'react/function-component-definition': [
+      'error',
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
+    'react/require-default-props': 'off',
 
     // Hooks
     'react-hooks/rules-of-hooks': 'error',
@@ -125,6 +136,17 @@ module.exports = {
     ],
     'import/no-duplicates': 'warn',
     'import/consistent-type-specifier-style': ['warn', 'prefer-top-level'],
+    'import/prefer-default-export': 'off',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
 
     // General
     'no-console': ['warn', { allow: ['warn', 'error'] }],

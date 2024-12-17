@@ -12,12 +12,7 @@
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "prepare": "husky",
-    "lint-staged": "lint-staged",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "lint-staged": "lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -29,10 +24,12 @@
     ]
   },
   "dependencies": {
+    "@prisma/client": "^5.2.0",
     "@radix-ui/react-slot": "^1.1.1",
     "@remix-run/node": "^2.15.1",
     "@remix-run/react": "^2.15.1",
     "@remix-run/serve": "^2.15.1",
+    "@types/jest": "^29.5.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "isbot": "^4.1.0",
@@ -41,27 +38,28 @@
     "prettier-plugin-tailwindcss": "^0.6.9",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "react-router-dom": "^7.0.2",
+    "react-router-dom": "^6.28.0",
     "sort-by": "^1.2.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "tiny-invariant": "^1.3.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "8.11.0",
-    "@typescript-eslint/parser": "8.11.0",
     "@commitlint/cli": "^19.6.0",
     "@commitlint/config-conventional": "^19.6.0",
     "@playwright/test": "^1.49.1",
     "@remix-run/dev": "^2.15.1",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@remix-run/testing": "^2.15.1",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^20.5.7",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "@vitest/ui": "^2.1.8",
+    "@typescript-eslint/eslint-plugin": "8.11.0",
+    "@typescript-eslint/parser": "8.11.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.28.1",
@@ -76,8 +74,7 @@
     "tailwindcss": "^3.4.16",
     "typescript": "^5.6.3",
     "vite": "^5.2.0",
-    "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^2.1.8"
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "engines": {
     "node": ">=20.0.0"

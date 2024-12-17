@@ -1,4 +1,4 @@
-import type { AppLoadContext, EntryContext } from '@remix-run/node';
+import type { AppLoadContext, EntryContext, LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
 import { PassThrough } from 'node:stream';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
@@ -132,4 +132,12 @@ function handleBrowserRequest(
 
     setTimeout(abort, ABORT_DELAY);
   });
+}
+
+/** 错误处理 */
+export function handleError(error: unknown, { request, params, context }: LoaderFunctionArgs | ActionFunctionArgs) {
+  if (!request.signal.aborted) {
+    console.error(error);
+    sendErrorToSentry(error);
+  }
 }
