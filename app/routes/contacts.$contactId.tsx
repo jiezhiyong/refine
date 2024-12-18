@@ -17,7 +17,7 @@ import { Button } from '~/components-shadcn/Button';
 import { getContact, updateContact } from '~/data';
 import type { ContactRecord } from '~/data';
 import { sleep } from '~/lib/utils';
-import { requireUserSession } from '~/session';
+import { requireUserSession } from '~/session.server';
 import { mergeMeta } from '~/utils/merge-meta';
 
 /** 加载器 - 处理`GET`请求 */

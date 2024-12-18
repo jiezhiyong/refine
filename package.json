@@ -4,6 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
+    "setup": "prisma generate && prisma migrate deploy && prisma db seed",
     "dev": "remix vite:dev",
     "start": "remix-serve ./build/server/index.js",
     "build": "tsc && remix vite:build",
@@ -32,6 +33,7 @@
     "@remix-run/react": "^2.15.1",
     "@remix-run/serve": "^2.15.1",
     "@types/jest": "^29.5.14",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "eslint-plugin-markdown": "^5.1.0",
@@ -56,6 +58,7 @@
     "react-dom": "^18.3.0"
   },
   "devDependencies": {
+    "prisma": "^5.2.0",
     "@commitlint/cli": "^19.6.0",
     "@commitlint/config-conventional": "^19.6.0",
     "@playwright/test": "^1.49.1",
@@ -90,5 +93,8 @@
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "prisma": {
+    "seed": "ts-node --require tsconfig-paths/register prisma/seed.ts"
   }
 }

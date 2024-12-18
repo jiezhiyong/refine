@@ -6,7 +6,7 @@ import { Button } from '~/components-shadcn/Button';
 import { getContact, updateContact } from '~/data';
 import { prisma } from '~/.server/db';
 
-/** 操作器 */
+/** Action 处理函数 */
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   invariant(params.contactId, 'Missing contactId param');
 

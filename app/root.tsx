@@ -20,7 +20,7 @@ import {
 import styles from '~/styles/base.css?url';
 import type { CookiePreferences } from './cookies.server';
 import { signedCookie } from './cookies.server';
-import { getSession } from './session';
+import { getSession } from './session.server';
 
 /** 全局样式 */
 import '~/styles/tailwind.css';
@@ -121,17 +121,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 /** 回退处理 */
 export function HydrateFallback() {
-  return (
-    <>
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500" />
-          <p className="mt-4 text-gray-600">页面加载中...</p>
-        </div>
-      </div>
-      <Scripts />
-    </>
-  );
+  return <h1>Loading(root.HydrateFallback)...</h1>;
 }
 
 /** 全局错误边界处理 */

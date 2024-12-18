@@ -1,13 +1,18 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { vitePlugin as remix } from '@remix-run/dev';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { visualizer } from 'rollup-plugin-visualizer';
 
+declare module '@remix-run/node' {
+  interface Future {
+    v3_singleFetch: true;
+  }
+}
+
 export default defineConfig({
   plugins: [
     remix({
-      ssr: true,
+      ssr: true, // false: 禁用服务端渲染、启用SPA模式
       manifest: true,
       future: {
         v3_fetcherPersist: true,

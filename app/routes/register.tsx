@@ -1,9 +1,12 @@
-import type { ActionFunctionArgs } from '@remix-run/node';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { json } from '@remix-run/node';
-import { Form, useActionData } from '@remix-run/react';
-import { useForm } from 'react-hook-form';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
+import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { z } from 'zod';
+import { useRef, useEffect } from 'react';
+import { createUserSession, requireUserSession } from '~/session.server';
+import { createUser, getUserByEmail } from '~/.server/user';
+import { validateEmail } from '~/utils/validate-email';
+import { safeRedirect } from '~/utils/safe-redirect';
 
 // 定义表单验证 schema
 const registerSchema = z
@@ -21,119 +24,147 @@ const registerSchema = z
 // 定义表单数据类型
 type RegisterFormData = z.infer<typeof registerSchema>;
 
-// Action 处理函数
+/** 加载器 */
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await requireUserSession(request);
+
+  if (!userId) {
+    return redirect('/');
+  }
+
+  return {};
+}
+
+/** Action 处理函数 */
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const rawFormData = Object.fromEntries(formData);
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo') || '/notes';
+  const { email, password } = rawFormData;
 
-  try {
-    // 验证表单数据
-    const validatedData = registerSchema.parse(rawFormData);
-
-    // TODO: 处理注册逻辑，比如保存到数据库
-    console.log('注册数据：', validatedData);
-
-    return json({ success: true });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return json({ errors: error.errors }, { status: 400 });
-    }
-
-    return json({ error: '注册失败' }, { status: 500 });
+  if (!validateEmail(email)) {
+    return data({ errors: { email: 'Email is invalid', password: null } }, { status: 400 });
   }
+
+  if (typeof password !== 'string' || password.length === 0) {
+    return data({ errors: { email: null, password: 'Password is required' } }, { status: 400 });
+  }
+
+  if (password.length < 8) {
+    return data({ errors: { email: null, password: 'Password is too short' } }, { status: 400 });
+  }
+
+  const existingUser = await getUserByEmail(email);
+  if (existingUser) {
+    return data(
+      {
+        errors: {
+          email: 'A user already exists with this email',
+          password: null,
+        },
+      },
+      { status: 400 }
+    );
+  }
+
+  const user = await createUser(email, password);
+
+  return createUserSession({
+    redirectTo,
+    remember: false,
+    request,
+    userId: user.id,
+  });
 }
 
 export default function Register() {
   const actionData = useActionData<typeof action>();
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
-  });
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // 这里不需要阻止默认行为，让 Remix Form 处理提交
-    const form = event.currentTarget;
-
-    handleSubmit(() => {
-      // 验证通过后，让表单正常提交
-      form.submit();
-    })(event);
-  };
+  useEffect(() => {
+    if (actionData?.errors?.email) {
+      emailRef.current?.focus();
+    } else if (actionData?.errors?.password) {
+      passwordRef.current?.focus();
+    }
+  }, [actionData]);
 
   return (
-    <div className="mx-auto mt-10 max-w-md rounded-lg bg-white p-6 shadow-md">
-      <h1 className="mb-6 text-2xl font-bold">用户注册</h1>
+    <div className="flex min-h-full flex-col justify-center">
+      <div className="mx-auto w-full max-w-md px-8">
+        <Form method="post" className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email address
+            </label>
+            <div className="mt-1">
+              <input
+                ref={emailRef}
+                id="email"
+                required
+                autoFocus={true}
+                name="email"
+                type="email"
+                autoComplete="email"
+                aria-invalid={actionData?.errors?.email ? true : undefined}
+                aria-describedby="email-error"
+                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              />
+              {actionData?.errors?.email ? (
+                <div className="pt-1 text-red-700" id="email-error">
+                  {actionData.errors.email}
+                </div>
+              ) : null}
+            </div>
+          </div>
 
-      <Form className="space-y-4" method="post" onSubmit={onSubmit}>
-        <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="username">
-            用户名
-          </label>
-          <input
-            {...register('username')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            id="username"
-            name="username"
-            type="text"
-          />
-          {errors.username && <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>}
-        </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <div className="mt-1">
+              <input
+                id="password"
+                ref={passwordRef}
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                aria-invalid={actionData?.errors?.password ? true : undefined}
+                aria-describedby="password-error"
+                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              />
+              {actionData?.errors?.password ? (
+                <div className="pt-1 text-red-700" id="password-error">
+                  {actionData.errors.password}
+                </div>
+              ) : null}
+            </div>
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="email">
-            邮箱
-          </label>
-          <input
-            {...register('email')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            id="email"
-            name="email"
-            type="email"
-          />
-          {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="password">
-            密码
-          </label>
-          <input
-            {...register('password')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            id="password"
-            name="password"
-            type="password"
-          />
-          {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="confirmPassword">
-            确认密码
-          </label>
-          <input
-            {...register('confirmPassword')}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-          />
-          {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>}
-        </div>
-
-        <button
-          className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          type="submit"
-        >
-          注册
-        </button>
-      </Form>
-
-      {actionData?.success && <p className="mt-4 text-sm text-green-600">注册成功！</p>}
+          <button
+            type="submit"
+            className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
+          >
+            Create Account
+          </button>
+          <div className="flex items-center justify-center">
+            <div className="text-center text-sm text-gray-500">
+              Already have an account?{' '}
+              <Link
+                className="text-blue-500 underline"
+                to={{
+                  pathname: '/login',
+                  search: searchParams.toString(),
+                }}
+              >
+                Log in
+              </Link>
+            </div>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 }
