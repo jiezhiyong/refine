@@ -1,5 +1,6 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
+import { getUserById } from './.server/user';
 
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
 
@@ -37,6 +38,17 @@ export const getUserId = async (request: Request) => {
   const session = await getSession(request);
   return session.get(USER_SESSION_KEY);
 };
+
+/** 获取用户信息 */
+export async function getUser(request: Request) {
+  let user = null;
+  const userId = await getUserId(request);
+  if (userId) {
+    user = await getUserById(userId);
+  }
+
+  return user;
+}
 
 /** 校验用户登录 Session */
 export const requireUserSession = async (request: Request, redirectTo: string = new URL(request.url).pathname) => {

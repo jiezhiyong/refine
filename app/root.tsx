@@ -20,7 +20,7 @@ import {
 import styles from '~/styles/base.css?url';
 import type { CookiePreferences } from './cookies.server';
 import { signedCookie } from './cookies.server';
-import { getSession } from './session.server';
+import { getSession, getUser } from './session.server';
 
 /** 全局样式 */
 import '~/styles/tailwind.css';
@@ -53,9 +53,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const query = url.searchParams.get('query'); // .getAll('brand')
 
-  // const USER = await prisma.user.findMany();
-
   return {
+    user: await getUser(request),
     theme: cookie?.theme,
     sidebarIsOpen: cookie?.sidebarIsOpen,
     ENV: {
