@@ -31,6 +31,7 @@ module.exports = {
     'plugin:import/typescript',
     'prettier',
   ],
+  plugins: ['react', '@typescript-eslint', 'import', 'jsx-a11y', 'markdown'],
   settings: {
     react: {
       version: 'detect',
