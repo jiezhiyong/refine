@@ -40,5 +40,8 @@
       "background": "#8bc34a",
       "iconColour": "#8bc34a"
     }
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
   }
 }

@@ -1,6 +1,6 @@
 import type { Password, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { db } from '../db.server';
+import { db } from './db';
 
 /** 根据 ID 获取用户 */
 export async function getUserById(id: User['id']) {
@@ -51,6 +51,5 @@ export async function verifyLogin(email: User['email'], password: Password['hash
     return null;
   }
 
-  delete userWithPassword.password;
-  return userWithPassword;
+  return { ...userWithPassword, password: null };
 }

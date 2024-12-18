@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.base.json",
-  "include": ["app/**/*.ts", "app/**/*.tsx", "global.d.ts"],
+  "include": ["app/**/*.ts", "app/**/*.tsx", "global.d.ts", "app/.server/signature.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "compilerOptions": {
     "types": ["@remix-run/node", "vite/client"],

@@ -1,16 +1,17 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { jokes } from '../mocks/jokes';
 
 const db = new PrismaClient();
 
 async function seed() {
-  const email = 'rachel@remix.run';
+  const email = 'spiderman@remix.run';
   await db.user.delete({ where: { email } }).catch(() => {
-    // no worries if it doesn't exist yet
+    /** */
   });
 
-  const hashedPassword = await bcrypt.hash('racheliscool', 10);
-  await db.user.create({
+  const hashedPassword = await bcrypt.hash('12345678', 10);
+  const spiderman = await db.user.create({
     data: {
       email,
       password: {
@@ -21,14 +22,24 @@ async function seed() {
     },
   });
 
-  console.log(`Database has been seeded. 🌱`);
+  await Promise.all(
+    jokes.map((joke) => {
+      const data = { jokesterId: spiderman.id, ...joke };
+      return db.joke.create({ data });
+    })
+  );
 }
 
-seed()
-  .catch((e) => {
+async function main() {
+  try {
+    await seed();
+    console.log(`Database has been seeded. 🌱`);
+  } catch (e) {
     console.error(e);
     process.exit(1);
-  })
-  .finally(async () => {
+  } finally {
     await db.$disconnect();
-  });
+  }
+}
+
+main();

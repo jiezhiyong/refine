@@ -13,7 +13,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    project: ['./tsconfig.eslint.json'],
+    project: './tsconfig.eslint.json',
     tsconfigRootDir: __dirname,
   },
   extends: [
@@ -29,10 +29,8 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
-    'plugin:markdown/recommended',
     'prettier',
   ],
-  plugins: ['react', '@typescript-eslint', 'import', 'jsx-a11y', 'markdown'],
   settings: {
     react: {
       version: 'detect',

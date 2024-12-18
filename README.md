@@ -1,6 +1,4 @@
-# Welcome to Remix!
-
-- https://codeload.github.com/remix-run/examples/zip/refs/heads/main
+# Welcome to Remix
 
 - 📖 [Remix docs](https://remix.run/docs)
 
