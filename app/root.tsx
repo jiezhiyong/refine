@@ -1,5 +1,5 @@
-import type { ActionFunction, HeadersFunction, LinksFunction, LoaderFunction } from '@remix-run/node';
-import type { MetaFunction, ShouldRevalidateFunctionArgs } from '@remix-run/react';
+import type { ActionFunction, ErrorResponse, HeadersFunction, LinksFunction, LoaderFunction } from '@remix-run/node';
+import type { MetaFunction } from '@remix-run/node';
 import {
   Links,
   Meta,
@@ -7,7 +7,6 @@ import {
   redirect,
   Scripts,
   ScrollRestoration,
-  LiveReload,
   useRouteError,
   isRouteErrorResponse,
   useRouteLoaderData,
@@ -15,29 +14,26 @@ import {
   useFetcher,
   useSubmit,
   useNavigation,
-  json,
   useSearchParams,
+  ShouldRevalidateFunctionArgs,
 } from '@remix-run/react';
+import styles from '~/styles/base.css?url';
 import type { CookiePreferences } from './cookies.server';
-import appStylesHref from './app.css?url';
 import { signedCookie } from './cookies.server';
 import { getSession } from './session';
 
 /** 全局样式 */
-import './tailwind.css';
+import '~/styles/tailwind.css';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
-  { title: 'Very cool app | Remix' },
-  { property: 'og:title', content: 'Very cool app' },
-  { name: 'description', content: 'This app is the best' },
+  { title: 'Remix' },
+  { property: 'og:title', content: 'This app is the best' },
+  { name: 'description', content: 'Welcome to Remix!' },
 ];
 
 /** 链接 */
-export const links: LinksFunction = () => [
-  { rel: 'icon', href: '/favicon.png', type: 'image/png' },
-  { rel: 'stylesheet', href: appStylesHref },
-];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 /** 自定义 HTTP 标头 */
 export const headers: HeadersFunction = () => ({
@@ -118,7 +114,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts crossOrigin="anonymous" />
-        <LiveReload />
       </body>
     </html>
   );
@@ -127,12 +122,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 /** 回退处理 */
 export function HydrateFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="text-center">
-        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500" />
-        <p className="mt-4 text-gray-600">页面加载中...</p>
+    <>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500" />
+          <p className="mt-4 text-gray-600">页面加载中...</p>
+        </div>
       </div>
-    </div>
+      <Scripts />
+    </>
   );
 }
 

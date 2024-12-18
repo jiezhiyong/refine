@@ -29,9 +29,10 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
+    'plugin:markdown/recommended',
     'prettier',
   ],
-  plugins: ['react', '@typescript-eslint', 'import', 'jsx-a11y'],
+  plugins: ['react', '@typescript-eslint', 'import', 'jsx-a11y', 'markdown'],
   settings: {
     react: {
       version: 'detect',
@@ -51,9 +52,11 @@ module.exports = {
     ],
   },
   rules: {
-    '@typescript-eslint/lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     'import/prefer-default-export': 'off',
     'jsx-props-no-spreading': 'off',
+    'global-require': 'off',
+    '@typescript-eslint/lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
+    '@typescript-eslint/no-require-imports': 'off',
   },
   ignorePatterns: ['node_modules', 'build', 'public', '*.css', '*.scss', '.cache', 'coverage'],
 };

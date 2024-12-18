@@ -2,11 +2,13 @@
 import { vitePlugin as remix } from '@remix-run/dev';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
     remix({
-      basename: '/',
+      ssr: true,
+      manifest: true,
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
@@ -14,13 +16,8 @@ export default defineConfig({
         v3_singleFetch: true,
         v3_lazyRouteDiscovery: true,
       },
-      ignoredRouteFiles: ['**/*.css'],
-      routes: undefined,
-      buildDirectory: 'build',
-      serverBuildFile: 'index.js',
-      manifest: true,
-      ssr: true,
     }),
     tsconfigPaths(),
+    visualizer({ emitFile: true }),
   ],
 });

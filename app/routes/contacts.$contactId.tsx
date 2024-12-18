@@ -27,16 +27,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { contactId } = params;
 
   invariant(contactId, 'Missing contactId param');
-  const promise = prisma.user.findOne({ where: { id: contactId } }).then(async (user) => {
-    if (!user) {
-      throw new Response('Not Found', { status: 404 });
-    }
+  const user = await prisma.user.findOne({ where: { id: contactId } });
 
-    return user;
-  });
+  if (!user) {
+    throw new Response('Not Found', { status: 404 });
+  }
 
   return {
-    user: promise,
+    user,
   };
 };
 

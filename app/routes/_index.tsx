@@ -1,3 +1,4 @@
+import { MetaFunction } from '@remix-run/node';
 import { Button } from '~/components-shadcn/Button';
 
 export default function Index() {

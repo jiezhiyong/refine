@@ -1,0 +1,8 @@
+/**
+ * 优先使用 Tailwind CSS 实现你的业务样式
+ * https://tailwindcss.com
+ */
+
+body {
+  background-color: red;
+}

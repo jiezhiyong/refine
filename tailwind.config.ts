@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-  content: ['./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}'],
+  content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       borderRadius: {
@@ -53,6 +53,6 @@ export default {
       },
     },
   },
-  darkMode: ['class', 'class'],
+  darkMode: ['class'],
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
