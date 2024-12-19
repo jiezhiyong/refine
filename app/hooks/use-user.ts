@@ -1,7 +1,8 @@
 import type { User } from '@prisma/client';
 import { useMatchesData } from './use-matches-data';
+import { TAny } from '~/types/any';
 
-function isUser(user: any): user is User {
+function isUser(user: TAny): user is User {
   return user && typeof user === 'object' && typeof user.email === 'string';
 }
 

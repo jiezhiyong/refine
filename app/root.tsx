@@ -1,3 +1,4 @@
+import { type PropsWithChildren } from 'react';
 import type {
   ActionFunction,
   ErrorResponse,
@@ -6,6 +7,7 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from '@remix-run/node';
+import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import {
   Links,
   Meta,
@@ -15,17 +17,19 @@ import {
   useRouteError,
   isRouteErrorResponse,
   useRouteLoaderData,
-  ShouldRevalidateFunctionArgs,
 } from '@remix-run/react';
 import { redirect } from '@remix-run/node';
+
 import styles from '~/styles/base.css?url';
 import type { CookiePreferences } from '~/.server/cookie';
 import { getCookie, signedCookie } from '~/.server/cookie';
-import { getUser } from '~/.server/session';
+
+import { canUseDOM } from '~/utils/can-use-dom';
+canUseDOM();
 
 /** 全局样式 */
 import '~/styles/tailwind.css';
-import { PropsWithChildren } from 'react';
+import { getUser } from './.server/session';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [

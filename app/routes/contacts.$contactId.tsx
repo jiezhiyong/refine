@@ -1,7 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import type { FunctionComponent } from 'react';
-import { json } from '@remix-run/node';
 import {
   Form,
   useFetcher,
@@ -14,11 +13,9 @@ import {
 import { Suspense } from 'react';
 import invariant from 'tiny-invariant';
 import { Button } from '~/components-shadcn/Button';
-import { getContact, updateContact } from '~/data';
+import { updateContact } from '~/data';
 import type { ContactRecord } from '~/data';
-import { sleep } from '~/lib/utils';
-import { requireUserSession } from '~/session.server';
-import { mergeMeta } from '~/utils/merge-meta';
+import { requireUserSession } from '~/.server/session';
 
 /** 加载器 - 处理`GET`请求 */
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
