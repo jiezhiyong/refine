@@ -1,7 +1,7 @@
 import { useHydrated } from 'remix-utils/use-hydrated';
 import { ClientOnly } from 'remix-utils/client-only';
-import { BrokenOnTheServer } from '~/components/broken-on-the-server.client';
-import { ComplexComponent } from '~/components/complex-component';
+import { BrokenOnTheServer } from '~/components/BrokenOnTheServer.client';
+import { ComplexComponent } from '~/components/ComplexComponent';
 
 export default function Index() {
   const hydrated = useHydrated();
