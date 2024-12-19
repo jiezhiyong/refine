@@ -39,3 +39,9 @@ Make sure to deploy the output of `pnpm run build`
 ## Styling
 
 This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+
+## 消息队列和批处理 - https://github.com/taskforcesh/bullmq
+
+[![Open in codesandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/remix-run/examples/tree/main/bullmq-task-queue)
+
+https://github.com/redis/ioredis

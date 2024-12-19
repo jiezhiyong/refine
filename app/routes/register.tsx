@@ -3,7 +3,7 @@ import { data, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { z } from 'zod';
 import { useRef, useEffect } from 'react';
-import { createUserSession, requireUserSession } from '~/session.server';
+import { createUserSession, requireUserSession } from '~/.server/session';
 import { createUser, getUserByEmail } from '~/.server/user';
 import { validateEmail } from '~/utils/validate-email';
 import { safeRedirect } from '~/utils/safe-redirect';
@@ -39,9 +39,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const rawFormData = Object.fromEntries(formData);
-  const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get('redirectTo') || '/notes';
   const { email, password } = rawFormData;
+  const redirectTo = safeRedirect(rawFormData.redirectTo);
 
   if (!validateEmail(email)) {
     return data({ errors: { email: 'Email is invalid', password: null } }, { status: 400 });
@@ -79,6 +78,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Register() {
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo') || '/';
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -95,6 +96,7 @@ export default function Register() {
     <div className="flex min-h-full flex-col justify-center">
       <div className="mx-auto w-full max-w-md px-8">
         <Form method="post" className="space-y-6">
+          <input type="hidden" name="redirectTo" value={redirectTo} />
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email address

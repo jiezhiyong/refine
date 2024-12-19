@@ -12,7 +12,7 @@ export default function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  _loadContext: AppLoadContext
+  loadContext: AppLoadContext
 ) {
   const prohibitOutOfOrderStreaming = isBotRequest(request.headers.get('user-agent')) || remixContext.isSpaMode;
 
@@ -138,6 +138,7 @@ function handleBrowserRequest(
 export function handleError(error: unknown, { request, params, context }: LoaderFunctionArgs | ActionFunctionArgs) {
   if (!request.signal.aborted) {
     console.error(error);
-    sendErrorToSentry(error);
+    // TODO:
+    // sendErrorToSentry(error);
   }
 }

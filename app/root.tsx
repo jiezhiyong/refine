@@ -19,17 +19,14 @@ import {
   useRouteLoaderData,
 } from '@remix-run/react';
 import { redirect } from '@remix-run/node';
-
 import styles from '~/styles/base.css?url';
 import type { CookiePreferences } from '~/.server/cookie';
 import { getCookie, signedCookie } from '~/.server/cookie';
-
-import { canUseDOM } from '~/utils/can-use-dom';
-canUseDOM();
+import { getUser } from '~/.server/session';
+import { useRealtimeRevalidation } from '~/hooks/use-realtime-revalidation';
 
 /** 全局样式 */
 import '~/styles/tailwind.css';
-import { getUser } from './.server/session';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -107,6 +104,7 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
 
 /** 根组件 */
 export default function App() {
+  useRealtimeRevalidation({ url: '/issues-events' });
   return (
     <Document>
       <Outlet />

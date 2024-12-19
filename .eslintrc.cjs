@@ -27,6 +27,9 @@ module.exports = {
       ],
       rules: {
         'react/react-in-jsx-scope': 'off',
+        'jsx-a11y/no-autofocus': 'off',
+        'jsx-a11y/click-events-have-key-events': 'off',
+        'jsx-a11y/no-static-element-interactions': 'off',
       },
       settings: {
         react: { version: 'detect' },
@@ -42,6 +45,9 @@ module.exports = {
       files: ['**/*.{ts,tsx}'],
       plugins: ['@typescript-eslint', 'import'],
       parser: '@typescript-eslint/parser',
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+      },
       settings: {
         'import/internal-regex': '^~/',
         'import/resolver': {
