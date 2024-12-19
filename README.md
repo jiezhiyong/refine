@@ -45,3 +45,7 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 [![Open in codesandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/remix-run/examples/tree/main/bullmq-task-queue)
 
 https://github.com/redis/ioredis
+
+## 批处理、数据缓存
+
+https://github.com/graphql/dataloader

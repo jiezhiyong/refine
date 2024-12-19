@@ -17,6 +17,8 @@ import {
   useRouteError,
   isRouteErrorResponse,
   useRouteLoaderData,
+  useOutlet,
+  useLocation,
 } from '@remix-run/react';
 import { redirect } from '@remix-run/node';
 import styles from '~/styles/base.css?url';
@@ -27,6 +29,7 @@ import { useRealtimeRevalidation } from '~/hooks/use-realtime-revalidation';
 
 /** 全局样式 */
 import '~/styles/tailwind.css';
+import { AnimatePresence, motion } from 'framer-motion';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -104,10 +107,21 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
 
 /** 根组件 */
 export default function App() {
+  const outlet = useOutlet();
   useRealtimeRevalidation({ url: '/issues-events' });
   return (
     <Document>
-      <Outlet />
+      {/* <Outlet /> */}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.main
+          key={useLocation().pathname}
+          initial={{ x: '10%', opacity: 0 }}
+          animate={{ x: '0', opacity: 1 }}
+          exit={{ x: '-40%', opacity: 0 }}
+        >
+          {outlet}
+        </motion.main>
+      </AnimatePresence>
     </Document>
   );
 }

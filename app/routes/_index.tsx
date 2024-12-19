@@ -1,4 +1,4 @@
-import { Button } from '~/components-shadcn/Button';
+import { NavLink } from '@remix-run/react';
 
 export default function Index() {
   return (
@@ -8,7 +8,14 @@ export default function Index() {
         <br />
         Check out <a href="https://remix.run">the docs at remix.run</a>.
       </p>
-      <Button>Press me</Button>
+      <nav>
+        <br />
+        <NavLink to="/">Home</NavLink>
+        <br />
+        <NavLink to="/framer-motion">framer-motion</NavLink>
+        <br />
+        <NavLink to="/issues">issues</NavLink>
+      </nav>
     </>
   );
 }
