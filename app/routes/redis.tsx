@@ -1,6 +1,6 @@
 import { ActionFunction, data, redirect } from '@remix-run/node';
 import { Form, useActionData, useLoaderData } from '@remix-run/react';
-import { redis } from '~/.server/redis';
+import { redis } from '~/services/redis.server';
 
 export const loader = async () => {
   const message = await redis.get('message');

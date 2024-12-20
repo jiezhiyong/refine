@@ -1,8 +1,8 @@
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { updateIssue } from 'mocks/issues';
 import invariant from 'tiny-invariant';
-import { badRequest } from '~/.server/utils';
-import { emitter, EVENTS } from '~/events';
+import { emitter, EVENTS } from '~/services/emitter';
+import { badRequest } from '~/services/utils';
 
 export async function loader() {
   return badRequest({ message: 'Method not allowed.' });

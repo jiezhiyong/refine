@@ -1,3 +1,5 @@
+import { TAny } from '~/types/any';
+
 /**
  * @name fetchFromGraphQL
  * @external https://css-tricks.com/raw-graphql-querying
@@ -9,7 +11,7 @@ export const fetchFromGraphQL = async (query: string, variables?: Record<string,
     throw new Error('GRAPHQL_API is required');
   }
 
-  const body: any = { query };
+  const body: TAny = { query };
 
   if (variables) body.variables = variables;
 

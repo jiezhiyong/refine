@@ -2,8 +2,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { data, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { useRef, useEffect } from 'react';
-import { requireUserSession, createUserSession } from '~/.server/session';
-import { verifyLogin } from '~/.server/user';
+import { requireUserSession, createUserSession } from '~/services/session.server';
+import { verifyLogin } from '~/services/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';
 import { validateEmail } from '~/utils/validate-email';
 

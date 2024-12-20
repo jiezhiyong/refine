@@ -1,7 +1,7 @@
 import type { Processor } from 'bullmq';
 import { Queue as BullQueue, Worker } from 'bullmq';
 
-import { redis } from './redis';
+import { redis } from './redis.server';
 
 type RegisteredQueue = {
   queue: BullQueue;

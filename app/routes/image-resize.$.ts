@@ -17,10 +17,11 @@ import { createReadStream, statSync } from 'fs';
 import path from 'path';
 import { PassThrough } from 'stream';
 
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunction } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 import type { FitEnum } from 'sharp';
 import sharp from 'sharp';
+import { TAny } from '~/types/any';
 
 const ASSETS_ROOT = 'assets';
 
@@ -31,7 +32,7 @@ interface ResizeParams {
   fit: keyof FitEnum;
 }
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
   // extract all the parameters from the url
   const { src, width, height, fit } = extractParams(params, request);
 
@@ -102,7 +103,7 @@ function streamingResize(
 
   imageStream.pipe(sharpTransforms).pipe(passthroughStream);
 
-  return new Response(passthroughStream as any, {
+  return new Response(passthroughStream as TAny, {
     headers: {
       'Content-Type': 'image/jpeg',
       'Cache-Control': 'public, max-age=31536000, immutable',

@@ -1,10 +1,15 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { data } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { Link, useFetcher, useLoaderData } from '@remix-run/react';
 import { getIssue } from 'mocks/issues';
 import invariant from 'tiny-invariant';
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+/** 处理应用程序约定 */
+export const handle = {
+  breadcrumb: (res) => <Link to="/issues">Issues details - {res?.data?.title}</Link>,
+};
+
+export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.id, 'Missing issue id');
   const issue = await getIssue(params.id);
   if (!issue) {

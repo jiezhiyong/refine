@@ -1,3 +1,4 @@
+import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
 import type {
   ActionFunction,
@@ -11,7 +12,6 @@ import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import {
   Links,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
   useRouteError,
@@ -19,17 +19,23 @@ import {
   useRouteLoaderData,
   useOutlet,
   useLocation,
+  useNavigation,
+  useMatches,
 } from '@remix-run/react';
 import { redirect } from '@remix-run/node';
 import styles from '~/styles/base.css?url';
-import type { CookiePreferences } from '~/.server/cookie';
-import { getCookie, signedCookie } from '~/.server/cookie';
-import { getUser } from '~/.server/session';
+import type { CookiePreferences } from '~/services/cookie.server';
+import { getCookie, signedCookie } from '~/services/cookie.server';
+import { getUser } from '~/services/session.server';
 import { useRealtimeRevalidation } from '~/hooks/use-realtime-revalidation';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 /** 全局样式 */
 import '~/styles/tailwind.css';
-import { AnimatePresence, motion } from 'framer-motion';
+
+/** 插件样式 */
+import nProgressStyles from 'nprogress/nprogress.css?url';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -39,7 +45,10 @@ export const meta: MetaFunction = () => [
 ];
 
 /** 链接 */
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: styles },
+  { rel: 'stylesheet', href: nProgressStyles },
+];
 
 /** 自定义 HTTP 标头 */
 export const headers: HeadersFunction = () => ({
@@ -81,6 +90,7 @@ export function HydrateFallback() {
 
 function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
   const routeLoaderData = useRouteLoaderData<typeof loader>('root');
+  const matches = useMatches();
 
   return (
     <html lang="en">
@@ -97,6 +107,15 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
         />
       </head>
       <body>
+        <header>
+          <ol>
+            {matches
+              .filter((match) => match.handle && match.handle.breadcrumb)
+              .map((match, index) => (
+                <li key={index}>{match.handle.breadcrumb(match)}</li>
+              ))}
+          </ol>
+        </header>
         {children}
         <ScrollRestoration />
         <Scripts crossOrigin="anonymous" />
@@ -108,10 +127,16 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
 /** 根组件 */
 export default function App() {
   const outlet = useOutlet();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    if (navigation.state === 'idle') nProgress.done();
+    else nProgress.start();
+  }, [navigation.state]);
+
   useRealtimeRevalidation({ url: '/issues-events' });
   return (
     <Document>
-      {/* <Outlet /> */}
       <AnimatePresence mode="wait" initial={false}>
         <motion.main
           key={useLocation().pathname}

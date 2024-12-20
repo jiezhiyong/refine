@@ -3,8 +3,8 @@ import { data, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { z } from 'zod';
 import { useRef, useEffect } from 'react';
-import { createUserSession, requireUserSession } from '~/.server/session';
-import { createUser, getUserByEmail } from '~/.server/user';
+import { createUserSession, requireUserSession } from '~/services/session.server';
+import { createUser, getUserByEmail } from '~/services/user.server';
 import { validateEmail } from '~/utils/validate-email';
 import { safeRedirect } from '~/utils/safe-redirect';
 

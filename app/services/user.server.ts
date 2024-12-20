@@ -1,6 +1,6 @@
 import type { Password, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { db } from './db';
+import { db } from './db.server';
 
 /** 根据 ID 获取用户 */
 export async function getUserById(id: User['id']) {
