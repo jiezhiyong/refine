@@ -65,12 +65,12 @@ export const requireUserSession = async (request: Request, redirectTo: string = 
 export async function createUserSession({
   request,
   userId,
-  remember,
+  remember = true,
   redirectTo,
 }: {
   request: Request;
   userId: string;
-  remember: boolean;
+  remember?: boolean;
   redirectTo: string;
 }) {
   const session = await getSession(request);

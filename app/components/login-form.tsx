@@ -1,27 +1,16 @@
 import { useSearchParams, useActionData, Form, Link } from '@remix-run/react';
-import { useRef, useEffect } from 'react';
 import { Button } from '~/components-shadcn/button';
 import { Card, CardContent } from '~/components-shadcn/card';
 import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
 import { action } from '~/routes/login';
+import { PrivacyPolicy } from './privacy-policy';
 
 /** 登录表单 */
 export function LoginForm() {
   const actionData = useActionData<typeof action>();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
-
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (actionData?.errors?.email) {
-      emailRef.current?.focus();
-    } else if (actionData?.errors?.password) {
-      passwordRef.current?.focus();
-    }
-  }, [actionData]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -31,16 +20,15 @@ export function LoginForm() {
             <input type="hidden" name="redirectTo" value={redirectTo} />
 
             <div className="flex flex-col gap-6">
-              <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
-                <p className="text-balance text-muted-foreground">Login to your Acme Inc account</p>
+              <div className="flex flex-col">
+                <h1 className="flex items-center text-2xl font-bold">Welcome back</h1>
+                <p className="text-balance text-muted-foreground">Login to your Acme OSS Inc. account</p>
               </div>
 
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   name="email"
-                  ref={emailRef}
                   id="email"
                   type="email"
                   placeholder="Goodman@example.com"
@@ -59,11 +47,12 @@ export function LoginForm() {
                 </div>
                 <Input
                   name="password"
-                  ref={passwordRef}
                   id="password"
                   type="password"
                   required
-                  autoComplete="password"
+                  autoComplete="current-password"
+                  minLength={6}
+                  maxLength={50}
                 />
               </div>
 
@@ -72,7 +61,7 @@ export function LoginForm() {
               </Button>
 
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                <span className="relative z-10 bg-background px-2 text-muted-foreground">Or continue with</span>
+                <span className="relative z-10 bg-background px-2 text-muted-foreground">or</span>
               </div>
 
               <Button variant="outline" className="w-full">
@@ -103,12 +92,7 @@ export function LoginForm() {
         </CardContent>
       </Card>
 
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-        {'By clicking continue, you agree to our '}
-        <Link to="#">Terms of Service</Link>
-        {' and '}
-        <Link to="#">Privacy Policy</Link>.
-      </div>
+      <PrivacyPolicy />
     </div>
   );
 }
