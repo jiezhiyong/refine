@@ -23,7 +23,6 @@ import {
   useMatches,
 } from '@remix-run/react';
 import { redirect } from '@remix-run/node';
-import styles from '~/styles/base.css?url';
 import type { CookiePreferences } from '~/services/cookie.server';
 import { getCookie, signedCookie } from '~/services/cookie.server';
 import { getUser } from '~/services/session.server';
@@ -31,10 +30,9 @@ import { useRealtimeRevalidation } from '~/hooks/use-realtime-revalidation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 
-/** 全局样式 */
+/** 全局样式、插件样式 */
 import '~/styles/tailwind.css';
-
-/** 插件样式 */
+import styles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
 
 /** 元数据 */
@@ -55,7 +53,7 @@ export const headers: HeadersFunction = () => ({
   'X-Powered-By': 'Hugs',
 });
 
-/** 加载器 */
+// 加载器
 export const loader: LoaderFunction = async ({ request }) => {
   const cookie = await getCookie(request);
 

@@ -3,7 +3,7 @@ import { data, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useSearchParams } from '@remix-run/react';
 import { z } from 'zod';
 import { useRef, useEffect } from 'react';
-import { createUserSession, requireUserSession } from '~/services/session.server';
+import { createUserSession, getUserId } from '~/services/session.server';
 import { createUser, getUserByEmail } from '~/services/user.server';
 import { validateEmail } from '~/utils/validate-email';
 import { safeRedirect } from '~/utils/safe-redirect';
@@ -24,18 +24,18 @@ const registerSchema = z
 // 定义表单数据类型
 type RegisterFormData = z.infer<typeof registerSchema>;
 
-/** 加载器 */
+// 加载器
 export async function loader({ request }: LoaderFunctionArgs) {
-  const userId = await requireUserSession(request);
+  const userId = await getUserId(request);
 
-  if (!userId) {
+  if (userId) {
     return redirect('/');
   }
 
   return {};
 }
 
-/** Action 处理函数 */
+// Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const rawFormData = Object.fromEntries(formData);
@@ -157,7 +157,7 @@ export default function Register() {
               <Link
                 className="text-blue-500 underline"
                 to={{
-                  pathname: '/login',
+                  pathname: '/user-login',
                   search: searchParams.toString(),
                 }}
               >
