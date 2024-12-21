@@ -1,5 +1,5 @@
 import { useFetcher } from '@remix-run/react';
-import { Button } from '~/components-shadcn/button1';
+import { Button } from '~/components-shadcn/button';
 
 interface SidebarProps {
   children: React.ReactNode;

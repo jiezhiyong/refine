@@ -1,5 +1,5 @@
-import { useSearchParams, useActionData, Form, Link } from '@remix-run/react';
-import { Button } from '~/components-shadcn/button1';
+import { useSearchParams, useActionData, Form, Link, useNavigation } from '@remix-run/react';
+import { Button } from '~/components-shadcn/button';
 import { Card, CardContent } from '~/components-shadcn/card';
 import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
@@ -23,6 +23,7 @@ export function LoginForm() {
   const { errors } = useActionData<ActionData>() || {};
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (errors?.default?.[0]) {
@@ -80,7 +81,7 @@ export function LoginForm() {
                 <ErrorMessage error={errors?.password?.[0]} />
               </div>
 
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={navigation.state === 'submitting'}>
                 Login
               </Button>
 

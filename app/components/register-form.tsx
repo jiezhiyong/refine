@@ -1,6 +1,6 @@
-import { useSearchParams, useActionData, Form, Link } from '@remix-run/react';
+import { useSearchParams, useActionData, Form, Link, useNavigation } from '@remix-run/react';
 import { GalleryVerticalEnd } from 'lucide-react';
-import { Button } from '~/components-shadcn/button1';
+import { Button } from '~/components-shadcn/button';
 import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
 import { PrivacyPolicy } from './privacy-policy';
@@ -23,6 +23,7 @@ export function RegisterForm() {
   const { errors } = useActionData<ActionData>() || {};
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (errors?.default?.[0]) {
@@ -85,7 +86,7 @@ export function RegisterForm() {
               <ErrorMessage error={errors?.password?.[0]} />
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={navigation.state === 'submitting'}>
               Register
             </Button>
           </div>

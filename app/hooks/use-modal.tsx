@@ -17,7 +17,7 @@ import {
   DialogFooter,
 } from '~/components-shadcn/dialog';
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { Button } from '~/components-shadcn/button1';
+import { Button } from '~/components-shadcn/button';
 
 type ModalType = 'alert' | 'dialog' | 'custom';
 
