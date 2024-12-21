@@ -1,0 +1,159 @@
+{
+  "routes": {
+    "root": {
+      "path": "",
+      "id": "root",
+      "file": "root.tsx"
+    },
+    "routes/agreement.$agreementId[.pdf]": {
+      "file": "routes/agreement.$agreementId[.pdf].tsx",
+      "id": "routes/agreement.$agreementId[.pdf]",
+      "path": "agreement/:agreementId.pdf",
+      "parentId": "root"
+    },
+    "routes/client-only-components": {
+      "file": "routes/client-only-components.tsx",
+      "id": "routes/client-only-components",
+      "path": "client-only-components",
+      "parentId": "root"
+    },
+    "routes/contacts.$contactId": {
+      "file": "routes/contacts.$contactId.tsx",
+      "id": "routes/contacts.$contactId",
+      "path": "contacts/:contactId",
+      "parentId": "root"
+    },
+    "routes/sharing-loader-data": {
+      "file": "routes/sharing-loader-data.tsx",
+      "id": "routes/sharing-loader-data",
+      "path": "sharing-loader-data",
+      "parentId": "root"
+    },
+    "routes/infinite-scrolling": {
+      "file": "routes/infinite-scrolling.tsx",
+      "id": "routes/infinite-scrolling",
+      "path": "infinite-scrolling",
+      "parentId": "root"
+    },
+    "routes/issues.$id.update": {
+      "file": "routes/issues.$id.update.tsx",
+      "id": "routes/issues.$id.update",
+      "path": ":id/update",
+      "parentId": "routes/issues"
+    },
+    "routes/image-resize.$": {
+      "file": "routes/image-resize.$.ts",
+      "id": "routes/image-resize.$",
+      "path": "image-resize/*",
+      "parentId": "root"
+    },
+    "routes/framer-motion": {
+      "file": "routes/framer-motion.tsx",
+      "id": "routes/framer-motion",
+      "path": "framer-motion",
+      "parentId": "root"
+    },
+    "routes/issues-events": {
+      "file": "routes/issues-events.tsx",
+      "id": "routes/issues-events",
+      "path": "issues-events",
+      "parentId": "root"
+    },
+    "routes/upload-local": {
+      "file": "routes/upload-local.tsx",
+      "id": "routes/upload-local",
+      "path": "upload-local",
+      "parentId": "root"
+    },
+    "routes/upload-video": {
+      "file": "routes/upload-video.tsx",
+      "id": "routes/upload-video",
+      "path": "upload-video",
+      "parentId": "root"
+    },
+    "routes/healthcheck": {
+      "file": "routes/healthcheck.tsx",
+      "id": "routes/healthcheck",
+      "path": "healthcheck",
+      "parentId": "root"
+    },
+    "routes/issues_.$id": {
+      "file": "routes/issues_.$id.tsx",
+      "id": "routes/issues_.$id",
+      "path": "issues/:id",
+      "parentId": "root"
+    },
+    "routes/socket-io": {
+      "file": "routes/socket-io.tsx",
+      "id": "routes/socket-io",
+      "path": "socket-io",
+      "parentId": "root"
+    },
+    "routes/upload-s3": {
+      "file": "routes/upload-s3.tsx",
+      "id": "routes/upload-s3",
+      "path": "upload-s3",
+      "parentId": "root"
+    },
+    "routes/register": {
+      "file": "routes/register.tsx",
+      "id": "routes/register",
+      "path": "register",
+      "parentId": "root"
+    },
+    "routes/sidebar": {
+      "file": "routes/sidebar.tsx",
+      "id": "routes/sidebar",
+      "path": "sidebar",
+      "parentId": "root"
+    },
+    "routes/_index": {
+      "file": "routes/_index.tsx",
+      "id": "routes/_index",
+      "index": true,
+      "parentId": "root"
+    },
+    "routes/issues": {
+      "file": "routes/issues.tsx",
+      "id": "routes/issues",
+      "path": "issues",
+      "parentId": "root"
+    },
+    "routes/logout": {
+      "file": "routes/logout.tsx",
+      "id": "routes/logout",
+      "path": "logout",
+      "parentId": "root"
+    },
+    "routes/login": {
+      "file": "routes/login.tsx",
+      "id": "routes/login",
+      "path": "login",
+      "parentId": "root"
+    },
+    "routes/queue": {
+      "file": "routes/queue.tsx",
+      "id": "routes/queue",
+      "path": "queue",
+      "parentId": "root"
+    },
+    "routes/redis": {
+      "file": "routes/redis.tsx",
+      "id": "routes/redis",
+      "path": "redis",
+      "parentId": "root"
+    },
+    "routes/bff": {
+      "file": "routes/bff.tsx",
+      "id": "routes/bff",
+      "path": "bff",
+      "parentId": "root"
+    },
+    "routes/msw": {
+      "file": "routes/msw.tsx",
+      "id": "routes/msw",
+      "path": "msw",
+      "parentId": "root"
+    }
+  }
+}
