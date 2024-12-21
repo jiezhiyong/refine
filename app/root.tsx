@@ -36,6 +36,8 @@ import { ModalProvider } from '~/hooks/use-modal';
 import '~/styles/tailwind.css';
 import styles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
+import PageError from './components/500';
+import NotFound from './components/404';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -154,18 +156,14 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     return (
       <Document title={`${error.status} ${error.statusText}`}>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
+        {error.status === 404 ? <NotFound /> : <PageError error={{ message: error.data }} />}
       </Document>
     );
   }
 
-  const errorMessage = error instanceof Error ? error.message : 'Unknown error';
   return (
     <Document title="Oh no!">
-      <h1>Error!</h1>
-      <pre>{errorMessage}</pre>
+      <PageError error={error as Error} />
     </Document>
   );
 }
