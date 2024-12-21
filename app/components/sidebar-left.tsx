@@ -1,5 +1,3 @@
-'use client';
-
 import * as React from 'react';
 import {
   AudioWaveform,
@@ -8,8 +6,10 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
+  LifeBuoy,
   Map,
   PieChart,
+  Send,
   Settings2,
   SquareTerminal,
 } from 'lucide-react';
@@ -19,6 +19,7 @@ import { NavProjects } from '~/components/nav-projects';
 import { NavUser } from '~/components/nav-user';
 import { TeamSwitcher } from '~/components/team-switcher';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '~/components-shadcn/sidebar';
+import { NavSecondary } from './nav-secondary';
 
 // This is sample data.
 const data = {
@@ -147,9 +148,21 @@ const data = {
       icon: Map,
     },
   ],
+  navSecondary: [
+    {
+      title: 'Support',
+      url: '#',
+      icon: LifeBuoy,
+    },
+    {
+      title: 'Feedback',
+      url: '#',
+      icon: Send,
+    },
+  ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -158,6 +171,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
+        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
