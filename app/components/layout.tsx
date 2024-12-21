@@ -9,8 +9,9 @@ import {
 } from '~/components-shadcn/breadcrumb';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '~/components-shadcn/sidebar';
 import { AppSidebar } from '~/components/sidebar';
+import { Outlet } from '@remix-run/react';
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -32,7 +33,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <Outlet />
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -46,22 +46,22 @@ const data = {
   ],
   navMain: [
     {
-      title: 'Playground',
+      title: 'Dashboard',
       url: '#',
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: 'Dashboard',
+          title: 'Home',
           url: '/dashboard',
         },
         {
-          title: 'Issues',
-          url: '/issues',
+          title: 'About',
+          url: '/dashboard/about',
         },
         {
-          title: 'Settings',
-          url: '#',
+          title: 'Setting',
+          url: '/dashboard/setting',
         },
       ],
     },
@@ -71,62 +71,61 @@ const data = {
       icon: Bot,
       items: [
         {
-          title: 'Genesis',
-          url: '#',
+          title: 'ChatGPT',
+          url: '/models/ChatGPT',
         },
         {
-          title: 'Explorer',
-          url: '#',
+          title: 'Claude',
+          url: '/models/Claude',
         },
         {
-          title: 'Quantum',
-          url: '#',
+          title: 'Gemini',
+          url: '/models/Gemini',
+        },
+        {
+          title: 'LLaMA',
+          url: '/models/LLaMA',
         },
       ],
     },
     {
-      title: 'Documentation',
+      title: 'Playground',
       url: '#',
       icon: BookOpen,
       items: [
         {
-          title: 'Introduction',
-          url: '#',
+          title: 'v0',
+          url: '/playground/v0',
         },
         {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
+          title: 'bolt',
+          url: '/playground/bolt',
         },
       ],
     },
     {
-      title: 'Settings',
+      title: 'Configs',
       url: '#',
       icon: Settings2,
       items: [
         {
-          title: 'General',
-          url: '#',
+          title: 'About',
+          url: '/configs/about',
         },
         {
-          title: 'Team',
-          url: '#',
+          title: 'Setting',
+          url: '/configs/about',
         },
+      ],
+    },
+    {
+      title: 'Users',
+      url: '#',
+      icon: Settings2,
+      items: [
         {
-          title: 'Billing',
-          url: '#',
-        },
-        {
-          title: 'Limits',
-          url: '#',
+          title: 'Table Lists',
+          url: '/users',
         },
       ],
     },
