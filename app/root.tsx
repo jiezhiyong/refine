@@ -137,7 +137,7 @@ export default function App() {
     else nProgress.start();
   }, [navigation.state]);
 
-  useRealtimeRevalidation({ url: '/issues-events' });
+  // useRealtimeRevalidation({ url: '/issues-events' });
   return (
     <Document>
       <AnimatePresence mode="wait" initial={false}>

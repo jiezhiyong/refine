@@ -52,12 +52,12 @@ const data = {
       isActive: true,
       items: [
         {
-          title: 'History',
-          url: '#',
+          title: 'Dashboard',
+          url: '/dashboard',
         },
         {
-          title: 'Starred',
-          url: '#',
+          title: 'Issues',
+          url: '/issues',
         },
         {
           title: 'Settings',
