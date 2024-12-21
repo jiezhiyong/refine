@@ -29,6 +29,8 @@ import { getUser } from '~/services/session.server';
 import { useRealtimeRevalidation } from '~/hooks/use-realtime-revalidation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
+import { Toaster } from '~/components-shadcn/sonner';
+import { ModalProvider } from '~/hooks/use-modal';
 
 /** 全局样式、插件样式 */
 import '~/styles/tailwind.css';
@@ -114,7 +116,8 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
               ))}
           </ol>
         </header>
-        {children}
+        <ModalProvider>{children}</ModalProvider>
+        <Toaster richColors position="top-center" />
         <ScrollRestoration />
         <Scripts crossOrigin="anonymous" />
       </body>
@@ -136,12 +139,7 @@ export default function App() {
   return (
     <Document>
       <AnimatePresence mode="wait" initial={false}>
-        <motion.main
-          key={useLocation().pathname}
-          initial={{ x: '10%', opacity: 0 }}
-          animate={{ x: '0', opacity: 1 }}
-          exit={{ x: '-40%', opacity: 0 }}
-        >
+        <motion.main key={useLocation().pathname} initial={{ x: '10%', opacity: 0 }} animate={{ x: '0', opacity: 1 }}>
           {outlet}
         </motion.main>
       </AnimatePresence>

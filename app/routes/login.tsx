@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { LoginForm } from '~/components/login-form';
 import { getUserId, createUserSession } from '~/services/session.server';
 import { verifyLogin } from '~/services/user.server';
-import { badRequest } from '~/services/utils';
 import { safeRedirect } from '~/utils/safe-redirect';
+import { typedFormError } from '~/utils/typed-form-error';
 
 // 定义表单验证 schema
 const loginSchema = z.object({
@@ -34,7 +34,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const { email, password } = loginSchema.parse(rawData);
     const user = await verifyLogin(email, password);
     if (!user) {
-      throw { email: ['Invalid email or password.'] };
+      throw new Error('Invalid email or password.');
     }
 
     return createUserSession({
@@ -43,10 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
       userId: user.id,
     });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return badRequest({ errors: error.flatten().fieldErrors });
-    }
-    return badRequest({ errors: error });
+    return typedFormError(error);
   }
 }
 

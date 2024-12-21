@@ -5,7 +5,8 @@ import { createUserSession, getUserId } from '~/services/session.server';
 import { createUser, getUserByEmail } from '~/services/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';
 import { RegisterForm } from '~/components/register-form';
-import { badRequest } from '~/services/utils';
+import { typedFormError } from '~/utils/typed-form-error';
+import { sleep } from '~/utils/sleep';
 
 // 定义表单验证 schema
 const registerSchema = z.object({
@@ -29,6 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const rawData = Object.fromEntries(formData) as z.infer<typeof registerSchema>;
+  await sleep(2000);
 
   try {
     const { email, password } = registerSchema.parse(rawData);
@@ -44,10 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
       userId: user.id,
     });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return badRequest({ errors: error.flatten().fieldErrors });
-    }
-    return badRequest({ errors: error });
+    return typedFormError(error);
   }
 }
 
