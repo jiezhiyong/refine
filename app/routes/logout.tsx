@@ -1,17 +1,7 @@
-import { ActionFunctionArgs } from '@remix-run/node';
-import { Form } from '@remix-run/react';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import { logout } from '~/services/session.server';
 
-// Action 处理函数
-export const action = async ({ request }: ActionFunctionArgs) => {
+// 加载器 - 初始化 && 处理表单`GET`请求
+export async function loader({ request }: LoaderFunctionArgs) {
   return logout(request);
-};
-
-// UI
-export default function Logout() {
-  return (
-    <Form method="post">
-      <button>Logout</button>
-    </Form>
-  );
 }

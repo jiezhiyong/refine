@@ -1,5 +1,7 @@
+import { TAny } from '~/types/any';
+
 export interface CodeProps {
-  data: any;
+  data: TAny;
   summary: string;
 }
 

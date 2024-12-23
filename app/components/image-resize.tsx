@@ -9,7 +9,7 @@ export interface ImageProps extends React.ComponentPropsWithRef<'img'> {
   alt: string;
 }
 
-export const Image = forwardRef<HTMLImageElement, ImageProps>(
+export const ImageResize = forwardRef<HTMLImageElement, ImageProps>(
   ({ children, width, height, fit, src, alt = '', ...other }, forwardedRef) => {
     const query = new URLSearchParams();
     if (width) {
@@ -21,6 +21,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
     if (fit) {
       query.set('fit', fit);
     }
+
     return (
       <img
         ref={forwardedRef}
@@ -32,4 +33,4 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
   }
 );
 
-Image.displayName = 'Image';
+ImageResize.displayName = 'ImageResize';

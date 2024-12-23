@@ -1,6 +1,6 @@
 import { Link } from '@remix-run/react';
 
-/** 隐私政策 */
+/** 登录、注册时的隐私政策 */
 export function PrivacyPolicy() {
   return (
     <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">

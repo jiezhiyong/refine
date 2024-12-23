@@ -1,4 +1,4 @@
-import { LifeBuoy, Send } from 'lucide-react';
+import { Activity, BadgeHelp } from 'lucide-react';
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -6,10 +6,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '~/components-shadcn/sidebar';
+import { cn } from '~/utils/cn';
 
 const items = [
-  { title: 'Support', url: '#', icon: LifeBuoy },
-  { title: 'Feedback', url: '#', icon: Send },
+  { title: 'Health Check', url: '#', icon: Activity },
+  { title: 'Help', url: '#', icon: BadgeHelp },
 ];
 
 export function NavSecondary() {
@@ -21,7 +22,7 @@ export function NavSecondary() {
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild size="sm">
                 <a href={item.url}>
-                  <item.icon />
+                  <item.icon className={cn(item.title === 'Health Check' && 'animate-pulse text-green-500')} />
                   <span>{item.title}</span>
                 </a>
               </SidebarMenuButton>

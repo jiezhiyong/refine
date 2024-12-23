@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AudioWaveform, ChevronsUpDown, Command, GalleryVerticalEnd, Plus } from 'lucide-react';
+import { AudioLines, ChevronsUpDown, Baby, GalleryVerticalEnd, Plus, BicepsFlexed } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -12,27 +12,16 @@ import {
 } from '~/components-shadcn/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components-shadcn/sidebar';
 
-const teams = [
-  {
-    name: 'Acme Inc',
-    logo: GalleryVerticalEnd,
-    plan: 'Enterprise',
-  },
-  {
-    name: 'Acme Corp.',
-    logo: AudioWaveform,
-    plan: 'Startup',
-  },
-  {
-    name: 'Evil Corp.',
-    logo: Command,
-    plan: 'Free',
-  },
+// TODO: replace with real roles
+const roles = [
+  { icon: BicepsFlexed, role: 'Administrator' },
+  { icon: AudioLines, role: 'Operations User' },
+  { icon: Baby, role: 'Guest' },
 ];
 
-export function TeamSwitcher() {
+export function RoleSwitcher() {
   const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = React.useState(teams[0]);
+  const [activeTeam, setActiveTeam] = React.useState(roles[0]);
 
   return (
     <SidebarMenu>
@@ -44,11 +33,11 @@ export function TeamSwitcher() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <activeTeam.logo className="size-4" />
+                <GalleryVerticalEnd className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{activeTeam.name}</span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate font-semibold">Acme OSS Inc.</span>
+                <span className="truncate text-xs">{activeTeam.role}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -59,13 +48,13 @@ export function TeamSwitcher() {
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Teams</DropdownMenuLabel>
-            {teams.map((team, index) => (
-              <DropdownMenuItem key={team.name} onClick={() => setActiveTeam(team)} className="gap-2 p-2">
+            <DropdownMenuLabel className="text-xs text-muted-foreground">roles</DropdownMenuLabel>
+            {roles.map((team, index) => (
+              <DropdownMenuItem key={team.role} onClick={() => setActiveTeam(team)} className="gap-2 p-2">
                 <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <team.logo className="size-4 shrink-0" />
+                  <team.icon className="size-4 shrink-0" />
                 </div>
-                {team.name}
+                {team.role}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
@@ -74,7 +63,7 @@ export function TeamSwitcher() {
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">Add team</div>
+              <div className="font-medium text-muted-foreground">Add Role</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

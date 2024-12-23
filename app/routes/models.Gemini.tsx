@@ -1,3 +1,5 @@
+import { PlaceholderDemo3 } from '~/components/placeholder';
+
 export default function ModelsGemini() {
-  return <>ModelsGemini</>;
+  return <PlaceholderDemo3 />;
 }

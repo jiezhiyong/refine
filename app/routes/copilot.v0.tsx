@@ -1,6 +1,5 @@
 import { PlaceholderDemo1 } from '~/components/placeholder';
 
-// UI
-export default function ModelsChatGPT() {
+export default function CopilotV0() {
   return <PlaceholderDemo1 />;
 }

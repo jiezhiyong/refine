@@ -36,6 +36,7 @@ const data = {
   ],
 };
 
+// 右侧导航栏
 export function SidebarRight({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="none" className="sticky top-0 hidden h-svh border-l lg:flex" {...props}>

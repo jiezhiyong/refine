@@ -1,4 +1,7 @@
-import { Bot, LucideIcon, PieChart, Siren, User } from 'lucide-react';
+// TODO: 权限控制、超出滚动
+
+import { UIMatch } from '@remix-run/react';
+import { Bot, Brain, LucideIcon, PieChart, Siren, UsersRound } from 'lucide-react';
 
 export type MenuItem = {
   id: string;
@@ -18,14 +21,23 @@ const menusBusiness: menuGroupItem = {
   items: [
     {
       id: 'routes/dashboard',
-      title: '仪表盘',
+      title: 'Dashboard',
       icon: PieChart,
-      children: [{ id: 'routes/dashboard._index', title: '首页' }],
+      children: [
+        { id: 'routes/dashboard._index', title: 'Home' },
+        { id: 'routes/dashboard.about', title: 'About' },
+      ],
+    },
+    {
+      id: 'routes/issues',
+      title: 'Issues',
+      icon: Siren,
+      children: [{ id: 'routes/issues._index', title: 'Home' }],
     },
     {
       id: 'routes/models',
-      title: 'AI',
-      icon: Bot,
+      title: 'AI Models',
+      icon: Brain,
       children: [
         { id: 'routes/models.ChatGPT', title: 'ChatGPT' },
         { id: 'routes/models.Claude', title: 'Claude' },
@@ -34,55 +46,47 @@ const menusBusiness: menuGroupItem = {
       ],
     },
     {
-      id: 'routes/playground',
-      title: '代码辅助',
+      id: 'routes/copilot',
+      title: 'Copilot',
       icon: Bot,
       children: [
-        { id: 'routes/playground.v0', title: 'v0' },
-        { id: 'routes/playground.bolt', title: 'bolt' },
+        { id: 'routes/copilot.v0', title: 'V0' },
+        { id: 'routes/copilot.bolt', title: 'Bolt' },
       ],
-    },
-    {
-      id: 'routes/alerts',
-      title: '告警配置',
-      icon: Siren,
-      children: [{ id: 'routes/alerts._index', title: '首页' }],
-    },
-    {
-      id: 'routes/users',
-      title: '用户管理',
-      icon: User,
-      children: [{ id: 'routes/users._index', title: '用户列表' }],
     },
   ],
 };
 
-// 技术菜单
-const menusTechStack: menuGroupItem = {
-  title: 'Techstack',
+// 设置菜单
+const menusSetting: menuGroupItem = {
+  title: 'Settings',
   items: [
     {
-      id: 'routes/javascript',
-      title: 'Javascript',
-      icon: Bot,
-      children: [
-        { id: 'routes/javascript/react', title: 'React' },
-        { id: 'routes/javascript/vue', title: 'Vue' },
-        { id: 'routes/javascript/svelte', title: 'Svelte' },
-        { id: 'routes/javascript/angular', title: 'Angular' },
-      ],
-    },
-    {
-      id: 'routes/css',
-      title: 'CSS',
-      icon: Bot,
-      children: [
-        { id: 'routes/css.tailwind', title: 'Tailwind' },
-        { id: 'routes/css.modules', title: 'Modules' },
-      ],
+      id: 'routes/users',
+      title: 'User Management',
+      icon: UsersRound,
+      children: [{ id: 'routes/users._index', title: 'Home' }],
     },
   ],
 };
 
 // 所有菜单
-export const menuGroups: menuGroupItem[] = [menusBusiness, menusTechStack];
+export const menuGroups: menuGroupItem[] = [menusBusiness, menusSetting];
+
+/**
+ * 路由面包屑名称映射
+ */
+export const routeBreadcrumbMap: Record<UIMatch['id'], string> = menuGroups.reduce(
+  (acc, group) => {
+    group.items.forEach((item) => {
+      acc[item.id] = item.title;
+      if (item.children) {
+        item.children.forEach((child) => {
+          acc[child.id] = child.title;
+        });
+      }
+    });
+    return acc;
+  },
+  {} as Record<UIMatch['id'], string>
+);

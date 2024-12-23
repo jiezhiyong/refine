@@ -1,5 +1,5 @@
 import Layout from '~/components/layout';
 
-export default function Playground() {
+export default function Copilot() {
   return <Layout />;
 }

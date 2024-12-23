@@ -7,14 +7,13 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from '~/components-shadcn/breadcrumb';
-import { routeBreadcrumbMap } from '~/configs/route-breadcrumb-map';
+import { routeBreadcrumbMap } from '~/configs/menus';
 
 /**
  * Breadcrumb - 面包屑导航
  */
 export function Breadcrumb() {
   const matches = useMatches();
-  // console.log(matches);
 
   return (
     <BreadcrumbComponent>
@@ -25,13 +24,17 @@ export function Breadcrumb() {
             return null;
           }
 
+          const next = matches[index + 1];
+          const nextIsIndex = next && next.id.includes('._index');
+          const currentIsNotPage = !routeBreadcrumbMap[`${match.id}._index`];
           const isCurrent = match.pathname === matches[matches.length - 1].pathname;
           const showSeparator = !isRoot && index < matches.length - 1;
           const name = routeBreadcrumbMap[match.id] || match.pathname.split('/').pop() || 'home';
+
           return (
             <>
               <BreadcrumbItem className="hidden capitalize md:block" key={index}>
-                {isCurrent ? (
+                {isCurrent || currentIsNotPage || nextIsIndex ? (
                   <BreadcrumbPage>{name}</BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink href={match.pathname}>{name}</BreadcrumbLink>
