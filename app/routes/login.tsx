@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
-import { LoginForm } from '~/components/login-form';
+import { LoginForm } from '~/components/form-login';
 import { getUserId, createUserSession } from '~/services/session.server';
 import { verifyLogin } from '~/services/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';

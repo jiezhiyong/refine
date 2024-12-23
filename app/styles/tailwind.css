@@ -5,11 +5,6 @@
 html,
 body {
   @apply bg-white dark:bg-gray-950;
-
-  /* TODO: */
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
 }
 
 @layer base {
@@ -48,7 +43,9 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-  .dark {
+
+  .dark,
+  :root[class~='dark'] {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;

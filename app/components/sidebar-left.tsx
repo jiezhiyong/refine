@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavMain } from '~/components/nav-main';
 import { NavUser } from '~/components/nav-user';
-import { RoleSwitcher } from '~/components/role-switcher';
+import { RoleSwitcher } from '~/components/switcher-role';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '~/components-shadcn/sidebar';
 import { NavSecondary } from './nav-secondary';
 

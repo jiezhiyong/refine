@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { createUserSession, getUserId } from '~/services/session.server';
 import { createUser, getUserByEmail } from '~/services/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';
-import { RegisterForm } from '~/components/register-form';
+import { RegisterForm } from '~/components/form-register';
 import { typedFormError } from '~/utils/typed-form-error';
 import { sleep } from '~/utils/sleep';
 

@@ -1,6 +1,7 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 import { getUserById } from './user.server';
+import { createThemeSessionResolver } from 'remix-themes';
 
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
 
@@ -94,3 +95,12 @@ export async function logout(request: Request) {
     },
   });
 }
+
+/** 主题 Session */
+const themeStorage = createCookieSessionStorage<SessionData, SessionFlashData>({
+  cookie: {
+    name: 'theme:state',
+  },
+});
+
+export const themeSessionResolver = createThemeSessionResolver(themeStorage);

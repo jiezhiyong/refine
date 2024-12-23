@@ -19,11 +19,12 @@ import {
   useRouteLoaderData,
   useNavigation,
   Outlet,
+  useLoaderData,
 } from '@remix-run/react';
 import { redirect } from '@remix-run/node';
 import type { CookiePreferences } from '~/services/cookie.server';
 import { getCookie, signedCookie } from '~/services/cookie.server';
-import { getUser } from '~/services/session.server';
+import { getUser, themeSessionResolver } from '~/services/session.server';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
 import { ModalProvider } from '~/hooks/use-modal';
@@ -34,6 +35,8 @@ import styles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
 import PageError from './components/500';
 import NotFound from './components/404';
+import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes';
+import { cn } from './utils/cn';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -53,13 +56,14 @@ export const headers: HeadersFunction = () => ({
   'X-Powered-By': 'Hugs',
 });
 
-// 加载器
+/** 加载器 */
 export const loader: LoaderFunction = async ({ request }) => {
   const cookie = await getCookie(request);
+  const { getTheme } = await themeSessionResolver(request);
 
   return {
     user: await getUser(request),
-    theme: cookie?.theme,
+    theme: getTheme(),
     sidebarIsOpen: cookie?.sidebarIsOpen,
   };
 };
@@ -88,14 +92,16 @@ export function HydrateFallback() {
 
 function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
   const routeLoaderData = useRouteLoaderData<typeof loader>('root');
+  const [theme] = useTheme();
 
   return (
-    <html lang="en">
+    <html lang="en" className={cn(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         {title && <title>{title}</title>}
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(routeLoaderData.theme)} />
         <Links />
         <style
           dangerouslySetInnerHTML={{
@@ -113,8 +119,17 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
   );
 }
 
+export default function AppWithProviders() {
+  const data = useLoaderData<typeof loader>();
+  return (
+    <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
+      <App />
+    </ThemeProvider>
+  );
+}
+
 /** 根组件 */
-export default function App() {
+export function App() {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -122,7 +137,7 @@ export default function App() {
     else nProgress.start();
   }, [navigation.state]);
 
-  // TODO:
+  // TODO: 应用实时更新
   // useRealtimeRevalidation({ url: '/issues-events' });
   return (
     <Document>
