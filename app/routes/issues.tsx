@@ -7,11 +7,6 @@ import { getIssues, Issue } from 'mocks/issues';
 import { cn } from '~/utils/cn';
 import icons from '/public/icons.svg?url';
 
-/** 处理应用程序约定 */
-export const handle = {
-  breadcrumb: () => <Link to="/issues">Issues</Link>,
-};
-
 export async function loader() {
   return await getIssues();
 }

@@ -1,6 +1,4 @@
-import * as React from 'react';
-import { type LucideIcon } from 'lucide-react';
-
+import { LifeBuoy, Send } from 'lucide-react';
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -9,18 +7,14 @@ import {
   SidebarMenuItem,
 } from '~/components-shadcn/sidebar';
 
-export function NavSecondary({
-  items,
-  ...props
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
-} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+const items = [
+  { title: 'Support', url: '#', icon: LifeBuoy },
+  { title: 'Feedback', url: '#', icon: Send },
+];
+
+export function NavSecondary() {
   return (
-    <SidebarGroup {...props}>
+    <SidebarGroup className="mt-auto">
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (

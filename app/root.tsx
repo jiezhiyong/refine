@@ -17,17 +17,13 @@ import {
   useRouteError,
   isRouteErrorResponse,
   useRouteLoaderData,
-  useOutlet,
-  useLocation,
   useNavigation,
-  useMatches,
+  Outlet,
 } from '@remix-run/react';
 import { redirect } from '@remix-run/node';
 import type { CookiePreferences } from '~/services/cookie.server';
 import { getCookie, signedCookie } from '~/services/cookie.server';
 import { getUser } from '~/services/session.server';
-import { useRealtimeRevalidation } from '~/hooks/use-realtime-revalidation';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
 import { ModalProvider } from '~/hooks/use-modal';
@@ -92,7 +88,6 @@ export function HydrateFallback() {
 
 function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
   const routeLoaderData = useRouteLoaderData<typeof loader>('root');
-  const matches = useMatches();
 
   return (
     <html lang="en">
@@ -109,15 +104,6 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
         />
       </head>
       <body>
-        <header>
-          <ol>
-            {matches
-              .filter((match) => match.handle && match.handle.breadcrumb)
-              .map((match, index) => (
-                <li key={index}>{match.handle.breadcrumb(match)}</li>
-              ))}
-          </ol>
-        </header>
         <ModalProvider>{children}</ModalProvider>
         <Toaster richColors position="top-center" />
         <ScrollRestoration />
@@ -129,7 +115,6 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
 
 /** 根组件 */
 export default function App() {
-  const outlet = useOutlet();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -137,14 +122,11 @@ export default function App() {
     else nProgress.start();
   }, [navigation.state]);
 
+  // TODO:
   // useRealtimeRevalidation({ url: '/issues-events' });
   return (
     <Document>
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.main key={useLocation().pathname} initial={{ x: '10%', opacity: 0 }} animate={{ x: '0', opacity: 1 }}>
-          {outlet}
-        </motion.main>
-      </AnimatePresence>
+      <Outlet />
     </Document>
   );
 }

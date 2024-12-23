@@ -1,17 +1,10 @@
 import { Separator } from '~/components-shadcn/separator';
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from '~/components-shadcn/breadcrumb';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '~/components-shadcn/sidebar';
 import { SidebarLeft } from '~/components/sidebar-left';
 import { Outlet } from '@remix-run/react';
 import { NavActions } from './nav-actions';
 import { SidebarRight } from './sidebar-right';
+import { Breadcrumb } from './breadcrumb';
 
 export default function Layout() {
   return (
@@ -22,17 +15,7 @@ export default function Layout() {
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <Breadcrumb />
           </div>
           <div className="ml-auto px-3">
             <NavActions />

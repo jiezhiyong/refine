@@ -12,15 +12,13 @@ import {
 } from '~/components-shadcn/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components-shadcn/sidebar';
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+const user = {
+  name: 'shadcn',
+  email: 'm@example.com',
+  avatar: '/avatar.jpg',
+};
+
+export function NavUser() {
   const { isMobile } = useSidebar();
 
   return (
