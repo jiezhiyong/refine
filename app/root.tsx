@@ -64,26 +64,26 @@ export const loader: LoaderFunction = async ({ request }) => {
   return {
     user: await getUser(request),
     theme: getTheme(),
-    sidebarIsOpen: cookie?.sidebarIsOpen,
+    sidebarIsOpen: cookie?.['sidebar:state'],
   };
 };
 
 /** 操作函数 */
-export const action: ActionFunction = async ({ request }) => {
-  const cookieHeader = request.headers.get('Cookie');
-  const cookie = (await signedCookie.parse(cookieHeader)) as CookiePreferences;
-  const bodyParams = await request.formData();
+// export const action: ActionFunction = async ({ request }) => {
+//   const cookieHeader = request.headers.get('Cookie');
+//   const cookie = (await signedCookie.parse(cookieHeader)) as CookiePreferences;
+//   const bodyParams = await request.formData();
 
-  if (bodyParams.get('sidebarIsOpen') === 'false') {
-    cookie.sidebarIsOpen = false;
-  }
+//   if (bodyParams.get('sidebarIsOpen') === 'false') {
+//     cookie['sidebar:state'] = false;
+//   }
 
-  return redirect('/', {
-    headers: {
-      'Set-Cookie': await signedCookie.serialize(cookie),
-    },
-  });
-};
+//   return redirect('/', {
+//     headers: {
+//       'Set-Cookie': await signedCookie.serialize(cookie),
+//     },
+//   });
+// };
 
 /** 回退处理 */
 export function HydrateFallback() {
@@ -103,11 +103,6 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
         {title && <title>{title}</title>}
         <PreventFlashOnWrongTheme ssrTheme={Boolean(routeLoaderData.theme)} />
         <Links />
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `:root { --theme: ${routeLoaderData?.theme || 'light'} }`,
-          }}
-        />
       </head>
       <body>
         <ModalProvider>{children}</ModalProvider>

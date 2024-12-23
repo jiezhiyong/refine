@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant';
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
 
 export interface CookiePreferences {
-  sidebarIsOpen?: boolean;
+  ['sidebar:state']?: boolean;
 }
 
 /** 用户偏好Cookie */
