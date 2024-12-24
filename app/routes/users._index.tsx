@@ -1,5 +1,5 @@
-import { PlaceholderDemo1 } from '~/components/placeholder';
+import { PlaceholderDemo5 } from '~/components/placeholder';
 
 export default function UsersIndex() {
-  return <PlaceholderDemo1 />;
+  return <PlaceholderDemo5 />;
 }

@@ -20,7 +20,7 @@ function ThemeSwitcher() {
 
   return (
     <div
-      className="w-full"
+      className="w-full p-2"
       onClick={() => {
         setTheme(theme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT);
       }}
@@ -50,7 +50,7 @@ export function NavSecondary() {
 
           <SidebarMenuItem key="theme-switch">
             <SidebarMenuButton asChild size="sm">
-              <a href="void:(0)">
+              <a href="void:(0)" className="!p-0">
                 <ThemeSwitcher />
               </a>
             </SidebarMenuButton>

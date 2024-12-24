@@ -1,62 +1,32 @@
-// TODO: 如何支持每个路由页面可以自定义右侧操作栏？
-
 import * as React from 'react';
-import { Plus } from 'lucide-react';
+import { Sidebar } from '~/components-shadcn/sidebar';
+import { useMatches, useSearchParams } from '@remix-run/react';
+import { cn } from '~/utils/cn';
+import { HandleFunction } from '~/types/handle';
 
-import { Calendars } from '~/components/calendars';
-import { DatePicker } from '~/components/date-picker';
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarSeparator,
-} from '~/components-shadcn/sidebar';
-
-// This is sample data.
-const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  calendars: [
-    {
-      name: 'My Calendars',
-      items: ['Personal', 'Work', 'Family'],
-    },
-    {
-      name: 'Favorites',
-      items: ['Holidays', 'Birthdays'],
-    },
-    {
-      name: 'Other',
-      items: ['Travel', 'Reminders', 'Deadlines'],
-    },
-  ],
-};
-
-// 右侧导航栏
+/**
+ * 右侧筛选栏
+ */
 export function SidebarRight({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [searchParams] = useSearchParams();
+
+  const matches = useMatches();
+  const lastMatch = matches[matches.length - 1];
+  const handle = lastMatch.handle as HandleFunction;
+
+  const { uiFilter } = handle || {};
+  if (!uiFilter) {
+    return null;
+  }
+
+  const isActive = Boolean(searchParams.get('filter'));
   return (
-    <Sidebar collapsible="none" className="sticky top-0 hidden h-svh border-l lg:flex" {...props}>
-      <SidebarContent>
-        <DatePicker />
-        <SidebarSeparator className="mx-0" />
-        <Calendars calendars={data.calendars} />
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Plus />
-              <span>New</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+    <Sidebar
+      collapsible="none"
+      className={cn('sticky top-0 flex h-svh w-0 border-l transition-all', isActive && 'w-[--sidebar-width]')}
+      {...props}
+    >
+      {typeof uiFilter === 'function' ? uiFilter(lastMatch, matches) : uiFilter}
     </Sidebar>
   );
 }

@@ -1,5 +1,5 @@
 import { Clock } from 'lucide-react';
-import { PlaceholderDemo2 } from '~/components/placeholder';
+import { PlaceholderDemo6 } from '~/components/placeholder';
 import { HandleFunction } from '~/types/handle';
 
 // 创建应用程序约定
@@ -14,5 +14,5 @@ export const handle: HandleFunction = {
 
 // UI
 export default function DashboardAbout() {
-  return <PlaceholderDemo2 />;
+  return <PlaceholderDemo6 />;
 }

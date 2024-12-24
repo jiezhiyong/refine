@@ -50,3 +50,23 @@ export function PlaceholderDemo4() {
     </>
   );
 }
+
+export function PlaceholderDemo5() {
+  return (
+    <>
+      {Array.from({ length: 12 }).map((_, index) => (
+        <div key={index} className="aspect-video h-24 w-full rounded-lg bg-muted/50" />
+      ))}
+    </>
+  );
+}
+
+export function PlaceholderDemo6() {
+  return (
+    <div className="grid auto-rows-min gap-4 md:grid-cols-5">
+      {Array.from({ length: 25 }).map((_, i) => (
+        <div key={i} className="aspect-square rounded-xl bg-muted/50" />
+      ))}
+    </div>
+  );
+}
