@@ -41,7 +41,7 @@ export function NavSecondary() {
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild size="sm">
                 <a href={item.url}>
-                  <item.icon className={cn(item.title === 'Health Check' && 'animate-pulse text-green-500')} />
+                  <item.icon className={cn(item.title === 'Service Health Check' && 'animate-pulse text-green-500')} />
                   <span>{item.title}</span>
                 </a>
               </SidebarMenuButton>

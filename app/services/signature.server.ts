@@ -1,6 +1,6 @@
 import { data } from '@remix-run/node';
 
-/** 校验签名 */
+/** // TODO: 校验签名 */
 export const validateSignature = async (request: Request) => {
   if (request.method !== 'POST') {
     return data({ message: 'Method not allowed' }, 405);

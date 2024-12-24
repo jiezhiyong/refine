@@ -100,6 +100,12 @@ export async function logout(request: Request) {
 const themeStorage = createCookieSessionStorage<SessionData, SessionFlashData>({
   cookie: {
     name: 'theme:state',
+    secrets: [process.env.SESSION_SECRET ?? ''],
+    path: '/',
+    sameSite: 'lax',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: undefined,
   },
 });
 

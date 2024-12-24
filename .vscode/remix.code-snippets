@@ -15,5 +15,16 @@
       "  return {};",
       "}",
 		],
+	},
+	"Remix function action": {
+		"prefix": "function action",
+		"body": [
+      "// 处理器 - 处理表单`POST`请求",
+      "export async function action({ request }: ActionFunctionArgs) {",
+      "  const formData = await request.formData();",
+      "  const rawData = Object.fromEntries(formData);",
+      "  return {};",
+      "}",
+		],
 	}
 }
