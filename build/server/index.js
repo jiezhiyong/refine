@@ -1410,7 +1410,7 @@ const TooltipContent = React.forwardRef(({ className, sideOffset = 4, ...props }
   }
 ) }));
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
-const SIDEBAR_COOKIE_NAME = "sidebar:state";
+const SIDEBAR_COOKIE_NAME = "sidebarIsOpen";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "16rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";

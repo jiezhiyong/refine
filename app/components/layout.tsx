@@ -1,14 +1,17 @@
 import { Separator } from '~/components-shadcn/separator';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '~/components-shadcn/sidebar';
 import { SidebarLeft } from '~/components/sidebar-left';
-import { Outlet } from '@remix-run/react';
+import { Outlet, useRouteLoaderData } from '@remix-run/react';
 import { NavActions } from './nav-actions';
 import { SidebarRight } from './sidebar-right';
 import { Breadcrumb } from './breadcrumb';
+import { loader } from '~/root';
 
 export default function Layout() {
+  const { sidebarIsOpen } = useRouteLoaderData<typeof loader>('root');
+
   return (
-    <SidebarProvider open>
+    <SidebarProvider open={sidebarIsOpen === 'true'}>
       <SidebarLeft />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

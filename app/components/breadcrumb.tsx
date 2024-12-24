@@ -1,4 +1,5 @@
 import { useMatches } from '@remix-run/react';
+import { Fragment } from 'react';
 import {
   Breadcrumb as BreadcrumbComponent,
   BreadcrumbList,
@@ -32,8 +33,8 @@ export function Breadcrumb() {
           const name = routeBreadcrumbMap[match.id] || match.pathname.split('/').pop() || 'home';
 
           return (
-            <>
-              <BreadcrumbItem className="hidden capitalize md:block" key={index}>
+            <Fragment key={match.id}>
+              <BreadcrumbItem className="hidden capitalize md:block">
                 {isCurrent || currentIsNotPage || nextIsIndex ? (
                   <BreadcrumbPage>{name}</BreadcrumbPage>
                 ) : (
@@ -41,7 +42,7 @@ export function Breadcrumb() {
                 )}
               </BreadcrumbItem>
               {showSeparator && <BreadcrumbSeparator className="hidden md:block" />}
-            </>
+            </Fragment>
           );
         })}
       </BreadcrumbList>

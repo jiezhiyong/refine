@@ -46,9 +46,9 @@ export function RegisterForm() {
               <div className="flex h-8 w-8 items-center justify-center rounded-md">
                 <GalleryVerticalEnd className="size-6" />
               </div>
-              <span className="sr-only">Scme Inc.</span>
+              <span className="sr-only">Remix Inc.</span>
             </Link>
-            <h1 className="text-xl font-bold">Welcome to Scme OSS Inc.</h1>
+            <h1 className="text-xl font-bold">Welcome to Remix OSS Inc.</h1>
             <div className="text-center text-sm">
               {`Already has an account? `}
               <Link to="/login" replace className="underline underline-offset-4">

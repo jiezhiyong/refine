@@ -1,13 +1,6 @@
 import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
-import type {
-  ActionFunction,
-  ErrorResponse,
-  HeadersFunction,
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-} from '@remix-run/node';
+import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
 import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import {
   Links,
@@ -21,22 +14,20 @@ import {
   Outlet,
   useLoaderData,
 } from '@remix-run/react';
-import { redirect } from '@remix-run/node';
-import type { CookiePreferences } from '~/services/cookie.server';
-import { getCookie, signedCookie } from '~/services/cookie.server';
+import { getCookie } from '~/services/cookie.server';
 import { getUser, themeSessionResolver } from '~/services/session.server';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
 import { ModalProvider } from '~/hooks/use-modal';
+import PageError from '~/components/500';
+import NotFound from '~/components/404';
+import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes';
+import { cn } from '~/utils/cn';
 
 /** 全局样式、插件样式 */
 import '~/styles/tailwind.css';
 import styles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
-import PageError from './components/500';
-import NotFound from './components/404';
-import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes';
-import { cn } from './utils/cn';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -64,26 +55,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   return {
     user: await getUser(request),
     theme: getTheme(),
-    sidebarIsOpen: cookie?.['sidebar:state'],
+    sidebarIsOpen: cookie?.sidebarIsOpen,
   };
 };
-
-/** 操作函数 */
-// export const action: ActionFunction = async ({ request }) => {
-//   const cookieHeader = request.headers.get('Cookie');
-//   const cookie = (await signedCookie.parse(cookieHeader)) as CookiePreferences;
-//   const bodyParams = await request.formData();
-
-//   if (bodyParams.get('sidebarIsOpen') === 'false') {
-//     cookie['sidebar:state'] = false;
-//   }
-
-//   return redirect('/', {
-//     headers: {
-//       'Set-Cookie': await signedCookie.serialize(cookie),
-//     },
-//   });
-// };
 
 /** 回退处理 */
 export function HydrateFallback() {
@@ -117,7 +91,7 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
 export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>();
   return (
-    <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
+    <ThemeProvider specifiedTheme={data.theme} themeAction="/api/set-theme">
       <App />
     </ThemeProvider>
   );

@@ -1,4 +1,4 @@
-// TODO: 权限控制、超出滚动
+// TODO: 权限控制
 
 import { UIMatch } from '@remix-run/react';
 import { Bot, Brain, LucideIcon, PieChart, Siren, UsersRound } from 'lucide-react';
