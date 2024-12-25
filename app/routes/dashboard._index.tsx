@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, UIMatch, useNavigate, useSearchParams, useSubmit } from '@remix-run/react';
+import { Form, UIMatch, useSearchParams } from '@remix-run/react';
 import {
   Settings2,
   FileText,
@@ -16,8 +16,6 @@ import {
   ArrowDown,
   Star,
   MoreHorizontal,
-  Filter,
-  FilterX,
   Plus,
   Search,
   ChevronRight,
@@ -42,10 +40,13 @@ import {
 } from '~/components-shadcn/sidebar';
 import { PlaceholderDemo1 } from '~/components/placeholder';
 import { HandleFunction } from '~/types/handle';
-import { useDebounceFn } from 'ahooks';
 import { Checkbox } from '~/components-shadcn/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components-shadcn/collapsible';
-import { FormItem } from '~/components-shadcn/form';
+import { DateRange } from 'react-day-picker';
+import { tryParse } from '~/utils/try-parse';
+import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
+import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
+import { getSearchParams } from '~/utils/search-params';
 
 // 创建应用程序约定
 export const handle: HandleFunction = {
@@ -58,9 +59,8 @@ export const handle: HandleFunction = {
 };
 
 // 加载器 - 初始化 && 处理表单`GET`请求
-export async function loader({ request, params }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const star = url.searchParams.get('star');
+export async function loader({ request }: LoaderFunctionArgs) {
+  const searchParams = getSearchParams(request);
   return {};
 }
 
@@ -76,6 +76,7 @@ export default function DashboardIndex() {
   return <PlaceholderDemo1 />;
 }
 
+// UI - 导航工具
 const dataTools = [
   [
     { label: 'Customize Page', icon: Settings2 },
@@ -103,32 +104,15 @@ const dataTools = [
 function UiTools() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [searchParams] = useSearchParams();
-
-  const navigate = useNavigate();
-  const newParams = new URLSearchParams(searchParams);
-
-  function changeParams(key: string, value: boolean) {
-    if (value) {
-      newParams.set(key, '1');
-    } else {
-      newParams.delete(key);
-    }
-
-    navigate(`./?${newParams.toString()}`, { replace: true });
-  }
+  const updateSearchParams = useUpdateSearchParams();
 
   const starred = Boolean(searchParams.get('starred'));
-  const filter = Boolean(searchParams.get('filter'));
   return (
     <div className="flex items-center gap-1 text-sm">
       <div className="hidden font-medium text-muted-foreground md:inline-block">Edit Oct 08</div>
 
-      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => changeParams('starred', !starred)}>
+      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => updateSearchParams({ starred: !starred })}>
         <Star className={starred ? 'fill-yellow-400' : ''} />
-      </Button>
-
-      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => changeParams('filter', !filter)}>
-        {filter ? <FilterX /> : <Filter />}
       </Button>
 
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -148,7 +132,10 @@ function UiTools() {
                         const isActive = Boolean(searchParams.get(item.label));
                         return (
                           <SidebarMenuItem key={index}>
-                            <SidebarMenuButton onClick={() => changeParams(item.label, !isActive)} isActive={isActive}>
+                            <SidebarMenuButton
+                              onClick={() => updateSearchParams({ [item.label]: !isActive })}
+                              isActive={isActive}
+                            >
                               <item.icon /> <span>{item.label}</span>
                             </SidebarMenuButton>
                           </SidebarMenuItem>
@@ -166,53 +153,37 @@ function UiTools() {
   );
 }
 
+// UI - 右侧过滤器
 const dataFilter = {
   checkbox: [
     {
-      name: 'Calendars Type',
-      items: ['Personal', 'Work', 'Family'],
+      title: 'Calendars Type',
+      name: 'calendarsType',
+      items: [
+        { label: 'Personal', id: 'personal' },
+        { label: 'Work', id: 'work' },
+        { label: 'Family', id: 'family' },
+      ],
     },
     {
-      name: 'Favorites',
-      items: ['Holidays', 'Birthdays'],
+      title: 'Calendars Favorites',
+      name: 'calendarsFavorites',
+      items: [
+        { label: 'Holidays', id: 'holidays' },
+        { label: 'Birthdays', id: 'birthdays' },
+      ],
     },
   ],
 };
 
 function UiFilter() {
   const [searchParams] = useSearchParams();
-
-  const submit = useSubmit();
-  const navigate = useNavigate();
-  const newParams = new URLSearchParams(searchParams);
-
-  const { run: debounceSubmit } = useDebounceFn((formData: FormData) => submit(formData, { replace: true }), {
-    wait: 300,
-  });
-
-  function changeParams(key: string, value: boolean) {
-    if (value) {
-      newParams.set(key, '1');
-    } else {
-      newParams.delete(key);
-    }
-
-    navigate(`./?${newParams.toString()}`, { replace: true });
-  }
+  const dateRange = tryParse(searchParams.get('dateRange')) as DateRange;
+  const updateSearchParams = useUpdateSearchParams();
+  const debounceSubmit = useDebounceSubmit();
 
   return (
-    <Form
-      className="flex flex-1 flex-col"
-      onChange={(event) => {
-        const formData = new FormData(event.currentTarget);
-        searchParams.forEach((value, key) => {
-          if (!formData.has(key)) {
-            formData.append(key, value);
-          }
-        });
-        debounceSubmit(formData);
-      }}
-    >
+    <Form className="flex flex-1 flex-col" onChange={(event) => debounceSubmit(event)}>
       <SidebarContent>
         <SidebarGroup>
           <div className="relative">
@@ -232,21 +203,27 @@ function UiFilter() {
         </SidebarGroup>
 
         <SidebarGroup className="p-0">
-          <Calendar className="[&_[role=gridcell].bg-accent]:bg-sidebar-primary [&_[role=gridcell].bg-accent]:text-sidebar-primary-foreground [&_[role=gridcell]]:w-[33px]" />
+          <Calendar
+            className="[&_[role=gridcell]]:w-[33px]"
+            mode="range"
+            selected={dateRange}
+            onSelect={(res) => {
+              updateSearchParams({ dateRange: JSON.stringify(res) });
+            }}
+          />
         </SidebarGroup>
-
-        <SidebarSeparator className="mx-0" />
 
         {dataFilter.checkbox.map((group, index) => (
           <React.Fragment key={group.name}>
-            <SidebarGroup key={group.name} className="py-0">
+            <SidebarSeparator className="mx-0" />
+            <SidebarGroup className="py-0">
               <Collapsible defaultOpen={index === 0} className="group/collapsible">
                 <SidebarGroupLabel
                   asChild
                   className="group/label w-full text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 >
                   <CollapsibleTrigger>
-                    {group.name}
+                    {group.title}
                     <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                   </CollapsibleTrigger>
                 </SidebarGroupLabel>
@@ -254,16 +231,20 @@ function UiFilter() {
                 <CollapsibleContent className="space-y-2 px-2 py-2">
                   {group.items.map((item, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <Checkbox name={item} id={item} />
-                      <Label htmlFor={item} className="text-sm font-normal">
-                        {item}
+                      <Checkbox
+                        name={group.name}
+                        id={item.id}
+                        value={item.id}
+                        defaultChecked={Boolean(searchParams.getAll(group.name).includes(item.id))}
+                      />
+                      <Label htmlFor={item.id} className="text-sm font-normal">
+                        {item.label}
                       </Label>
                     </div>
                   ))}
                 </CollapsibleContent>
               </Collapsible>
             </SidebarGroup>
-            <SidebarSeparator className="mx-0" />
           </React.Fragment>
         ))}
       </SidebarContent>
@@ -271,7 +252,7 @@ function UiFilter() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton type="button">
               <Plus />
               <span>New</span>
             </SidebarMenuButton>
