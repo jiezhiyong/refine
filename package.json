@@ -5,7 +5,6 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "db:setup": "prisma generate && prisma migrate deploy && prisma db seed",
     "dev": "remix vite:dev",
     "start": "remix-serve ./build/server/index.js",
     "build": "tsc && remix vite:build",
@@ -15,7 +14,9 @@
     "prettier:check": "prettier --check --ignore-unknown .",
     "prepare": "husky",
     "lint-staged": "lint-staged",
-    "test-eslint": "npx eslint --config .eslintrc.cjs --print-config src/index.ts"
+    "test-eslint": "npx eslint --config .eslintrc.cjs --print-config src/index.ts",
+    "db:setup": "prisma generate && prisma migrate deploy && prisma db seed",
+    "db:studio": "prisma studio"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
