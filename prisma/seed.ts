@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { jokes } from '../mocks/jokes';
+import { jokes } from '../mocks/jokes.ts';
 
 const db = new PrismaClient();
 
@@ -33,7 +33,6 @@ async function seed() {
 async function main() {
   try {
     await seed();
-    console.log(`Database has been seeded. 🌱`);
   } catch (e) {
     console.error(e);
     process.exit(1);

@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
 import { createUserSession, getUserId } from '~/services/session.server';
-import { createUser, getUserByEmail } from '~/services/user.server';
+import { createUser, getUserByEmail } from '~/models/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';
 import { RegisterForm } from '~/components/form-register';
 import { typedFormError } from '~/utils/typed-form-error';

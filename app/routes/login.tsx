@@ -3,7 +3,7 @@ import { redirect } from '@remix-run/node';
 import { z } from 'zod';
 import { LoginForm } from '~/components/form-login';
 import { getUserId, createUserSession } from '~/services/session.server';
-import { verifyLogin } from '~/services/user.server';
+import { verifyLogin } from '~/models/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';
 import { typedFormError } from '~/utils/typed-form-error';
 

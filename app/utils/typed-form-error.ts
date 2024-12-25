@@ -1,6 +1,6 @@
 import { data } from '@remix-run/node';
 import { z } from 'zod';
-import { badRequest } from '~/services/utils';
+import { badRequest } from '~/utils/request';
 
 /**
  * 使用 zod 进行表单验证时，根据错误类型返回不同的响应

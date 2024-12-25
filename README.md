@@ -8,6 +8,7 @@ Run the dev server:
 
 ```shellscript
 pnpm i
+pnpm db:setup
 pnpm dev
 ```
 

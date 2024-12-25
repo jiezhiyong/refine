@@ -118,7 +118,7 @@ export default function App() {
     else nProgress.start();
   }, [navigation.state]);
 
-  // TODO: 应用实时更新
+  // TODO: 实时更新
   // useRealtimeRevalidation({ url: '/issues-events' });
   return (
     <UiThemeProviders>
