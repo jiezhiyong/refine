@@ -50,7 +50,7 @@ export function NavSecondary() {
 
           <SidebarMenuItem key="theme-switch">
             <SidebarMenuButton asChild size="sm">
-              <a href="void:(0)" className="!p-0">
+              <a href="void:(0)" style={{ padding: '0 !important' }}>
                 <ThemeSwitcher />
               </a>
             </SidebarMenuButton>

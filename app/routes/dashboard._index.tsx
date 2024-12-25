@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Form, UIMatch, useSearchParams } from '@remix-run/react';
 import {
   Settings2,
@@ -47,6 +47,12 @@ import { tryParse } from '~/utils/try-parse';
 import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
 import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
 import { getSearchParams } from '~/utils/search-params';
+import { getDefaultTitle } from '~/utils/get-default-title';
+
+// 元数据
+export const meta: MetaFunction = ({ matches }) => {
+  return [{ title: getDefaultTitle(matches) }];
+};
 
 // 创建应用程序约定
 export const handle: HandleFunction = {

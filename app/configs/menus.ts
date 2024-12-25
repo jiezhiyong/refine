@@ -74,7 +74,7 @@ const menusSetting: menuGroupItem = {
 export const menuGroups: menuGroupItem[] = [menusBusiness, menusSetting];
 
 /**
- * 路由面包屑名称映射
+ * 路由面包屑名称映射 - title
  */
 export const routeBreadcrumbMap: Record<UIMatch['id'], string> = menuGroups.reduce(
   (acc, group) => {

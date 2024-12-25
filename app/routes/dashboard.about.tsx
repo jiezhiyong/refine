@@ -1,6 +1,13 @@
+import { MetaFunction } from '@remix-run/node';
 import { Clock } from 'lucide-react';
 import { PlaceholderDemo6 } from '~/components/placeholder';
 import { HandleFunction } from '~/types/handle';
+import { getDefaultTitle } from '~/utils/get-default-title';
+
+// 元数据
+export const meta: MetaFunction = ({ matches }) => {
+  return [{ title: getDefaultTitle(matches) }];
+};
 
 // 创建应用程序约定
 export const handle: HandleFunction = {

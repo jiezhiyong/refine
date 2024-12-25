@@ -9,10 +9,9 @@ import {
   ScrollRestoration,
   useRouteError,
   isRouteErrorResponse,
-  useRouteLoaderData,
   useNavigation,
   Outlet,
-  useLoaderData,
+  useRouteLoaderData,
 } from '@remix-run/react';
 import { getCookie } from '~/services/cookie.server';
 import { getUser, themeSessionResolver } from '~/services/session.server';
@@ -25,26 +24,27 @@ import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes'
 import { cn } from '~/utils/cn';
 
 /** 全局样式、插件样式 */
-import '~/styles/tailwind.css';
-import styles from '~/styles/base.css?url';
+import tailwindStyles from '~/styles/tailwind.css?url';
+import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
+import { Loader } from 'lucide-react';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
-  { title: 'Remix' },
   { property: 'og:title', content: 'This app is the best.' },
   { name: 'description', content: 'Welcome to Remix!' },
 ];
 
 /** 链接 */
 export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: styles },
+  { rel: 'stylesheet', href: tailwindStyles },
+  { rel: 'stylesheet', href: baseStyles },
   { rel: 'stylesheet', href: nProgressStyles },
 ];
 
 /** 自定义 HTTP 标头 */
 export const headers: HeadersFunction = () => ({
-  'X-Powered-By': 'Hugs',
+  'X-Powered-By': 'GoodMan',
 });
 
 /** 加载器 */
@@ -59,13 +59,21 @@ export const loader: LoaderFunction = async ({ request }) => {
   };
 };
 
-/** 回退处理 */
+/** 水和回退处理 */
 export function HydrateFallback() {
-  return <h1>Loading(root.HydrateFallback)...</h1>;
+  return (
+    <h1 className="fixed inset-0 z-10 flex items-center justify-center bg-background">
+      <Loader className="animate-spin" />
+    </h1>
+  );
 }
 
-function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
-  const routeLoaderData = useRouteLoaderData<typeof loader>('root');
+function Document({
+  children,
+  title,
+  sessionTheme,
+  script = true,
+}: PropsWithChildren<{ title?: string; sessionTheme?: string; script?: boolean }>) {
   const [theme] = useTheme();
 
   return (
@@ -75,30 +83,34 @@ function Document({ children, title }: PropsWithChildren<{ title?: string }>) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         {title && <title>{title}</title>}
-        <PreventFlashOnWrongTheme ssrTheme={Boolean(routeLoaderData.theme)} />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(sessionTheme)} />
         <Links />
       </head>
       <body>
         <ModalProvider>{children}</ModalProvider>
         <Toaster richColors position="top-center" />
         <ScrollRestoration />
-        <Scripts crossOrigin="anonymous" />
+        {script && <Scripts crossOrigin="anonymous" />}
       </body>
     </html>
   );
 }
 
-export default function AppWithProviders() {
-  const data = useLoaderData<typeof loader>();
+function UiThemeProviders({ children, title, script = true }: PropsWithChildren<{ title?: string; script?: boolean }>) {
+  const data = useRouteLoaderData<typeof loader>('root');
+  const theme = data?.theme;
+
   return (
-    <ThemeProvider specifiedTheme={data.theme} themeAction="/api/set-theme">
-      <App />
+    <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
+      <Document title={title} sessionTheme={theme} script={script}>
+        {children}
+      </Document>
     </ThemeProvider>
   );
 }
 
 /** 根组件 */
-export function App() {
+export default function App() {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -109,9 +121,9 @@ export function App() {
   // TODO: 应用实时更新
   // useRealtimeRevalidation({ url: '/issues-events' });
   return (
-    <Document>
+    <UiThemeProviders>
       <Outlet />
-    </Document>
+    </UiThemeProviders>
   );
 }
 
@@ -121,16 +133,16 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <Document title={`${error.status} ${error.statusText}`}>
+      <UiThemeProviders title={`${error.status} ${error.statusText}`} script={false}>
         {error.status === 404 ? <NotFound /> : <PageError error={{ message: error.data }} />}
-      </Document>
+      </UiThemeProviders>
     );
   }
 
   return (
-    <Document title="Oh no!">
+    <UiThemeProviders title="Oh no!" script={false}>
       <PageError error={error as Error} />
-    </Document>
+    </UiThemeProviders>
   );
 }
 
