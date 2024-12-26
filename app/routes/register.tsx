@@ -1,12 +1,10 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import { z } from 'zod';
-import { createUserSession, getUser } from '~/services/session.server';
+import { createUserSession } from '~/services/session.server';
 import { createUser, getUserByEmail } from '~/models/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';
 import { RegisterForm } from '~/components/form-register';
 import { typedFormError } from '~/utils/typed-form-error';
-import { sleep } from '~/utils/sleep';
 
 // 定义表单验证 schema
 const registerSchema = z.object({
@@ -15,22 +13,15 @@ const registerSchema = z.object({
   redirectTo: z.string().optional(),
 });
 
-// 加载器
-export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await getUser(request);
-
-  if (user) {
-    return redirect('/');
-  }
-
-  return {};
-}
+// 元数据
+export const meta: MetaFunction = () => {
+  return [{ title: 'Register' }];
+};
 
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const rawData = Object.fromEntries(formData) as z.infer<typeof registerSchema>;
-  await sleep(2000);
 
   try {
     const { email, password } = registerSchema.parse(rawData);

@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
 import { LoginForm } from '~/components/form-login';
@@ -13,6 +13,11 @@ const loginSchema = z.object({
   password: z.string().min(6, '密码至少需要6个字符').max(50, '密码不能超过50个字符'),
   redirectTo: z.string().optional(),
 });
+
+// 元数据
+export const meta: MetaFunction = () => {
+  return [{ title: 'Login' }];
+};
 
 // 加载器
 export async function loader({ request }: LoaderFunctionArgs) {

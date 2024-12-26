@@ -19,6 +19,7 @@ export async function createUser(email: User['email'], password: string) {
   return db.user.create({
     data: {
       email,
+      username: email.split('@')[0],
       password: {
         create: {
           hash: hashedPassword,

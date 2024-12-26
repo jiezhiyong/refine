@@ -9,7 +9,6 @@
 
 // const queue = Queue<QueueData>('notifier', async (job) => {
 //   console.log(`Sending email to ${job.data.emailAddress}`);
-//   await sleep(1000);
 //   console.log(`Email sent to ${job.data.emailAddress}`);
 // });
 
