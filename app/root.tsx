@@ -1,3 +1,4 @@
+import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
 import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
@@ -109,8 +110,7 @@ function UiThemeProviders({ children, title, script = true }: PropsWithChildren<
   );
 }
 
-/** 根组件 */
-export default function App() {
+function App() {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -127,9 +127,13 @@ export default function App() {
   );
 }
 
+/** 根组件 */
+export default withSentry(App);
+
 /** 全局错误边界处理 */
 export function ErrorBoundary() {
   const error = useRouteError() as ErrorResponse | Error;
+  captureRemixErrorBoundaryError(error);
 
   if (isRouteErrorResponse(error)) {
     return (

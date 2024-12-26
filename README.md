@@ -8,7 +8,6 @@ Run the dev server:
 
 ```shellscript
 pnpm i
-pnpm db:setup
 pnpm dev
 ```
 
@@ -16,8 +15,8 @@ pnpm dev
 
 ```shellscript
 npx prisma migrate dev --name init
-npx prisma generate
 pnpm db:setup
+npx prisma generate
 npx prisma studio
 ```
 

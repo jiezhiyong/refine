@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/remix';
 import type { AppLoadContext, EntryContext, LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
 import { PassThrough } from 'node:stream';
 import { createReadableStreamFromReadable } from '@remix-run/node';
@@ -135,10 +136,10 @@ function handleBrowserRequest(
 }
 
 /** 错误处理 */
-export function handleError(error: unknown, { request, params, context }: LoaderFunctionArgs | ActionFunctionArgs) {
+export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }) => {
   if (!request.signal.aborted) {
     console.error(error);
     // TODO: 接入Sentry
     // sendErrorToSentry(error);
   }
-}
+});
