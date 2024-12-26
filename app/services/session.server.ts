@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/remix';
 import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 import { getUserById } from '../models/user.server';
@@ -89,6 +90,8 @@ export async function createUserSession({
 
 /** 用户登出 */
 export async function logout(request: Request) {
+  Sentry.setUser(null);
+
   const session = await getSession(request);
   return redirect('/login', {
     headers: {

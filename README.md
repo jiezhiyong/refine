@@ -58,3 +58,7 @@ https://github.com/redis/ioredis
 ## 批处理、数据缓存
 
 https://github.com/graphql/dataloader
+
+## Sentry
+
+https://docs.sentry.io/platforms/javascript/guides/remix/

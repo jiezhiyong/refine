@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/remix';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
@@ -51,10 +52,12 @@ export const headers: HeadersFunction = () => ({
 /** 加载器 */
 export const loader: LoaderFunction = async ({ request }) => {
   const cookie = await getCookie(request);
+  const user = await getUser(request);
   const { getTheme } = await themeSessionResolver(request);
 
+  Sentry.setUser({ email: user?.email, username: user?.username, id: user?.id });
   return {
-    user: await getUser(request),
+    user,
     theme: getTheme(),
     sidebarIsOpen: cookie?.sidebarIsOpen,
   };

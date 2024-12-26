@@ -1,10 +1,19 @@
 import * as Sentry from '@sentry/remix';
-import type { AppLoadContext, EntryContext, LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
+import type { EntryContext } from '@remix-run/node';
 import { PassThrough } from 'node:stream';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
-import * as isbotModule from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
+import { TAny } from './types/any';
+import { isbot } from 'isbot';
+
+/** 初始化服务端的 Sentry */
+Sentry.init({
+  dsn: 'https://75b9ac913e289a295b7265065fd2a1cf@o62860.ingest.us.sentry.io/4508533052801024',
+  tracesSampleRate: 1,
+  autoInstrumentRemix: true,
+  integrations: [Sentry.prismaIntegration()],
+});
 
 const ABORT_DELAY = 5_000;
 
@@ -12,35 +21,11 @@ export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
-  loadContext: AppLoadContext
+  remixContext: EntryContext
 ) {
-  const prohibitOutOfOrderStreaming = isBotRequest(request.headers.get('user-agent')) || remixContext.isSpaMode;
-
-  return prohibitOutOfOrderStreaming
+  return isbot(request.headers.get('user-agent') || '')
     ? handleBotRequest(request, responseStatusCode, responseHeaders, remixContext)
     : handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext);
-}
-
-// We have some Remix apps in the wild already running with isbot@3 so we need
-// to maintain backwards compatibility even though we want new apps to use
-// isbot@4.  That way, we can ship this as a minor Semver update to @remix-run/dev.
-function isBotRequest(userAgent: string | null) {
-  if (!userAgent) {
-    return false;
-  }
-
-  // isbot >= 3.8.0, >4
-  if ('isbot' in isbotModule && typeof isbotModule.isbot === 'function') {
-    return isbotModule.isbot(userAgent);
-  }
-
-  // isbot < 3.8.0
-  if ('default' in isbotModule && typeof isbotModule.default === 'function') {
-    return isbotModule.default(userAgent);
-  }
-
-  return false;
 }
 
 function handleBotRequest(
@@ -59,6 +44,7 @@ function handleBotRequest(
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);
 
+          responseHeaders.set('Document-Policy', 'js-profiling');
           responseHeaders.set('Content-Type', 'text/html');
 
           resolve(
@@ -136,10 +122,8 @@ function handleBrowserRequest(
 }
 
 /** 错误处理 */
-export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }) => {
+export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }: TAny) => {
   if (!request.signal.aborted) {
-    console.error(error);
-    // TODO: 接入Sentry
-    // sendErrorToSentry(error);
+    console.error('handleError', error);
   }
 });

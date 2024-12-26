@@ -26,8 +26,13 @@ export default defineConfig({
     tsconfigPaths(),
     visualizer({ emitFile: true }),
     sentryVitePlugin({
-      org: 'tcsk',
-      project: 'remix',
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN || (console.log('SENTRY_AUTH_TOKEN 未设置'), undefined),
+      telemetry: false,
+      sourcemaps: {
+        filesToDeleteAfterUpload: ['**/*.map'],
+      },
     }),
   ],
   build: {
