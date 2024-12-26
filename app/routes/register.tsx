@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
-import { createUserSession, getUserId } from '~/services/session.server';
+import { createUserSession, getUser } from '~/services/session.server';
 import { createUser, getUserByEmail } from '~/models/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';
 import { RegisterForm } from '~/components/form-register';
@@ -17,9 +17,9 @@ const registerSchema = z.object({
 
 // 加载器
 export async function loader({ request }: LoaderFunctionArgs) {
-  const userId = await getUserId(request);
+  const user = await getUser(request);
 
-  if (userId) {
+  if (user) {
     return redirect('/');
   }
 

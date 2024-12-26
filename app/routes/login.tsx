@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
 import { LoginForm } from '~/components/form-login';
-import { getUserId, createUserSession } from '~/services/session.server';
+import { getUser, createUserSession } from '~/services/session.server';
 import { verifyLogin } from '~/models/user.server';
 import { safeRedirect } from '~/utils/safe-redirect';
 import { typedFormError } from '~/utils/typed-form-error';
@@ -16,9 +16,9 @@ const loginSchema = z.object({
 
 // 加载器
 export async function loader({ request }: LoaderFunctionArgs) {
-  const userId = await getUserId(request);
+  const user = await getUser(request);
 
-  if (userId) {
+  if (user) {
     return redirect('/');
   }
 

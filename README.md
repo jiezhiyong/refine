@@ -12,6 +12,15 @@ pnpm db:setup
 pnpm dev
 ```
 
+## prisma
+
+```shellscript
+npx prisma migrate dev --name init
+npx prisma generate
+pnpm db:setup
+npx prisma studio
+```
+
 ## Deployment
 
 First, build your app for production:

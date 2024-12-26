@@ -44,6 +44,7 @@ export const getUserId = async (request: Request) => {
 export async function getUser(request: Request) {
   let user = null;
   const userId = await getUserId(request);
+
   if (userId) {
     user = await getUserById(userId);
   }
@@ -53,13 +54,13 @@ export async function getUser(request: Request) {
 
 /** 校验用户登录 Session */
 export const requireUserSession = async (request: Request, redirectTo: string = new URL(request.url).pathname) => {
-  const userId = await getUserId(request);
-  if (!userId) {
+  const user = await getUser(request);
+  if (!user) {
     const searchParams = new URLSearchParams([['redirectTo', redirectTo]]);
     throw redirect(`/login?${searchParams}`);
   }
 
-  return userId;
+  return user;
 };
 
 /** 创建用户登录 Session */

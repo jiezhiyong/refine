@@ -5,15 +5,18 @@ import { jokes } from '../mocks/jokes.ts';
 const db = new PrismaClient();
 
 async function seed() {
-  const email = 'spiderman@remix.run';
+  const email = 'goodman@remix.run';
   await db.user.delete({ where: { email } }).catch(() => {
     /** */
   });
 
   const hashedPassword = await bcrypt.hash('12345678', 10);
-  const spiderman = await db.user.create({
+  const goodman = await db.user.create({
     data: {
       email,
+      name: 'Brian Goodman',
+      username: 'shadcn',
+      avatar: 'https://ui.shadcn.com/avatars/shadcn.jpg',
       password: {
         create: {
           hash: hashedPassword,
@@ -24,7 +27,7 @@ async function seed() {
 
   await Promise.all(
     jokes.map((joke) => {
-      const data = { jokesterId: spiderman.id, ...joke };
+      const data = { userId: goodman.id, ...joke };
       return db.joke.create({ data });
     })
   );

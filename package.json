@@ -15,8 +15,7 @@
     "prepare": "husky",
     "lint-staged": "lint-staged",
     "test-eslint": "npx eslint --config .eslintrc.cjs --print-config src/index.ts",
-    "db:setup": "prisma generate && prisma migrate deploy && prisma db seed",
-    "db:studio": "prisma studio"
+    "db:setup": "prisma generate && prisma migrate deploy && prisma db seed"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

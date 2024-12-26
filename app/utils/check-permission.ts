@@ -1,14 +1,15 @@
-import { PrismaClient } from '@prisma/client';
+// TODO: 菜单权限
+// import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
-export async function checkPermission(userId: string, path: string) {
-  const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user) return false;
+// export async function checkPermission(userId: string, path: string) {
+//   const user = await prisma.user.findUnique({ where: { id: userId } });
+//   if (!user) return false;
 
-  const menu = await prisma.menu.findFirst({ where: { path } });
-  if (!menu) return false;
+//   const menu = await prisma.menu.findFirst({ where: { path } });
+//   if (!menu) return false;
 
-  const allowedRoles = menu.roles.split(',');
-  return allowedRoles.includes(user.role);
-}
+//   const allowedRoles = menu.roles.split(',');
+//   return allowedRoles.includes(user.role);
+// }

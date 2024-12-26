@@ -55,6 +55,7 @@ export function LoginForm() {
                   id="email"
                   type="email"
                   placeholder="Goodman@example.com"
+                  defaultValue="goodman@remix.run"
                   required
                   autoFocus
                   autoComplete="email"
@@ -77,6 +78,7 @@ export function LoginForm() {
                   autoComplete="current-password"
                   minLength={6}
                   maxLength={50}
+                  defaultValue="12345678"
                 />
                 <ErrorMessage error={errors?.password?.[0]} />
               </div>
@@ -108,11 +110,7 @@ export function LoginForm() {
             </div>
           </Form>
           <div className="relative hidden bg-muted md:block">
-            <img
-              src="/placeholder.svg"
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-            />
+            <img src="/logo.gif" alt="" className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.3]" />
           </div>
         </CardContent>
       </Card>

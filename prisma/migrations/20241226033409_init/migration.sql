@@ -7,8 +7,8 @@ CREATE TABLE "User" (
     "email" TEXT,
     "username" TEXT,
     "emailVerified" DATETIME DEFAULT CURRENT_TIMESTAMP,
-    "image" TEXT,
-    "role" TEXT DEFAULT 'user',
+    "avatar" TEXT,
+    "role" TEXT DEFAULT 'guest',
     "provider" TEXT
 );
 
@@ -22,12 +22,12 @@ CREATE TABLE "Password" (
 -- CreateTable
 CREATE TABLE "Joke" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "jokesterId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "name" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    CONSTRAINT "Joke_jokesterId_fkey" FOREIGN KEY ("jokesterId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "Joke_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateIndex

@@ -11,12 +11,12 @@ model User {
   id            String    @id @default(cuid())
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  email         String    @unique
   name          String?
-  email         String?   @unique
   username      String?   @unique
   emailVerified DateTime? @default(now())
-  image         String?
-  role          String?   @default("user")
+  avatar        String?
+  role          String?   @default("guest")
   provider      String?
   password      Password?
   jokes         Joke[]
@@ -29,11 +29,11 @@ model Password {
 }
 
 model Joke {
-  id         String   @id @default(uuid())
-  jokesterId String
-  jokester   User     @relation(fields: [jokesterId], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  name       String
-  content    String
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  content   String
 }

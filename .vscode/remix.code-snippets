@@ -10,8 +10,8 @@
 		"prefix": "function loader",
 		"body": [
       "// 加载器 - 初始化 && 处理表单`GET`请求",
-      "export async function loader({ request, params }: LoaderFunctionArgs) {",
-      "  $1",
+      "export async function loader({ request }: LoaderFunctionArgs) {",
+      "  await requireUserSession(request);",
       "  return {};",
       "}",
 		],
