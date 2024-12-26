@@ -43,25 +43,43 @@ export const getUserId = async (request: Request) => {
 
 /** 获取用户信息 */
 export async function getUser(request: Request) {
-  let user = null;
-  const userId = await getUserId(request);
+  try {
+    let user = null;
+    const userId = await getUserId(request);
 
-  if (userId) {
-    user = await getUserById(userId);
+    if (userId) {
+      user = await getUserById(userId);
+    }
+    return user;
+  } catch (error) {
+    return {
+      message: 'cannot get user in database.',
+      id: '',
+      username: '',
+      email: '',
+    };
   }
-
-  return user;
 }
 
-/** 校验用户登录 Session */
-export const requireUserSession = async (request: Request, redirectTo: string = new URL(request.url).pathname) => {
-  const user = await getUser(request);
-  if (!user) {
-    const searchParams = new URLSearchParams([['redirectTo', redirectTo]]);
-    throw redirect(`/login?${searchParams}`);
-  }
+/** 重定向到登录页 */
+const redirectToLogin = (request: Request, redirectTo = request.url) => {
+  const searchParams = new URLSearchParams([['redirectTo', redirectTo]]);
+  throw redirect(`/login?${searchParams}`);
+};
 
-  return user;
+/** 校验用户登录 Session */
+export const requireUserSession = async (request: Request, redirectTo = request.url) => {
+  try {
+    const user = await getUser(request);
+    if (!user?.id) {
+      redirectToLogin(request, redirectTo);
+    }
+
+    return user;
+  } catch (error) {
+    console.error('@requireUserSession', error);
+    redirectToLogin(request, redirectTo);
+  }
 };
 
 /** 创建用户登录 Session */

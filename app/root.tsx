@@ -46,7 +46,7 @@ export const links: LinksFunction = () => [
 
 /** 自定义 HTTP 标头 */
 export const headers: HeadersFunction = () => ({
-  'X-Powered-By': 'GoodMan',
+  'Document-Policy': 'js-profiling',
 });
 
 /** 加载器 */
@@ -55,7 +55,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
   const { getTheme } = await themeSessionResolver(request);
 
-  Sentry.setUser({ email: user?.email, username: user?.username, id: user?.id });
+  Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
   return {
     user,
     theme: getTheme(),

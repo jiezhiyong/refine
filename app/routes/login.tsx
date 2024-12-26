@@ -23,7 +23,7 @@ export const meta: MetaFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await getUser(request);
 
-  if (user) {
+  if (user?.id) {
     return redirect('/');
   }
 

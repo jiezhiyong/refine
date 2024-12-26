@@ -44,7 +44,6 @@ function handleBotRequest(
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);
 
-          responseHeaders.set('Document-Policy', 'js-profiling');
           responseHeaders.set('Content-Type', 'text/html');
 
           resolve(
@@ -65,7 +64,7 @@ function handleBotRequest(
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
-            console.error(error);
+            console.error('@handleBotRequest', error);
           }
         },
       }
@@ -111,7 +110,7 @@ function handleBrowserRequest(
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
-            console.error(error);
+            console.error('@handleBrowserRequest', error);
           }
         },
       }
@@ -124,6 +123,6 @@ function handleBrowserRequest(
 /** 错误处理 */
 export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }: TAny) => {
   if (!request.signal.aborted) {
-    console.error('handleError', error);
+    console.error('@handleError', error);
   }
 });

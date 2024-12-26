@@ -8,7 +8,7 @@ export const tryParse = (jsonString: string | null | Record<string, unknown>) =>
     try {
       jsonObject = JSON.parse(jsonString);
     } catch (error) {
-      console.error(error);
+      console.error('@tryParse', error);
     }
   } else {
     jsonObject = undefined;

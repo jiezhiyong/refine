@@ -1,4 +1,5 @@
-import { Activity, BadgeHelp, Moon, Sun } from 'lucide-react';
+/* eslint-disable import/namespace */
+import { Activity, Bug, Moon, Sun } from 'lucide-react';
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,11 +9,11 @@ import {
 } from '~/components-shadcn/sidebar';
 import { cn } from '~/utils/cn';
 import { Theme, useTheme } from 'remix-themes';
+import * as Sentry from '@sentry/remix';
+import { useEffect, useRef } from 'react';
 
-const items = [
-  { title: 'Service Health Check', url: '#', icon: Activity },
-  { title: 'Help Center', url: '#', icon: BadgeHelp },
-];
+// 次要菜单
+const items = [{ title: 'Service Health Check', url: '#', icon: Activity }];
 
 // 主题切换
 function ThemeSwitcher() {
@@ -20,7 +21,7 @@ function ThemeSwitcher() {
 
   return (
     <div
-      className="w-full p-2"
+      className="w-full cursor-pointer"
       onClick={() => {
         setTheme(theme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT);
       }}
@@ -33,8 +34,26 @@ function ThemeSwitcher() {
 }
 
 export function NavSecondary() {
+  const buttonRef = useRef(null);
+  const feedbackAttachedRef = useRef(false);
+
+  useEffect(() => {
+    if (feedbackAttachedRef.current) {
+      return;
+    }
+
+    if (buttonRef.current) {
+      const feedback = Sentry.feedbackIntegration({
+        autoInject: false,
+      });
+      feedback.attachTo(buttonRef.current);
+
+      feedbackAttachedRef.current = true;
+    }
+  }, []);
+
   return (
-    <SidebarGroup className="mt-auto">
+    <SidebarGroup className="mt-auto opacity-60">
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
@@ -48,11 +67,20 @@ export function NavSecondary() {
             </SidebarMenuItem>
           ))}
 
+          <SidebarMenuItem key="sentry-feedback">
+            <SidebarMenuButton asChild size="sm">
+              <div ref={buttonRef} className="cursor-pointer">
+                <Bug className="text-destructive" />
+                <span>Report a Bug</span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
           <SidebarMenuItem key="theme-switch">
             <SidebarMenuButton asChild size="sm">
-              <a href="void:(0)" style={{ padding: '0 !important' }}>
+              <div className="curpointer">
                 <ThemeSwitcher />
-              </a>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
