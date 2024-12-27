@@ -102,6 +102,14 @@ self.addEventListener('fetch', function (event) {
     return;
   }
 
+  // Bypass some requests
+  if (['image', 'style', 'script'].includes(request.destination)) {
+    return;
+  }
+  if (/__manifest|sentry/.test(request.url)) {
+    return;
+  }
+
   // Opening the DevTools triggers the "only-if-cached" request
   // that cannot be handled by the worker. Bypass such requests.
   if (request.cache === 'only-if-cached' && request.mode !== 'same-origin') {

@@ -3,25 +3,10 @@ import type { LoaderFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
 export const loader: LoaderFunction = async () => {
-  // 使用 node-fetch 或确保在服务端环境中正确初始化 fetch
-  const response = await fetch('https://api.example.com/user', {
-    // 添加必要的请求头
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
+  const response = await fetch('https://api.example.com/user');
   const serverSideData = await response.json();
-  console.log('Server side data:', serverSideData); // 添加日志
 
-  return {
-    serverSideData,
-  };
+  return { serverSideData };
 };
 
 export default function Index() {
@@ -31,7 +16,7 @@ export default function Index() {
   } | null>(null);
 
   const handleClick = () => {
-    fetch('/api/runtime', {
+    fetch('/api/check-health', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

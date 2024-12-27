@@ -1,7 +1,7 @@
 {
   "name": "learn-remix",
   "version": "0.0.1",
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@9.15.1",
   "private": true,
   "sideEffects": false,
   "type": "module",
@@ -68,7 +68,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "concurrently": "^9.1.0",
-    "date-fns": "^4.1.0",
+    "date-fns": "^3.0.0",
     "framer-motion": "^11.15.0",
     "ioredis": "^5.4.1",
     "isbot": "^4.1.0",
