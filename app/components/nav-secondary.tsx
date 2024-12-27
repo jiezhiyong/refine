@@ -53,7 +53,7 @@ export function NavSecondary() {
   }, []);
 
   return (
-    <SidebarGroup className="mt-auto opacity-60">
+    <SidebarGroup className="mt-auto opacity-80">
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
