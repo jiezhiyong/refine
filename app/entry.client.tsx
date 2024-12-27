@@ -4,12 +4,8 @@ import { RemixBrowser, useLocation, useMatches } from '@remix-run/react';
 import { startTransition, StrictMode, useEffect } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __isRenderedReortDialog: boolean;
-}
-
 /** 初始化客户端 Sentry */
+const isProduction = import.meta.env.MODE === 'production';
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   environment: import.meta.env.MODE,
@@ -17,7 +13,7 @@ Sentry.init({
   integrations: [
     Sentry.browserTracingIntegration({ useEffect, useLocation, useMatches }),
     Sentry.browserProfilingIntegration(),
-    Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),
+    Sentry.replayIntegration({ maskAllText: isProduction, blockAllMedia: isProduction }),
     Sentry.captureConsoleIntegration(),
     Sentry.extraErrorDataIntegration(),
     Sentry.httpClientIntegration(),
@@ -26,11 +22,11 @@ Sentry.init({
   tracesSampleRate: 1.0,
   tracePropagationTargets: ['localhost', /^\/api/, 'https://external-api.com'],
   profilesSampleRate: 1.0,
-  replaysSessionSampleRate: import.meta.env.MODE === 'production' ? 0.1 : 1.0,
+  replaysSessionSampleRate: isProduction ? 0.1 : 1.0,
   replaysOnErrorSampleRate: 1.0,
   beforeSend(event) {
-    if (event.exception && event.event_id && !global?.__isRenderedReortDialog) {
-      global.__isRenderedReortDialog = true;
+    if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
+      window._isRenderedReortDialog = true;
       Sentry.showReportDialog({ eventId: event.event_id });
     }
     return event;

@@ -11,7 +11,6 @@ export default function SentryExamplePage() {
         }}
       >
         <h1 style={{ fontSize: '4rem', margin: '14px 0' }}>
-          {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
           <svg
             style={{
               height: '1em',
