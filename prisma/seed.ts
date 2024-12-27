@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { jokes } from '../mocks/jokes.ts';
+import { jokes } from '../public/jokes.ts';
 
 const db = new PrismaClient();
 

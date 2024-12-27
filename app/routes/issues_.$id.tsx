@@ -1,7 +1,7 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { data } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
-import { getIssue } from 'mocks/issues';
+import { getIssue } from 'public/issues';
 import invariant from 'tiny-invariant';
 
 export const loader: LoaderFunction = async ({ params }) => {

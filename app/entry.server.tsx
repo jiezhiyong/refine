@@ -7,6 +7,32 @@ import { RemixServer } from '@remix-run/react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { TAny } from './types/any';
 import { isbot } from 'isbot';
+import { server } from './mocks/node';
+import { handlers } from './mocks/handlers';
+
+const ABORT_DELAY = 5_000;
+
+if (process.env.NODE_ENV === 'development') {
+  server.listen({ onUnhandledRequest: 'bypass' });
+
+  // 手动重置并更新 handlers
+  server.resetHandlers();
+  server.use(...handlers);
+
+  console.log('MSW Server started in development mode');
+
+  // 在开发模式下，监听 handlers 文件的变化
+  if (import.meta.hot) {
+    import.meta.hot.accept('./mocks/handlers', (newModule) => {
+      // 重置所有已存在的请求处理器
+      server.resetHandlers();
+      // 添加新的请求处理器
+      if (newModule) {
+        server.use(...newModule.handlers);
+      }
+    });
+  }
+}
 
 /** 初始化服务端的 Sentry */
 Sentry.init({
@@ -22,8 +48,6 @@ Sentry.init({
     SentryProfiling.nodeProfilingIntegration(),
   ],
 });
-
-const ABORT_DELAY = 5_000;
 
 export default function handleRequest(
   request: Request,
@@ -68,9 +92,6 @@ function handleBotRequest(
         },
         onError(error: unknown) {
           responseStatusCode = 500;
-          // Log streaming rendering errors from inside the shell.  Don't log
-          // errors encountered during initial shell rendering since they'll
-          // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
             console.error('@handleBotRequest', error);
           }
@@ -114,9 +135,6 @@ function handleBrowserRequest(
         },
         onError(error: unknown) {
           responseStatusCode = 500;
-          // Log streaming rendering errors from inside the shell.  Don't log
-          // errors encountered during initial shell rendering since they'll
-          // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
             console.error('@handleBrowserRequest', error);
           }

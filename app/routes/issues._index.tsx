@@ -3,7 +3,7 @@
  */
 
 import { Link, useLoaderData, useNavigate } from '@remix-run/react';
-import { getIssues, Issue } from 'mocks/issues';
+import { getIssues, Issue } from 'public/issues';
 import { cn } from '~/utils/cn';
 import icons from '/public/icons.svg?url';
 
