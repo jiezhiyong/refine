@@ -10,18 +10,23 @@ import {
 import { cn } from '~/utils/cn';
 import { Theme, useTheme } from 'remix-themes';
 import * as Sentry from '@sentry/remix';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useMountEffect } from '~/hooks/use-mount-effect';
 
 // 次要菜单
 const items = [{ title: 'Service Health Check', url: '#', icon: Activity }];
 
 // 主题切换
-function ThemeSwitcher() {
-  const [theme, setTheme] = useTheme();
-
+function ThemeSwitcher({
+  theme,
+  setTheme,
+}: {
+  theme: Theme | null;
+  setTheme: React.Dispatch<React.SetStateAction<Theme | null>>;
+}) {
   return (
     <div
-      className="w-full cursor-pointer"
+      className="w-full cursor-pointer p-2"
       onClick={() => {
         setTheme(theme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT);
       }}
@@ -34,23 +39,16 @@ function ThemeSwitcher() {
 }
 
 export function NavSecondary() {
+  const [theme, setTheme] = useTheme();
   const buttonRef = useRef(null);
-  const feedbackAttachedRef = useRef(false);
 
-  useEffect(() => {
-    if (feedbackAttachedRef.current) {
+  useMountEffect(() => {
+    if (!buttonRef.current) {
       return;
     }
-
-    if (buttonRef.current) {
-      const feedback = Sentry.feedbackIntegration({
-        autoInject: false,
-      });
-      feedback.attachTo(buttonRef.current);
-
-      feedbackAttachedRef.current = true;
-    }
-  }, []);
+    const feedback = Sentry.feedbackIntegration({ autoInject: false, colorScheme: theme });
+    feedback.attachTo(buttonRef.current);
+  });
 
   return (
     <SidebarGroup className="mt-auto opacity-80">
@@ -78,8 +76,8 @@ export function NavSecondary() {
 
           <SidebarMenuItem key="theme-switch">
             <SidebarMenuButton asChild size="sm">
-              <div className="curpointer">
-                <ThemeSwitcher />
+              <div className="cursor-pointer" style={{ padding: '0 !important' }}>
+                <ThemeSwitcher theme={theme} setTheme={setTheme} />
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

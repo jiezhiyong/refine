@@ -7,7 +7,7 @@ export const validateSignature = async (request: Request) => {
   }
 
   const payload = await request.json();
-  const signature = request.headers.get('X-Hub-Signature-256');
+  const signature = request.headers.get('signature');
   const generatedSignature = `sha256=${crypto
     .createHmac('sha256', process.env.GITHUB_WEBHOOK_SECRET)
     .update(JSON.stringify(payload))

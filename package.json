@@ -1,5 +1,6 @@
 {
   "name": "learn-remix",
+  "version": "0.0.1",
   "packageManager": "pnpm@9.15.0",
   "private": true,
   "sideEffects": false,
@@ -56,6 +57,7 @@
     "@remix-run/node": "^2.15.1",
     "@remix-run/react": "^2.15.1",
     "@remix-run/serve": "^2.15.1",
+    "@sentry/profiling-node": "^8.47.0",
     "@sentry/remix": "^8.47.0",
     "@sentry/vite-plugin": "^2.22.7",
     "@types/jest": "^29.5.14",

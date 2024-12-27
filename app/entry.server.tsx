@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/remix';
+import * as SentryProfiling from '@sentry/profiling-node';
 import type { EntryContext } from '@remix-run/node';
 import { PassThrough } from 'node:stream';
 import { createReadableStreamFromReadable } from '@remix-run/node';
@@ -9,10 +10,17 @@ import { isbot } from 'isbot';
 
 /** 初始化服务端的 Sentry */
 Sentry.init({
-  dsn: 'https://75b9ac913e289a295b7265065fd2a1cf@o62860.ingest.us.sentry.io/4508533052801024',
+  dsn: process.env.VITE_SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  release: 'remix-oss@' + process.env.npm_package_version,
   tracesSampleRate: 1,
   autoInstrumentRemix: true,
-  integrations: [Sentry.prismaIntegration()],
+  integrations: [
+    Sentry.prismaIntegration(),
+    Sentry.anrIntegration({ captureStackTrace: true }),
+    Sentry.extraErrorDataIntegration(),
+    SentryProfiling.nodeProfilingIntegration(),
+  ],
 });
 
 const ABORT_DELAY = 5_000;

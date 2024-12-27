@@ -13,6 +13,9 @@ declare module '@remix-run/node' {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
+    define: {
+      'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
+    },
     plugins: [
       remix({
         ssr: true, // false: 禁用服务端渲染、启用SPA模式

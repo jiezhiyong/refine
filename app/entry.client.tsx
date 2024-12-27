@@ -11,16 +11,22 @@ declare global {
 
 /** 初始化客户端 Sentry */
 Sentry.init({
-  dsn: 'https://75b9ac913e289a295b7265065fd2a1cf@o62860.ingest.us.sentry.io/4508533052801024',
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  environment: import.meta.env.MODE,
+  release: 'remix-oss@' + import.meta.env.npm_package_version,
   integrations: [
     Sentry.browserTracingIntegration({ useEffect, useLocation, useMatches }),
     Sentry.browserProfilingIntegration(),
     Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),
+    Sentry.captureConsoleIntegration(),
+    Sentry.extraErrorDataIntegration(),
+    Sentry.httpClientIntegration(),
   ],
+  sendDefaultPii: true,
   tracesSampleRate: 1.0,
   tracePropagationTargets: ['localhost', /^\/api/, 'https://external-api.com'],
   profilesSampleRate: 1.0,
-  replaysSessionSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+  replaysSessionSampleRate: import.meta.env.MODE === 'production' ? 0.1 : 1.0,
   replaysOnErrorSampleRate: 1.0,
   beforeSend(event) {
     if (event.exception && event.event_id && !global?.__isRenderedReortDialog) {
