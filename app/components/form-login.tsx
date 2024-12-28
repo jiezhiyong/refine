@@ -55,7 +55,7 @@ export function LoginForm() {
                   id="email"
                   type="email"
                   placeholder="Goodman@example.com"
-                  defaultValue="goodman@remix.run"
+                  defaultValue="admin@remix.run"
                   required
                   autoFocus
                   autoComplete="email"

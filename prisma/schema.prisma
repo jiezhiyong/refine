@@ -28,6 +28,12 @@ model Password {
   userId String @unique
 }
 
+model Role {
+  id    String @id @default(uuid())
+  label String
+  value String
+}
+
 model Joke {
   id        String   @id @default(uuid())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)

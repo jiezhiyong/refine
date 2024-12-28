@@ -13,3 +13,12 @@
 //   const allowedRoles = menu.roles.split(',');
 //   return allowedRoles.includes(user.role);
 // }
+
+// https://pro.ant.design/zh-CN/docs/authority-management
+// https://umijs.org/zh-CN/plugins/plugin-access
+
+// <Access />
+
+// export function useAccess() {
+
+// }

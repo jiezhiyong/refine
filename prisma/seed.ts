@@ -5,7 +5,7 @@ import { jokes } from '../public/jokes.ts';
 const db = new PrismaClient();
 
 async function seed() {
-  const email = 'goodman@remix.run';
+  const email = 'admin@remix.run';
   await db.user.delete({ where: { email } }).catch(() => {
     /** */
   });

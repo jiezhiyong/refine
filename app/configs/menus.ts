@@ -67,7 +67,11 @@ const menusSetting: menuGroupItem = {
       id: 'routes/users',
       title: 'User Management',
       icon: UsersRound,
-      children: [{ id: 'routes/users._index', title: 'Home' }],
+      children: [
+        { id: 'routes/users._index', title: 'Home' },
+        { id: 'routes/users.role', title: 'Role' },
+        { id: 'routes/users.audit-log', title: 'Audit Log' },
+      ],
     },
   ],
 };
