@@ -1,5 +1,5 @@
 import { useMatches, useNavigate, useSearchParams } from '@remix-run/react';
-import { Filter, FilterX } from 'lucide-react';
+import { Filter, FilterX, Fullscreen } from 'lucide-react';
 import { Button } from '~/components-shadcn/button';
 import { Separator } from '~/components-shadcn/separator';
 import { HandleFunction } from '~/types/handle';
@@ -16,9 +16,27 @@ export function NavTools() {
   const lastMatch = matches[matches.length - 1];
   const handle = lastMatch.handle as HandleFunction;
 
+  // 浏览器全屏切换
+  const domToggleFullscreen = (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="h-7 w-7"
+      onClick={() => {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          document.documentElement.requestFullscreen();
+        }
+      }}
+    >
+      <Fullscreen />
+    </Button>
+  );
+
   const { uiTools, uiFilter } = handle || {};
   if (!uiTools && !uiFilter) {
-    return null;
+    return domToggleFullscreen;
   }
 
   function changeParams(key: string, value: boolean) {
@@ -36,13 +54,15 @@ export function NavTools() {
   return (
     <div className="flex items-center gap-1">
       {uiFilter && (
-        <>
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => changeParams('filter', !filter)}>
-            {filter ? <FilterX /> : <Filter />}
-          </Button>
-          <Separator orientation="vertical" className="mr-2 h-4" />
-        </>
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => changeParams('filter', !filter)}>
+          {filter ? <FilterX /> : <Filter />}
+        </Button>
       )}
+
+      {domToggleFullscreen}
+
+      <Separator orientation="vertical" className="mr-2 h-4" />
+
       {domUiTools}
     </div>
   );
