@@ -1,4 +1,5 @@
 import { Button } from '~/components-shadcn/button';
+import PageError from '~/components/500';
 
 export default function SentryExamplePage() {
   return (
@@ -14,16 +15,8 @@ export default function SentryExamplePage() {
 
       <Button
         type="button"
-        style={{
-          padding: '12px',
-          cursor: 'pointer',
-          backgroundColor: '#AD6CAA',
-          borderRadius: '4px',
-          border: 'none',
-          color: 'white',
-          fontSize: '14px',
-          margin: '18px',
-        }}
+        variant="destructive"
+        className="m-5 p-3"
         onClick={() => {
           throw new Error('Sentry Example Frontend Error');
         }}
@@ -46,4 +39,9 @@ export default function SentryExamplePage() {
       </p>
     </main>
   );
+}
+
+// 错误边界处理
+export function ErrorBoundary() {
+  return <PageError />;
 }

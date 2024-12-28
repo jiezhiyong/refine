@@ -1,5 +1,6 @@
 import { MetaFunction } from '@remix-run/node';
 import { Clock } from 'lucide-react';
+import PageError from '~/components/500';
 import { PlaceholderDemo6 } from '~/components/placeholder';
 import { HandleFunction } from '~/types/handle';
 import { getDefaultTitle } from '~/utils/get-default-title';
@@ -22,4 +23,9 @@ export const handle: HandleFunction = {
 // UI
 export default function DashboardAbout() {
   return <PlaceholderDemo6 />;
+}
+
+// 错误边界处理
+export function ErrorBoundary() {
+  return <PageError />;
 }

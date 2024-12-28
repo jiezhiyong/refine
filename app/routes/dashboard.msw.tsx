@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import type { ErrorResponse, LoaderFunction, MetaFunction } from '@remix-run/node';
-import { useLoaderData, useRouteError } from '@remix-run/react';
+import type { LoaderFunction, MetaFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
 import { getDefaultTitle } from '~/utils/get-default-title';
+import PageError from '~/components/500';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {
@@ -67,6 +68,5 @@ export default function Index() {
 
 // 错误边界处理
 export function ErrorBoundary() {
-  const error = useRouteError() as ErrorResponse | Error;
-  return <h1>{error.message}</h1>;
+  return <PageError />;
 }

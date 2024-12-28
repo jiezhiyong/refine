@@ -48,6 +48,7 @@ import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
 import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
 import { getSearchParams } from '~/utils/search-params';
 import { getDefaultTitle } from '~/utils/get-default-title';
+import PageError from '~/components/500';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {
@@ -267,4 +268,9 @@ function UiFilter() {
       </SidebarFooter>
     </Form>
   );
+}
+
+// 错误边界处理
+export function ErrorBoundary() {
+  return <PageError />;
 }
