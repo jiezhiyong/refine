@@ -1,13 +1,16 @@
 import { http, graphql, HttpResponse } from 'msw';
 
-// 定义需要 mock 的 API 请求处理器
-export const handlers = [
-  http.get('https://api.example.com/user', () => {
+export const handlersExample = [
+  // Normal
+  http.get('https://api.example.com/user', async ({ request }) => {
+    // const data = await request.formData();
+    // const email = data.get('email');
+
     return HttpResponse.json({
-      firstName: 'John',
-      lastName: 'Maverick',
+      name: 'John Maverick',
     });
   }),
+  // GraphQL
   graphql.query('ListMovies', () => {
     return HttpResponse.json({
       data: {

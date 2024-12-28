@@ -77,7 +77,6 @@ export const requireUserSession = async (request: Request, redirectTo = request.
 
     return user;
   } catch (error) {
-    console.error('@requireUserSession', error);
     redirectToLogin(request, redirectTo);
   }
 };

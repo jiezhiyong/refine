@@ -1,7 +1,15 @@
 import { useState } from 'react';
-import type { LoaderFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import type { ErrorResponse, LoaderFunction, MetaFunction } from '@remix-run/node';
+import { useLoaderData, useRouteError } from '@remix-run/react';
+import { Button } from '~/components-shadcn/button';
+import { getDefaultTitle } from '~/utils/get-default-title';
 
+// 元数据
+export const meta: MetaFunction = ({ matches }) => {
+  return [{ title: getDefaultTitle(matches) }];
+};
+
+// 加载器 - 初始化 && 处理表单`GET`请求
 export const loader: LoaderFunction = async () => {
   const response = await fetch('https://api.example.com/user');
   const serverSideData = await response.json();
@@ -9,14 +17,16 @@ export const loader: LoaderFunction = async () => {
   return { serverSideData };
 };
 
+// UI
 export default function Index() {
-  const { serverSideData } = useLoaderData();
+  const { serverSideData } = useLoaderData<typeof loader>();
   const [favoriteMovies, setFavoriteMovies] = useState<{
     data: { movies: Array<{ id: string; title: string }> };
   } | null>(null);
 
+  // FIXME: TypeError: argument name is invalid
   const handleClick = () => {
-    fetch('/api/check-health', {
+    fetch('/api/runtime', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +47,7 @@ export default function Index() {
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
-      <p id="server-side-greeting">Hello, {serverSideData.firstName}!</p>
+      <p id="server-side-greeting">Hello, {serverSideData.name}!</p>
       {favoriteMovies?.data ? (
         <div>
           <h2>My favorite movies ({favoriteMovies.data.movies.length})</h2>
@@ -48,9 +58,15 @@ export default function Index() {
           </ul>
         </div>
       ) : null}
-      <button id="fetch-movies-button" onClick={handleClick}>
+      <Button id="fetch-movies-button" onClick={handleClick}>
         Make a runtime request
-      </button>
+      </Button>
     </div>
   );
+}
+
+// 错误边界处理
+export function ErrorBoundary() {
+  const error = useRouteError() as ErrorResponse | Error;
+  return <h1>{error.message}</h1>;
 }

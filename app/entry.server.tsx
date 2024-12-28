@@ -7,13 +7,22 @@ import { RemixServer } from '@remix-run/react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { TAny } from './types/any';
 import { isbot } from 'isbot';
-import { server } from './mocks/node';
+import { server } from '../mock/node';
 
 const ABORT_DELAY = 5_000;
 
 if (process.env.NODE_ENV === 'development') {
   server.listen({
-    onUnhandledRequest: 'bypass',
+    onUnhandledRequest: ({ url }) => {
+      if (url.includes('sentry')) {
+        return 'bypass';
+      }
+      return 'warn';
+    },
+  });
+
+  server.events.on('request:match', ({ request }) => {
+    console.log('[MSW] Intercepted match:', `(${request.method}) ${request.url}`);
   });
 }
 

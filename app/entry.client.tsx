@@ -38,7 +38,11 @@ async function prepareApp() {
     return Promise.resolve();
   }
 
-  const { worker } = await import('./mocks/browser');
+  const { worker } = await import('../mock/browser');
+
+  worker.events.on('request:match', ({ request }) => {
+    console.log('[MSW] Request matched:', request.method, request.url);
+  });
 
   return worker.start({
     onUnhandledRequest: 'bypass',

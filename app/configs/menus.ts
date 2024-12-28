@@ -15,9 +15,9 @@ export type menuGroupItem = {
   items: MenuItem[];
 };
 
-// 业务菜单
-const menusBusiness: menuGroupItem = {
-  title: 'Business',
+// 主菜单
+const menusPlayground: menuGroupItem = {
+  title: 'Playground',
   items: [
     {
       id: 'routes/dashboard',
@@ -26,6 +26,8 @@ const menusBusiness: menuGroupItem = {
       children: [
         { id: 'routes/dashboard._index', title: 'Home' },
         { id: 'routes/dashboard.about', title: 'About' },
+        { id: 'routes/dashboard.sentry', title: 'Sentry' },
+        { id: 'routes/dashboard.msw', title: 'Msw' },
       ],
     },
     {
@@ -71,7 +73,7 @@ const menusSetting: menuGroupItem = {
 };
 
 // 所有菜单
-export const menuGroups: menuGroupItem[] = [menusBusiness, menusSetting];
+export const menuGroups: menuGroupItem[] = [menusPlayground, menusSetting];
 
 /**
  * 路由面包屑名称映射 - title
