@@ -2259,7 +2259,7 @@ const data = {
       ]
     },
     {
-      title: "Models",
+      title: "Techstack",
       url: "#",
       icon: Bot,
       items: [

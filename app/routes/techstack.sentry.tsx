@@ -1,7 +1,7 @@
 import { Button } from '~/components-shadcn/button';
 import PageError from '~/components/500';
 
-export default function SentryExamplePage() {
+export default function TechstackSentry() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center">
       <h1 style={{ fontSize: '4rem', margin: '14px 0' }}>

@@ -8,6 +8,10 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { TAny } from './types/any';
 import { isbot } from 'isbot';
 import { server } from '../mock/node';
+import { createInstance, i18n as i18next } from 'i18next';
+import i18nServer from './services/i18n.server';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
+import * as i18n from './configs/i18n';
 
 const ABORT_DELAY = 5_000;
 
@@ -41,27 +45,36 @@ Sentry.init({
   ],
 });
 
-export default function handleRequest(
+export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
+  const instance = createInstance();
+  const lng = await i18nServer.getLocale(request);
+  const ns = i18nServer.getRouteNamespaces(remixContext);
+
+  await instance.use(initReactI18next).init({ ...i18n, lng, ns });
+
   return isbot(request.headers.get('user-agent') || '')
-    ? handleBotRequest(request, responseStatusCode, responseHeaders, remixContext)
-    : handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext);
+    ? handleBotRequest(request, responseStatusCode, responseHeaders, remixContext, instance)
+    : handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext, instance);
 }
 
 function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
+  i18next: i18next
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer abortDelay={ABORT_DELAY} context={remixContext} url={request.url} />,
+      <I18nextProvider i18n={i18next}>
+        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+      </I18nextProvider>,
       {
         onAllReady() {
           shellRendered = true;
@@ -99,12 +112,15 @@ function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
+  i18next: i18next
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer abortDelay={ABORT_DELAY} context={remixContext} url={request.url} />,
+      <I18nextProvider i18n={i18next}>
+        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+      </I18nextProvider>,
       {
         onShellReady() {
           shellRendered = true;
@@ -141,6 +157,6 @@ function handleBrowserRequest(
 /** 错误处理 */
 export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }: TAny) => {
   if (!request.signal.aborted) {
-    console.error('@handleError', error);
+    console.error('@entry.server.handleError', error);
   }
 });

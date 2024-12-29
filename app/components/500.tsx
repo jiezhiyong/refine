@@ -11,7 +11,7 @@ export default function PageError({ error }: { error?: Error | ErrorResponse | {
   }
 
   useMountEffect(() => {
-    console.error(error);
+    console.error('@PageError', error);
   });
 
   return (

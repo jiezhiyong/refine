@@ -1,6 +1,6 @@
 import Layout from '~/components/layout';
 
 // UI
-export default function Playground() {
+export default function Techstack() {
   return <Layout />;
 }

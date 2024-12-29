@@ -3,6 +3,7 @@ import { vitePlugin as remix } from '@remix-run/dev';
 import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { envOnlyMacros } from 'vite-env-only';
 
 declare module '@remix-run/node' {
   interface Future {
@@ -17,6 +18,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
     },
     plugins: [
+      envOnlyMacros(),
       remix({
         ssr: true, // false: 禁用服务端渲染、启用SPA模式
         manifest: true,

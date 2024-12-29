@@ -1,8 +1,10 @@
 import { useMatches, useNavigate, useSearchParams } from '@remix-run/react';
-import { Filter, FilterX, Fullscreen } from 'lucide-react';
+import { Filter, FilterX } from 'lucide-react';
 import { Button } from '~/components-shadcn/button';
 import { Separator } from '~/components-shadcn/separator';
 import { HandleFunction } from '~/types/handle';
+import { LanguageSwitcher } from './switcher-language';
+import { FullscreenSwitcher } from './switcher-fullscreen';
 
 /**
  * 工具栏
@@ -16,27 +18,16 @@ export function NavTools() {
   const lastMatch = matches[matches.length - 1];
   const handle = lastMatch.handle as HandleFunction;
 
-  // 浏览器全屏切换
-  const domToggleFullscreen = (
-    <Button
-      variant="ghost"
-      size="icon"
-      className="h-7 w-7"
-      onClick={() => {
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-        } else {
-          document.documentElement.requestFullscreen();
-        }
-      }}
-    >
-      <Fullscreen />
-    </Button>
+  const defaultTools = (
+    <>
+      <FullscreenSwitcher />
+      <LanguageSwitcher />
+    </>
   );
 
   const { uiTools, uiFilter } = handle || {};
   if (!uiTools && !uiFilter) {
-    return domToggleFullscreen;
+    return defaultTools;
   }
 
   function changeParams(key: string, value: boolean) {
@@ -59,7 +50,7 @@ export function NavTools() {
         </Button>
       )}
 
-      {domToggleFullscreen}
+      {defaultTools}
 
       <Separator orientation="vertical" className="mr-2 h-4" />
 

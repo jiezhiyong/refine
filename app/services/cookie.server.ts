@@ -5,29 +5,29 @@ invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
 
 export interface CookiePreferences {
   sidebarIsOpen?: boolean;
+  lng?: 'en' | 'zh';
 }
 
 /** 用户偏好Cookie */
-export const signedCookie = createCookie('user-preferences', {
+export const preferencesCookie = createCookie('user-preferences', {
   secrets: [process.env.SESSION_SECRET ?? ''],
   path: '/',
   sameSite: 'lax',
   httpOnly: true,
-  secure: true,
-  maxAge: 7 * 24 * 60 * 60, // one week
+  secure: process.env.NODE_ENV === 'production',
 });
 
 /** 获取用户偏好Cookie */
 export const getCookie = async (request: Request): Promise<CookiePreferences> => {
   const cookieHeader = request.headers.get('Cookie');
 
-  return await signedCookie.parse(cookieHeader);
+  return await preferencesCookie.parse(cookieHeader);
 };
 
 /** 设置用户偏好Cookie */
 export const setCookie = async (request: Request, cookie: CookiePreferences) => {
   const exitingCookie = await getCookie(request);
-  const cookieHeader = await signedCookie.serialize({
+  const cookieHeader = await preferencesCookie.serialize({
     ...exitingCookie,
     ...cookie,
   });

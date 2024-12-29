@@ -19,7 +19,7 @@ export const loader: LoaderFunction = async () => {
 };
 
 // UI
-export default function Index() {
+export default function TechstackMsw() {
   const { serverSideData } = useLoaderData<typeof loader>();
   const [favoriteMovies, setFavoriteMovies] = useState<{
     data: { movies: Array<{ id: string; title: string }> };

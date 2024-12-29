@@ -24,37 +24,25 @@ const menusPlayground: menuGroupItem = {
       title: 'Dashboard',
       icon: PieChart,
       children: [
-        { id: 'routes/dashboard._index', title: 'Home' },
-        { id: 'routes/dashboard.about', title: 'About' },
-        { id: 'routes/dashboard.sentry', title: 'Sentry' },
-        { id: 'routes/dashboard.msw', title: 'Msw' },
+        { id: 'routes/dashboard._index', title: 'index' },
+        { id: 'routes/dashboard.about', title: 'about' },
+      ],
+    },
+    {
+      id: 'routes/techstack',
+      title: 'Techstack',
+      icon: Brain,
+      children: [
+        { id: 'routes/techstack.sentry', title: 'sentry' },
+        { id: 'routes/techstack.msw', title: 'msw' },
+        { id: 'routes/techstack.i18n', title: 'i18n' },
       ],
     },
     {
       id: 'routes/issues',
       title: 'Issues',
       icon: Siren,
-      children: [{ id: 'routes/issues._index', title: 'Home' }],
-    },
-    {
-      id: 'routes/models',
-      title: 'AI Models',
-      icon: Brain,
-      children: [
-        { id: 'routes/models.ChatGPT', title: 'ChatGPT' },
-        { id: 'routes/models.Claude', title: 'Claude' },
-        { id: 'routes/models.Gemini', title: 'Gemini' },
-        { id: 'routes/models.LLaMA', title: 'LLaMA' },
-      ],
-    },
-    {
-      id: 'routes/copilot',
-      title: 'Copilot',
-      icon: Bot,
-      children: [
-        { id: 'routes/copilot.v0', title: 'V0' },
-        { id: 'routes/copilot.bolt', title: 'Bolt' },
-      ],
+      children: [{ id: 'routes/issues._index', title: 'index' }],
     },
   ],
 };
@@ -68,9 +56,9 @@ const menusSetting: menuGroupItem = {
       title: 'User Management',
       icon: UsersRound,
       children: [
-        { id: 'routes/users._index', title: 'Home' },
-        { id: 'routes/users.role', title: 'Role' },
-        { id: 'routes/users.audit-log', title: 'Audit Log' },
+        { id: 'routes/users._index', title: 'index' },
+        { id: 'routes/users.role', title: 'role' },
+        { id: 'routes/users.audit-log', title: 'audit log' },
       ],
     },
   ],

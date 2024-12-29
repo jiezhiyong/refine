@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/remix';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
-import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import {
   Links,
@@ -14,22 +14,27 @@ import {
   useNavigation,
   Outlet,
   useRouteLoaderData,
+  data,
+  useLoaderData,
 } from '@remix-run/react';
-import { getCookie } from '~/services/cookie.server';
 import { getUser, themeSessionResolver } from '~/services/session.server';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
 import { ModalProvider } from '~/hooks/use-modal';
 import PageError from '~/components/500';
 import NotFound from '~/components/404';
-import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes';
+import { PreventFlashOnWrongTheme, ThemeProvider } from 'remix-themes';
 import { cn } from '~/utils/cn';
+import { Loader } from 'lucide-react';
+import i18nServer, { localeCookie } from '~/services/i18n.server';
+import { useChangeLanguage } from 'remix-i18next/react';
 
 /** 全局样式、插件样式 */
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
-import { Loader } from 'lucide-react';
+import { User } from '@prisma/client';
+import { preferencesCookie } from './services/cookie.server';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -49,19 +54,30 @@ export const headers: HeadersFunction = () => ({
   'Document-Policy': 'js-profiling',
 });
 
-/** 加载器 */
-export const loader: LoaderFunction = async ({ request }) => {
-  const cookie = await getCookie(request);
-  const user = await getUser(request);
-  const { getTheme } = await themeSessionResolver(request);
+/** 创建应用程序约定 */
+export const handle = { i18n: ['translation'] };
 
-  Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
-  return {
-    user,
-    theme: getTheme(),
-    sidebarIsOpen: cookie?.sidebarIsOpen,
-  };
-};
+/** 加载器 */
+export async function loader({ request }: LoaderFunctionArgs) {
+  const [user, { getTheme }, locale] = await Promise.all([
+    getUser(request),
+    themeSessionResolver(request),
+    i18nServer.getLocale(request),
+  ]);
+
+  if (user?.id) {
+    Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
+  }
+
+  return data(
+    {
+      user: user || ({} as User),
+      theme: getTheme(),
+      locale,
+    },
+    { headers: { 'Set-Cookie': await preferencesCookie.serialize(locale) } }
+  );
+}
 
 /** 水和回退处理 */
 export function HydrateFallback() {
@@ -77,11 +93,10 @@ function Document({
   title,
   sessionTheme,
   script = true,
-}: PropsWithChildren<{ title?: string; sessionTheme?: string; script?: boolean }>) {
-  const [theme] = useTheme();
-
+  locale,
+}: PropsWithChildren<{ title?: string; sessionTheme?: string; script?: boolean; locale?: string }>) {
   return (
-    <html lang="en" className={cn(theme)}>
+    <html lang={locale ?? 'en'} className={cn(sessionTheme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -100,13 +115,12 @@ function Document({
   );
 }
 
-function UiThemeProviders({ children, title, script = true }: PropsWithChildren<{ title?: string; script?: boolean }>) {
-  const data = useRouteLoaderData<typeof loader>('root');
-  const theme = data?.theme;
+function AppProviders({ children, title, script = true }: PropsWithChildren<{ title?: string; script?: boolean }>) {
+  const { theme, locale } = useRouteLoaderData<typeof loader>('root') || {};
 
   return (
     <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
-      <Document title={title} sessionTheme={theme} script={script}>
+      <Document title={title} sessionTheme={theme} script={script} locale={locale}>
         {children}
       </Document>
     </ThemeProvider>
@@ -115,6 +129,8 @@ function UiThemeProviders({ children, title, script = true }: PropsWithChildren<
 
 function App() {
   const navigation = useNavigation();
+  const { locale } = useLoaderData<typeof loader>();
+  useChangeLanguage(locale);
 
   useEffect(() => {
     if (navigation.state === 'idle') nProgress.done();
@@ -124,9 +140,9 @@ function App() {
   // TODO: 实时更新
   // useRealtimeRevalidation({ url: '/issues-events' });
   return (
-    <UiThemeProviders>
+    <AppProviders>
       <Outlet />
-    </UiThemeProviders>
+    </AppProviders>
   );
 }
 
@@ -140,16 +156,16 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <UiThemeProviders title={`${error.status} ${error.statusText}`} script={false}>
+      <AppProviders title={`${error.status} ${error.statusText}`} script={false}>
         {error.status === 404 ? <NotFound /> : <PageError error={{ message: error.data }} />}
-      </UiThemeProviders>
+      </AppProviders>
     );
   }
 
   return (
-    <UiThemeProviders title="Oh no!" script={false}>
+    <AppProviders title="Oh no!" script={false}>
       <PageError error={error as Error} />
-    </UiThemeProviders>
+    </AppProviders>
   );
 }
 
