@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
+import { type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import PageError from '~/components/500';
@@ -10,7 +10,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const t = await i18nServer.getFixedT(request);
-  return json({ title: t('title'), description: t('description') });
+  return { title: t('title'), description: t('description') };
 }
 
 export default function Index() {

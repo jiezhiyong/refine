@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from '~/components-shadcn/breadcrumb';
-import { routeBreadcrumbMap } from '~/configs/menus';
+import { routeBreadcrumbMap } from '~/config/menus';
 
 /**
  * Breadcrumb - 面包屑导航

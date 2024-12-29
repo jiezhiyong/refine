@@ -13,7 +13,7 @@ import { Skeleton } from '~/components-shadcn/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components-shadcn/tooltip';
 import { useFetcher } from '@remix-run/react';
 
-const SIDEBAR_COOKIE_NAME = 'sidebarIsOpen';
+const SIDEBAR_COOKIE_NAME = 'sidebarIsClose';
 const SIDEBAR_WIDTH = '16rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
@@ -66,7 +66,7 @@ const SidebarProvider = React.forwardRef<
       }
 
       // 使用 fetcher 更新 cookie
-      fetcher.submit({ [SIDEBAR_COOKIE_NAME]: openState }, { method: 'post', action: '/api/set-preferences' });
+      fetcher.submit({ [SIDEBAR_COOKIE_NAME]: !openState }, { method: 'post', action: '/api/set-preferences' });
     },
     [setOpenProp, open, fetcher]
   );

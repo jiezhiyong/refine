@@ -11,7 +11,7 @@ import { server } from '../mock/node';
 import { createInstance, i18n as i18next } from 'i18next';
 import i18nServer from './services/i18n.server';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import * as i18n from './configs/i18n';
+import * as i18n from './config/i18n';
 
 const ABORT_DELAY = 5_000;
 

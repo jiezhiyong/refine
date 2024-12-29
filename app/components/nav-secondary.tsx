@@ -1,5 +1,5 @@
 /* eslint-disable import/namespace */
-import { Activity, Bug, Moon, Sun } from 'lucide-react';
+import { Activity, Bug } from 'lucide-react';
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,35 +8,14 @@ import {
   SidebarMenuItem,
 } from '~/components-shadcn/sidebar';
 import { cn } from '~/utils/cn';
-import { Theme, useTheme } from 'remix-themes';
+import { useTheme } from 'remix-themes';
 import * as Sentry from '@sentry/remix';
 import { useRef } from 'react';
 import { useMountEffect } from '~/hooks/use-mount-effect';
+import { ThemeSwitcher } from './switcher-theme';
 
 // 次要菜单
 const items = [{ title: 'Service Health Check', url: '#', icon: Activity }];
-
-// 主题切换
-function ThemeSwitcher({
-  theme,
-  setTheme,
-}: {
-  theme: Theme | null;
-  setTheme: React.Dispatch<React.SetStateAction<Theme | null>>;
-}) {
-  return (
-    <div
-      className="w-full cursor-pointer p-2"
-      onClick={() => {
-        setTheme(theme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT);
-      }}
-    >
-      <Sun size={16} className="absolute rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon size={16} className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span>&nbsp;</span>
-    </div>
-  );
-}
 
 export function NavSecondary() {
   const [theme, setTheme] = useTheme();

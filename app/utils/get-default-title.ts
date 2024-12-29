@@ -1,4 +1,4 @@
-import { routeBreadcrumbMap } from '~/configs/menus';
+import { routeBreadcrumbMap } from '~/config/menus';
 import { TAny } from '~/types/any';
 
 /**

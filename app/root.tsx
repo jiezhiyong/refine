@@ -13,7 +13,6 @@ import {
   isRouteErrorResponse,
   useNavigation,
   Outlet,
-  useRouteLoaderData,
   data,
   useLoaderData,
 } from '@remix-run/react';
@@ -23,10 +22,10 @@ import { Toaster } from '~/components-shadcn/sonner';
 import { ModalProvider } from '~/hooks/use-modal';
 import PageError from '~/components/500';
 import NotFound from '~/components/404';
-import { PreventFlashOnWrongTheme, ThemeProvider } from 'remix-themes';
+import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 import { cn } from '~/utils/cn';
 import { Loader } from 'lucide-react';
-import i18nServer, { localeCookie } from '~/services/i18n.server';
+import i18nServer from '~/services/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
 
 /** 全局样式、插件样式 */
@@ -34,7 +33,8 @@ import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
 import { User } from '@prisma/client';
-import { preferencesCookie } from './services/cookie.server';
+import { getCookie, preferencesCookie } from '~/services/cookie.server';
+import { TypeLocaleLanguage } from '~/config/i18n';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -57,9 +57,18 @@ export const headers: HeadersFunction = () => ({
 /** 创建应用程序约定 */
 export const handle = { i18n: ['translation'] };
 
+/** 加载器返回数据类型定义 */
+export type RootLoaderData = {
+  user: User;
+  theme: Theme | null;
+  sidebarIsClose?: string;
+  locale: TypeLocaleLanguage;
+};
+
 /** 加载器 */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [user, { getTheme }, locale] = await Promise.all([
+  const [cookie, user, themeResolver, locale] = await Promise.all([
+    getCookie(request),
     getUser(request),
     themeSessionResolver(request),
     i18nServer.getLocale(request),
@@ -72,10 +81,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return data(
     {
       user: user || ({} as User),
-      theme: getTheme(),
+      theme: themeResolver.getTheme(),
+      sidebarIsClose: cookie?.sidebarIsClose,
       locale,
     },
-    { headers: { 'Set-Cookie': await preferencesCookie.serialize(locale) } }
+    {
+      headers: {
+        'Set-Cookie': await preferencesCookie.serialize({ ...cookie, lng: locale }),
+      },
+    }
   );
 }
 
@@ -91,18 +105,18 @@ export function HydrateFallback() {
 function Document({
   children,
   title,
-  sessionTheme,
+  specifiedTheme,
   script = true,
   locale,
-}: PropsWithChildren<{ title?: string; sessionTheme?: string; script?: boolean; locale?: string }>) {
+}: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale?: string }>) {
   return (
-    <html lang={locale ?? 'en'} className={cn(sessionTheme)}>
+    <html lang={locale ?? 'en'} className={cn(specifiedTheme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         {title && <title>{title}</title>}
-        <PreventFlashOnWrongTheme ssrTheme={Boolean(sessionTheme)} />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(specifiedTheme)} />
         <Links />
       </head>
       <body>
@@ -116,11 +130,11 @@ function Document({
 }
 
 function AppProviders({ children, title, script = true }: PropsWithChildren<{ title?: string; script?: boolean }>) {
-  const { theme, locale } = useRouteLoaderData<typeof loader>('root') || {};
+  const { theme, locale } = useLoaderData<typeof loader>() || {};
 
   return (
     <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
-      <Document title={title} sessionTheme={theme} script={script} locale={locale}>
+      <Document title={title} specifiedTheme={theme} script={script} locale={locale}>
         {children}
       </Document>
     </ThemeProvider>

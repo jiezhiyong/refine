@@ -16,3 +16,5 @@ export const resources = serverOnly$({
   en: { translation: enTranslation },
   zh: { translation: zhTranslation },
 });
+
+export type TypeLocaleLanguage = 'zh' | 'en';

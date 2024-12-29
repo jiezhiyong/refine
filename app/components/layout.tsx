@@ -5,13 +5,13 @@ import { Outlet, useRouteLoaderData } from '@remix-run/react';
 import { NavTools } from './nav-tools';
 import { SidebarRight } from './sidebar-right';
 import { Breadcrumb } from './breadcrumb';
-import { loader } from '~/root';
+import { loader, type RootLoaderData } from '~/root';
 
 export default function Layout() {
-  const { sidebarIsOpen } = useRouteLoaderData<typeof loader>('root');
+  const data = useRouteLoaderData<typeof loader>('root') as RootLoaderData;
 
   return (
-    <SidebarProvider open={sidebarIsOpen === 'true'}>
+    <SidebarProvider open={data.sidebarIsClose !== 'true'}>
       <SidebarLeft />
       <SidebarInset>
         <header className="sticky top-0 flex h-16 shrink-0 items-center gap-2 bg-background transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

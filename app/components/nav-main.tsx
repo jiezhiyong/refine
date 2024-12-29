@@ -12,7 +12,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '~/components-shadcn/sidebar';
-import { menuGroups } from '~/configs/menus';
+import { menuGroups } from '~/config/menus';
 import { cn } from '~/utils/cn';
 
 export function NavMain() {
