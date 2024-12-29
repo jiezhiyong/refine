@@ -47,7 +47,7 @@ export function NavSecondary() {
           <SidebarMenuItem key="sentry-feedback">
             <SidebarMenuButton asChild size="sm">
               <div ref={buttonRef} className="cursor-pointer">
-                <Bug className="text-destructive" />
+                <Bug className="text-yellow-200" />
                 <span>Report a Bug</span>
               </div>
             </SidebarMenuButton>
