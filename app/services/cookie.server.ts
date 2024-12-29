@@ -10,7 +10,7 @@ export interface CookiePreferences {
 }
 
 /** 用户偏好Cookie */
-export const preferencesCookie = createCookie('user-preferences', {
+export const preferencesCookie = createCookie('preferences', {
   secrets: [process.env.SESSION_SECRET ?? ''],
   path: '/',
   sameSite: 'lax',

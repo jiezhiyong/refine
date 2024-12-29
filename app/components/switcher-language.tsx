@@ -1,40 +1,25 @@
-import { useTranslation } from 'react-i18next';
+import { Form, useRouteLoaderData, useNavigate } from '@remix-run/react';
+import { Languages } from 'lucide-react';
 import { Button } from '~/components-shadcn/button';
-import { useFetcher } from '@remix-run/react';
+import { RootLoaderData } from '~/root';
+import { cn } from '~/utils/cn';
 
 export function LanguageSwitcher() {
-  return null;
+  const navigate = useNavigate();
+  const { locale } = useRouteLoaderData<RootLoaderData>('root') || {};
 
-  // const { i18n } = useTranslation();
-  // const fetcher = useFetcher();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('lng', locale === 'zh' ? 'en' : 'zh');
+    navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+  };
 
-  // const changeLanguage = (lng: string) => {
-  //   if (lng === i18n.language) return;
-  //   fetcher.submit({ lng }, { method: 'post', action: '/api/set-language' });
-  // };
-
-  // return (
-  //   <div className="flex gap-2">
-  //     <Button
-  //       variant="ghost"
-  //       size="sm"
-  //       className={`rounded px-3 py-1 ${
-  //         i18n.language === 'zh' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
-  //       }`}
-  //       onClick={() => changeLanguage('zh')}
-  //     >
-  //       中文
-  //     </Button>
-  //     <Button
-  //       variant="ghost"
-  //       size="sm"
-  //       className={`rounded px-3 py-1 ${
-  //         i18n.language === 'en' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
-  //       }`}
-  //       onClick={() => changeLanguage('en')}
-  //     >
-  //       English
-  //     </Button>
-  //   </div>
-  // );
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Button variant="ghost" size="icon" className="h-7 w-7" type="submit">
+        <Languages className={cn('transition-all', locale === 'zh' && 'scale-x-[-1]')} />
+      </Button>
+    </Form>
+  );
 }

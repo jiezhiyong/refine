@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/namespace */
 import * as Sentry from '@sentry/remix';
 import i18next from 'i18next';
@@ -7,7 +8,6 @@ import { RemixBrowser, useLocation, useMatches } from '@remix-run/react';
 import { startTransition, StrictMode, useEffect } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { getInitialNamespaces } from 'remix-i18next/client';
 import { defaultNS, fallbackLng, supportedLngs } from '~/config/i18n';
 
 /** 初始化客户端 Sentry */

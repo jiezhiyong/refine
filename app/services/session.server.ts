@@ -120,7 +120,7 @@ export async function logout(request: Request) {
 /** 主题 Session */
 const themeStorage = createCookieSessionStorage<SessionData, SessionFlashData>({
   cookie: {
-    name: 'theme:state',
+    name: 'theme',
     secrets: [process.env.SESSION_SECRET ?? ''],
     path: '/',
     sameSite: 'lax',

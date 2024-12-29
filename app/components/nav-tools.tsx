@@ -20,14 +20,14 @@ export function NavTools() {
 
   const defaultTools = (
     <>
-      <FullscreenSwitcher />
       <LanguageSwitcher />
+      <FullscreenSwitcher />
     </>
   );
 
   const { uiTools, uiFilter } = handle || {};
   if (!uiTools && !uiFilter) {
-    return defaultTools;
+    return <div className="flex items-center gap-1">{defaultTools}</div>;
   }
 
   function changeParams(key: string, value: boolean) {

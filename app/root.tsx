@@ -129,7 +129,11 @@ function Document({
   );
 }
 
-function AppProviders({ children, title, script = true }: PropsWithChildren<{ title?: string; script?: boolean }>) {
+function WithThemeProviders({
+  children,
+  title,
+  script = true,
+}: PropsWithChildren<{ title?: string; script?: boolean }>) {
   const { theme, locale } = useLoaderData<typeof loader>() || {};
 
   return (
@@ -154,9 +158,9 @@ function App() {
   // TODO: 实时更新
   // useRealtimeRevalidation({ url: '/issues-events' });
   return (
-    <AppProviders>
+    <WithThemeProviders>
       <Outlet />
-    </AppProviders>
+    </WithThemeProviders>
   );
 }
 
@@ -170,16 +174,16 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <AppProviders title={`${error.status} ${error.statusText}`} script={false}>
+      <WithThemeProviders title={`${error.status} ${error.statusText}`} script={false}>
         {error.status === 404 ? <NotFound /> : <PageError error={{ message: error.data }} />}
-      </AppProviders>
+      </WithThemeProviders>
     );
   }
 
   return (
-    <AppProviders title="Oh no!" script={false}>
+    <WithThemeProviders title="Oh no!" script={false}>
       <PageError error={error as Error} />
-    </AppProviders>
+    </WithThemeProviders>
   );
 }
 
