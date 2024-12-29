@@ -13,19 +13,18 @@ export const meta: MetaFunction = ({ matches }) => {
 // 加载器 - 初始化 && 处理表单`GET`请求
 export const loader: LoaderFunction = async () => {
   const response = await fetch('https://api.example.com/user');
-  const serverSideData = await response.json();
+  const res = await response.json();
 
-  return { serverSideData };
+  return { res };
 };
 
 // UI
 export default function TechstackMsw() {
-  const { serverSideData } = useLoaderData<typeof loader>();
+  const { res } = useLoaderData<typeof loader>();
   const [favoriteMovies, setFavoriteMovies] = useState<{
     data: { movies: Array<{ id: string; title: string }> };
   } | null>(null);
 
-  // FIXME: TypeError: argument name is invalid
   const handleClick = () => {
     fetch('/api/runtime', {
       method: 'POST',
@@ -47,20 +46,22 @@ export default function TechstackMsw() {
   };
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
-      <p id="server-side-greeting">Hello, {serverSideData.name}!</p>
-      {favoriteMovies?.data ? (
-        <div>
-          <h2>My favorite movies ({favoriteMovies.data.movies.length})</h2>
+    <div className="flex flex-1 flex-col items-center justify-center">
+      <h1 className="text-6xl text-[#3defe9]">Hi, {res.name} 👋</h1>
+      <div className="my-10 text-3xl text-[#fecc1b]">
+        {favoriteMovies?.data ? (
           <ul id="movies-list">
             {favoriteMovies.data.movies.map((movie) => (
-              <li key={movie.id}>{movie.title}</li>
+              <span key={movie.id}>{movie.title}、</span>
             ))}
           </ul>
-        </div>
-      ) : null}
+        ) : (
+          <span>...</span>
+        )}
+      </div>
+
       <Button id="fetch-movies-button" onClick={handleClick}>
-        Make a runtime request
+        Make a runtime reques
       </Button>
     </div>
   );

@@ -55,7 +55,7 @@ export function NavSecondary() {
 
           <SidebarMenuItem key="theme-switch">
             <SidebarMenuButton asChild size="sm">
-              <div className="cursor-pointer" style={{ padding: '0 !important' }}>
+              <div className="cursor-pointer">
                 <ThemeSwitcher theme={theme} setTheme={setTheme} />
               </div>
             </SidebarMenuButton>
