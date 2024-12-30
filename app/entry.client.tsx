@@ -60,8 +60,8 @@ async function prepareApp() {
       },
       backend: {
         // We will configure the backend to fetch the translations from the
-        // resource route /api/locales and pass the lng and ns as search params
-        loadPath: '/api/locales?lng={{lng}}&ns={{ns}}',
+        // resource route /api/set-locales and pass the lng and ns as search params
+        loadPath: '/api/set-locales?lng={{lng}}&ns={{ns}}',
       },
     });
 

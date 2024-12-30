@@ -16,6 +16,7 @@ import {
   data,
   useLoaderData,
 } from '@remix-run/react';
+import { ClientOnly } from 'remix-utils/client-only';
 import { getUser, themeSessionResolver } from '~/services/session.server';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
@@ -27,14 +28,14 @@ import { cn } from '~/utils/cn';
 import { Loader } from 'lucide-react';
 import i18nServer from '~/services/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
+import { User } from '@prisma/client';
+import { getCookie, preferencesCookie } from '~/services/cookie.server';
+import { TypeLocaleLanguage } from '~/config/i18n';
 
 /** 全局样式、插件样式 */
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
-import { User } from '@prisma/client';
-import { getCookie, preferencesCookie } from '~/services/cookie.server';
-import { TypeLocaleLanguage } from '~/config/i18n';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -110,7 +111,7 @@ function Document({
   locale,
 }: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale?: string }>) {
   return (
-    <html lang={locale ?? 'en'} className={cn(specifiedTheme)}>
+    <html lang={locale ?? 'en'} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -120,8 +121,8 @@ function Document({
         <Links />
       </head>
       <body>
-        <ModalProvider>{children}</ModalProvider>
-        <Toaster richColors position="top-center" />
+        {/* FIXME: 修复水和问题 */}
+        <ClientOnly fallback={<HydrateFallback />}>{() => children}</ClientOnly>
         <ScrollRestoration />
         {script && <Scripts crossOrigin="anonymous" />}
       </body>
@@ -129,7 +130,7 @@ function Document({
   );
 }
 
-function WithThemeProviders({
+function DocumentWithThemeProviders({
   children,
   title,
   script = true,
@@ -139,7 +140,8 @@ function WithThemeProviders({
   return (
     <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
       <Document title={title} specifiedTheme={theme} script={script} locale={locale}>
-        {children}
+        <ModalProvider>{children}</ModalProvider>
+        <Toaster richColors position="top-center" />
       </Document>
     </ThemeProvider>
   );
@@ -155,12 +157,10 @@ function App() {
     else nProgress.start();
   }, [navigation.state]);
 
-  // TODO: 实时更新
-  // useRealtimeRevalidation({ url: '/issues-events' });
   return (
-    <WithThemeProviders>
+    <DocumentWithThemeProviders>
       <Outlet />
-    </WithThemeProviders>
+    </DocumentWithThemeProviders>
   );
 }
 
@@ -174,16 +174,16 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <WithThemeProviders title={`${error.status} ${error.statusText}`} script={false}>
+      <DocumentWithThemeProviders title={`${error.status} ${error.statusText}`} script={false}>
         {error.status === 404 ? <NotFound /> : <PageError error={{ message: error.data }} />}
-      </WithThemeProviders>
+      </DocumentWithThemeProviders>
     );
   }
 
   return (
-    <WithThemeProviders title="Oh no!" script={false}>
+    <DocumentWithThemeProviders title="Oh no!" script={false}>
       <PageError error={error as Error} />
-    </WithThemeProviders>
+    </DocumentWithThemeProviders>
   );
 }
 

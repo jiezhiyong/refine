@@ -26,6 +26,7 @@ const menusPlayground: menuGroupItem = {
       children: [
         { id: 'routes/dashboard._index', title: 'index' },
         { id: 'routes/dashboard.about', title: 'about' },
+        { id: 'routes/dashboard.image', title: 'image' },
       ],
     },
     {

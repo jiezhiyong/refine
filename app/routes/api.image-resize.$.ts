@@ -16,7 +16,6 @@ import type { ReadStream } from 'fs';
 import { createReadStream, statSync } from 'fs';
 import path from 'path';
 import { PassThrough } from 'stream';
-
 import type { LoaderFunction } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 import type { FitEnum } from 'sharp';
@@ -116,10 +115,16 @@ function readFileAsStream(src: string): ReadStream {
 
   // check that file exists
   const srcPath = path.join(ASSETS_ROOT, src);
-  const fileStat = statSync(srcPath);
-  if (!fileStat.isFile()) {
-    throw new Error(`${srcPath} is not a file`);
+
+  try {
+    const fileStat = statSync(srcPath);
+    if (!fileStat.isFile()) {
+      throw new Error(`${srcPath} is not a file`);
+    }
+  } catch (e) {
+    throw new Error(`${srcPath} does not exist`);
   }
+
   // create a readable stream from the image file
   return createReadStream(path.join(ASSETS_ROOT, src));
 

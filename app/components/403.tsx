@@ -9,7 +9,7 @@ export default function PermissionDenied() {
           <h1 className="text-forceground absolute left-1/2 top-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase">
             Oops!
           </h1>
-          <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] py-2.5 text-[28px] font-normal uppercase">
+          <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] font-normal uppercase">
             {"403 - You don't have permission to access this page"}
           </h2>
         </div>

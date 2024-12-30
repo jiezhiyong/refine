@@ -6,7 +6,7 @@ export interface ImageProps extends React.ComponentPropsWithRef<'img'> {
   width?: number; // either width or height is required
   height?: number;
   fit?: keyof FitEnum; // contain is default
-  alt: string;
+  alt?: string;
 }
 
 export const ImageResize = forwardRef<HTMLImageElement, ImageProps>(
@@ -26,7 +26,7 @@ export const ImageResize = forwardRef<HTMLImageElement, ImageProps>(
       <img
         ref={forwardedRef}
         alt={alt}
-        src={`/image-resize/${src}?${query.toString()}`}
+        src={`/api/image-resize/${src}?${query.toString()}`}
         {...{ width, height, ...other }}
       />
     );
