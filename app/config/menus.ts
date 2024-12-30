@@ -48,9 +48,9 @@ const menusPlayground: menuGroupItem = {
   ],
 };
 
-// 设置菜单
+// 账户菜单
 const menusSetting: menuGroupItem = {
-  title: 'Settings',
+  title: 'Accounts',
   items: [
     {
       id: 'routes/users',

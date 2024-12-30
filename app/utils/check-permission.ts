@@ -22,3 +22,7 @@
 // export function useAccess() {
 
 // }
+
+// https://demo.dashpress.io/zh-cn/roles/dadada?tab=app
+// Refine 实现精细访问控制
+// 原生集成到授权服务，为常见的访问控制模型如ACL、RBAC和ABAC模型提供开箱即用的支持。

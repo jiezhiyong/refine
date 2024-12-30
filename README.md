@@ -64,3 +64,9 @@ https://github.com/graphql/dataloader
 ## Sentry
 
 https://docs.sentry.io/platforms/javascript/guides/remix/
+
+## qrcode sign in
+
+## 功能搜索
+
+## 单点登录、多重身份验证
