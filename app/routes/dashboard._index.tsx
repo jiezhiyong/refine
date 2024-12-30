@@ -1,3 +1,4 @@
+import { CanAccess } from '@refinedev/core';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Form, UIMatch, useSearchParams } from '@remix-run/react';
 import {
@@ -65,7 +66,6 @@ export const handle: HandleFunction = {
   },
 };
 
-// 加载器 - 初始化 && 处理表单`GET`请求
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = getSearchParams(request);
   return {};
@@ -73,14 +73,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // 处理器 - 处理表单`POST`请求
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const rawData = Object.fromEntries(formData);
+  const form = await request.formData();
+  const formData = Object.fromEntries(form);
   return {};
 }
 
 // UI
 export default function DashboardIndex() {
-  return <PlaceholderDemo1 />;
+  return (
+    <CanAccess>
+      <PlaceholderDemo1 />
+    </CanAccess>
+  );
 }
 
 // UI - 导航工具

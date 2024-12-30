@@ -21,8 +21,6 @@
 
 // /** 加载器 - 处理`GET`请求 */
 // export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-//   await requireUserSession(request);
-
 //   const { contactId } = params;
 
 //   invariant(contactId, 'Missing contactId param');

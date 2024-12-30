@@ -2,8 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
 import { LoginForm } from '~/components/form-login';
-import { getUser, createUserSession } from '~/services/session.server';
-import { verifyLogin } from '~/models/user.server';
+import { getUser, createUserSession, login } from '~/services/session.server';
 import { safeRedirect } from '~/utils/safe-redirect';
 import { typedFormError } from '~/utils/typed-form-error';
 
@@ -32,21 +31,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const rawData = Object.fromEntries(formData) as z.infer<typeof loginSchema>;
+  const form = await request.formData();
+  const formData = Object.fromEntries(form) as z.infer<typeof loginSchema>;
 
   try {
-    const { email, password } = loginSchema.parse(rawData);
-    const user = await verifyLogin(email, password);
+    const { email, password } = loginSchema.parse(formData);
+    const user = await login({ email, password });
     if (!user) {
       throw new Error('Invalid email or password.');
     }
 
-    return createUserSession({
-      redirectTo: safeRedirect(rawData.redirectTo),
-      request,
-      userId: user.id,
-    });
+    return createUserSession(user, safeRedirect(formData.redirectTo));
   } catch (error) {
     return typedFormError(error);
   }

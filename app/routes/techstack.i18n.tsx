@@ -9,7 +9,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
 
-// 加载器 - 初始化 && 处理表单`GET`请求
 export async function loader({ request }: LoaderFunctionArgs) {
   const t = await i18nServer.getFixedT(request);
   return { title: t('title'), description: t('description') };

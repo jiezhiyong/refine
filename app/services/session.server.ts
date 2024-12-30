@@ -3,21 +3,17 @@ import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 import { createThemeSessionResolver } from 'remix-themes';
 import { getUserById } from '~/models/user.server';
+import { authProvider } from '~/authProvider';
+
+type LoginParams = {
+  email: string;
+  password: string;
+};
 
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
 
-const USER_SESSION_KEY = 'userId';
-
-type SessionData = {
-  userId: string;
-};
-
-type SessionFlashData = {
-  error: string;
-};
-
 /** 用户登录 Session */
-const sessionStorage = createCookieSessionStorage<SessionData, SessionFlashData>({
+const storage = createCookieSessionStorage({
   cookie: {
     name: '__session',
     secrets: [process.env.SESSION_SECRET ?? ''],
@@ -29,10 +25,56 @@ const sessionStorage = createCookieSessionStorage<SessionData, SessionFlashData>
   },
 });
 
-/** 获取用户登录 Session */
-export async function getSession(request: Request) {
-  const cookie = request.headers.get('Cookie');
-  return sessionStorage.getSession(cookie);
+/** 用户登录 */
+export async function login({ email, password }: LoginParams) {
+  try {
+    const user = await authProvider.login({ email, password });
+    if (user) {
+      return { user };
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+/** 重定向到登录页 */
+const redirectToLogin = (request: Request, redirectTo = request.url) => {
+  const searchParams = new URLSearchParams([['redirectTo', redirectTo]]);
+  throw redirect(`/login?${searchParams}`);
+};
+
+/** 校验用户登录 Session */
+export async function requireUserSession(request: Request, redirectTo: string = request.url) {
+  try {
+    const user = await authProvider.check?.({ request, storage });
+    return user;
+  } catch (error) {
+    redirectToLogin(request, redirectTo);
+  }
+}
+
+/** 创建用户登录 Session */
+export async function createUserSession(user: object, redirectTo: string) {
+  const session = await storage.getSession();
+  session.set('user', { ...user });
+  return redirect(redirectTo, {
+    headers: {
+      'Set-Cookie': await storage.commitSession(session),
+    },
+  });
+}
+
+/** 用户登出 */
+export async function logout(request: Request) {
+  const session = await storage.getSession(request.headers.get('Cookie'));
+
+  Sentry.setUser(null);
+
+  return redirect('/login', {
+    headers: {
+      'Set-Cookie': await storage.destroySession(session),
+    },
+  });
 }
 
 /** 获取用户 ID */
@@ -61,64 +103,8 @@ export async function getUser(request: Request) {
   }
 }
 
-/** 重定向到登录页 */
-const redirectToLogin = (request: Request, redirectTo = request.url) => {
-  const searchParams = new URLSearchParams([['redirectTo', redirectTo]]);
-  throw redirect(`/login?${searchParams}`);
-};
-
-/** 校验用户登录 Session */
-export const requireUserSession = async (request: Request, redirectTo = request.url) => {
-  try {
-    const user = await getUser(request);
-    if (!user?.id) {
-      redirectToLogin(request, redirectTo);
-    }
-
-    return user;
-  } catch (error) {
-    redirectToLogin(request, redirectTo);
-  }
-};
-
-/** 创建用户登录 Session */
-export async function createUserSession({
-  request,
-  userId,
-  remember = true,
-  redirectTo,
-}: {
-  request: Request;
-  userId: string;
-  remember?: boolean;
-  redirectTo: string;
-}) {
-  const session = await getSession(request);
-  session.set(USER_SESSION_KEY, userId);
-
-  return redirect(redirectTo, {
-    headers: {
-      'Set-Cookie': await sessionStorage.commitSession(session, {
-        maxAge: remember ? 60 * 60 * 24 * 7 : undefined,
-      }),
-    },
-  });
-}
-
-/** 用户登出 */
-export async function logout(request: Request) {
-  Sentry.setUser(null);
-
-  const session = await getSession(request);
-  return redirect('/login', {
-    headers: {
-      'Set-Cookie': await sessionStorage.destroySession(session),
-    },
-  });
-}
-
 /** 主题 Session */
-const themeStorage = createCookieSessionStorage<SessionData, SessionFlashData>({
+const themeStorage = createCookieSessionStorage({
   cookie: {
     name: 'theme',
     secrets: [process.env.SESSION_SECRET ?? ''],

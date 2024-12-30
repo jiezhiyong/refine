@@ -10,7 +10,6 @@ export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
 
-// 加载器 - 初始化 && 处理表单`GET`请求
 export const loader: LoaderFunction = async () => {
   const response = await fetch('https://api.example.com/user');
   const res = await response.json();

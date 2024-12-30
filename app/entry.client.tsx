@@ -11,33 +11,33 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { defaultNS, fallbackLng, supportedLngs } from '~/config/i18n';
 
 /** 初始化客户端 Sentry */
-const isProduction = import.meta.env.MODE === 'production';
-Sentry.init({
-  dsn: import.meta.env.VITE_SENTRY_DSN,
-  environment: import.meta.env.MODE,
-  release: 'remix-oss@' + import.meta.env.npm_package_version,
-  integrations: [
-    Sentry.browserTracingIntegration({ useEffect, useLocation, useMatches }),
-    Sentry.browserProfilingIntegration(),
-    Sentry.replayIntegration({ maskAllText: isProduction, blockAllMedia: isProduction }),
-    Sentry.captureConsoleIntegration(),
-    Sentry.extraErrorDataIntegration(),
-    Sentry.httpClientIntegration(),
-  ],
-  sendDefaultPii: true,
-  tracesSampleRate: 1.0,
-  tracePropagationTargets: ['localhost', /^\/api/, 'https://external-api.com'],
-  profilesSampleRate: 1.0,
-  replaysSessionSampleRate: isProduction ? 0.1 : 1.0,
-  replaysOnErrorSampleRate: 1.0,
-  beforeSend(event) {
-    if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
-      window._isRenderedReortDialog = true;
-      Sentry.showReportDialog({ eventId: event.event_id });
-    }
-    return event;
-  },
-});
+// const isProduction = import.meta.env.MODE === 'production';
+// Sentry.init({
+//   dsn: import.meta.env.VITE_SENTRY_DSN,
+//   environment: import.meta.env.MODE,
+//   release: 'remix-oss@' + import.meta.env.npm_package_version,
+//   integrations: [
+//     Sentry.browserTracingIntegration({ useEffect, useLocation, useMatches }),
+//     Sentry.browserProfilingIntegration(),
+//     Sentry.replayIntegration({ maskAllText: isProduction, blockAllMedia: isProduction }),
+//     Sentry.captureConsoleIntegration(),
+//     Sentry.extraErrorDataIntegration(),
+//     Sentry.httpClientIntegration(),
+//   ],
+//   sendDefaultPii: true,
+//   tracesSampleRate: 1.0,
+//   tracePropagationTargets: ['localhost', /^\/api/, 'https://external-api.com'],
+//   profilesSampleRate: 1.0,
+//   replaysSessionSampleRate: isProduction ? 0.1 : 1.0,
+//   replaysOnErrorSampleRate: 1.0,
+//   beforeSend(event) {
+//     if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
+//       window._isRenderedReortDialog = true;
+//       Sentry.showReportDialog({ eventId: event.event_id });
+//     }
+//     return event;
+//   },
+// });
 
 async function prepareApp() {
   await i18next
@@ -81,15 +81,15 @@ async function prepareApp() {
 }
 
 /** 浏览器的入口点 - 初始化客户端库、添加仅限客户端的提供程序等 */
-prepareApp().then(() => {
-  startTransition(() => {
-    hydrateRoot(
-      document,
-      <I18nextProvider i18n={i18next}>
-        <StrictMode>
-          <RemixBrowser />
-        </StrictMode>
-      </I18nextProvider>
-    );
-  });
+// prepareApp().then(() => {
+startTransition(() => {
+  hydrateRoot(
+    document,
+    <I18nextProvider i18n={i18next}>
+      <StrictMode>
+        <RemixBrowser />
+      </StrictMode>
+    </I18nextProvider>
+  );
 });
+// });

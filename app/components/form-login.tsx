@@ -7,6 +7,7 @@ import { PrivacyPolicy } from './privacy-policy';
 import { ErrorMessage } from './error';
 import { useEffect } from 'react';
 import { useModal } from '~/hooks/use-modal';
+import { useTranslate } from '@refinedev/core';
 
 // 定义错误类型
 interface ActionData {
@@ -24,6 +25,7 @@ export function LoginForm() {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
   const navigation = useNavigation();
+  const translate = useTranslate();
 
   useEffect(() => {
     if (errors?.default?.[0]) {

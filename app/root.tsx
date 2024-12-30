@@ -1,3 +1,7 @@
+import { Refine } from '@refinedev/core';
+import dataProvider from '@refinedev/simple-rest';
+import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
+import { authProvider } from './authProvider';
 import * as Sentry from '@sentry/remix';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
@@ -16,7 +20,6 @@ import {
   data,
   useLoaderData,
 } from '@remix-run/react';
-import { ClientOnly } from 'remix-utils/client-only';
 import { getUser, themeSessionResolver } from '~/services/session.server';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
@@ -36,6 +39,7 @@ import { TypeLocaleLanguage } from '~/config/i18n';
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
+import { API_URL } from './constants';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -121,8 +125,26 @@ function Document({
         <Links />
       </head>
       <body>
-        {/* FIXME: 修复水和问题 */}
-        <ClientOnly fallback={<HydrateFallback />}>{() => children}</ClientOnly>
+        <Refine
+          dataProvider={dataProvider('https://api.fake-rest.refine.dev')}
+          routerProvider={routerProvider}
+          authProvider={authProvider}
+          resources={[
+            {
+              name: 'posts',
+              list: '/posts',
+              create: '/posts/create',
+              edit: '/posts/edit/:id',
+            },
+          ]}
+          options={{
+            syncWithLocation: true,
+            warnWhenUnsavedChanges: true,
+          }}
+        >
+          {children}
+          <UnsavedChangesNotifier />
+        </Refine>
         <ScrollRestoration />
         {script && <Scripts crossOrigin="anonymous" />}
       </body>
@@ -147,25 +169,60 @@ function DocumentWithThemeProviders({
   );
 }
 
-function App() {
-  const navigation = useNavigation();
-  const { locale } = useLoaderData<typeof loader>();
-  useChangeLanguage(locale);
+// function App() {
+//   const navigation = useNavigation();
+//   const { locale } = useLoaderData<typeof loader>();
+//   useChangeLanguage(locale);
 
-  useEffect(() => {
-    if (navigation.state === 'idle') nProgress.done();
-    else nProgress.start();
-  }, [navigation.state]);
+//   useEffect(() => {
+//     if (navigation.state === 'idle') nProgress.done();
+//     else nProgress.start();
+//   }, [navigation.state]);
 
-  return (
-    <DocumentWithThemeProviders>
-      <Outlet />
-    </DocumentWithThemeProviders>
-  );
-}
+//   return (
+//     <DocumentWithThemeProviders>
+//       <Outlet />
+//     </DocumentWithThemeProviders>
+//   );
+// }
 
 /** 根组件 */
-export default withSentry(App);
+// export default withSentry(App);
+
+export default function App() {
+  return (
+    <html lang="en">
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <Refine
+          dataProvider={dataProvider(API_URL)}
+          routerProvider={routerProvider}
+          authProvider={authProvider}
+          resources={[
+            {
+              name: 'posts',
+              list: '/posts',
+              create: '/posts/create',
+              edit: '/posts/edit/:id',
+            },
+          ]}
+          options={{
+            syncWithLocation: true,
+            warnWhenUnsavedChanges: true,
+          }}
+        >
+          <Outlet />
+          <UnsavedChangesNotifier />
+        </Refine>
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 
 /** 全局错误边界处理 */
 export function ErrorBoundary() {

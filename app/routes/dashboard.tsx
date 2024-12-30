@@ -1,7 +1,10 @@
-import { LoaderFunctionArgs } from '@remix-run/node';
+import dataProvider from '@refinedev/simple-rest';
+import { data } from '@remix-run/node';
+import { accessControlProvider } from '~/accessControlProvider';
 import PageError from '~/components/500';
 import Layout from '~/components/layout';
-import { requireUserSession } from '~/services/session.server';
+import { API_URL } from '~/constants';
+import { IPost } from '~/types/demo-post';
 import { HandleFunction } from '~/types/handle';
 
 // 创建应用程序约定
@@ -9,10 +12,21 @@ export const handle: HandleFunction = {
   from: 'dashboard',
 };
 
-// 加载器 - 初始化 && 处理表单`GET`请求
-export async function loader({ request }: LoaderFunctionArgs) {
-  await requireUserSession(request);
-  return {};
+export async function loader() {
+  const can = accessControlProvider.can({
+    resource: 'posts',
+    action: 'list',
+  });
+
+  if (!can) {
+    return data({}, { status: 403 });
+  }
+
+  const res = await dataProvider(API_URL).getList<IPost>({
+    resource: 'posts',
+  });
+
+  return { initialData: res };
 }
 
 // UI
