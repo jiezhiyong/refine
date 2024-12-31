@@ -39,25 +39,29 @@ p, editor, categories, list
 export const accessControlProvider: AccessControlProvider = {
   can: async ({ resource, action, params }) => {
     const enforcer = await newEnforcer(model, adapter);
+    const reason = 'You are not allowed to perform this action';
 
     if (action === 'delete' || action === 'edit' || action === 'show') {
-      const can = await enforcer.enforce(role, `${resource}/${params?.id}`, action);
-      return { can };
+      return {
+        can: await enforcer.enforce(role, `${resource}/${params?.id}`, action),
+        reason,
+      };
     }
 
     if (action === 'field') {
-      const can = await enforcer.enforce(role, `${resource}/${params?.field}`, action);
-      return { can };
+      return {
+        can: await enforcer.enforce(role, `${resource}/${params?.field}`, action),
+        reason,
+      };
     }
 
-    const can = await enforcer.enforce(role, resource, action);
-    return { can };
+    return {
+      can: await enforcer.enforce(role, resource, action),
+      reason,
+    };
   },
   options: {
-    queryOptions: {},
-    buttons: {
-      enableAccessControl: true,
-      hideIfUnauthorized: false,
-    },
+    buttons: { enableAccessControl: true, hideIfUnauthorized: false },
+    queryOptions: { cacheTime: 5 * 60 * 1000, staleTime: 0 },
   },
 };

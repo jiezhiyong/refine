@@ -1,8 +1,8 @@
 import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
 import dataProvider from '@refinedev/nestjsx-crud';
-import { Refine } from '@refinedev/core';
+import { CanAccess, Refine } from '@refinedev/core';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
-import { authProvider } from '~/auth-provider';
+import { authProvider } from '~/provider-auth';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
@@ -39,7 +39,8 @@ import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
 import { API_URL } from './constants';
-import { accessControlProvider } from './accessControlProvider';
+import { accessControlProvider } from './provider-access-control';
+import { liveProvider } from './provider-live';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -127,9 +128,9 @@ function Document({
             routerProvider={routerProvider}
             authProvider={authProvider}
             accessControlProvider={accessControlProvider}
+            liveProvider={liveProvider}
             // notificationProvider={useNotificationProvider}
             // auditLogProvider={}
-            // liveProvider={}
             // i18nProvider={}
             resources={[
               {
@@ -198,7 +199,9 @@ function App() {
 
   return (
     <DocumentWithThemeProviders>
-      <Outlet />
+      <CanAccess>
+        <Outlet />
+      </CanAccess>
     </DocumentWithThemeProviders>
   );
 }

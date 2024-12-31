@@ -12,8 +12,22 @@ import { createInstance, i18n as i18next } from 'i18next';
 import i18nServer from './services/i18n.server';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import * as i18n from './config/i18n';
+import { createServer } from 'http';
+import { initSocketIO } from './services/socket.server';
 
 const ABORT_DELAY = 5_000;
+
+// 初始化 Socket.IO 服务器
+let httpServer: ReturnType<typeof createServer>;
+if (typeof process !== 'undefined') {
+  httpServer = createServer();
+  initSocketIO(httpServer);
+
+  const port = process.env.SOCKET_PORT || 3001;
+  httpServer.listen(port, () => {
+    console.log(`Socket.IO server listening on port ${port}`);
+  });
+}
 
 if (process.env.NODE_ENV === 'development') {
   server.listen({

@@ -1,7 +1,7 @@
 import { redirect, type ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
 import { z } from 'zod';
 import { RegisterForm } from '~/components/form-register';
-import { authProvider } from '~/auth-provider';
+import { authProvider } from '~/provider-auth';
 
 // 定义表单验证 schema
 const registerSchema = z.object({

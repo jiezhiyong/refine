@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { authProvider } from '~/auth-provider';
+import { authProvider } from '~/provider-auth';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { authenticated, redirectTo } = await authProvider.check(request);

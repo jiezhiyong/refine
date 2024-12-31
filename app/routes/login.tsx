@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
-import { authProvider } from '~/auth-provider';
+import { authProvider } from '~/provider-auth';
 import { LoginForm } from '~/components/form-login';
 
 // 定义表单验证 schema

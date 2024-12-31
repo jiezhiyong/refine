@@ -1,5 +1,5 @@
 import { data } from '@remix-run/node';
-import { accessControlProvider } from '~/accessControlProvider';
+import { accessControlProvider } from '~/provider-access-control';
 import PageError from '~/components/500';
 import Layout from '~/components/layout';
 import { API_URL } from '~/constants';
