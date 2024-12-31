@@ -1,8 +1,8 @@
+import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
+import dataProvider from '@refinedev/nestjsx-crud';
 import { Refine } from '@refinedev/core';
-import dataProvider from '@refinedev/simple-rest';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
-import { authProvider } from './authProvider';
-import * as Sentry from '@sentry/remix';
+import { authProvider } from '~/auth-provider';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
@@ -20,7 +20,6 @@ import {
   data,
   useLoaderData,
 } from '@remix-run/react';
-import { getUser, themeSessionResolver } from '~/services/session.server';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
 import { ModalProvider } from '~/hooks/use-modal';
@@ -40,6 +39,7 @@ import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
 import { API_URL } from './constants';
+import { accessControlProvider } from './accessControlProvider';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -64,7 +64,7 @@ export const handle = { i18n: ['translation'] };
 
 /** 加载器返回数据类型定义 */
 export type RootLoaderData = {
-  user: User;
+  user: User | null;
   theme: Theme | null;
   sidebarIsClose?: string;
   locale: TypeLocaleLanguage;
@@ -72,21 +72,17 @@ export type RootLoaderData = {
 
 /** 加载器 */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [cookie, user, themeResolver, locale] = await Promise.all([
+  const [cookie, user, locale] = await Promise.all([
     getCookie(request),
-    getUser(request),
-    themeSessionResolver(request),
+    authProvider.getIdentity(request),
+    // themeSessionResolver(request),
     i18nServer.getLocale(request),
   ]);
 
-  if (user?.id) {
-    Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
-  }
-
   return data(
     {
-      user: user || ({} as User),
-      theme: themeResolver.getTheme(),
+      user,
+      // theme: themeResolver.getTheme(),
       sidebarIsClose: cookie?.sidebarIsClose,
       locale,
     },
@@ -125,26 +121,47 @@ function Document({
         <Links />
       </head>
       <body>
-        <Refine
-          dataProvider={dataProvider('https://api.fake-rest.refine.dev')}
-          routerProvider={routerProvider}
-          authProvider={authProvider}
-          resources={[
-            {
-              name: 'posts',
-              list: '/posts',
-              create: '/posts/create',
-              edit: '/posts/edit/:id',
-            },
-          ]}
-          options={{
-            syncWithLocation: true,
-            warnWhenUnsavedChanges: true,
-          }}
-        >
-          {children}
-          <UnsavedChangesNotifier />
-        </Refine>
+        <DevtoolsProvider>
+          <Refine
+            dataProvider={dataProvider(API_URL)}
+            routerProvider={routerProvider}
+            authProvider={authProvider}
+            accessControlProvider={accessControlProvider}
+            // notificationProvider={useNotificationProvider}
+            // auditLogProvider={}
+            // liveProvider={}
+            // i18nProvider={}
+            resources={[
+              {
+                name: 'posts',
+                list: '/posts',
+                create: '/posts/create',
+                edit: '/posts/edit/:id',
+                show: '/posts/show/:id',
+                meta: { label: 'Posts', icon: 'book', canDelete: true },
+              },
+            ]}
+            options={{
+              title: {
+                icon: undefined,
+                text: 'Refine & Remix OSS',
+              },
+              mutationMode: 'optimistic',
+              syncWithLocation: true,
+              warnWhenUnsavedChanges: true,
+              liveMode: 'auto',
+              reactQuery: {
+                clientConfig: {
+                  defaultOptions: { queries: { networkMode: 'always' }, mutations: { networkMode: 'always' } },
+                },
+              },
+            }}
+          >
+            {children}
+            <UnsavedChangesNotifier />
+            <DevtoolsPanel />
+          </Refine>
+        </DevtoolsProvider>
         <ScrollRestoration />
         {script && <Scripts crossOrigin="anonymous" />}
       </body>
@@ -169,60 +186,25 @@ function DocumentWithThemeProviders({
   );
 }
 
-// function App() {
-//   const navigation = useNavigation();
-//   const { locale } = useLoaderData<typeof loader>();
-//   useChangeLanguage(locale);
+function App() {
+  const navigation = useNavigation();
+  const { locale } = useLoaderData<typeof loader>();
+  useChangeLanguage(locale);
 
-//   useEffect(() => {
-//     if (navigation.state === 'idle') nProgress.done();
-//     else nProgress.start();
-//   }, [navigation.state]);
+  useEffect(() => {
+    if (navigation.state === 'idle') nProgress.done();
+    else nProgress.start();
+  }, [navigation.state]);
 
-//   return (
-//     <DocumentWithThemeProviders>
-//       <Outlet />
-//     </DocumentWithThemeProviders>
-//   );
-// }
-
-/** 根组件 */
-// export default withSentry(App);
-
-export default function App() {
   return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <Refine
-          dataProvider={dataProvider(API_URL)}
-          routerProvider={routerProvider}
-          authProvider={authProvider}
-          resources={[
-            {
-              name: 'posts',
-              list: '/posts',
-              create: '/posts/create',
-              edit: '/posts/edit/:id',
-            },
-          ]}
-          options={{
-            syncWithLocation: true,
-            warnWhenUnsavedChanges: true,
-          }}
-        >
-          <Outlet />
-          <UnsavedChangesNotifier />
-        </Refine>
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
+    <DocumentWithThemeProviders>
+      <Outlet />
+    </DocumentWithThemeProviders>
   );
 }
+
+/** 根组件 */
+export default withSentry(App);
 
 /** 全局错误边界处理 */
 export function ErrorBoundary() {

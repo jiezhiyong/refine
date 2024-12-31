@@ -1,4 +1,3 @@
-import dataProvider from '@refinedev/simple-rest';
 import { data } from '@remix-run/node';
 import { accessControlProvider } from '~/accessControlProvider';
 import PageError from '~/components/500';
@@ -22,11 +21,7 @@ export async function loader() {
     return data({}, { status: 403 });
   }
 
-  const res = await dataProvider(API_URL).getList<IPost>({
-    resource: 'posts',
-  });
-
-  return { initialData: res };
+  return { initialData: {} };
 }
 
 // UI

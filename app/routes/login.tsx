@@ -1,10 +1,8 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
+import { authProvider } from '~/auth-provider';
 import { LoginForm } from '~/components/form-login';
-import { getUser, createUserSession, login } from '~/services/session.server';
-import { safeRedirect } from '~/utils/safe-redirect';
-import { typedFormError } from '~/utils/typed-form-error';
 
 // 定义表单验证 schema
 const loginSchema = z.object({
@@ -20,9 +18,9 @@ export const meta: MetaFunction = () => {
 
 // 加载器
 export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await getUser(request);
+  const user = await authProvider.getIdentity(request);
 
-  if (user?.id) {
+  if (user && user.id) {
     return redirect('/');
   }
 
@@ -34,16 +32,15 @@ export async function action({ request }: ActionFunctionArgs) {
   const form = await request.formData();
   const formData = Object.fromEntries(form) as z.infer<typeof loginSchema>;
 
-  try {
-    const { email, password } = loginSchema.parse(formData);
-    const user = await login({ email, password });
-    if (!user) {
-      throw new Error('Invalid email or password.');
-    }
+  const { email, password, redirectTo } = loginSchema.parse(formData);
+  const { error, success } = await authProvider.login({ email, password, redirectTo });
 
-    return createUserSession(user, safeRedirect(formData.redirectTo));
-  } catch (error) {
-    return typedFormError(error);
+  if (error) {
+    return { error };
+  }
+
+  if (success) {
+    return redirect(redirectTo!);
   }
 }
 

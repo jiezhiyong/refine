@@ -2,6 +2,9 @@
 
 # Welcome to Remix
 
+refine 是一个开源的无头 React 框架，供开发人员构建企业内部工具、管理面板、仪表板、B2B 应用程序。
+它消除了 CRUD 操作中的重复性任务，并为关键项目组件（如身份验证、访问控制、路由、网络、状态管理和 i18n）提供行业标准解决方案。
+
 - 📖 [Remix docs](https://remix.run/docs)
 
 ## Development
@@ -28,6 +31,8 @@ First, build your app for production:
 
 ```sh
 pnpm build
+docker build -t remix -f Dockerfile .
+docker run -p 3000:3000 remix
 ```
 
 Then run the app in production mode:

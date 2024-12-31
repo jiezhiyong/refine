@@ -1,4 +1,5 @@
-import { Link, useRouteLoaderData } from '@remix-run/react';
+import { useLogout } from '@refinedev/core';
+import { useRouteLoaderData } from '@remix-run/react';
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
@@ -15,8 +16,13 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/c
 import { loader } from '~/root';
 
 export function NavUser() {
-  const { user } = useRouteLoaderData<typeof loader>('root');
   const { isMobile } = useSidebar();
+  const { user } = useRouteLoaderData<typeof loader>('root') || {};
+  const { mutate: logout } = useLogout();
+
+  function onLoginout() {
+    logout();
+  }
 
   return (
     <SidebarMenu>
@@ -28,12 +34,12 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar || '/avatar.jpg'} alt={user.username} />
-                <AvatarFallback className="rounded-lg">{user.username?.charAt(0) || '?'}</AvatarFallback>
+                <AvatarImage src={user?.avatar || '/avatar.jpg'} alt={user?.username || ''} />
+                <AvatarFallback className="rounded-lg">{user?.username?.charAt(0) || '?'}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold capitalize">{user.username || 'unknown user'}</span>
-                <span className="truncate text-xs">{user.email || '...'}</span>
+                <span className="truncate font-semibold capitalize">{user?.username || 'unknown user'}</span>
+                <span className="truncate text-xs">{user?.email || '...'}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -47,12 +53,12 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar || '/avatar.jpg'} alt={user.username} />
-                  <AvatarFallback className="rounded-lg">{user.username?.charAt(0) || '?'}</AvatarFallback>
+                  <AvatarImage src={user?.avatar || '/avatar.jpg'} alt={user?.username || ''} />
+                  <AvatarFallback className="rounded-lg">{user?.username?.charAt(0) || '?'}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold capitalize">{user.username || 'unknown user'}</span>
-                  <span className="truncate text-xs">{user.email || '...'}</span>
+                  <span className="truncate font-semibold capitalize">{user?.username || 'unknown user'}</span>
+                  <span className="truncate text-xs">{user?.email || '...'}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -72,11 +78,9 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to="/logout">
-                <LogOut />
-                <span>Log out</span>
-              </Link>
+            <DropdownMenuItem onClick={onLoginout}>
+              <LogOut />
+              <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

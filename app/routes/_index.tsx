@@ -1,7 +1,12 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { requireUserSession } from '~/services/session.server';
+import { authProvider } from '~/auth-provider';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  await requireUserSession(request);
+  const { authenticated, redirectTo } = await authProvider.check(request);
+
+  if (!authenticated) {
+    throw redirect(redirectTo!);
+  }
+
   return redirect('/dashboard');
 }

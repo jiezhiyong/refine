@@ -1,33 +1,26 @@
-// import { Lucia } from 'lucia';
-// import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
-// import { PrismaClient } from '@prisma/client';
-// import { RemixLucia } from 'lucia/middleware';
+/**
+ * auth.server.ts
+ * https://sergiodxa.github.io/remix-auth/
+ */
+import { User } from '@prisma/client';
+import { Authenticator } from 'remix-auth';
+import { FormStrategy } from 'remix-auth-form';
+import { verifyLogin } from '~/models/user.server';
 
-// const client = new PrismaClient();
-// const adapter = new PrismaAdapter(client.session, client.user);
+// 创建认证器实例
+export const authenticator = new Authenticator<User>();
 
-// export const lucia = new Lucia(adapter, {
-//   sessionCookie: {
-//     attributes: {
-//       secure: process.env.NODE_ENV === 'production',
-//     },
-//   },
-//   getUserAttributes: (attributes) => ({
-//     email: attributes.email,
-//     name: attributes.name,
-//     role: attributes.role,
-//   }),
-// });
+// 表单登录策略
+const strategyForm = new FormStrategy(async ({ form }) => {
+  const email = form.get('email') as string;
+  const password = form.get('password') as string;
 
-// export const auth = new RemixLucia(lucia);
+  const user = await verifyLogin(email, password);
+  if (!user) {
+    throw new Error('Invalid email or password.');
+  }
 
-// declare module 'lucia' {
-//   interface Register {
-//     Lucia: typeof lucia;
-//     DatabaseUserAttributes: {
-//       email: string;
-//       name: string;
-//       role: string;
-//     };
-//   }
-// }
+  return user;
+});
+
+authenticator.use(strategyForm, 'user-pass');
