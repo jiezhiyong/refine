@@ -121,14 +121,14 @@ function Document({
       <body>
         <DevtoolsProvider>
           <Refine
-            dataProvider={dataProvider}
+            // dataProvider={dataProvider}
             routerProvider={routerProvider}
             authProvider={authProvider}
             // accessControlProvider={accessControlProvider}
             // liveProvider={liveProvider}
             // notificationProvider={notificationProvider}
-            i18nProvider={i18nProvider}
-            auditLogProvider={auditLogProvider}
+            // i18nProvider={i18nProvider}
+            // auditLogProvider={auditLogProvider}
             resources={[
               {
                 name: 'posts',
@@ -142,7 +142,7 @@ function Document({
             options={{
               title: {
                 icon: undefined,
-                text: 'Refine & Remix OSS',
+                text: 'Refine & Remix',
               },
               mutationMode: 'optimistic',
               syncWithLocation: true,

@@ -48,7 +48,7 @@ export function RegisterForm() {
               </div>
               <span className="sr-only">Remix Inc.</span>
             </Link>
-            <h1 className="text-xl font-bold">Welcome to Remix OSS Inc.</h1>
+            <h1 className="text-xl font-bold">Welcome to OSS Inc.</h1>
             <div className="text-center text-sm">
               {`Already has an account? `}
               <Link to="/login" replace className="underline underline-offset-4">

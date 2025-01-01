@@ -36,6 +36,8 @@ p, editor, posts/hit, field, deny
 p, editor, categories, list
 `);
 
+const role = 'admin';
+
 export const accessControlProvider: AccessControlProvider = {
   can: async ({ resource, action, params }) => {
     const enforcer = await newEnforcer(model, adapter);

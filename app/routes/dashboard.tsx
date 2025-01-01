@@ -10,21 +10,22 @@ export const handle: HandleFunction = {
 };
 
 export async function loader() {
-  const can = accessControlProvider.can({
-    resource: 'posts',
-    action: 'list',
-  });
+  // const can = accessControlProvider.can({
+  //   resource: 'posts',
+  //   action: 'list',
+  // });
 
-  if (!can) {
-    return data({}, { status: 403 });
-  }
+  // if (!can) {
+  //   return data({}, { status: 403 });
+  // }
 
   return { initialData: {} };
 }
 
 // UI
 export default function Dashboard() {
-  return <Layout />;
+  // return <Layout />;
+  return <div>Dashboard</div>;
 }
 
 // 错误边界处理

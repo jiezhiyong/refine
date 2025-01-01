@@ -10,8 +10,11 @@ type AuthProviderLoginParams = {
   redirectTo?: string;
 };
 
-export const authProvider: Omit<AuthProvider, 'getIdentity'> & {
-  login: (params: AuthProviderLoginParams) => Promise<AuthActionResponse>;
+export const authProvider: Omit<
+  AuthProvider,
+  'login' | 'getIdentity' | 'register' | 'forgotPassword' | 'updatePassword' | 'getPermissions'
+> & {
+  login: (params: AuthProviderLoginParams) => Promise<AuthActionResponse & { user?: User }>;
   getIdentity: (request: Request) => Promise<User | null>;
   register: Required<Pick<AuthProvider, 'register'>>['register'];
   forgotPassword: Required<Pick<AuthProvider, 'forgotPassword'>>['forgotPassword'];
@@ -21,37 +24,26 @@ export const authProvider: Omit<AuthProvider, 'getIdentity'> & {
   login: async ({ request, providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
     try {
       const formData = new FormData();
+
       formData.append('email', email);
       formData.append('password', password);
 
       const host = request.headers.get('origin');
-      const response = await fetch(`${host}/auth/${providerName}`, {
+      const response = await fetch(`${host}/api/auth/${providerName}`, {
         method: 'POST',
         body: formData,
       });
+      const user = await response.json();
 
-      console.log('response', response);
+      if (response.ok && user.id) {
+        Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
 
-      // const formData = new FormData();
-      // formData.append('email', email);
-      // formData.append('password', password);
-
-      // const user = await authenticator.authenticate(
-      //   'user-pass',
-      //   new Request('', {
-      //     method: 'POST',
-      //     body: formData,
-      //   })
-      // );
-
-      // if (user) {
-      //   Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
-
-      //   return {
-      //     success: true,
-      //     redirectTo,
-      //   };
-      // }
+        return {
+          success: true,
+          redirectTo,
+          user,
+        };
+      }
 
       return {
         success: false,
@@ -72,13 +64,16 @@ export const authProvider: Omit<AuthProvider, 'getIdentity'> & {
     }
   },
 
-  logout: async () => {
+  logout: async (request: Request) => {
     try {
-      await sessionStorage.destroySession(await sessionStorage.getSession());
-
-      Sentry.setUser(null);
-
-      return { success: true, redirectTo: '/login' };
+      const host = request.headers.get('origin');
+      await fetch(`${host}/api/auth/logout`, {
+        method: 'POST',
+      });
+      return {
+        success: true,
+        redirectTo: '/login',
+      };
     } catch (error) {
       return {
         success: false,
@@ -91,53 +86,57 @@ export const authProvider: Omit<AuthProvider, 'getIdentity'> & {
   },
 
   check: async (request: Request) => {
-    const redirectTo = `/login?redirectTo=${request.url}`;
+    return {
+      authenticated: true,
+    };
+    // const redirectTo = `/login?redirectTo=${request.url}`;
 
-    try {
-      const session = await sessionStorage.getSession(request.headers.get('Cookie'));
-      const id = session.get('id');
+    // try {
+    //   const session = await getSession(request.headers.get('Cookie'));
+    //   const id = session.get('id');
 
-      if (id) {
-        return {
-          authenticated: true,
-        };
-      }
+    //   if (id) {
+    //     return {
+    //       authenticated: true,
+    //     };
+    //   }
 
-      return {
-        authenticated: false,
-        error: {
-          message: '未登录',
-          name: 'Not authenticated',
-        },
-        logout: true,
-        redirectTo,
-      };
-    } catch (error) {
-      return {
-        authenticated: false,
-        error: {
-          message: '未登录',
-          name: 'Not authenticated',
-        },
-        logout: true,
-        redirectTo,
-      };
-    }
+    //   return {
+    //     authenticated: false,
+    //     error: {
+    //       message: '未登录',
+    //       name: 'Not authenticated',
+    //     },
+    //     logout: true,
+    //     redirectTo,
+    //   };
+    // } catch (error) {
+    //   return {
+    //     authenticated: false,
+    //     error: {
+    //       message: '未登录',
+    //       name: 'Not authenticated',
+    //     },
+    //     logout: true,
+    //     redirectTo,
+    //   };
+    // }
   },
 
   getIdentity: async (request: Request) => {
-    try {
-      const session = await sessionStorage.getSession(request.headers.get('Cookie'));
-      const user = session.get('user') as User;
+    return null;
+    // try {
+    //   const session = await getSession(request.headers.get('Cookie'));
+    //   const user = session.get('user') as User;
 
-      if (user) {
-        return user;
-      }
+    //   if (user) {
+    //     return user;
+    //   }
 
-      return null;
-    } catch (error) {
-      return null;
-    }
+    //   return null;
+    // } catch (error) {
+    //   return null;
+    // }
   },
 
   onError: async (error) => {

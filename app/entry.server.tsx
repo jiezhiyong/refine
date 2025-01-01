@@ -14,34 +14,34 @@ import { initSentry } from './services/sentry.server';
 const ABORT_DELAY = 5_000;
 
 /** 初始化 Socket.IO 服务器 */
-let httpServer: ReturnType<typeof createServer>;
-if (typeof process !== 'undefined') {
-  httpServer = createServer();
-  initSocketIO(httpServer);
+// let httpServer: ReturnType<typeof createServer>;
+// if (typeof process !== 'undefined') {
+//   httpServer = createServer();
+//   initSocketIO(httpServer);
 
-  const port = process.env.SOCKET_PORT || 3001;
-  httpServer.listen(port, () => {
-    console.log(`[Socket.IO] server listening on port ${port}`);
-  });
-}
+//   const port = process.env.SOCKET_PORT || 3001;
+//   httpServer.listen(port, () => {
+//     console.log(`[Socket.IO] server listening on port ${port}`);
+//   });
+// }
 
-if (process.env.NODE_ENV === 'development') {
-  server.listen({
-    onUnhandledRequest: ({ url }) => {
-      if (url.includes('sentry')) {
-        return 'bypass';
-      }
-      return 'warn';
-    },
-  });
+// if (process.env.NODE_ENV === 'development') {
+//   server.listen({
+//     onUnhandledRequest: ({ url }) => {
+//       if (url.includes('sentry')) {
+//         return 'bypass';
+//       }
+//       return 'warn';
+//     },
+//   });
 
-  server.events.on('request:match', ({ request }) => {
-    console.log('[MSW] Intercepted match:', `(${request.method}) ${request.url}`);
-  });
-}
+//   server.events.on('request:match', ({ request }) => {
+//     console.log('[MSW] Intercepted match:', `(${request.method}) ${request.url}`);
+//   });
+// }
 
 /** 初始化服务端 Sentry */
-initSentry();
+// initSentry();
 
 /** 处理请求 */
 export default async function handleRequest(

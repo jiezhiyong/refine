@@ -3,6 +3,7 @@ import { redirect } from '@remix-run/node';
 import { z } from 'zod';
 import { authProvider } from '~/providers/auth';
 import { LoginForm } from '~/components/form-login';
+import { commitSession, getSession } from '~/services/session.server';
 
 // 定义表单验证 schema
 const loginSchema = z.object({
@@ -33,7 +34,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = Object.fromEntries(form) as z.infer<typeof loginSchema>;
 
   const { email, password, redirectTo } = loginSchema.parse(formData);
-  const { error, success } = await authProvider.login({
+  const { error, success, user } = await authProvider.login({
     request,
     providerName: 'user-pass',
     email,
@@ -45,8 +46,16 @@ export async function action({ request }: ActionFunctionArgs) {
     return { error };
   }
 
-  if (success) {
-    return redirect(redirectTo!);
+  if (success && user?.id) {
+    const session = await getSession();
+
+    session.set('user', user);
+
+    return redirect(redirectTo!, {
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
+    });
   }
 }
 
