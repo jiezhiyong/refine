@@ -12,6 +12,8 @@ export const authenticator = new Authenticator<User>();
 
 // 表单登录策略
 const strategyForm = new FormStrategy(async ({ form }) => {
+  console.log('strategyForm form', form);
+
   const email = form.get('email') as string;
   const password = form.get('password') as string;
 

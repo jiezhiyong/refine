@@ -1,8 +1,6 @@
 import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
-import dataProvider from '@refinedev/nestjsx-crud';
 import { CanAccess, Refine } from '@refinedev/core';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
-import { authProvider } from '~/provider-auth';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
@@ -28,19 +26,22 @@ import NotFound from '~/components/404';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 import { cn } from '~/utils/cn';
 import { Loader } from 'lucide-react';
-import i18nServer from '~/services/i18n.server';
-import { useChangeLanguage } from 'remix-i18next/react';
 import { User } from '@prisma/client';
 import { getCookie, preferencesCookie } from '~/services/cookie.server';
-import { TypeLocaleLanguage } from '~/config/i18n';
+import { themeSessionResolver } from '~/services/theme.server';
+import { fallbackLng, LocaleLanguage } from './config/i18n';
+import { dataProvider } from '~/providers/data';
+import { authProvider } from '~/providers/auth';
+import { accessControlProvider } from '~/providers/access-control';
+import { liveProvider } from '~/providers/live';
+import { i18nProvider } from '~/providers/i18n';
+import { auditLogProvider } from '~/providers/audit-log';
+import { notificationProvider } from '~/providers/notification';
 
 /** 全局样式、插件样式 */
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
-import { API_URL } from './constants';
-import { accessControlProvider } from './provider-access-control';
-import { liveProvider } from './provider-live';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -68,31 +69,27 @@ export type RootLoaderData = {
   user: User | null;
   theme: Theme | null;
   sidebarIsClose?: string;
-  locale: TypeLocaleLanguage;
+  locale: LocaleLanguage;
 };
 
 /** 加载器 */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [cookie, user, locale] = await Promise.all([
+  const [cookie, user, themeResolver] = await Promise.all([
     getCookie(request),
     authProvider.getIdentity(request),
-    // themeSessionResolver(request),
-    i18nServer.getLocale(request),
+    themeSessionResolver(request),
   ]);
 
-  return data(
-    {
-      user,
-      // theme: themeResolver.getTheme(),
-      sidebarIsClose: cookie?.sidebarIsClose,
-      locale,
-    },
-    {
-      headers: {
-        'Set-Cookie': await preferencesCookie.serialize({ ...cookie, lng: locale }),
-      },
-    }
-  );
+  // 获取当前语言设置
+  const cookieHeader = request.headers.get('Cookie');
+  const locale = (await preferencesCookie.parse(cookieHeader)) || fallbackLng;
+
+  return data({
+    user,
+    theme: themeResolver.getTheme(),
+    sidebarIsClose: cookie?.sidebarIsClose,
+    locale,
+  });
 }
 
 /** 水和回退处理 */
@@ -112,7 +109,7 @@ function Document({
   locale,
 }: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale?: string }>) {
   return (
-    <html lang={locale ?? 'en'} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
+    <html lang={locale} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -124,14 +121,14 @@ function Document({
       <body>
         <DevtoolsProvider>
           <Refine
-            dataProvider={dataProvider(API_URL)}
+            dataProvider={dataProvider}
             routerProvider={routerProvider}
             authProvider={authProvider}
-            accessControlProvider={accessControlProvider}
-            liveProvider={liveProvider}
-            // notificationProvider={useNotificationProvider}
-            // auditLogProvider={}
-            // i18nProvider={}
+            // accessControlProvider={accessControlProvider}
+            // liveProvider={liveProvider}
+            // notificationProvider={notificationProvider}
+            i18nProvider={i18nProvider}
+            auditLogProvider={auditLogProvider}
             resources={[
               {
                 name: 'posts',
@@ -189,8 +186,6 @@ function DocumentWithThemeProviders({
 
 function App() {
   const navigation = useNavigation();
-  const { locale } = useLoaderData<typeof loader>();
-  useChangeLanguage(locale);
 
   useEffect(() => {
     if (navigation.state === 'idle') nProgress.done();

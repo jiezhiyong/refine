@@ -2,6 +2,7 @@ import { type LoaderFunctionArgs } from '@remix-run/node';
 import { cacheHeader } from 'pretty-cache-header';
 import { z } from 'zod';
 import { resources } from '~/config/i18n';
+import { preferencesCookie } from '~/services/cookie.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -26,6 +27,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .parse(url.searchParams.get('ns'));
 
   const headers = new Headers();
+
+  // 设置语言 cookie
+  headers.append('Set-Cookie', await preferencesCookie.serialize(lng));
 
   // On production, we want to add cache headers to the response
   if (process.env.NODE_ENV === 'production') {

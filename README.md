@@ -1,3 +1,7 @@
+https://refine.dev/docs/i18n/i18n-provider/#translation-file
+https://refine.dev/docs/core/components/auto-save-indicator/
+https://refine.dev/docs/core/components/inferencer/
+
 // TODO: 使用最新版本依赖
 
 # Welcome to Remix

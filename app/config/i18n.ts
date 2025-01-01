@@ -17,4 +17,4 @@ export const resources = serverOnly$({
   zh: { translation: zhTranslation },
 });
 
-export type TypeLocaleLanguage = 'zh' | 'en';
+export type LocaleLanguage = 'zh' | 'en';

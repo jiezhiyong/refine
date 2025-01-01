@@ -1,22 +1,22 @@
-import { type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
+import { useTranslation } from '@refinedev/core';
+import { type MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { useTranslation } from 'react-i18next';
 import PageError from '~/components/500';
-import i18nServer from '~/services/i18n.server';
+import { i18nProvider } from '~/providers/i18n';
 
 // 元数据
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const t = await i18nServer.getFixedT(request);
+export async function loader() {
+  const t = i18nProvider.translate;
   return { title: t('title'), description: t('description') };
 }
 
 // UI
 export default function TechstackI18n() {
-  const { t } = useTranslation();
+  const { translate: t } = useTranslation();
   const { description } = useLoaderData<typeof loader>();
 
   return (

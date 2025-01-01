@@ -1,39 +1,57 @@
 import * as Sentry from '@sentry/remix';
-import { AuthProvider } from '@refinedev/core';
-import { authenticator } from './services/auth.server';
-import { sessionStorage } from './services/session.server';
-import { createUser, getUserByEmail } from './models/user.server';
+import { AuthActionResponse, AuthProvider } from '@refinedev/core';
 import { User } from '@prisma/client';
 
+type AuthProviderLoginParams = {
+  request: Request;
+  providerName: 'user-pass' | 'github';
+  email: string;
+  password: string;
+  redirectTo?: string;
+};
+
 export const authProvider: Omit<AuthProvider, 'getIdentity'> & {
+  login: (params: AuthProviderLoginParams) => Promise<AuthActionResponse>;
   getIdentity: (request: Request) => Promise<User | null>;
   register: Required<Pick<AuthProvider, 'register'>>['register'];
   forgotPassword: Required<Pick<AuthProvider, 'forgotPassword'>>['forgotPassword'];
   updatePassword: Required<Pick<AuthProvider, 'updatePassword'>>['updatePassword'];
   getPermissions: Required<Pick<AuthProvider, 'getPermissions'>>['getPermissions'];
 } = {
-  login: async ({ email, password, redirectTo = '/' }) => {
+  login: async ({ request, providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
     try {
       const formData = new FormData();
       formData.append('email', email);
       formData.append('password', password);
 
-      const user = await authenticator.authenticate(
-        'user-pass',
-        new Request('', {
-          method: 'POST',
-          body: formData,
-        })
-      );
+      const host = request.headers.get('origin');
+      const response = await fetch(`${host}/auth/${providerName}`, {
+        method: 'POST',
+        body: formData,
+      });
 
-      if (user) {
-        Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
+      console.log('response', response);
 
-        return {
-          success: true,
-          redirectTo,
-        };
-      }
+      // const formData = new FormData();
+      // formData.append('email', email);
+      // formData.append('password', password);
+
+      // const user = await authenticator.authenticate(
+      //   'user-pass',
+      //   new Request('', {
+      //     method: 'POST',
+      //     body: formData,
+      //   })
+      // );
+
+      // if (user) {
+      //   Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
+
+      //   return {
+      //     success: true,
+      //     redirectTo,
+      //   };
+      // }
 
       return {
         success: false,
@@ -43,6 +61,7 @@ export const authProvider: Omit<AuthProvider, 'getIdentity'> & {
         },
       };
     } catch (error) {
+      console.error(error);
       return {
         success: false,
         error: {
@@ -137,19 +156,20 @@ export const authProvider: Omit<AuthProvider, 'getIdentity'> & {
 
   register: async ({ email, password }) => {
     try {
-      const existingUser = await getUserByEmail(email);
+      console.log(email, password);
+      // const existingUser = await getUserByEmail(email);
 
-      if (existingUser) {
-        return {
-          success: false,
-          error: {
-            message: 'A user already exists with this email.',
-            name: 'Register Error',
-          },
-        };
-      }
+      // if (existingUser) {
+      //   return {
+      //     success: false,
+      //     error: {
+      //       message: 'A user already exists with this email.',
+      //       name: 'Register Error',
+      //     },
+      //   };
+      // }
 
-      await createUser(email, password);
+      // await createUser(email, password);
       return {
         success: true,
         redirectTo: '/login',

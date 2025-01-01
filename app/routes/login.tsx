@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
-import { authProvider } from '~/provider-auth';
+import { authProvider } from '~/providers/auth';
 import { LoginForm } from '~/components/form-login';
 
 // 定义表单验证 schema
@@ -33,7 +33,13 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = Object.fromEntries(form) as z.infer<typeof loginSchema>;
 
   const { email, password, redirectTo } = loginSchema.parse(formData);
-  const { error, success } = await authProvider.login({ email, password, redirectTo });
+  const { error, success } = await authProvider.login({
+    request,
+    providerName: 'user-pass',
+    email,
+    password,
+    redirectTo,
+  });
 
   if (error) {
     return { error };

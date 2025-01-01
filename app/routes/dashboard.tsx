@@ -1,9 +1,7 @@
 import { data } from '@remix-run/node';
-import { accessControlProvider } from '~/provider-access-control';
+import { accessControlProvider } from '~/providers/access-control';
 import PageError from '~/components/500';
 import Layout from '~/components/layout';
-import { API_URL } from '~/constants';
-import { IPost } from '~/types/demo-post';
 import { HandleFunction } from '~/types/handle';
 
 // 创建应用程序约定
