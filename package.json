@@ -175,5 +175,8 @@
   },
   "msw": {
     "workerDirectory": "public"
+  },
+  "refine": {
+    "projectId": "v08e3x-vauZUB-n1Ntw2"
   }
 }

@@ -1,7 +1,8 @@
 import { redirect, type ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
 import { z } from 'zod';
 import { RegisterForm } from '~/components/form-register';
-import { authProvider } from '~/providers/auth';
+import { createUser, getUserByEmail } from '~/models/user.server';
+import { typedFormError } from '~/utils/typed-form-error';
 
 // 定义表单验证 schema
 const registerSchema = z.object({
@@ -17,18 +18,22 @@ export const meta: MetaFunction = () => {
 
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const rawData = Object.fromEntries(formData) as z.infer<typeof registerSchema>;
+  try {
+    const formData = await request.formData();
+    const rawData = Object.fromEntries(formData) as z.infer<typeof registerSchema>;
 
-  const { email, password } = registerSchema.parse(rawData);
-  const { redirectTo, error, success } = await authProvider.register({ email, password });
+    const { email, password } = registerSchema.parse(rawData);
+    const existingUser = await getUserByEmail(email);
 
-  if (error) {
-    return { error };
-  }
+    if (existingUser) {
+      throw { email: ['A user already exists with this email.'] };
+    }
 
-  if (success) {
-    return redirect(redirectTo!);
+    await createUser(email, password);
+
+    return redirect(`/login?email=${email}`);
+  } catch (error) {
+    return typedFormError(error);
   }
 }
 

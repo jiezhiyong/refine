@@ -27,7 +27,7 @@ export function NavMain() {
           const isCollapsibleOpen = lastMatch.id.includes(item.id);
 
           return (
-            <Collapsible key={item.id} asChild defaultOpen={isCollapsibleOpen} className="group/collapsible">
+            (<Collapsible key={item.id} asChild defaultOpen={isCollapsibleOpen} className="group/collapsible">
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton tooltip={item.title}>
@@ -59,7 +59,7 @@ export function NavMain() {
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenuItem>
-            </Collapsible>
+            </Collapsible>)
           );
         })}
       </SidebarMenu>

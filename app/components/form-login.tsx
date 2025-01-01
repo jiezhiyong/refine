@@ -57,7 +57,7 @@ export function LoginForm() {
                   id="email"
                   type="email"
                   placeholder="Goodman@example.com"
-                  defaultValue="admin@remix.run"
+                  defaultValue={searchParams.get('email') || 'admin@remix.run'}
                   required
                   autoFocus
                   autoComplete="email"

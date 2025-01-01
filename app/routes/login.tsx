@@ -3,7 +3,7 @@ import { redirect } from '@remix-run/node';
 import { z } from 'zod';
 import { authProvider } from '~/providers/auth';
 import { LoginForm } from '~/components/form-login';
-import { commitSession, getSession } from '~/services/session.server';
+import { sessionStorage, commitSession, getSession } from '~/services/session.server';
 
 // 定义表单验证 schema
 const loginSchema = z.object({
@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => {
 
 // 加载器
 export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await authProvider.getIdentity(request);
+  const user = await authProvider.getIdentity({ request, sessionStorage });
 
   if (user && user.id) {
     return redirect('/');

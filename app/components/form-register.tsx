@@ -83,6 +83,7 @@ export function RegisterForm() {
                 autoComplete="new-password"
                 minLength={6}
                 maxLength={50}
+                defaultValue="12345678"
               />
               <ErrorMessage error={errors?.password?.[0]} />
             </div>

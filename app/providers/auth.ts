@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/remix';
-import { AuthActionResponse, AuthProvider } from '@refinedev/core';
+import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import { User } from '@prisma/client';
+import { SessionStorage, SessionData } from '@remix-run/node';
 
 type AuthProviderLoginParams = {
   request: Request;
@@ -10,16 +11,18 @@ type AuthProviderLoginParams = {
   redirectTo?: string;
 };
 
-export const authProvider: Omit<
-  AuthProvider,
-  'login' | 'getIdentity' | 'register' | 'forgotPassword' | 'updatePassword' | 'getPermissions'
-> & {
+export const authProvider: {
   login: (params: AuthProviderLoginParams) => Promise<AuthActionResponse & { user?: User }>;
-  getIdentity: (request: Request) => Promise<User | null>;
-  register: Required<Pick<AuthProvider, 'register'>>['register'];
-  forgotPassword: Required<Pick<AuthProvider, 'forgotPassword'>>['forgotPassword'];
-  updatePassword: Required<Pick<AuthProvider, 'updatePassword'>>['updatePassword'];
-  getPermissions: Required<Pick<AuthProvider, 'getPermissions'>>['getPermissions'];
+  logout: () => Promise<AuthActionResponse>;
+  check: (params: {
+    request: Request;
+    sessionStorage: SessionStorage<SessionData, SessionData>;
+  }) => Promise<CheckResponse>;
+  getIdentity: (params: {
+    request: Request;
+    sessionStorage: SessionStorage<SessionData, SessionData>;
+  }) => Promise<User | null>;
+  onError: Required<Pick<AuthProvider, 'onError'>>['onError'];
 } = {
   login: async ({ request, providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
     try {
@@ -28,8 +31,8 @@ export const authProvider: Omit<
       formData.append('email', email);
       formData.append('password', password);
 
-      const host = request.headers.get('origin');
-      const response = await fetch(`${host}/api/auth/${providerName}`, {
+      const origin = request.headers.get('origin');
+      const response = await fetch(`${origin}/api/auth/${providerName}`, {
         method: 'POST',
         body: formData,
       });
@@ -64,79 +67,65 @@ export const authProvider: Omit<
     }
   },
 
-  logout: async (request: Request) => {
+  logout: async () => {
+    Sentry.setUser(null);
+
+    window.location.href = '/api/auth/logout';
+
+    return {
+      success: true,
+      redirectTo: '/login',
+    };
+  },
+
+  check: async ({ request, sessionStorage }) => {
+    const redirectTo = `/login?redirectTo=${request.url}`;
+
     try {
-      const host = request.headers.get('origin');
-      await fetch(`${host}/api/auth/logout`, {
-        method: 'POST',
-      });
+      const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+      const user = session.get('user');
+
+      if (user.id) {
+        return {
+          authenticated: true,
+        };
+      }
+
       return {
-        success: true,
-        redirectTo: '/login',
+        authenticated: false,
+        error: {
+          message: '未登录',
+          name: 'Not authenticated',
+        },
+        logout: true,
+        redirectTo,
       };
     } catch (error) {
       return {
-        success: false,
+        authenticated: false,
         error: {
-          message: '登出失败',
-          name: 'Logout Error',
+          message: '未登录',
+          name: 'Not authenticated',
         },
+        logout: true,
+        redirectTo,
       };
     }
   },
 
-  check: async (request: Request) => {
-    return {
-      authenticated: true,
-    };
-    // const redirectTo = `/login?redirectTo=${request.url}`;
+  getIdentity: async ({ request, sessionStorage }) => {
+    try {
+      const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+      const user = session.get('user') as User;
 
-    // try {
-    //   const session = await getSession(request.headers.get('Cookie'));
-    //   const id = session.get('id');
+      if (user.id) {
+        return user;
+      }
 
-    //   if (id) {
-    //     return {
-    //       authenticated: true,
-    //     };
-    //   }
-
-    //   return {
-    //     authenticated: false,
-    //     error: {
-    //       message: '未登录',
-    //       name: 'Not authenticated',
-    //     },
-    //     logout: true,
-    //     redirectTo,
-    //   };
-    // } catch (error) {
-    //   return {
-    //     authenticated: false,
-    //     error: {
-    //       message: '未登录',
-    //       name: 'Not authenticated',
-    //     },
-    //     logout: true,
-    //     redirectTo,
-    //   };
-    // }
-  },
-
-  getIdentity: async (request: Request) => {
-    return null;
-    // try {
-    //   const session = await getSession(request.headers.get('Cookie'));
-    //   const user = session.get('user') as User;
-
-    //   if (user) {
-    //     return user;
-    //   }
-
-    //   return null;
-    // } catch (error) {
-    //   return null;
-    // }
+      return null;
+    } catch (error) {
+      return null;
+    }
   },
 
   onError: async (error) => {
@@ -151,80 +140,5 @@ export const authProvider: Omit<
     }
 
     return { error };
-  },
-
-  register: async ({ email, password }) => {
-    try {
-      console.log(email, password);
-      // const existingUser = await getUserByEmail(email);
-
-      // if (existingUser) {
-      //   return {
-      //     success: false,
-      //     error: {
-      //       message: 'A user already exists with this email.',
-      //       name: 'Register Error',
-      //     },
-      //   };
-      // }
-
-      // await createUser(email, password);
-      return {
-        success: true,
-        redirectTo: '/login',
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: {
-          message: '注册失败',
-          name: 'Register Error',
-        },
-      };
-    }
-  },
-
-  forgotPassword: async ({ email }) => {
-    try {
-      // TODO: await send password reset link to the user's email address
-
-      return {
-        success: true,
-        redirectTo: '/login',
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: {
-          name: 'Forgot Password Error',
-          message: 'Email send failed',
-        },
-      };
-    }
-  },
-
-  updatePassword: async (request: Request) => {
-    try {
-      // TODO: await update the user's password
-
-      return {
-        success: true,
-        redirectTo: '/login',
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: {
-          name: 'Updare Password Error',
-          message: 'Password update failed',
-        },
-      };
-    }
-  },
-
-  getPermissions: async (params) => {
-    // TODO: get permissions
-
-    return ['admin'];
   },
 };

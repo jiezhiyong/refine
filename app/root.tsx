@@ -29,6 +29,7 @@ import { Loader } from 'lucide-react';
 import { User } from '@prisma/client';
 import { getCookie, preferencesCookie } from '~/services/cookie.server';
 import { themeSessionResolver } from '~/services/theme.server';
+import { sessionStorage } from '~/services/session.server';
 import { fallbackLng, LocaleLanguage } from './config/i18n';
 import { dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
@@ -76,7 +77,7 @@ export type RootLoaderData = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const [cookie, user, themeResolver] = await Promise.all([
     getCookie(request),
-    authProvider.getIdentity(request),
+    authProvider.getIdentity({ request, sessionStorage }),
     themeSessionResolver(request),
   ]);
 
@@ -109,7 +110,7 @@ function Document({
   locale,
 }: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale?: string }>) {
   return (
-    <html lang={locale} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
+    (<html lang={locale} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -144,15 +145,19 @@ function Document({
                 icon: undefined,
                 text: 'Refine & Remix',
               },
+
               mutationMode: 'optimistic',
               syncWithLocation: true,
               warnWhenUnsavedChanges: true,
               liveMode: 'auto',
+
               reactQuery: {
                 clientConfig: {
                   defaultOptions: { queries: { networkMode: 'always' }, mutations: { networkMode: 'always' } },
                 },
               },
+
+              projectId: "v08e3x-vauZUB-n1Ntw2"
             }}
           >
             {children}
@@ -163,7 +168,7 @@ function Document({
         <ScrollRestoration />
         {script && <Scripts crossOrigin="anonymous" />}
       </body>
-    </html>
+    </html>)
   );
 }
 

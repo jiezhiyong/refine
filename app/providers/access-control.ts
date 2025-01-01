@@ -40,26 +40,24 @@ const role = 'admin';
 
 export const accessControlProvider: AccessControlProvider = {
   can: async ({ resource, action, params }) => {
+    let can = false;
+
     const enforcer = await newEnforcer(model, adapter);
-    const reason = 'You are not allowed to perform this action';
+    const message = 'You are not allowed to perform this action';
 
     if (action === 'delete' || action === 'edit' || action === 'show') {
-      return {
-        can: await enforcer.enforce(role, `${resource}/${params?.id}`, action),
-        reason,
-      };
+      can = await enforcer.enforce(role, `${resource}/${params?.id}`, action);
     }
 
     if (action === 'field') {
-      return {
-        can: await enforcer.enforce(role, `${resource}/${params?.field}`, action),
-        reason,
-      };
+      can = await enforcer.enforce(role, `${resource}/${params?.field}`, action);
     }
 
+    can = await enforcer.enforce(role, resource, action);
+
     return {
-      can: await enforcer.enforce(role, resource, action),
-      reason,
+      can,
+      reason: !can ? message : undefined,
     };
   },
   options: {
