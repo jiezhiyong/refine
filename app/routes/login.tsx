@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { authProvider } from '~/providers/auth';
 import { LoginForm } from '~/components/form-login';
 import { sessionStorage, commitSession, getSession } from '~/services/session.server';
+import { typedFormError } from '~/utils/typed-form-error';
 
 // 定义表单验证 schema
 const loginSchema = z.object({
@@ -30,32 +31,36 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
-  const form = await request.formData();
-  const formData = Object.fromEntries(form) as z.infer<typeof loginSchema>;
+  try {
+    const form = await request.formData();
+    const formData = Object.fromEntries(form) as z.infer<typeof loginSchema>;
 
-  const { email, password, redirectTo } = loginSchema.parse(formData);
-  const { error, success, user } = await authProvider.login({
-    request,
-    providerName: 'user-pass',
-    email,
-    password,
-    redirectTo,
-  });
-
-  if (error) {
-    return { error };
-  }
-
-  if (success && user?.id) {
-    const session = await getSession();
-
-    session.set('user', user);
-
-    return redirect(redirectTo!, {
-      headers: {
-        'Set-Cookie': await commitSession(session),
-      },
+    const { email, password, redirectTo } = loginSchema.parse(formData);
+    const { error, success, user } = await authProvider.login({
+      request,
+      providerName: 'user-pass',
+      email,
+      password,
+      redirectTo,
     });
+
+    if (error) {
+      throw { default: [error.message] };
+    }
+
+    if (success && user?.id) {
+      const session = await getSession();
+
+      session.set('user', user);
+
+      return redirect(redirectTo!, {
+        headers: {
+          'Set-Cookie': await commitSession(session),
+        },
+      });
+    }
+  } catch (error) {
+    return typedFormError(error);
   }
 }
 

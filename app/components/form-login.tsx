@@ -27,16 +27,6 @@ export function LoginForm() {
   const navigation = useNavigation();
   const translate = useTranslate();
 
-  useEffect(() => {
-    if (errors?.default?.[0]) {
-      showModal({
-        type: 'alert',
-        title: '登录提交失败',
-        description: errors.default[0],
-      });
-    }
-  }, [showModal, errors?.default]);
-
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden">
@@ -80,14 +70,17 @@ export function LoginForm() {
                   autoComplete="current-password"
                   minLength={6}
                   maxLength={50}
-                  defaultValue="12345678"
+                  defaultValue="1234@5678"
                 />
                 <ErrorMessage error={errors?.password?.[0]} />
               </div>
 
-              <Button type="submit" className="w-full" disabled={navigation.state === 'submitting'}>
-                Login
-              </Button>
+              <div className="grid gap-2">
+                <Button type="submit" className="w-full" disabled={navigation.state === 'submitting'}>
+                  Login
+                </Button>
+                <ErrorMessage error={errors?.default?.[0]} />
+              </div>
 
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">or</span>

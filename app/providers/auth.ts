@@ -36,22 +36,23 @@ export const authProvider: {
         method: 'POST',
         body: formData,
       });
-      const user = await response.json();
 
-      if (response.ok && user.id) {
-        Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
+      const res = await response.json();
+
+      if (response.ok && res.id) {
+        Sentry.setUser({ email: res?.email, username: res?.username || '?', id: res?.id });
 
         return {
           success: true,
           redirectTo,
-          user,
+          user: res,
         };
       }
 
       return {
         success: false,
         error: {
-          message: '登录失败',
+          message: res.message || '登录失败',
           name: 'Invalid credentials',
         },
       };
