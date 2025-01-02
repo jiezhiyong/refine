@@ -1,6 +1,5 @@
 import Loader from '../components/loader';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as TableUi } from '~/components-shadcn/table';
-import { PopoverContentProps } from '@radix-ui/react-popover';
 import { BaseOption, BaseRecord, HttpError, useTranslate } from '@refinedev/core';
 import { UseTableProps, UseTableReturnType, useTable } from '@refinedev/react-table';
 import {
@@ -23,6 +22,7 @@ import { DataTableToolbar } from './toolbar';
 import { DeleteAction } from './actions/delete';
 import { DeleteProvider } from '../providers';
 import { TAny } from '~/types/any';
+import { PopoverContentProps } from '@radix-ui/react-popover';
 
 export type TableListFilterOption = BaseOption & {
   icon?: React.ComponentType<{ className?: string }>;
@@ -194,11 +194,11 @@ export function Table<
   );
 }
 
-const TableColumn = <TData extends BaseRecord = BaseRecord, TError extends HttpError = HttpError>(
+function TableColumn<TData extends BaseRecord = BaseRecord, TError extends HttpError = HttpError>(
   props: ColumnProps<TData, TError>
-) => {
-  return props.children;
-};
+): ReactElement {
+  return props.children as ReactElement;
+}
 
 Table.Column = TableColumn;
 Table.CheckAll = CheckAll;

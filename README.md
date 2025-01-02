@@ -15,14 +15,14 @@ refine 是一个开源的无头 React 框架，供开发人员构建企业内部
 
 Run the dev server:
 
-```shellscript
+```sh
 pnpm i
 pnpm dev
 ```
 
 ## prisma
 
-```shellscript
+```sh
 npx prisma migrate dev --name init
 npx prisma db seed
 npx prisma generate | npx prisma db push

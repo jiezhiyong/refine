@@ -1,6 +1,6 @@
 import { type ActionFunctionArgs } from '@remix-run/node';
 import { Theme } from 'remix-themes';
-import { themeSessionResolver } from '~/services/session.server';
+import { themeSessionResolver } from '~/services/theme.server';
 
 // 设置主题
 export async function action({ request }: ActionFunctionArgs) {

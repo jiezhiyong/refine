@@ -1,0 +1,2 @@
+import{r as f}from"./jsx-runtime-BMlD0yL_.js";import"./api.agreement._agreementId_.pdf_-CYRM_IyK.js";(function(){try{var e=typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},t=new e.Error().stack;t&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[t]="bffeadc5-3189-46cf-a87c-3458851f24ac",e._sentryDebugIdIdentifier="sentry-dbid-bffeadc5-3189-46cf-a87c-3458851f24ac")}catch{}})();function c(e){const t=f.useRef(!1);f.useEffect(()=>{if(!t.current)return t.current=!0,e()},[e])}export{c as u};
+//# sourceMappingURL=use-mount-effect-D-pHQY95.js.map
