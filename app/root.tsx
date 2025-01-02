@@ -31,7 +31,7 @@ import { getCookie, preferencesCookie } from '~/services/cookie.server';
 import { themeSessionResolver } from '~/services/theme.server';
 import { sessionStorage } from '~/services/session.server';
 import { fallbackLng, LocaleLanguage } from './config/i18n';
-import { dataProvider } from '~/providers/data';
+import { dataResources, dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
 import { accessControlProvider } from '~/providers/access-control';
 import { liveProvider } from '~/providers/live';
@@ -122,7 +122,8 @@ function Document({
       <body>
         <DevtoolsProvider>
           <Refine
-            // dataProvider={dataProvider}
+            resources={dataResources}
+            dataProvider={dataProvider}
             routerProvider={routerProvider}
             authProvider={authProvider}
             // accessControlProvider={accessControlProvider}
@@ -130,16 +131,6 @@ function Document({
             // notificationProvider={notificationProvider}
             // i18nProvider={i18nProvider}
             // auditLogProvider={auditLogProvider}
-            resources={[
-              {
-                name: 'posts',
-                list: '/posts',
-                create: '/posts/create',
-                edit: '/posts/edit/:id',
-                show: '/posts/show/:id',
-                meta: { label: 'Posts', icon: 'book', canDelete: true },
-              },
-            ]}
             options={{
               title: {
                 icon: undefined,

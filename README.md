@@ -24,7 +24,7 @@ pnpm dev
 
 ```shellscript
 npx prisma migrate dev --name init
-pnpm db:setup
+npx prisma db seed
 npx prisma generate | npx prisma db push
 npx prisma studio
 ```

@@ -3,6 +3,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 import * as React from 'react';
 import { cn } from '~/utils/cn';
+import { LoadingIcon } from './loading';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
@@ -34,13 +35,38 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
+  icon?: React.ReactElement<SVGSVGElement>;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, icon = null, loading = false, asChild = false, children, disabled, ...props }, ref) => {
+    disabled = disabled || loading;
+    const Icon = React.useMemo(() => {
+      if (React.isValidElement(icon)) {
+        return icon;
+      }
+      return loading ? <LoadingIcon className="mr-2" /> : null;
+    }, [icon, loading]);
+
     const Comp = asChild ? Slot : 'button';
 
-    return <Comp ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props} />;
+    return (
+      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} disabled={disabled} {...props}>
+        {size === 'icon' ? (
+          loading ? (
+            <LoadingIcon />
+          ) : (
+            children
+          )
+        ) : (
+          <>
+            {Icon}
+            {children}
+          </>
+        )}
+      </Comp>
+    );
   }
 );
 

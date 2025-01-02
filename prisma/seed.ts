@@ -1,17 +1,21 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { jokes } from '../public/jokes.ts';
+import { categories } from '../public/sql-categories.ts';
+import { posts } from '../public/sql-posts.ts';
 
 const db = new PrismaClient();
 
 async function seed() {
   const email = 'admin@remix.run';
-  await db.user.delete({ where: { email } }).catch(() => {
-    /** */
-  });
 
-  const hashedPassword = await bcrypt.hash('12345678', 10);
-  const goodman = await db.user.create({
+  try {
+    await db.user.delete({ where: { email } });
+  } catch (error) {
+    /** */
+  }
+
+  const hashedPassword = await bcrypt.hash('Abc@12345678', 10);
+  const newUser = await db.user.create({
     data: {
       email,
       name: 'Brian Goodman',
@@ -25,10 +29,28 @@ async function seed() {
     },
   });
 
+  // 删除所有已存在的 posts、categories
+  try {
+    await db.post.deleteMany();
+    await db.category.deleteMany();
+  } catch (error) {
+    /**  */
+  }
+
+  // 首先创建 categories
   await Promise.all(
-    jokes.map((joke) => {
-      const data = { userId: goodman.id, ...joke };
-      return db.joke.create({ data });
+    categories.map((category) => {
+      const data = { ...category };
+      return db.category.create({ data });
+    })
+  );
+
+  // 然后创建 posts
+  await Promise.all(
+    posts.map((post) => {
+      const { category, ...rest } = post;
+      const data = { ...rest, userId: newUser.id, categoryId: category.id };
+      return db.post.create({ data });
     })
   );
 }

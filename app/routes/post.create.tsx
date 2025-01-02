@@ -21,7 +21,7 @@ export const handle: HandleFunction = {
 };
 
 // UI
-export default function DashboardAbout() {
+export default function PostCreate() {
   return <PlaceholderDemo6 />;
 }
 

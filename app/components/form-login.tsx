@@ -70,7 +70,7 @@ export function LoginForm() {
                   autoComplete="current-password"
                   minLength={6}
                   maxLength={50}
-                  defaultValue="1234@5678"
+                  defaultValue="Abc@12345678"
                 />
                 <ErrorMessage error={errors?.password?.[0]} />
               </div>

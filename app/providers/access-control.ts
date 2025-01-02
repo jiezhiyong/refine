@@ -1,5 +1,6 @@
-import { AccessControlProvider } from '@refinedev/core';
+import { AccessControlProvider, CanParams } from '@refinedev/core';
 import { newEnforcer, newModel, StringAdapter } from 'casbin';
+import { Resources } from '~/config/data-resources';
 
 export const model = newModel(`
 [request_definition]
@@ -19,21 +20,21 @@ m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)
 `);
 
 export const adapter = new StringAdapter(`
-p, admin, posts, (list)|(create)
-p, admin, posts/*, (edit)|(show)|(delete)
-p, admin, posts/*, field
+p, admin, post, (list)|(create)
+p, admin, post/*, (edit)|(show)|(delete)
+p, admin, post/*, field
 
-p, admin, users, (list)|(create)
-p, admin, users/*, (edit)|(show)|(delete)
+p, admin, user, (list)|(create)
+p, admin, user/*, (edit)|(show)|(delete)
 
-p, admin, categories, (list)|(create)
-p, admin, categories/*, (edit)|(show)|(delete)
+p, admin, category, (list)|(create)
+p, admin, category/*, (edit)|(show)|(delete)
 
-p, editor, posts, (list)|(create)
-p, editor, posts/*, (edit)|(show)
-p, editor, posts/hit, field, deny
+p, editor, post, (list)|(create)
+p, editor, post/*, (edit)|(show)
+p, editor, post/hit, field, deny
 
-p, editor, categories, list
+p, editor, category, list
 `);
 
 const role = 'admin';

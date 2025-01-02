@@ -6,12 +6,12 @@ import { HandleFunction } from '~/types/handle';
 
 // 创建应用程序约定
 export const handle: HandleFunction = {
-  from: 'dashboard',
+  fromAbc: 'xyz',
 };
 
 export async function loader() {
   const can = await accessControlProvider.can({
-    resource: 'posts',
+    resource: 'post',
     action: 'list',
   });
 
@@ -23,7 +23,7 @@ export async function loader() {
 }
 
 // UI
-export default function Dashboard() {
+export default function Post() {
   return <Layout />;
 }
 

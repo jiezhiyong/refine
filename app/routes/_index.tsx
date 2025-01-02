@@ -9,5 +9,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw redirect(redirectTo!);
   }
 
-  return redirect('/dashboard');
+  return redirect('/post');
 }
