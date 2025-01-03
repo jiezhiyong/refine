@@ -4,7 +4,7 @@ import { db } from '~/services/db.server';
 import { TAny } from '~/types/any';
 
 // 定义操作符
-export type FilterOperator = 'eq' | 'contains' | 'gt' | 'lt' | 'gte' | 'lte';
+export type FilterOperator = 'eq' | 'contains' | 'gt' | 'lt' | 'gte' | 'lte' | 'in';
 
 // 类型守卫函数
 function isPrismaModel(resource: string): resource is Resources {
@@ -40,6 +40,19 @@ function buildWhereClause(filters: Filter[] = []): Record<string, TAny> {
         return { ...acc, [filter.field]: { gte: filter.value } };
       case 'lte':
         return { ...acc, [filter.field]: { lte: filter.value } };
+      case 'in':
+        // 如果值已经是数组，直接使用；否则尝试将其转换为数组
+        const values = Array.isArray(filter.value) ? filter.value : filter.value.toString().split(',');
+
+        // 对于 id 字段，保持字符串类型；对于其他字段，尝试转换为数字
+        const parsedValues =
+          filter.field === 'id'
+            ? values
+            : values.map((v: unknown) => {
+                const num = Number(v);
+                return isNaN(num) ? v : num;
+              });
+        return { ...acc, [filter.field]: { in: parsedValues } };
       default:
         return acc;
     }
@@ -55,6 +68,21 @@ function buildOrderByClause(sorters: Sorter[] = []): Record<string, 'asc' | 'des
     }),
     {}
   );
+}
+
+// 处理 Refine 的过滤参数格式
+function parseRefineFilters(filters: Filter[]): Filter[] {
+  return filters.map((filter) => {
+    if (filter.field.startsWith('filter[')) {
+      const [field, operator, value] = filter.value.split('||');
+      return {
+        field,
+        operator: operator.replace('$', '') as FilterOperator,
+        value,
+      };
+    }
+    return filter;
+  });
 }
 
 // 根据定义的数据资源，生成数据资源配置
@@ -75,7 +103,8 @@ export const dataService: DataProvider = {
     const skip = (current - 1) * pageSize;
 
     // 构建过滤条件
-    const where = filters ? buildWhereClause(filters as Filter[]) : {};
+    const parsedFilters = filters ? parseRefineFilters(filters as Filter[]) : [];
+    const where = parsedFilters.length > 0 ? buildWhereClause(parsedFilters) : {};
 
     // 构建排序条件
     const orderBy = sorters ? buildOrderByClause(sorters) : {};
@@ -89,7 +118,7 @@ export const dataService: DataProvider = {
       findMany: (args: TAny) => Promise<TAny[]>;
     };
 
-    const [total, data] = await Promise.all([
+    const [total, items] = await Promise.all([
       prismaModel.count({ where }),
       prismaModel.findMany({
         skip,
@@ -100,10 +129,13 @@ export const dataService: DataProvider = {
       }),
     ]);
 
-    return {
-      data,
+    // 确保返回的数据格式符合 Refine 的期望
+    const result = {
+      data: items,
       total,
     };
+
+    return result;
   },
 
   // 创建数据
@@ -120,9 +152,7 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return {
-      data,
-    };
+    return data;
   },
 
   // 更新数据
@@ -140,9 +170,7 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return {
-      data,
-    };
+    return data;
   },
 
   // 删除数据
@@ -159,9 +187,7 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return {
-      data,
-    };
+    return data;
   },
 
   // 获取单条数据
@@ -178,9 +204,7 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return {
-      data,
-    };
+    return data;
   },
 
   // 获取 API URL
@@ -194,13 +218,16 @@ export const dataService: DataProvider = {
     if (!isPrismaModel(resource)) {
       throw new Error(`无效的资源类型: ${resource}`);
     }
+
     const prismaModel = db[resource] as unknown as {
-      findMany: (args: TAny) => Promise<TAny>;
+      findMany: (args: TAny) => Promise<TAny[]>;
     };
 
     const data = await prismaModel.findMany({
       where: {
-        id: { in: ids },
+        id: {
+          in: ids,
+        },
       },
       ...meta,
     });
@@ -215,6 +242,7 @@ export const dataService: DataProvider = {
     if (!isPrismaModel(resource)) {
       throw new Error(`无效的资源类型: ${resource}`);
     }
+
     const prismaModel = db[resource] as unknown as {
       createMany: (args: TAny) => Promise<TAny>;
     };
@@ -234,13 +262,16 @@ export const dataService: DataProvider = {
     if (!isPrismaModel(resource)) {
       throw new Error(`无效的资源类型: ${resource}`);
     }
+
     const prismaModel = db[resource] as unknown as {
       deleteMany: (args: TAny) => Promise<TAny>;
     };
 
     const data = await prismaModel.deleteMany({
       where: {
-        id: { in: ids },
+        id: {
+          in: ids,
+        },
       },
       ...meta,
     });
@@ -255,13 +286,16 @@ export const dataService: DataProvider = {
     if (!isPrismaModel(resource)) {
       throw new Error(`无效的资源类型: ${resource}`);
     }
+
     const prismaModel = db[resource] as unknown as {
       updateMany: (args: TAny) => Promise<TAny>;
     };
 
     const data = await prismaModel.updateMany({
       where: {
-        id: { in: ids },
+        id: {
+          in: ids,
+        },
       },
       data: variables,
       ...meta,

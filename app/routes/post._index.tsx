@@ -5,7 +5,6 @@ import {
   Trash2,
   Settings2,
   FileText,
-  Link,
   Copy,
   CornerUpRight,
   CornerUpLeft,
@@ -21,9 +20,9 @@ import {
   Search,
   ChevronRight,
 } from 'lucide-react';
-import { BaseRecord, HttpError, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, HttpError, useDelete, useSelect, useUserFriendlyName } from '@refinedev/core';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Form, UIMatch, useSearchParams } from '@remix-run/react';
+import { Form, Link, UIMatch, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import React from 'react';
 import { Button } from '~/components-shadcn/button';
 import { Calendar } from '~/components-shadcn/calendar';
@@ -53,7 +52,9 @@ import { getSearchParams } from '~/utils/search-params';
 import { getDefaultTitle } from '~/utils/get-default-title';
 import PageError from '~/components/500';
 import { dataProvider } from '~/providers/data';
-import { ListPage, Table, TableFilterProps } from '~/component-refine';
+import { CreateButton, DeleteButton, EditButton, ListPage, Table, TableFilterProps } from '~/component-refine';
+import { parseTableParams } from '@refinedev/remix-router';
+import { Category, Post } from '@prisma/client';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {
@@ -70,16 +71,21 @@ export const handle: HandleFunction = {
   },
 };
 
+// 处理 GET 请求
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = getSearchParams(request);
-  const data = await dataProvider.getList({
+  const { pagination, filters, sorters } = parseTableParams(new URL(request.url).search);
+  const posts = await dataProvider.getList<Post>({
     resource: 'post',
+    filters,
+    pagination,
+    sorters,
   });
 
-  return {};
+  return { posts };
 }
 
-// 处理器 - 处理表单`POST`请求
+// 处理 POST、PATCH、DELETE 请求
 export async function action({ request }: ActionFunctionArgs) {
   const form = await request.formData();
   const formData = Object.fromEntries(form);
@@ -88,100 +94,42 @@ export async function action({ request }: ActionFunctionArgs) {
 
 // UI
 export default function PostIndex() {
-  const friendly = useUserFriendlyName();
-  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const label = `Delete Selected (${table.getSelectedRowModel().rows.length}) ${friendly(
-      'Row',
-      table.getSelectedRowModel().rows.length > 1 ? 'plural' : 'singular'
-    )}`;
-
-    return {
-      label,
-      onClick: () => {
-        alert('Delete Selected');
-      },
-    };
-  };
+  const { posts } = useLoaderData<typeof loader>();
+  const { data, total } = posts;
+  const { mutate: deletePost } = useDelete();
+  const navigate = useNavigate();
 
   return (
-    <ListPage>
-      <Table enableSorting enableFilters>
-        <Table.Column
-          accessorKey="id"
-          id={'select'}
-          header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
-          cell={({ row }) => (
-            <Checkbox
-              className="translate-y-[2px]"
-              checked={row.getIsSelected()}
-              onCheckedChange={(value) => row.toggleSelected(!!value)}
-              aria-label="Select row"
-              key={`checkbox-${row.original.id}`}
-            />
-          )}
-        />
-        <Table.Column header={'ID'} id="id" accessorKey="id" enableSorting enableHiding />
-        <Table.Column
-          header={'Title'}
-          accessorKey="title"
-          id="title"
-          enableSorting
-          enableHiding
-          filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Title" />}
-        />
-        <Table.Column
-          header={'Status'}
-          accessorKey="status"
-          id="status"
-          enableSorting
-          enableHiding
-          filter={(props: TableFilterProps) => (
-            <Table.Filter.Dropdown
-              {...props}
-              options={[
-                {
-                  label: 'Published',
-                  value: 'published',
-                },
-                {
-                  label: 'Draft',
-                  value: 'draft',
-                },
-                {
-                  label: 'Rejected',
-                  value: 'rejected',
-                },
-              ]}
-            />
-          )}
-        />
-        <Table.Column
-          header={'CreatedAt'}
-          accessorKey="createdAt"
-          id="createdAt"
-          enableSorting
-          enableHiding
-          filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
-        />
-        <Table.Column
-          accessorKey={'id'}
-          id={'actions'}
-          cell={({ row: { original } }) => (
-            <Table.Actions>
-              <Table.ShowAction title="Detail" row={original} resource="posts" icon={<Eye size={16} />} />
-              <Table.EditAction title="Edit" row={original} resource="posts" icon={<Edit size={16} />} />
-              <Table.DeleteAction
-                title="Delete"
-                row={original}
-                withForceDelete={true}
-                resource="posts"
-                icon={<Trash2 size={16} />}
-              />
-            </Table.Actions>
-          )}
-        />
-      </Table>
-    </ListPage>
+    <ul className="space-y-2">
+      {/* <CreateButton /> */}
+      <Link to="/post/create">
+        <Button>Create</Button>
+      </Link>
+      {data.map((post) => (
+        <li key={post.id} className="flex border border-gray-200 p-2">
+          <div className="flex-1">
+            <h3>{post.title}</h3>
+            <p>{post.content}</p>
+          </div>
+          <div className="flex gap-2">
+            <Link to={`/post/edit/${post.id}`}>
+              <Button>Edit</Button>
+            </Link>
+            <Button
+              variant={'destructive'}
+              onClick={() => {
+                deletePost({ resource: 'post', id: post.id });
+                navigate('.');
+              }}
+            >
+              Delete
+            </Button>
+            {/* <EditButton />
+            <DeleteButton /> */}
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 

@@ -13,9 +13,10 @@ export default function PermissionDenied() {
             {"403 - You don't have permission to access this page"}
           </h2>
         </div>
-        <Button size="lg" asChild>
-          <Link to="/">Back To Home</Link>
-        </Button>
+
+        <Link to="/">
+          <Button size="lg">Back To Home</Button>
+        </Link>
       </div>
     </div>
   );

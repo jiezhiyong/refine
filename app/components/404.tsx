@@ -13,9 +13,10 @@ export default function NotFound() {
             {"404 - The Page can't be found"}
           </h2>
         </div>
-        <Button size="lg" asChild>
-          <Link to="/">Back To Home</Link>
-        </Button>
+
+        <Link to="/">
+          <Button size="lg">Back To Home</Button>
+        </Link>
       </div>
     </div>
   );

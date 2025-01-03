@@ -1,5 +1,5 @@
 import { DataProvider, ResourceProps } from '@refinedev/core';
-import dataProviderNestjsCrud from '@refinedev/nestjsx-crud';
+import dataProviderSimpleRest from '@refinedev/simple-rest';
 import { resources } from '~/config/data-resources';
 import { getBaseUrl } from '~/config/base-url';
 
@@ -14,4 +14,4 @@ export const dataResources: ResourceProps[] = resources.map((name) => ({
 }));
 
 // 使用 dataProviderNestjsCrud 并配置正确的基础 URL
-export const dataProvider: DataProvider = dataProviderNestjsCrud(`${getBaseUrl()}/api`);
+export const dataProvider: DataProvider = dataProviderSimpleRest(`${getBaseUrl()}/api`);
