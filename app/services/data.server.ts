@@ -143,6 +143,7 @@ export const dataService: DataProvider = {
     if (!isPrismaModel(resource)) {
       throw new Error(`无效的资源类型: ${resource}`);
     }
+
     const prismaModel = db[resource] as unknown as {
       create: (args: TAny) => Promise<TAny>;
     };
@@ -152,7 +153,7 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return data;
+    return { data };
   },
 
   // 更新数据
@@ -170,7 +171,7 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return data;
+    return { data };
   },
 
   // 删除数据
@@ -187,7 +188,7 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return data;
+    return { data };
   },
 
   // 获取单条数据
@@ -204,7 +205,7 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return data;
+    return { data };
   },
 
   // 获取 API URL

@@ -23,8 +23,8 @@ CREATE TABLE "Role" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "label" TEXT NOT NULL,
     "value" TEXT NOT NULL,
-    "userId" TEXT,
-    CONSTRAINT "Role_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "userId" TEXT NOT NULL,
+    CONSTRAINT "Role_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -35,7 +35,7 @@ CREATE TABLE "Post" (
     "hit" INTEGER NOT NULL DEFAULT 0,
     "image" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "updatedAt" DATETIME,
     "categoryId" TEXT,
     "userId" TEXT NOT NULL,
     CONSTRAINT "Post_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
@@ -46,8 +46,10 @@ CREATE TABLE "Post" (
 CREATE TABLE "Category" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    "title" TEXT NOT NULL
+    "updatedAt" DATETIME,
+    "title" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    CONSTRAINT "Category_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex

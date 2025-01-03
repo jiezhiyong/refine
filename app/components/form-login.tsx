@@ -5,9 +5,6 @@ import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
 import { PrivacyPolicy } from './privacy-policy';
 import { ErrorMessage } from './error';
-import { useEffect } from 'react';
-import { useModal } from '~/hooks/use-modal';
-import { useTranslate } from '@refinedev/core';
 
 // 定义错误类型
 interface ActionData {
@@ -20,12 +17,10 @@ interface ActionData {
 
 // 登录表单
 export function LoginForm() {
-  const { showModal } = useModal();
   const { errors } = useActionData<ActionData>() || {};
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
   const navigation = useNavigation();
-  const translate = useTranslate();
 
   return (
     <div className="flex flex-col gap-6">

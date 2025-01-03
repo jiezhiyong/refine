@@ -28,7 +28,7 @@ const safeEmit = (eventName: string, data: any) => {
       });
 
       socket.on('connect_error', (error) => {
-        console.error('Socket connection error:', error);
+        console.error('@liveProvider - Socket connection error:', error);
       });
 
       socket.on('disconnect', (reason) => {
@@ -40,7 +40,7 @@ const safeEmit = (eventName: string, data: any) => {
       });
 
       socket.on('error', (error) => {
-        console.error('Socket error:', error);
+        console.error('@liveProvider - Socket error:', error);
       });
     }
     socket.emit(eventName, data);
@@ -63,7 +63,7 @@ const safeEmit = (eventName: string, data: any) => {
         return response.json();
       })
       .catch((err) => {
-        console.error('Failed to publish event:', err);
+        console.error('@liveProvider - Failed to publish event:', err);
       });
   }
 };
@@ -110,7 +110,7 @@ class SocketManager {
     });
 
     this.socket.on('connect_error', (error) => {
-      console.error('Socket connection error:', error);
+      console.error('@liveProvider - Socket connection failed:', error);
       this.connectionStatus = 'disconnected';
     });
 
@@ -201,7 +201,7 @@ export const liveProvider: LiveProvider = {
       try {
         callback(event);
       } catch (error) {
-        console.error('Error in subscription callback:', error);
+        console.error('@liveProvider.subscribe - Error in subscription callback:', error);
       }
     });
 
@@ -224,7 +224,7 @@ export const liveProvider: LiveProvider = {
 
       socket.off(channel);
     } catch (error) {
-      console.error('Error in unsubscribe:', error);
+      console.error('@liveProvider.unsubscribe - Error in unsubscribe:', error);
     }
   },
 
@@ -239,7 +239,7 @@ export const liveProvider: LiveProvider = {
         },
       });
     } catch (error) {
-      console.error('Error in publish:', error);
+      console.error('@liveProvider.publish - Error in publish:', error);
     }
   },
 };

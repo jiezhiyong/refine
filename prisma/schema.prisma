@@ -11,18 +11,19 @@ generator client {
 // 用户认证相关模型
 // ========================
 model User {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  email         String    @unique
+  id            String     @id @default(cuid())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  email         String     @unique
   name          String?
-  username      String?   @unique
-  emailVerified DateTime? @default(now())
+  username      String?    @unique
+  emailVerified DateTime?  @default(now())
   avatar        String?
   provider      String?
   role          Role[]
   password      Password?
   Post          Post[]
+  Category      Category[]
 }
 
 model Password {
@@ -32,39 +33,39 @@ model Password {
 }
 
 model Role {
-  id     String  @id @default(uuid())
+  id     String @id @default(uuid())
   label  String
   value  String
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
 
 // ========================
 // Post 相关模型
 // ========================
 model Post {
-  id        String   @id @default(uuid())
-  title     String
-  content   String
-  hit       Int      @default(0)
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id         String    @id @default(uuid())
+  title      String
+  content    String
+  hit        Int       @default(0)
+  image      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId String?
-
-  user   User   @relation(references: [id], fields: [userId])
-  userId String
+  user       User      @relation(references: [id], fields: [userId])
+  userId     String
 }
 
 // ========================
 // category 相关模型
 // ========================
 model Category {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
   title     String
   Post      Post[]
+  user      User      @relation(references: [id], fields: [userId])
+  userId    String
 }

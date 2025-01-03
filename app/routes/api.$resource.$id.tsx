@@ -1,5 +1,6 @@
 import { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
 import { dataService } from '~/services/data.server';
+import { TAny } from '~/types/any';
 
 // 处理单个获取 getOne
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -14,8 +15,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
       id,
     });
     return Response.json(data);
-  } catch (error) {
-    return Response.json(error, { status: 500 });
+  } catch (error: TAny) {
+    return Response.json({ message: error.message }, { status: 500 });
   }
 }
 
@@ -53,7 +54,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       default:
         throw new Error(`不支持的请求方法: ${method}`);
     }
-  } catch (error) {
-    return Response.json(error, { status: 500 });
+  } catch (error: TAny) {
+    return Response.json({ message: error.message }, { status: 500 });
   }
 }

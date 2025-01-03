@@ -5,8 +5,6 @@ import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
 import { PrivacyPolicy } from './privacy-policy';
 import { ErrorMessage } from './error';
-import { useEffect } from 'react';
-import { useModal } from '~/hooks/use-modal';
 
 // 定义错误类型
 interface ActionData {
@@ -19,21 +17,10 @@ interface ActionData {
 
 // 注册表单
 export function RegisterForm() {
-  const { showModal } = useModal();
   const { errors } = useActionData<ActionData>() || {};
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
   const navigation = useNavigation();
-
-  useEffect(() => {
-    if (errors?.default?.[0]) {
-      showModal({
-        type: 'alert',
-        title: '注册提交失败',
-        description: errors.default[0],
-      });
-    }
-  }, [showModal, errors?.default]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -88,9 +75,12 @@ export function RegisterForm() {
               <ErrorMessage error={errors?.password?.[0]} />
             </div>
 
-            <Button type="submit" className="w-full" disabled={navigation.state === 'submitting'}>
-              Register
-            </Button>
+            <div className="grid gap-2">
+              <Button type="submit" className="w-full" disabled={navigation.state === 'submitting'}>
+                Register
+              </Button>
+              <ErrorMessage error={errors?.default?.[0]} />
+            </div>
           </div>
 
           <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">

@@ -51,10 +51,10 @@ import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
 import { getSearchParams } from '~/utils/search-params';
 import { getDefaultTitle } from '~/utils/get-default-title';
 import PageError from '~/components/500';
-import { dataProvider } from '~/providers/data';
 import { CreateButton, DeleteButton, EditButton, ListPage, Table, TableFilterProps } from '~/component-refine';
 import { parseTableParams } from '@refinedev/remix-router';
 import { Category, Post } from '@prisma/client';
+import { dataService } from '~/services/data.server';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {
@@ -75,7 +75,7 @@ export const handle: HandleFunction = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = getSearchParams(request);
   const { pagination, filters, sorters } = parseTableParams(new URL(request.url).search);
-  const posts = await dataProvider.getList<Post>({
+  const posts = await dataService.getList<Post>({
     resource: 'post',
     filters,
     pagination,
@@ -114,6 +114,9 @@ export default function PostIndex() {
           <div className="flex gap-2">
             <Link to={`/post/edit/${post.id}`}>
               <Button>Edit</Button>
+            </Link>
+            <Link to={`/post/show/${post.id}`}>
+              <Button>Show</Button>
             </Link>
             <Button
               variant={'destructive'}

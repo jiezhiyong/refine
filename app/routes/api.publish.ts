@@ -20,7 +20,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     return { success: true };
   } catch (error) {
-    console.error('Error publishing event:', error);
+    console.error('@api.publish - Error publishing event:', error);
     return data({ error: 'Internal server error' }, { status: 500 });
   }
 };

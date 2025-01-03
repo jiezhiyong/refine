@@ -1,8 +1,10 @@
-import { MetaFunction } from '@remix-run/node';
-import { Clock } from 'lucide-react';
+import { Category, Post } from '@prisma/client';
+import { useDelete } from '@refinedev/core';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+import { Button } from '~/components-shadcn/button';
 import PageError from '~/components/500';
-import { PlaceholderDemo6 } from '~/components/placeholder';
-import { HandleFunction } from '~/types/handle';
+import { dataService } from '~/services/data.server';
 import { getDefaultTitle } from '~/utils/get-default-title';
 
 // 元数据
@@ -10,19 +12,46 @@ export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
 
-// 创建应用程序约定
-export const handle: HandleFunction = {
-  uiTools: (
-    <p className="flex items-center gap-2 pr-1 text-sm text-muted-foreground">
-      <Clock size={16} />
-      <span>Updated at 10s ago</span>
-    </p>
-  ),
-};
+// 页面初始化时的`GET`请求 && 表单`GET`请求
+export async function loader({ params }: LoaderFunctionArgs) {
+  const [postRes] = await Promise.all([
+    dataService.getOne<Post & { category?: Category }>({
+      resource: 'post',
+      id: params?.id || '',
+      meta: {
+        include: {
+          category: true, // 包含关联的 category 数据
+        },
+      },
+    }),
+  ]);
+
+  return { postRes };
+}
 
 // UI
 export default function PostShow() {
-  return <PlaceholderDemo6 />;
+  const { postRes } = useLoaderData<typeof loader>();
+  const { data: post } = postRes;
+  const { mutate: deletePost } = useDelete();
+
+  return (
+    <form className="flex flex-col gap-2">
+      <textarea disabled value={post.title} rows={2} className="w-full border p-2" />
+
+      <textarea disabled value={post.content} rows={10} className="w-full border p-2" />
+
+      <select disabled className="w-full border p-2" value={post.categoryId || undefined}>
+        <option>{post.category?.title}</option>
+      </select>
+
+      <div className="flex gap-2">
+        <Button variant={'destructive'} onClick={() => deletePost({ resource: 'post', id: post.id })}>
+          Delete
+        </Button>
+      </div>
+    </form>
+  );
 }
 
 // 错误边界处理

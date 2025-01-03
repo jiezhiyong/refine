@@ -20,7 +20,6 @@ import {
 } from '@remix-run/react';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
-import { ModalProvider } from '~/hooks/use-modal';
 import PageError from '~/components/500';
 import NotFound from '~/components/404';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
@@ -128,7 +127,7 @@ function Document({
             authProvider={authProvider}
             // accessControlProvider={accessControlProvider}
             // liveProvider={liveProvider}
-            // notificationProvider={notificationProvider}
+            notificationProvider={notificationProvider}
             // i18nProvider={i18nProvider}
             // auditLogProvider={auditLogProvider}
             options={{
@@ -137,7 +136,7 @@ function Document({
                 text: 'Refine & Remix',
               },
 
-              mutationMode: 'optimistic',
+              mutationMode: 'pessimistic',
               syncWithLocation: true,
               warnWhenUnsavedChanges: true,
               liveMode: 'auto',
@@ -173,8 +172,8 @@ function DocumentWithThemeProviders({
   return (
     <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
       <Document title={title} specifiedTheme={theme} script={script} locale={locale}>
-        <ModalProvider>{children}</ModalProvider>
-        <Toaster richColors position="top-center" />
+        {children}
+        <Toaster richColors position="top-right" />
       </Document>
     </ThemeProvider>
   );

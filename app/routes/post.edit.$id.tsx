@@ -5,7 +5,7 @@ import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
 import PageError from '~/components/500';
-import { dataProvider } from '~/providers/data';
+import { dataService } from '~/services/data.server';
 import { getDefaultTitle } from '~/utils/get-default-title';
 
 // 元数据
@@ -16,11 +16,11 @@ export const meta: MetaFunction = ({ matches }) => {
 // 页面初始化时的`GET`请求 && 表单`GET`请求
 export async function loader({ params }: LoaderFunctionArgs) {
   const [postRes, categoriesRes] = await Promise.all([
-    dataProvider.getOne<Post>({
+    dataService.getOne<Post>({
       resource: 'post',
       id: params?.id || '',
     }),
-    dataProvider.getList<Category>({
+    dataService.getList<Category>({
       resource: 'category',
     }),
   ]);

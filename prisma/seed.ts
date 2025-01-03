@@ -40,7 +40,7 @@ async function seed() {
   // 首先创建 categories
   await Promise.all(
     categories.map((category) => {
-      const data = { ...category };
+      const data = { ...category, userId: newUser.id };
       return db.category.create({ data });
     })
   );

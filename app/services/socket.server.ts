@@ -64,13 +64,13 @@ export function initSocketIO(httpServer: HttpServer) {
     });
 
     socket.on('error', (error) => {
-      console.error('Socket error:', error);
+      console.error('@socket.server -  Socket error:', error);
     });
   });
 
   // 全局错误处理
   io.engine.on('connection_error', (error) => {
-    console.error('Connection error:', error);
+    console.error('@socket.server - Connection error:', error);
   });
 
   return io;

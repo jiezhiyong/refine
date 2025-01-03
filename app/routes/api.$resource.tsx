@@ -1,6 +1,8 @@
 import { LoaderFunctionArgs, type ActionFunctionArgs } from '@remix-run/node';
 import { dataService } from '~/services/data.server';
 import type { CrudFilters, CrudOperators, CrudSorting, Pagination } from '@refinedev/core';
+import { TAny } from '~/types/any';
+import { getSession } from '~/services/session.server';
 
 // 处理 getList 请求
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -25,12 +27,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     });
 
     return Response.json(res?.data || []);
-  } catch (error) {
-    return Response.json(error, { status: 500 });
+  } catch (error: TAny) {
+    return Response.json({ message: error.message }, { status: 500 });
   }
 }
 
 // 处理单个创建 create
+// 注意：默认所有数据模型都应该关联用户
 export async function action({ request, params }: ActionFunctionArgs) {
   const { resource } = params;
   if (!resource) {
@@ -43,9 +46,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     switch (method) {
       case 'POST': {
+        const session = await getSession(request.headers.get('Cookie'));
+        const user = session.get('user');
+
         const created = await dataService.create({
           resource,
-          variables: body,
+          variables: { ...body, userId: user?.id },
         });
         return Response.json(created);
       }
@@ -53,8 +59,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
       default:
         throw new Error(`不支持的请求方法: ${method}`);
     }
-  } catch (error) {
-    return Response.json(error, { status: 500 });
+  } catch (error: TAny) {
+    return Response.json({ message: error.message }, { status: 500 });
   }
 }
 

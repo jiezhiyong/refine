@@ -13,5 +13,5 @@ export const dataResources: ResourceProps[] = resources.map((name) => ({
   meta: { label: name, icon: '', canDelete: true },
 }));
 
-// 使用 dataProviderNestjsCrud 并配置正确的基础 URL
+// 使用 @refinedev/simple-rest, 并配置正确的基础 URL
 export const dataProvider: DataProvider = dataProviderSimpleRest(`${getBaseUrl()}/api`);
