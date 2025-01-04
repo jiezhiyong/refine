@@ -55,7 +55,7 @@ export function RegisterForm() {
                 required
                 autoFocus
                 autoComplete="email"
-                defaultValue="admin@remix.run"
+                defaultValue="administrator@goodman.com"
               />
               <ErrorMessage error={errors?.email?.[0]} />
             </div>

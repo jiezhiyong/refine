@@ -19,7 +19,7 @@ export async function createUser(email: User['email'], password: string) {
   return db.user.create({
     data: {
       email,
-      username: email.split('@')[0],
+      name: email.split('@')[0],
       password: {
         create: {
           hash: hashedPassword,
@@ -36,21 +36,34 @@ export async function deleteUserByEmail(email: User['email']) {
 
 /** 验证用户登录 */
 export async function verifyLogin(email: User['email'], password: Password['hash']) {
-  const userWithPassword = await db.user.findUnique({
+  const userWithPasswordAndRoles = await db.user.findUnique({
     where: { email },
     include: {
       password: true,
+      roles: {
+        include: {
+          role: true,
+        },
+      },
     },
   });
 
-  if (!userWithPassword || !userWithPassword.password) {
+  if (!userWithPasswordAndRoles || !userWithPasswordAndRoles.password) {
     return null;
   }
 
-  const isValid = await bcrypt.compare(password, userWithPassword.password.hash);
+  const isValid = await bcrypt.compare(password, userWithPasswordAndRoles.password.hash);
   if (!isValid) {
     return null;
   }
 
-  return { ...userWithPassword, password: null };
+  // 提取角色标题
+  const roles = userWithPasswordAndRoles.roles.map((userRole) => userRole.role.title);
+  const userWithRoles = {
+    ...userWithPasswordAndRoles,
+    password: null,
+    roles,
+  };
+
+  return userWithRoles;
 }

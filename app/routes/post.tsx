@@ -1,15 +1,18 @@
-import { data } from '@remix-run/node';
+import { data, LoaderFunctionArgs } from '@remix-run/node';
 import { accessControlProvider } from '~/providers/access-control';
 import PageError from '~/components/500';
 import Layout from '~/components/layout';
 import { HandleFunction } from '~/types/handle';
+import { requireUserSession } from '~/services/session.server';
 
 // 创建应用程序约定
 export const handle: HandleFunction = {
   fromAbc: 'xyz',
 };
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requireUserSession(request);
+
   const can = await accessControlProvider.can({
     resource: 'post',
     action: 'list',
@@ -19,7 +22,7 @@ export async function loader() {
     return data({}, { status: 403 });
   }
 
-  return { initialData: {} };
+  return null;
 }
 
 // UI

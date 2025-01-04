@@ -46,13 +46,17 @@ async function seed() {
     })
   );
 
-  // 为管理员用户分配管理员角色
-  await db.userRole.create({
-    data: {
-      userId: adminUser.id,
-      roleId: createdRoles[0].id,
-    },
-  });
+  // 为管理员用户分配所有角色
+  await Promise.all(
+    createdRoles.map((role) =>
+      db.userRole.create({
+        data: {
+          userId: adminUser.id,
+          roleId: role.id,
+        },
+      })
+    )
+  );
 
   // 创建其他用户并分配角色
   await Promise.all(

@@ -28,12 +28,12 @@ import { Loader } from 'lucide-react';
 import { User } from '@prisma/client';
 import { getCookie, preferencesCookie } from '~/services/cookie.server';
 import { themeSessionResolver } from '~/services/theme.server';
-import { sessionStorage } from '~/services/session.server';
+import { getUser } from '~/services/session.server';
 import { fallbackLng, LocaleLanguage } from './config/i18n';
 import { dataResources, dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
 import { accessControlProvider } from '~/providers/access-control';
-import { liveProvider } from '~/providers/live';
+// import { liveProvider } from '~/providers/live';
 import { i18nProvider } from '~/providers/i18n';
 import { auditLogProvider } from '~/providers/audit-log';
 import { notificationProvider } from '~/providers/notification';
@@ -76,7 +76,7 @@ export type RootLoaderData = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const [cookie, user, themeResolver] = await Promise.all([
     getCookie(request),
-    authProvider.getIdentity({ request, sessionStorage }),
+    getUser(request),
     themeSessionResolver(request),
   ]);
 
@@ -122,10 +122,10 @@ function Document({
         <DevtoolsProvider>
           <Refine
             resources={dataResources}
-            dataProvider={dataProvider}
             routerProvider={routerProvider}
+            dataProvider={dataProvider}
             authProvider={authProvider}
-            // accessControlProvider={accessControlProvider}
+            accessControlProvider={accessControlProvider}
             // liveProvider={liveProvider}
             notificationProvider={notificationProvider}
             // i18nProvider={i18nProvider}
