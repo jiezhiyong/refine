@@ -1,12 +1,10 @@
 import { createCookie } from '@remix-run/node';
 import invariant from 'tiny-invariant';
-import { TypeLocaleLanguage } from '~/config/i18n';
 
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
 
 export interface CookiePreferences {
   sidebarIsClose?: boolean;
-  lng?: TypeLocaleLanguage;
 }
 
 /** 用户偏好Cookie */

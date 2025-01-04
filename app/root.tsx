@@ -26,10 +26,10 @@ import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 import { cn } from '~/utils/cn';
 import { Loader } from 'lucide-react';
 import { User } from '@prisma/client';
-import { getCookie, preferencesCookie } from '~/services/cookie.server';
+import { getCookie } from '~/services/cookie.server';
 import { themeSessionResolver } from '~/services/theme.server';
-import { getUser } from '~/services/session.server';
-import { fallbackLng, LocaleLanguage } from './config/i18n';
+import { getSession, getUser } from '~/services/session.server';
+import { fallbackLanguage, LocaleLanguage } from './config/i18n';
 import { dataResources, dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
 import { accessControlProvider } from '~/providers/access-control';
@@ -42,6 +42,7 @@ import { notificationProvider } from '~/providers/notification';
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
+import i18next from 'i18next';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -74,21 +75,24 @@ export type RootLoaderData = {
 
 /** 加载器 */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [cookie, user, themeResolver] = await Promise.all([
+  const [session, cookie, user, themeResolver] = await Promise.all([
+    getSession(request.headers.get('Cookie')),
     getCookie(request),
     getUser(request),
     themeSessionResolver(request),
   ]);
 
-  // 获取当前语言设置
-  const cookieHeader = request.headers.get('Cookie');
-  const locale = (await preferencesCookie.parse(cookieHeader)) || fallbackLng;
+  const locale = session.get('locale') || fallbackLanguage;
+  console.log('server vs client', locale, i18next.language);
+  if (i18next.language !== locale) {
+    await i18next.changeLanguage(locale);
+  }
 
   return data({
     user,
+    locale,
     theme: themeResolver.getTheme(),
     sidebarIsClose: cookie?.sidebarIsClose,
-    locale,
   });
 }
 
@@ -128,7 +132,7 @@ function Document({
             // accessControlProvider={accessControlProvider}
             // liveProvider={liveProvider}
             notificationProvider={notificationProvider}
-            // i18nProvider={i18nProvider}
+            i18nProvider={i18nProvider}
             auditLogProvider={auditLogProvider}
             options={{
               title: {
@@ -168,6 +172,8 @@ function DocumentWithThemeProviders({
   script = true,
 }: PropsWithChildren<{ title?: string; script?: boolean }>) {
   const { theme, locale } = useLoaderData<typeof loader>() || {};
+
+  console.log('locale', locale);
 
   return (
     <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
