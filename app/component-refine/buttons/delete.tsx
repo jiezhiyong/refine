@@ -62,6 +62,7 @@ export const DeleteButton: FC<DeleteButtonProps> = ({
       onConfirm={onConfirm}
     >
       <Button
+        variant="destructive"
         disabled={disabled}
         title={title}
         loading={loading}

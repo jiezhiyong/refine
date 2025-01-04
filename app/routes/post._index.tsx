@@ -51,7 +51,7 @@ import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
 import { getSearchParams } from '~/utils/search-params';
 import { getDefaultTitle } from '~/utils/get-default-title';
 import PageError from '~/components/500';
-import { CreateButton, DeleteButton, EditButton, ListPage, Table, TableFilterProps } from '~/component-refine';
+import { CreateButton, DeleteButton, EditButton, ShowButton } from '~/component-refine';
 import { parseTableParams } from '@refinedev/remix-router';
 import { Category, Post } from '@prisma/client';
 import { dataService } from '~/services/data.server';
@@ -101,10 +101,8 @@ export default function PostIndex() {
 
   return (
     <ul className="space-y-2">
-      {/* <CreateButton /> */}
-      <Link to="/post/create">
-        <Button>Create</Button>
-      </Link>
+      <CreateButton />
+
       {data.map((post) => (
         <li key={post.id} className="flex border border-gray-200 p-2">
           <div className="flex-1">
@@ -112,23 +110,9 @@ export default function PostIndex() {
             <p>{post.content}</p>
           </div>
           <div className="flex gap-2">
-            <Link to={`/post/edit/${post.id}`}>
-              <Button>Edit</Button>
-            </Link>
-            <Link to={`/post/show/${post.id}`}>
-              <Button>Show</Button>
-            </Link>
-            <Button
-              variant={'destructive'}
-              onClick={() => {
-                deletePost({ resource: 'post', id: post.id });
-                navigate('.');
-              }}
-            >
-              Delete
-            </Button>
-            {/* <EditButton />
-            <DeleteButton /> */}
+            <ShowButton resource="post" recordItemId={post.id} />
+            <EditButton resource="post" recordItemId={post.id} />
+            <DeleteButton resource="post" recordItemId={post.id} />
           </div>
         </li>
       ))}

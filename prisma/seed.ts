@@ -1,55 +1,98 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { userAdministrator, users } from '../public/sql-users.ts';
+import { roles } from '../public/sql-roles.ts';
 import { categories } from '../public/sql-categories.ts';
 import { posts } from '../public/sql-posts.ts';
 
 const db = new PrismaClient();
 
 async function seed() {
-  const email = 'admin@remix.run';
-
+  // 删除所有已存在的 user、roles、posts、categories
   try {
-    await db.user.delete({ where: { email } });
-  } catch (error) {
-    /** */
-  }
-
-  const hashedPassword = await bcrypt.hash('Abc@12345678', 10);
-  const newUser = await db.user.create({
-    data: {
-      email,
-      name: 'Brian Goodman',
-      username: 'shadcn',
-      avatar: 'https://ui.shadcn.com/avatars/shadcn.jpg',
-      password: {
-        create: {
-          hash: hashedPassword,
-        },
-      },
-    },
-  });
-
-  // 删除所有已存在的 posts、categories
-  try {
+    await db.user.deleteMany();
+    await db.role.deleteMany();
     await db.post.deleteMany();
     await db.category.deleteMany();
   } catch (error) {
     /**  */
   }
 
-  // 首先创建 categories
+  // 创建管理员用户
+  const adminUser = await db.user.create({
+    data: {
+      email: userAdministrator.email,
+      name: userAdministrator.name,
+      avatar: userAdministrator.avatar,
+      password: {
+        create: {
+          hash: await bcrypt.hash(userAdministrator.password, 10),
+        },
+      },
+    },
+  });
+
+  // 创建角色
+  const createdRoles = await Promise.all(
+    roles.map((role) => {
+      return db.role.create({
+        data: {
+          ...role,
+          creator: {
+            connect: { id: adminUser.id },
+          },
+        },
+      });
+    })
+  );
+
+  // 为管理员用户分配管理员角色
+  await db.userRole.create({
+    data: {
+      userId: adminUser.id,
+      roleId: createdRoles[0].id,
+    },
+  });
+
+  // 创建其他用户并分配角色
+  await Promise.all(
+    users.map(async (user) => {
+      const { password, role, ...rest } = user;
+      const newUser = await db.user.create({
+        data: {
+          ...rest,
+          password: {
+            create: {
+              hash: await bcrypt.hash(password, 10),
+            },
+          },
+        },
+      });
+
+      await db.userRole.create({
+        data: {
+          userId: newUser.id,
+          roleId: role.id,
+        },
+      });
+
+      return newUser;
+    })
+  );
+
+  // 创建 categories
   await Promise.all(
     categories.map((category) => {
-      const data = { ...category, userId: newUser.id };
+      const data = { ...category, userId: adminUser.id };
       return db.category.create({ data });
     })
   );
 
-  // 然后创建 posts
+  // 创建 posts
   await Promise.all(
     posts.map((post) => {
       const { category, ...rest } = post;
-      const data = { ...rest, userId: newUser.id, categoryId: category.id };
+      const data = { ...rest, userId: adminUser.id, categoryId: category.id };
       return db.post.create({ data });
     })
   );

@@ -5,8 +5,6 @@ CREATE TABLE "User" (
     "updatedAt" DATETIME NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
-    "username" TEXT,
-    "emailVerified" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "avatar" TEXT,
     "provider" TEXT
 );
@@ -21,10 +19,21 @@ CREATE TABLE "Password" (
 -- CreateTable
 CREATE TABLE "Role" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "label" TEXT NOT NULL,
-    "value" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "creatorId" TEXT NOT NULL,
+    CONSTRAINT "Role_creatorId_fkey" FOREIGN KEY ("creatorId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "UserRole" (
+    "id" TEXT NOT NULL PRIMARY KEY,
     "userId" TEXT NOT NULL,
-    CONSTRAINT "Role_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "roleId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "UserRole_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "UserRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -56,7 +65,10 @@ CREATE TABLE "Category" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+CREATE UNIQUE INDEX "Password_userId_key" ON "Password"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Password_userId_key" ON "Password"("userId");
+CREATE UNIQUE INDEX "Role_title_key" ON "Role"("title");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserRole_userId_roleId_key" ON "UserRole"("userId", "roleId");

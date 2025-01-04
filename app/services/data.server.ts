@@ -205,6 +205,10 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
+    if (!data) {
+      throw new Error(`${resource} 中没有找到 id 为 ${id} 的数据`);
+    }
+
     return { data };
   },
 

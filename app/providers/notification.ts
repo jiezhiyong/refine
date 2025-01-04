@@ -5,17 +5,17 @@ export const notificationProvider: NotificationProvider = {
   open: ({ key, message, description, type }) => {
     // 成功通知
     if (type === 'success') {
-      toast.success(message, { description });
+      toast.success(message, { description, id: key });
     }
 
     // 失败通知
     else if (type === 'error') {
-      toast.error(message, { description });
+      toast.error(message, { description, id: key });
     }
 
     // 处理中通知
     else if (type === 'progress') {
-      toast.loading(message, { description });
+      toast.loading(message, { description, id: key });
     }
   },
   close: (key) => toast.dismiss(key),

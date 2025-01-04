@@ -26,6 +26,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     }),
   ]);
 
+  console.log('postRes', postRes);
   return { postRes };
 }
 
@@ -46,7 +47,17 @@ export default function PostShow() {
       </select>
 
       <div className="flex gap-2">
-        <Button variant={'destructive'} onClick={() => deletePost({ resource: 'post', id: post.id })}>
+        <Button
+          type="button"
+          variant={'destructive'}
+          onClick={() =>
+            deletePost({
+              resource: 'post',
+              id: post.id,
+              mutationMode: 'undoable',
+            })
+          }
+        >
           Delete
         </Button>
       </div>
