@@ -14,4 +14,5 @@ export const dataResources: ResourceProps[] = resources.map((name) => ({
 }));
 
 // 使用 @refinedev/simple-rest, 并配置正确的基础 URL
-export const dataProvider: DataProvider = dataProviderSimpleRest(`${getBaseUrl()}/api`);
+export const apiBase = getBaseUrl() + '/api';
+export const dataProvider: DataProvider = dataProviderSimpleRest(apiBase);

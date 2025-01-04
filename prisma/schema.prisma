@@ -18,11 +18,12 @@ model User {
   name         String?
   avatar       String?
   provider     String?
-  roles        UserRole[] // 用户拥有的角色
+  roles        UserRole[]
   password     Password?
   Post         Post[]
   Category     Category[]
-  createdRoles Role[]     @relation("RoleCreator") // 用户创建的角色
+  createdRoles Role[]     @relation("RoleCreator")
+  Log          Log[]
 }
 
 model Password {
@@ -36,7 +37,7 @@ model Role {
   title     String     @unique
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  users     UserRole[] // 拥有此角色的用户
+  users     UserRole[]
   creator   User       @relation("RoleCreator", fields: [creatorId], references: [id]) // 角色创建者
   creatorId String
 }
@@ -81,4 +82,20 @@ model Category {
   Post      Post[]
   user      User      @relation(references: [id], fields: [userId])
   userId    String
+}
+
+// ========================
+// Log 相关模型
+// ========================
+model Log {
+  id           String   @id @default(uuid())
+  resource     String
+  action       String
+  user         User     @relation(references: [id], fields: [userId])
+  userId       String
+  data         String?
+  previousData String?
+  meta         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

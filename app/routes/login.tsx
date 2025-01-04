@@ -37,7 +37,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const { email, password, redirectTo } = loginSchema.parse(formData);
     const { error, success, user } = await authProvider.login({
-      request,
       providerName: 'user-pass',
       email,
       password,

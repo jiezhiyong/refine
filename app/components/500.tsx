@@ -25,7 +25,8 @@ export default function PageError({ error }: { error?: Error | ErrorResponse | {
             {isRouteErrorResponse(error) ? `${error.status} ${error.statusText}` : 'Something went wrong'}
           </h2>
         </div>
-        <p className="mb-8 capitalize text-red-500">{(error as Error).message || 'unknown error'}</p>
+        <p className="mb-8 text-red-500">{(error as Error).message || 'unknown error'}</p>
+        <pre className="mb-8 rounded-lg border p-6 text-left">{(error as Error).message || 'unknown error'}</pre>
         <Button size="lg" onClick={() => location.reload()}>
           Try Again
         </Button>

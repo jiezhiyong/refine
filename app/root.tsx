@@ -125,11 +125,11 @@ function Document({
             routerProvider={routerProvider}
             dataProvider={dataProvider}
             authProvider={authProvider}
-            accessControlProvider={accessControlProvider}
+            // accessControlProvider={accessControlProvider}
             // liveProvider={liveProvider}
             notificationProvider={notificationProvider}
             // i18nProvider={i18nProvider}
-            // auditLogProvider={auditLogProvider}
+            auditLogProvider={auditLogProvider}
             options={{
               title: {
                 icon: undefined,

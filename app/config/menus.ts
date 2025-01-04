@@ -21,9 +21,12 @@ const menusPlayground: menuGroupItem = {
   items: [
     {
       id: 'routes/dashboard',
-      title: 'Post',
+      title: 'Dashboard',
       icon: PieChart,
-      children: [{ id: 'routes/post._index', title: 'index' }],
+      children: [
+        { id: 'routes/post._index', title: 'Post' },
+        { id: 'routes/log._index', title: 'Audit Log' },
+      ],
     },
     {
       id: 'routes/techstack',

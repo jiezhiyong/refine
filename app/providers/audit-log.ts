@@ -1,60 +1,99 @@
 import { AuditLogProvider, BaseKey, MetaQuery } from '@refinedev/core';
 import { dataProvider } from './data';
 import { TAny } from '~/types/any';
+import { EnumResource } from '~/config/data-resources';
 
 export const auditLogProvider: AuditLogProvider = {
   get: async (params: {
     resource: string;
     action?: string;
-    meta?: Record<string, TAny>;
-    author?: Record<string, TAny>;
+    meta?: Record<number | string, any>;
+    author?: Record<number | string, any>;
     metaData?: MetaQuery;
   }) => {
     const { resource, action, meta, author, metaData } = params;
 
+    const filters = [
+      {
+        field: 'resource',
+        operator: 'eq' as const,
+        value: resource,
+      },
+    ];
+
+    if (action) {
+      filters.push({
+        field: 'action',
+        operator: 'eq' as const,
+        value: action,
+      });
+    }
+
+    if (meta?.id) {
+      filters.push({
+        field: 'meta.id',
+        operator: 'eq' as const,
+        value: meta.id,
+      });
+    }
+
+    if (author?.id) {
+      filters.push({
+        field: 'userId',
+        operator: 'eq' as const,
+        value: author.id,
+      });
+    }
+
     const { data } = await dataProvider.getList({
-      resource: 'logs',
-      filters: [
-        {
-          field: 'resource',
-          operator: 'eq',
-          value: resource,
-        },
-        {
-          field: 'meta.id',
-          operator: 'eq',
-          value: meta?.id,
-        },
-      ],
+      resource: EnumResource.Log,
+      filters,
+      pagination: metaData?.pagination,
+      sort: metaData?.sort,
     });
 
     return data;
   },
 
-  create: (params: {
+  create: async (params: {
     resource: string;
     action: string;
     data?: TAny;
-    author?: {
-      name?: string;
-      [key: string]: TAny;
-    };
+    author?: Record<number | string, any>;
     previousData?: TAny;
-    meta?: Record<string, TAny>;
+    meta?: Record<number | string, any>;
   }) => {
-    return dataProvider.create({
-      resource: 'logs',
-      variables: params,
+    const { resource, action, data, previousData, meta } = params;
+
+    const logEntry = {
+      resource,
+      action,
+      data: JSON.stringify(data),
+      previousData: JSON.stringify(previousData),
+      meta: JSON.stringify(meta),
+      createdAt: new Date().toISOString(),
+    };
+
+    const response = await dataProvider.create({
+      resource: EnumResource.Log,
+      variables: logEntry,
     });
+
+    return response.data;
   },
 
   update: async (params: { id: BaseKey; name: string }) => {
     const { id, name } = params;
-    const { data } = await dataProvider.update({
-      resource: 'logs',
+
+    const response = await dataProvider.update({
+      resource: EnumResource.Log,
       id,
-      variables: { name },
+      variables: {
+        name,
+        updatedAt: new Date().toISOString(),
+      },
     });
-    return data;
+
+    return response.data;
   },
 };

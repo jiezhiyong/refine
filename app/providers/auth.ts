@@ -1,10 +1,9 @@
 import * as Sentry from '@sentry/remix';
 import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import { User } from '@prisma/client';
-import { SessionStorage, SessionData } from '@remix-run/node';
+import { apiBase } from './data';
 
 type AuthProviderLoginParams = {
-  request: Request;
   providerName: 'user-pass' | 'github';
   email: string;
   password: string;
@@ -14,25 +13,18 @@ type AuthProviderLoginParams = {
 export const authProvider: {
   login: (params: AuthProviderLoginParams) => Promise<AuthActionResponse & { user?: User }>;
   logout: () => Promise<AuthActionResponse>;
-  check: (params: {
-    request: Request;
-    sessionStorage: SessionStorage<SessionData, SessionData>;
-  }) => Promise<CheckResponse>;
-  getIdentity: (params: {
-    request: Request;
-    sessionStorage: SessionStorage<SessionData, SessionData>;
-  }) => Promise<User | null>;
+  check: () => Promise<CheckResponse>;
+  getIdentity: () => Promise<User | null>;
   onError: Required<Pick<AuthProvider, 'onError'>>['onError'];
 } = {
-  login: async ({ request, providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
+  login: async ({ providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
     try {
       const formData = new FormData();
 
       formData.append('email', email);
       formData.append('password', password);
 
-      const origin = request.headers.get('origin');
-      const response = await fetch(`${origin}/api/auth/${providerName}`, {
+      const response = await fetch(`${apiBase}/auth/${providerName}`, {
         method: 'POST',
         body: formData,
       });
@@ -79,14 +71,13 @@ export const authProvider: {
     };
   },
 
-  check: async ({ request, sessionStorage }) => {
-    const redirectTo = `/login?redirectTo=${request.url}`;
+  check: async () => {
+    const redirectTo = `/login?redirectTo=${window.location.href}`;
 
     try {
-      const session = await sessionStorage.getSession(request.headers.get('Cookie'));
-      const user = session.get('user');
-
-      if (user.id) {
+      const response = await fetch(`${apiBase}/auth/me`);
+      const { data } = await response.json();
+      if (data && data.id) {
         return {
           authenticated: true,
         };
@@ -114,17 +105,17 @@ export const authProvider: {
     }
   },
 
-  getIdentity: async ({ request, sessionStorage }) => {
+  getIdentity: async () => {
     try {
-      const session = await sessionStorage.getSession(request.headers.get('Cookie'));
-      const user = session.get('user') as User;
-
-      if (user.id) {
-        return user;
+      const response = await fetch(`${apiBase}/auth/me`);
+      const { data } = await response.json();
+      if (data && data.id) {
+        return data;
       }
 
       return null;
     } catch (error) {
+      console.error('@authProvider.getIdentity', error);
       return null;
     }
   },
