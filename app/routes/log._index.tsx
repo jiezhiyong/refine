@@ -10,6 +10,7 @@ import { dataService } from '~/services/data.server';
 import PageError from '~/components/500';
 import { getSearchParams } from '~/utils/search-params';
 import { parseTableParams } from '~/utils/table';
+import { Log } from '@prisma/client';
 
 // 处理 GET 请求
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -26,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  const logs = await dataService.getList<any>({
+  const logs = await dataService.getList<Log & { user: { name: string; email: string } }>({
     resource: 'log',
     filters,
     pagination,
@@ -42,8 +43,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
     },
   });
-
-  console.log('logs', logs);
 
   return {
     logs: logs.data,
@@ -82,7 +81,7 @@ export default function LogIndex() {
               <TableRow key={log.id}>
                 <TableCell>{log.resource}</TableCell>
                 <TableCell>{log.action}</TableCell>
-                <TableCell>{log.author.name || log.author.email}</TableCell>
+                <TableCell>{log.user.name || log.user.email}</TableCell>
                 <TableCell>{format(new Date(log.createdAt), 'yyyy-MM-dd HH:mm:ss')}</TableCell>
                 <TableCell>
                   <Button variant="ghost" size="icon" asChild>

@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, json } from '@remix-run/node';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components-shadcn/card';
@@ -8,16 +8,17 @@ import { ArrowLeft } from 'lucide-react';
 import { Link } from '@remix-run/react';
 import { dataService } from '~/services/data.server';
 import PageError from '~/components/500';
+import { Log } from '@prisma/client';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
 
-  const { data: log } = await dataService.getOne<any>({
+  const { data: log } = await dataService.getOne<Log & { user: { name: string; email: string } }>({
     resource: 'log',
     id: id as string,
     meta: {
       include: {
-        author: {
+        user: {
           select: {
             name: true,
             email: true,
@@ -31,14 +32,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response('未找到日志记录', { status: 404 });
   }
 
-  return json({ log });
+  return { log };
 }
 
 export default function LogShow() {
   const { log } = useLoaderData<typeof loader>();
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="">
       <div className="mb-6">
         <Button variant="ghost" asChild>
           <Link to="/log">
@@ -64,7 +65,7 @@ export default function LogShow() {
             </div>
             <div>
               <Label>操作人</Label>
-              <div className="mt-1">{log.author.name || log.author.email}</div>
+              <div className="mt-1">{log.user.name || log.user.email}</div>
             </div>
             <div>
               <Label>操作时间</Label>
@@ -75,17 +76,17 @@ export default function LogShow() {
           {log.data && (
             <div>
               <Label>数据</Label>
-              <pre className="mt-1 whitespace-pre-wrap rounded-lg bg-muted p-4">
+              <pre className="mt-1 whitespace-pre rounded-lg bg-muted p-4">
                 {JSON.stringify(JSON.parse(log.data), null, 2)}
               </pre>
             </div>
           )}
 
-          {log.oldData && (
+          {log.previousData && (
             <div>
               <Label>旧数据</Label>
-              <pre className="mt-1 whitespace-pre-wrap rounded-lg bg-muted p-4">
-                {JSON.stringify(JSON.parse(log.oldData), null, 2)}
+              <pre className="mt-1 whitespace-pre rounded-lg bg-muted p-4">
+                {JSON.stringify(JSON.parse(log.previousData), null, 2)}
               </pre>
             </div>
           )}
@@ -93,7 +94,7 @@ export default function LogShow() {
           {log.meta && (
             <div>
               <Label>元数据</Label>
-              <pre className="mt-1 whitespace-pre-wrap rounded-lg bg-muted p-4">
+              <pre className="mt-1 whitespace-pre rounded-lg bg-muted p-4">
                 {JSON.stringify(JSON.parse(log.meta), null, 2)}
               </pre>
             </div>
