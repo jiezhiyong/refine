@@ -28,7 +28,7 @@ import { Loader } from 'lucide-react';
 import { User } from '@prisma/client';
 import { getCookie } from '~/services/cookie.server';
 import { themeSessionResolver } from '~/services/theme.server';
-import { getSession, getUser } from '~/services/session.server';
+import { getUser } from '~/services/session.server';
 import { fallbackLanguage, LocaleLanguage } from './config/i18n';
 import { dataResources, dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
@@ -74,20 +74,19 @@ export type RootLoaderData = {
 
 /** 加载器 */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [session, cookie, user, themeResolver] = await Promise.all([
-    getSession(request.headers.get('Cookie')),
+  const [cookie, user, themeResolver] = await Promise.all([
     getCookie(request),
     getUser(request),
     themeSessionResolver(request),
   ]);
 
-  const locale: LocaleLanguage = session.get('locale') || fallbackLanguage;
+  const locale = cookie.locale || fallbackLanguage;
   await syncServiceLocaleToClient(locale);
 
   return data({
     user,
-    locale,
     theme: themeResolver.getTheme(),
+    locale,
     sidebarIsClose: cookie?.sidebarIsClose,
   });
 }

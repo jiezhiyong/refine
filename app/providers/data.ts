@@ -24,104 +24,95 @@ export const dataProvider: DataProvider = dataProviderSimpleRest(apiBase);
 // 定义的数据资源、菜单项
 // icons - https://lucide.dev/icons/
 export const dataResources: ResourceProps[] = [
-  // 一级菜单 Playground
+  // 一级菜单 playground
   {
-    name: 'Playground',
+    name: 'playground',
   },
 
-  // 二级菜单 Playground/Dashboard
+  // 二级菜单 playground/dashboard
   {
-    name: 'Dashboard',
-    meta: { parent: 'Playground', label: 'Dashboard', icon: PieChart as TAny },
+    name: 'dashboard',
+    meta: { parent: 'playground', label: 'dashboard', icon: PieChart as TAny },
   },
 
-  // 三级菜单 Playground/Dashboard/About、Techstack
+  // 三级菜单 playground/dashboard/About、Techstack
   {
     name: 'about',
     list: '/dashboard/about',
-    create: '/dashboard/about/create',
-    edit: '/dashboard/about/edit/:id',
-    show: '/dashboard/about/show/:id',
-    meta: { parent: 'Dashboard', label: 'About' },
+    meta: { parent: 'dashboard', label: 'About' },
   },
   {
     name: 'techstack',
     list: '/dashboard/techstack',
-    create: '/dashboard/techstack/create',
-    edit: '/dashboard/techstack/edit/:id',
-    show: '/dashboard/techstack/show/:id',
-    meta: { parent: 'Dashboard', label: 'Techstack' },
+    meta: { parent: 'dashboard', label: 'Techstack' },
   },
 
-  // 二级菜单 Playground/Document
+  // 二级菜单 playground/document
   {
-    name: 'Document',
-    meta: { parent: 'Playground', label: 'Document', icon: Brain },
+    name: 'document',
+    meta: { parent: 'playground', label: 'document', icon: Brain },
   },
 
-  // 三级菜单 Playground/Dashboard/Post、Category
+  // 三级菜单 playground/dashboard/Post、Category
   {
     name: 'post',
-    list: '/document/post',
-    create: '/document/post/create',
-    edit: '/document/post/edit/:id',
-    show: '/document/post/show/:id',
-    meta: { parent: 'Document', label: 'Post' },
+    list: '/post',
+    create: '/post/create',
+    edit: '/post/edit/:id',
+    show: '/post/show/:id',
+    meta: { parent: 'document', label: 'Post' },
   },
   {
     name: 'category',
-    list: '/document/category',
-    create: '/document/category/create',
-    edit: '/document/category/edit/:id',
-    show: '/document/category/show/:id',
-    meta: { parent: 'Document', label: 'Category' },
+    list: '/category',
+    meta: { parent: 'document', label: 'Category' },
   },
 
-  // 一级菜单 System
+  // 一级菜单 system
   {
-    name: 'System',
+    name: 'system',
   },
 
-  // 二级菜单 System/Account
+  // 二级菜单 system/account
   {
-    name: 'Account',
-    meta: { parent: 'System', label: 'Account', icon: UsersRound },
+    name: 'account',
+    meta: { parent: 'system', label: 'account', icon: UsersRound },
   },
 
-  // 三级菜单 System/Account/Role、User
+  // 三级菜单 system/account/Role、User
   {
     name: 'user',
-    list: '/account/user',
-    create: '/account/user/create',
-    edit: '/account/user/edit/:id',
-    show: '/account/user/show/:id',
-    meta: { parent: 'Account', label: 'User' },
+    list: '/user',
+    create: '/user/create',
+    edit: '/user/edit/:id',
+    show: '/user/show/:id',
+    meta: { parent: 'account', label: 'User' },
   },
   {
     name: 'role',
-    list: '/account/role',
-    create: '/account/role/create',
-    edit: '/account/role/edit/:id',
-    show: '/account/role/show/:id',
-    meta: { parent: 'Account', label: 'Role' },
+    list: '/role',
+    create: '/role/create',
+    edit: '/role/edit/:id',
+    show: '/role/show/:id',
+    meta: { parent: 'account', label: 'Role' },
   },
 
-  // 二级菜单 System/Other
+  // 二级菜单 system/other
   {
-    name: 'Other',
-    meta: { parent: 'System', label: 'Other', icon: Bot },
+    name: 'other',
+    meta: { parent: 'system', label: 'other', icon: Bot },
   },
 
-  // 三级菜单 System/Other/Log、Demo
+  // 三级菜单 system/other/Log、Demo
   {
     name: 'log',
-    list: '/other/log',
-    show: '/other/log/show/:id',
-    meta: { parent: 'Other', label: 'AuditLog' },
+    list: '/log',
+    show: '/log/show/:id',
+    meta: { parent: 'other', label: 'AuditLog' },
   },
   {
     name: 'demo',
-    list: '/other/demo',
-    meta: { parent: 'Other', label: 'Demo' },
+    list: '/demo',
+    meta: { parent: 'other', label: 'Demo' },
   },
 ];

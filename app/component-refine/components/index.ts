@@ -6,4 +6,3 @@ export * from './form';
 export * from './link';
 export * from './page-header';
 export * from './select';
-export * from './sidebar';

@@ -1,14 +1,17 @@
 import { useTranslation } from '@refinedev/core';
-import { useNavigate } from '@remix-run/react';
+import { useNavigate, useRouteLoaderData } from '@remix-run/react';
 import { Languages } from 'lucide-react';
 import { Button } from '~/components-shadcn/button';
+import { RootLoaderData } from '~/root';
+import { canUseDOM } from '~/utils/can-use-dom';
 import { cn } from '~/utils/cn';
 
 export function LanguageSwitcher() {
-  const { getLocale, changeLocale } = useTranslation();
-  const currentLocale = getLocale();
+  const { locale } = useRouteLoaderData('root') as RootLoaderData;
+  const { changeLocale, getLocale } = useTranslation();
   const navigate = useNavigate();
 
+  const currentLocale = canUseDOM() ? getLocale() : locale;
   return (
     <Button
       variant="ghost"
@@ -16,15 +19,16 @@ export function LanguageSwitcher() {
       className="h-7 w-7"
       type="submit"
       onClick={async () => {
-        const newLocale = currentLocale === 'zh' ? 'en' : 'zh';
-        const { locale } = await changeLocale(newLocale);
+        const nextLocale = currentLocale === 'zh' ? 'en' : 'zh';
+        await changeLocale(nextLocale);
 
         const searchParams = new URLSearchParams(location.search);
-        searchParams.set('locale', locale);
+        searchParams.set('locale', nextLocale);
+
         navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
       }}
     >
-      <Languages className={cn('transition-all', currentLocale === 'zh' && 'scale-x-[-1]')} />
+      <Languages className={cn('transition-all', currentLocale === 'en' && 'scale-x-[-1]')} />
     </Button>
   );
 }
