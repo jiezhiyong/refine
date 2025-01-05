@@ -34,7 +34,7 @@ import { dataResources, dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
 import { accessControlProvider } from '~/providers/access-control';
 // import { liveProvider } from '~/providers/live';
-import { i18nProvider } from '~/providers/i18n';
+import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
 import { auditLogProvider } from '~/providers/audit-log';
 import { notificationProvider } from '~/providers/notification';
 
@@ -42,7 +42,6 @@ import { notificationProvider } from '~/providers/notification';
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
-import i18next from 'i18next';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -82,11 +81,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     themeSessionResolver(request),
   ]);
 
-  const locale = session.get('locale') || fallbackLanguage;
-  console.log('server vs client', locale, i18next.language);
-  if (i18next.language !== locale) {
-    await i18next.changeLanguage(locale);
-  }
+  const locale: LocaleLanguage = session.get('locale') || fallbackLanguage;
+  await syncServiceLocaleToClient(locale);
 
   return data({
     user,
@@ -111,7 +107,7 @@ function Document({
   specifiedTheme,
   script = true,
   locale,
-}: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale?: string }>) {
+}: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale: LocaleLanguage }>) {
   return (
     <html lang={locale} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
       <head>
@@ -172,8 +168,6 @@ function DocumentWithThemeProviders({
   script = true,
 }: PropsWithChildren<{ title?: string; script?: boolean }>) {
   const { theme, locale } = useLoaderData<typeof loader>() || {};
-
-  console.log('locale', locale);
 
   return (
     <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">

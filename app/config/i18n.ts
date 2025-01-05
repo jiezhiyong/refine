@@ -2,7 +2,7 @@ import enTranslation from '~/locales/en';
 import zhTranslation from '~/locales/zh';
 
 // This is the list of languages your application supports, the last one is your fallback language
-export const supportedLanguages = ['zh', 'en'];
+export const supportedLanguages = ['en', 'zh'];
 
 // This is the language you want to use in case the user language is not in the supportedLanguages
 export const fallbackLanguage = 'en';
@@ -15,4 +15,4 @@ export const resourcesLanguages = {
   zh: { [defaultNS]: zhTranslation },
 };
 
-export type LocaleLanguage = 'zh' | 'en';
+export type LocaleLanguage = 'en' | 'zh';

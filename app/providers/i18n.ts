@@ -1,19 +1,31 @@
 import { type I18nProvider } from '@refinedev/core';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { resourcesLanguages, supportedLanguages, fallbackLanguage, defaultNS } from '~/config/i18n';
+import { resourcesLanguages, supportedLanguages, defaultNS, fallbackLanguage, LocaleLanguage } from '~/config/i18n';
 
-const searchParams = new URLSearchParams(location.search);
-const locale = searchParams.get('locale') || fallbackLanguage;
-console.log('locale 111', locale);
+// 客户端初始化
+if (typeof window !== 'undefined') {
+  const initialLocale = document.documentElement.lang as LocaleLanguage;
 
-i18next.use(initReactI18next).init({
-  resources: resourcesLanguages,
-  supportedLngs: supportedLanguages,
-  fallbackLng: fallbackLanguage,
-  ns: [defaultNS],
-  react: { useSuspense: false },
-});
+  if (!i18next.isInitialized) {
+    i18next.use(initReactI18next).init({
+      resources: resourcesLanguages,
+      supportedLngs: supportedLanguages,
+      lng: initialLocale || fallbackLanguage,
+      ns: [defaultNS],
+      react: { useSuspense: false },
+    });
+  } else if (i18next.language !== initialLocale) {
+    i18next.changeLanguage(initialLocale);
+  }
+}
+
+// 同步服务端和客户端的语言设置
+export async function syncServiceLocaleToClient(locale?: LocaleLanguage) {
+  if (locale !== i18next.language) {
+    return i18next.changeLanguage(locale);
+  }
+}
 
 export const i18nProvider: I18nProvider = {
   translate: (key: string, defaultMessage?: string) => {
@@ -32,7 +44,6 @@ export const i18nProvider: I18nProvider = {
   },
 
   getLocale: () => {
-    console.log('client', i18next.language);
     return i18next.language;
   },
 };

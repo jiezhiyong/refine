@@ -1,28 +1,30 @@
 import { useTranslation } from '@refinedev/core';
-import { type MetaFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
+import i18next from 'i18next';
 import PageError from '~/components/500';
-import { i18nProvider } from '~/providers/i18n';
+import { syncServiceLocaleToClient } from '~/providers/i18n';
+import { getSessionLocale } from '~/services/session.server';
 
 // 元数据
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
 
-export async function loader() {
-  const t = i18nProvider.translate;
-  return { title: t('title'), description: t('description') };
+// 加载器
+// 注意：如果需要切换语言时动态更新 meta，需要手动同步服务端与客户端的 locale
+export async function loader({ request }: LoaderFunctionArgs) {
+  await syncServiceLocaleToClient(await getSessionLocale(request));
+  return { title: i18next.t('title'), description: i18next.t('description') };
 }
 
 // UI
 export default function TechstackI18n() {
   const { translate: t } = useTranslation();
-  const { description } = useLoaderData<typeof loader>();
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
       <h1 className="text-6xl text-[#3defe9]">{t('title')}</h1>
-      <p className="my-10 text-3xl text-[#fecc1b]">{description}</p>
+      <p className="my-10 text-3xl text-[#fecc1b]">{t('description')}</p>
     </div>
   );
 }
