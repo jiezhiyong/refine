@@ -1,5 +1,5 @@
-import { DataProvider, ResourceProps } from '@refinedev/core';
-import { Resources, resources } from '~/config/data-resources';
+import { DataProvider } from '@refinedev/core';
+import { dataResources, Resources } from '~/providers';
 import { db } from '~/services/db.server';
 import { TAny } from '~/types/any';
 
@@ -8,7 +8,7 @@ export type FilterOperator = 'eq' | 'contains' | 'gt' | 'lt' | 'gte' | 'lte' | '
 
 // 类型守卫函数
 function isPrismaModel(resource: string): resource is Resources {
-  return resources.includes(resource as Resources);
+  return dataResources.some((r) => r.name === resource);
 }
 
 // 定义过滤器类型
@@ -84,16 +84,6 @@ function parseRefineFilters(filters: Filter[]): Filter[] {
     return filter;
   });
 }
-
-// 根据定义的数据资源，生成数据资源配置
-export const dataResources: ResourceProps[] = resources.map((name) => ({
-  name,
-  list: `/${name}`,
-  create: `/${name}/create`,
-  edit: `/${name}/edit/:id`,
-  show: `/${name}/show/:id`,
-  meta: { label: name, icon: '', canDelete: true },
-}));
 
 // 数据提供者
 export const dataService: DataProvider = {

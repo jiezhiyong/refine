@@ -1,7 +1,6 @@
 import { AuditLogProvider, BaseKey, MetaQuery } from '@refinedev/core';
-import { dataProvider } from './data';
+import { dataProvider, EnumResource } from './data';
 import { TAny } from '~/types/any';
-import { EnumResource } from '~/config/data-resources';
 
 export const auditLogProvider: AuditLogProvider = {
   get: async (params: {
@@ -46,7 +45,7 @@ export const auditLogProvider: AuditLogProvider = {
     }
 
     const { data } = await dataProvider.getList({
-      resource: EnumResource.Log,
+      resource: EnumResource.log,
       filters,
       pagination: metaData?.pagination,
       sort: metaData?.sort,
@@ -75,7 +74,7 @@ export const auditLogProvider: AuditLogProvider = {
     };
 
     const response = await dataProvider.create({
-      resource: EnumResource.Log,
+      resource: EnumResource.log,
       variables: logEntry,
     });
 
@@ -86,7 +85,7 @@ export const auditLogProvider: AuditLogProvider = {
     const { id, name } = params;
 
     const response = await dataProvider.update({
-      resource: EnumResource.Log,
+      resource: EnumResource.log,
       id,
       variables: {
         name,

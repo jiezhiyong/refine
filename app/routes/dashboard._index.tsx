@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 // UI
-export default function TechstackI18n() {
+export default function DashboardIndex() {
   const { translate: t } = useTranslation();
 
   return (
