@@ -19,23 +19,22 @@ const getCookieLocale = () => {
 };
 
 // 客户端初始化
-if (canUseDOM()) {
-  const initialLocale = getCookieLocale() || fallbackLanguage;
-  if (!i18next.isInitialized) {
-    i18next.use(initReactI18next).init({
-      resources: resourcesLanguages,
-      supportedLngs: supportedLanguages,
-      lng: initialLocale,
-      ns: [defaultNS],
-      react: { useSuspense: false },
-    });
-  } else if (i18next.language !== initialLocale) {
-    i18next.changeLanguage(initialLocale);
-  }
+const initialLocale = canUseDOM() ? getCookieLocale() || fallbackLanguage : fallbackLanguage;
+if (!i18next.isInitialized) {
+  i18next.use(initReactI18next).init({
+    resources: resourcesLanguages,
+    supportedLngs: supportedLanguages,
+    lng: initialLocale,
+    ns: [defaultNS],
+    react: { useSuspense: false },
+  });
+} else if (i18next.language !== initialLocale) {
+  i18next.changeLanguage(initialLocale);
 }
 
 // 同步服务端和客户端的语言设置
 export async function syncServiceLocaleToClient(locale?: LocaleLanguage) {
+  console.log('i18next.isInitialized', i18next.isInitialized);
   if (locale !== i18next?.language) {
     try {
       await i18next.changeLanguage(locale);
