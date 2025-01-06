@@ -57,12 +57,13 @@ export async function verifyLogin(email: User['email'], password: Password['hash
     return null;
   }
 
-  // 提取角色标题
+  // 提取角色
   const roles = userWithPasswordAndRoles.roles.map((userRole) => userRole.role.title);
   const userWithRoles = {
     ...userWithPasswordAndRoles,
-    password: null,
+    password: '******',
     roles,
+    role: roles[0],
   };
 
   return userWithRoles;

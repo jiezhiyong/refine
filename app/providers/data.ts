@@ -1,7 +1,7 @@
 import { Bot, Brain, UsersRound } from 'lucide-react';
 import { DataProvider, ResourceProps } from '@refinedev/core';
 import dataProviderSimpleRest from '@refinedev/simple-rest';
-import { getBaseUrl } from '~/config/base-url';
+import { apiBase } from '~/config/base-url';
 import { PieChart } from 'lucide-react';
 import { TAny } from '~/types/any';
 
@@ -18,7 +18,6 @@ export const EnumResource = {
 export type Resources = (typeof EnumResource)[keyof typeof EnumResource];
 
 // 使用 @refinedev/simple-rest, 并配置正确的基础 URL
-export const apiBase = getBaseUrl() + '/api';
 export const dataProvider: DataProvider = dataProviderSimpleRest(apiBase);
 
 // 定义的数据资源、菜单项

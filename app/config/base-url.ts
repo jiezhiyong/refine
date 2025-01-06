@@ -7,3 +7,5 @@ export const getBaseUrl = () => {
   }
   return window.location.origin;
 };
+
+export const apiBase = getBaseUrl() + '/api';

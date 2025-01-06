@@ -1,5 +1,5 @@
 import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
-import { CanAccess, Refine } from '@refinedev/core';
+import { Refine } from '@refinedev/core';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
@@ -33,7 +33,7 @@ import { fallbackLanguage, LocaleLanguage } from './config/i18n';
 import { dataResources, dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
 import { accessControlProvider } from '~/providers/access-control';
-import { liveProvider } from '~/providers/live';
+// import { liveProvider } from '~/providers/live';
 import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
 import { auditLogProvider } from '~/providers/audit-log';
 import { notificationProvider } from '~/providers/notification';
@@ -124,7 +124,7 @@ function Document({
             routerProvider={routerProvider}
             dataProvider={dataProvider}
             authProvider={authProvider}
-            // accessControlProvider={accessControlProvider}
+            accessControlProvider={accessControlProvider}
             // liveProvider={liveProvider}
             notificationProvider={notificationProvider}
             i18nProvider={i18nProvider}
@@ -191,9 +191,7 @@ function App() {
 
   return (
     <DocumentWithThemeProviders>
-      <CanAccess>
-        <Outlet />
-      </CanAccess>
+      <Outlet />
     </DocumentWithThemeProviders>
   );
 }

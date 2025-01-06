@@ -25,21 +25,16 @@ const redirectToLogin = (request: Request, redirectTo = request.url) => {
   throw redirect(`/login?${searchParams}`);
 };
 
-// 获取 Session 中的 locale
-export async function getSessionLocale(request: Request) {
-  const session = await getSession(request.headers.get('Cookie'));
-  return session.get('locale');
-}
-
 // 获取用户信息
 export async function getUser(request: Request) {
   try {
     let user = null;
     const session = await getSession(request.headers.get('Cookie'));
-    const userFromSession = session.get('user') as User;
+    const userSession = session.get('user') as User & { role: Role; roles: string[] };
+    const { role, roles } = userSession;
 
-    if (userFromSession.id) {
-      user = await getUserById(userFromSession.id);
+    if (userSession.id) {
+      user = await getUserById(userSession.id);
     }
     return user;
   } catch (error) {

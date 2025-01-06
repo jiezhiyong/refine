@@ -1,0 +1,17 @@
+p, administrator, user, (list)|(show)|(create)|(edit)|(delete)
+p, administrator, role, (list)|(show)|(create)|(edit)|(delete)
+p, administrator, post, (list)|(show)|(create)|(edit)|(delete)
+p, administrator, category, (list)|(show)|(create)|(edit)|(delete)
+p, administrator, log, (list)|(show)|(create)|(edit)|(delete)
+
+p, editor, user, (list)|(show)
+p, editor, role, (list)|(show)
+p, editor, post, (list)|(show)|(create)|(edit)|(delete)
+p, editor, category, (list)|(show)|(create)|(edit)|(delete)
+p, editor, log, (list)|(show)
+
+p, guest, user, (list)|(show)
+p, guest, role, (list)|(show)
+p, guest, post, (list)|(show)
+p, guest, category, (list)|(show)
+p, guest, log, (list)|(show)

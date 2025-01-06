@@ -4,6 +4,8 @@ import { PageError } from '~/components/500';
 import Layout from '~/components/layout';
 import { HandleFunction } from '~/types/handle';
 import { requireUserSession } from '~/services/session.server';
+import { CanAccess } from '@refinedev/core';
+import { PermissionDenied } from '~/components/403';
 
 // 创建应用程序约定
 export const handle: HandleFunction = {
@@ -27,7 +29,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // UI
 export default function Post() {
-  return <Layout />;
+  return (
+    <CanAccess fallback={<PermissionDenied />}>
+      <Layout />
+    </CanAccess>
+  );
 }
 
 // 错误边界处理

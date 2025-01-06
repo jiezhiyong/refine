@@ -106,7 +106,7 @@ self.addEventListener('fetch', function (event) {
   if (['image', 'style', 'script'].includes(request.destination)) {
     return;
   }
-  if (/__manifest|sentry|.data/.test(request.url)) {
+  if (/__manifest|sentry|.data|api/.test(request.url)) {
     return;
   }
 

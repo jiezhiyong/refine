@@ -1,5 +1,6 @@
 import { DataProvider } from '@refinedev/core';
-import { dataResources, Resources } from '~/providers';
+import { Resources } from '~/constants/resource';
+import { dataResources } from '~/providers';
 import { db } from '~/services/db.server';
 import { TAny } from '~/types/any';
 

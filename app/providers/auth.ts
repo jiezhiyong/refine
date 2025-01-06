@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/remix';
 import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import { User } from '@prisma/client';
-import { apiBase } from './data';
+import { apiBase } from '~/config/base-url';
 
 type AuthProviderLoginParams = {
   providerName: 'user-pass' | 'github';

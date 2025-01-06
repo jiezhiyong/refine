@@ -24,13 +24,13 @@ async function prepareApp() {
 }
 
 /** 浏览器的入口点 - 初始化客户端库、添加仅限客户端的提供程序等 */
-prepareApp().then(() => {
-  startTransition(() => {
-    hydrateRoot(
-      document,
-      <StrictMode>
-        <RemixBrowser />
-      </StrictMode>
-    );
-  });
+// prepareApp().then(() => {
+startTransition(() => {
+  hydrateRoot(
+    document,
+    <StrictMode>
+      <RemixBrowser />
+    </StrictMode>
+  );
 });
+// });
