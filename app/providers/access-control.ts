@@ -6,12 +6,18 @@ export const accessControlProvider: AccessControlProvider = {
     const reason = 'You are not allowed to perform this action';
 
     try {
+      if (action === 'delete' || action === 'edit' || action === 'show') {
+        resource = `${resource}/${params?.id}`;
+      } else if (action === 'field') {
+        resource = `${resource}/${params?.field}`;
+      }
+
       const response = await fetch(`${apiBase}/permissions/check`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ object: resource ?? '', action }),
+        body: JSON.stringify({ object: resource, action }),
       });
 
       const { permitted } = await response.json();

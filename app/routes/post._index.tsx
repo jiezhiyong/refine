@@ -20,7 +20,7 @@ import {
   Search,
   ChevronRight,
 } from 'lucide-react';
-import { BaseRecord, HttpError, useDelete, useSelect, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, HttpError, useCan, useDelete, useSelect, useUserFriendlyName } from '@refinedev/core';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Form, Link, UIMatch, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import React from 'react';
@@ -99,6 +99,12 @@ export default function PostIndex() {
   const { mutate: deletePost } = useDelete();
   const navigate = useNavigate();
 
+  const { data: canAccessFieldhit } = useCan({
+    resource: 'post',
+    action: 'field',
+    params: { field: 'hit' },
+  });
+
   return (
     <ul className="space-y-2">
       <CreateButton />
@@ -108,6 +114,7 @@ export default function PostIndex() {
           <div className="flex-1">
             <h3>{post.title}</h3>
             <p>{post.content}</p>
+            {canAccessFieldhit?.can && <p>{post.hit}</p>}
           </div>
           <div className="flex gap-2">
             <ShowButton resource="post" recordItemId={post.id} />

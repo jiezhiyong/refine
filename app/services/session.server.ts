@@ -1,8 +1,7 @@
-import { User } from '@prisma/client';
 import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
-import { Role } from '~/constants/roles';
 import { getUserById } from '~/models/user.server';
+import { SessionUser } from '~/types/user';
 
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
 
@@ -26,18 +25,25 @@ const redirectToLogin = (request: Request, redirectTo = request.url) => {
   throw redirect(`/login?${searchParams}`);
 };
 
+// 获取用户 Session
+export async function getUserSession(request: Request) {
+  try {
+    return getSession(request.headers.get('Cookie'));
+  } catch (error) {
+    return null;
+  }
+}
+
 // 获取用户信息
 export async function getUser(request: Request) {
   try {
     let user = null;
-    const session = await getSession(request.headers.get('Cookie'));
-    const userSession = session.get('user') as User & { role: Role; roles: Role[] };
-    const { role, roles } = userSession;
-
-    if (userSession.id) {
-      user = await getUserById(userSession.id);
+    const session = await getUserSession(request);
+    const sessionUser = session?.get('user') as SessionUser;
+    if (sessionUser?.id) {
+      user = await getUserById(sessionUser.id);
     }
-    return { ...user, role, roles };
+    return { ...sessionUser, ...user };
   } catch (error) {
     return null;
   }
@@ -54,5 +60,19 @@ export async function requireUserSession(request: Request, redirectTo: string = 
     return user;
   } catch (error) {
     redirectToLogin(request, redirectTo);
+  }
+}
+
+// 检验用户信息
+export async function requireUser(request: Request) {
+  try {
+    const user = await getUser(request);
+    if (!user?.id) {
+      throw new Error('Unauthorized');
+    }
+
+    return { user, session: await getUserSession(request) };
+  } catch (error) {
+    return Promise.reject(error);
   }
 }

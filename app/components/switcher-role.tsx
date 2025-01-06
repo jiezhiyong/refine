@@ -14,6 +14,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/c
 import { rolesAll } from '~/constants/roles';
 import { useRouteLoaderData } from '@remix-run/react';
 import { RootLoaderData } from '~/root';
+import { apiBase } from '~/config/base-url';
 
 export function RoleSwitcher() {
   const { isMobile } = useSidebar();
@@ -22,7 +23,28 @@ export function RoleSwitcher() {
   const { role, roles = [] } = user || {};
   const userRoles = rolesAll.filter((item) => roles.includes(item.value));
 
-  const [activeRole, setActiveRole] = React.useState(rolesAll.find((item) => item.value === role));
+  const [activeRole, setActiveRole] = React.useState(
+    rolesAll.find((item) => {
+      return item.value === role;
+    })
+  );
+
+  const switchRole = React.useCallback(async (selectedRole: typeof activeRole) => {
+    try {
+      await fetch(`${apiBase}/permissions/switch`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role: selectedRole?.value }),
+      });
+      setActiveRole(selectedRole);
+
+      location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   return (
     <SidebarMenu>
@@ -51,7 +73,7 @@ export function RoleSwitcher() {
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">roles</DropdownMenuLabel>
             {userRoles.map((role, index) => (
-              <DropdownMenuItem key={role.value} onClick={() => setActiveRole(role)} className="gap-2 p-2">
+              <DropdownMenuItem key={role.value} onClick={() => switchRole(role)} className="gap-2 p-2">
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <role.icon className="size-4 shrink-0" />
                 </div>

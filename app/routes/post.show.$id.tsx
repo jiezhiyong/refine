@@ -26,7 +26,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
     }),
   ]);
 
-  console.log('postRes', postRes);
   return { postRes };
 }
 
