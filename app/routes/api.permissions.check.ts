@@ -1,7 +1,6 @@
-import { User } from '@prisma/client';
 import { ActionFunctionArgs } from '@remix-run/node';
 import { checkPermission } from '~/services/casbin-permission.server';
-import { getSession } from '~/services/session.server';
+import { getUser } from '~/services/session.server';
 
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== 'POST') {
@@ -10,8 +9,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const { object, action } = await request.json();
 
-  const session = await getSession(request.headers.get('Cookie'));
-  const user = session.get('user') as User & { role: string };
+  const user = await getUser(request);
   const role = user?.role;
 
   if (!role) {

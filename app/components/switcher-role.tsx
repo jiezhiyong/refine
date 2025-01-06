@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AudioLines, ChevronsUpDown, Baby, GalleryVerticalEnd, Plus, BicepsFlexed } from 'lucide-react';
+import { ChevronsUpDown, GalleryVerticalEnd, Plus } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -11,17 +11,18 @@ import {
   DropdownMenuTrigger,
 } from '~/components-shadcn/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components-shadcn/sidebar';
-
-// TODO: replace with real roles
-const roles = [
-  { icon: BicepsFlexed, role: 'Administrator' },
-  { icon: AudioLines, role: 'Operations User' },
-  { icon: Baby, role: 'Guest' },
-];
+import { rolesAll } from '~/constants/roles';
+import { useRouteLoaderData } from '@remix-run/react';
+import { RootLoaderData } from '~/root';
 
 export function RoleSwitcher() {
   const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = React.useState(roles[0]);
+  const { user } = (useRouteLoaderData('root') || {}) as RootLoaderData;
+
+  const { role, roles = [] } = user || {};
+  const userRoles = rolesAll.filter((item) => roles.includes(item.value));
+
+  const [activeRole, setActiveRole] = React.useState(rolesAll.find((item) => item.value === role));
 
   return (
     <SidebarMenu>
@@ -37,7 +38,7 @@ export function RoleSwitcher() {
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">OSS Inc.</span>
-                <span className="truncate text-xs">{activeTeam.role}</span>
+                <span className="truncate text-xs">{activeRole?.label || 'unknown'}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -49,12 +50,12 @@ export function RoleSwitcher() {
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">roles</DropdownMenuLabel>
-            {roles.map((team, index) => (
-              <DropdownMenuItem key={team.role} onClick={() => setActiveTeam(team)} className="gap-2 p-2">
+            {userRoles.map((role, index) => (
+              <DropdownMenuItem key={role.value} onClick={() => setActiveRole(role)} className="gap-2 p-2">
                 <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <team.icon className="size-4 shrink-0" />
+                  <role.icon className="size-4 shrink-0" />
                 </div>
-                {team.role}
+                {role.label}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}

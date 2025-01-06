@@ -1,6 +1,7 @@
 import { User } from '@prisma/client';
 import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
+import { Role } from '~/constants/roles';
 import { getUserById } from '~/models/user.server';
 
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
@@ -30,13 +31,13 @@ export async function getUser(request: Request) {
   try {
     let user = null;
     const session = await getSession(request.headers.get('Cookie'));
-    const userSession = session.get('user') as User & { role: Role; roles: string[] };
+    const userSession = session.get('user') as User & { role: Role; roles: Role[] };
     const { role, roles } = userSession;
 
     if (userSession.id) {
       user = await getUserById(userSession.id);
     }
-    return user;
+    return { ...user, role, roles };
   } catch (error) {
     return null;
   }

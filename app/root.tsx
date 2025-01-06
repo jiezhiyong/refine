@@ -42,6 +42,7 @@ import { notificationProvider } from '~/providers/notification';
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
+import { Role } from './constants/roles';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -66,7 +67,7 @@ export const handle = { i18n: ['translation'] };
 
 /** 加载器返回数据类型定义 */
 export type RootLoaderData = {
-  user: User | null;
+  user: (User & { role: Role; roles: Role[] }) | null;
   theme: Theme | null;
   sidebarIsClose?: string;
   locale: LocaleLanguage;
