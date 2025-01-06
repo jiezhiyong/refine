@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { requireUserSession } from '~/services/session.server';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import Layout from '~/components/layout';
 
 export async function loader({ request }: LoaderFunctionArgs) {

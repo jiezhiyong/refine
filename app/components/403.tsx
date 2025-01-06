@@ -1,7 +1,7 @@
 import { Link } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
 
-export default function PermissionDenied() {
+export function PermissionDenied() {
   return (
     <div className="relative h-screen font-['sans-serif']">
       <div className="absolute left-1/2 top-1/2 w-full max-w-[520px] -translate-x-1/2 -translate-y-1/2 text-center leading-[1.4]">

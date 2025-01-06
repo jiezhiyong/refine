@@ -7,7 +7,7 @@ import { Eye } from 'lucide-react';
 import { Link } from '@remix-run/react';
 import { format } from 'date-fns';
 import { dataService } from '~/services/data.server';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import { getSearchParams } from '~/utils/search-params';
 import { parseTableParams } from '~/utils/table';
 import { Log } from '@prisma/client';

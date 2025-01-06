@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavMain } from '~/components/nav-main';
+import { Sidebar as RefineSidebar } from '~/component-refine/components/sidebar';
 import { NavUser } from '~/components/nav-user';
 import { RoleSwitcher } from '~/components/switcher-role';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '~/components-shadcn/sidebar';
@@ -13,7 +13,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
         <RoleSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain />
+        <RefineSidebar />
         <NavSecondary />
       </SidebarContent>
       <SidebarFooter>

@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import Layout from '~/components/layout';
 import { requireUserSession } from '~/services/session.server';
 

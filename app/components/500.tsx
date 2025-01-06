@@ -3,7 +3,7 @@ import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
 import { useMountEffect } from '~/hooks/use-mount-effect';
 
-export default function PageError({ error }: { error?: Error | ErrorResponse | { message: string } | unknown }) {
+export function PageError({ error }: { error?: Error | ErrorResponse | { message: string } | unknown }) {
   const routeError = useRouteError();
 
   if (!error) {

@@ -4,8 +4,8 @@ import { SidebarLeft } from '~/components/sidebar-left';
 import { Outlet, useRouteLoaderData } from '@remix-run/react';
 import { NavTools } from './nav-tools';
 import { SidebarRight } from './sidebar-right';
-import { Breadcrumb } from './breadcrumb';
 import { loader, type RootLoaderData } from '~/root';
+import { Breadcrumbs } from '~/component-refine/components';
 
 export default function Layout() {
   const data = useRouteLoaderData<typeof loader>('root') as RootLoaderData;
@@ -18,7 +18,7 @@ export default function Layout() {
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb />
+            <Breadcrumbs />
           </div>
           <div className="ml-auto px-3">
             <NavTools />

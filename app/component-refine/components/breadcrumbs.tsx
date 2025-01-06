@@ -30,7 +30,7 @@ export const Breadcrumbs: FC<BreadcrumbProps> = ({ showHome = true, meta }) => {
     <Fragment key={key}>
       <BreadcrumbItem>
         {href ? (
-          <BreadcrumbLink asChild href={`#x`}>
+          <BreadcrumbLink asChild className="text-link">
             <Link href={href}>{label}</Link>
           </BreadcrumbLink>
         ) : (

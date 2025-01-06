@@ -1,5 +1,5 @@
 import { MetaFunction } from '@remix-run/node';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import { ImageResize } from '~/components/image-resize';
 import { getDefaultTitle } from '~/utils/get-default-title';
 

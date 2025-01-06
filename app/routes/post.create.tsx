@@ -3,7 +3,7 @@ import { useForm } from '@refinedev/react-hook-form';
 import { MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import { dataService } from '~/services/data.server';
 import { getDefaultTitle } from '~/utils/get-default-title';
 

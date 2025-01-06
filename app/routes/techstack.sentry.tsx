@@ -1,6 +1,6 @@
 // import { MetaFunction } from '@remix-run/node';
 // import { Button } from '~/components-shadcn/button';
-// import PageError from '~/components/500';
+// import { PageError} from '~/components/500';
 // import { getDefaultTitle } from '~/utils/get-default-title';
 
 // // 元数据

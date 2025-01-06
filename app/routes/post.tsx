@@ -1,6 +1,6 @@
 import { data, LoaderFunctionArgs } from '@remix-run/node';
 import { accessControlProvider } from '~/providers/access-control';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import Layout from '~/components/layout';
 import { HandleFunction } from '~/types/handle';
 import { requireUserSession } from '~/services/session.server';

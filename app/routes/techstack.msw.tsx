@@ -3,7 +3,7 @@
 // import { useLoaderData } from '@remix-run/react';
 // import { Button } from '~/components-shadcn/button';
 // import { getDefaultTitle } from '~/utils/get-default-title';
-// import PageError from '~/components/500';
+// import { PageError} from '~/components/500';
 
 // // 元数据
 // export const meta: MetaFunction = ({ matches }) => {

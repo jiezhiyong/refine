@@ -16,7 +16,7 @@ import {
 } from '~/components-shadcn/sidebar';
 import { cn } from '~/utils/cn';
 
-export function NavMain() {
+export function Sidebar() {
   const { menuItems, selectedKey, defaultOpenKeys } = useMenu();
   const resourceParams = useResourceParams();
 

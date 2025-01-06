@@ -1,7 +1,7 @@
 import { useTranslation } from '@refinedev/core';
 import { LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
 import i18next from 'i18next';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import { syncServiceLocaleToClient } from '~/providers/i18n';
 import { getCookie } from '~/services/cookie.server';
 

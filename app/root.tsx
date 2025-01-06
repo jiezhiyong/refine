@@ -20,8 +20,8 @@ import {
 } from '@remix-run/react';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
-import PageError from '~/components/500';
-import NotFound from '~/components/404';
+import { PageError } from '~/components/500';
+import { NotFound } from '~/components/404';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 import { cn } from '~/utils/cn';
 import { Loader } from 'lucide-react';

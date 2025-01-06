@@ -27,12 +27,13 @@ export const dataResources: ResourceProps[] = [
   // 一级菜单 playground
   {
     name: 'playground',
+    meta: { label: 'Playground' },
   },
 
   // 二级菜单 playground/dashboard
   {
     name: 'dashboard',
-    meta: { parent: 'playground', label: 'dashboard', icon: PieChart as TAny },
+    meta: { parent: 'playground', label: 'Dashboard', icon: PieChart as TAny },
   },
 
   // 三级菜单 playground/dashboard/About、Techstack
@@ -49,8 +50,8 @@ export const dataResources: ResourceProps[] = [
 
   // 二级菜单 playground/document
   {
-    name: 'document',
-    meta: { parent: 'playground', label: 'document', icon: Brain },
+    name: 'article',
+    meta: { parent: 'playground', label: 'Article', icon: Brain },
   },
 
   // 三级菜单 playground/dashboard/Post、Category
@@ -60,23 +61,24 @@ export const dataResources: ResourceProps[] = [
     create: '/post/create',
     edit: '/post/edit/:id',
     show: '/post/show/:id',
-    meta: { parent: 'document', label: 'Post' },
+    meta: { parent: 'article', label: 'Post' },
   },
   {
     name: 'category',
     list: '/category',
-    meta: { parent: 'document', label: 'Category' },
+    meta: { parent: 'article', label: 'Category' },
   },
 
   // 一级菜单 system
   {
     name: 'system',
+    meta: { label: 'System' },
   },
 
   // 二级菜单 system/account
   {
     name: 'account',
-    meta: { parent: 'system', label: 'account', icon: UsersRound },
+    meta: { parent: 'system', label: 'Account', icon: UsersRound },
   },
 
   // 三级菜单 system/account/Role、User
@@ -100,7 +102,7 @@ export const dataResources: ResourceProps[] = [
   // 二级菜单 system/other
   {
     name: 'other',
-    meta: { parent: 'system', label: 'other', icon: Bot },
+    meta: { parent: 'system', label: 'Other', icon: Bot },
   },
 
   // 三级菜单 system/other/Log、Demo

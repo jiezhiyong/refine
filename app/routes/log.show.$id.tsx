@@ -7,7 +7,7 @@ import { Button } from '~/components-shadcn/button';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from '@remix-run/react';
 import { dataService } from '~/services/data.server';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import { Log } from '@prisma/client';
 
 export async function loader({ params }: LoaderFunctionArgs) {

@@ -50,7 +50,7 @@ import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
 import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
 import { getSearchParams } from '~/utils/search-params';
 import { getDefaultTitle } from '~/utils/get-default-title';
-import PageError from '~/components/500';
+import { PageError } from '~/components/500';
 import { CreateButton, DeleteButton, EditButton, ShowButton } from '~/component-refine';
 import { parseTableParams } from '@refinedev/remix-router';
 import { Category, Post } from '@prisma/client';
