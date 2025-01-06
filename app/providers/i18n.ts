@@ -34,8 +34,7 @@ if (!i18next.isInitialized) {
 
 // 同步服务端和客户端的语言设置
 export async function syncServiceLocaleToClient(locale?: LocaleLanguage) {
-  console.log('i18next.isInitialized', i18next.isInitialized);
-  if (locale !== i18next?.language) {
+  if (i18next.isInitialized && locale !== i18next?.language) {
     try {
       await i18next.changeLanguage(locale);
     } catch (error) {

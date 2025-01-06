@@ -33,7 +33,7 @@ import { fallbackLanguage, LocaleLanguage } from './config/i18n';
 import { dataResources, dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
 import { accessControlProvider } from '~/providers/access-control';
-// import { liveProvider } from '~/providers/live';
+import { liveProvider } from '~/providers/live';
 import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
 import { auditLogProvider } from '~/providers/audit-log';
 import { notificationProvider } from '~/providers/notification';
@@ -147,6 +147,9 @@ function Document({
               },
 
               projectId: 'v08e3x-vauZUB-n1Ntw2',
+            }}
+            onLiveEvent={(event) => {
+              console.log('@onLiveEvent', event);
             }}
           >
             {children}
