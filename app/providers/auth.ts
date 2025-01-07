@@ -27,6 +27,7 @@ export const authProvider: {
       const response = await fetch(`${apiBase}/auth/${providerName}`, {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       });
 
       const res = await response.json();

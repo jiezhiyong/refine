@@ -1,3 +1,4 @@
+import { PermissionRule } from '~/types/casbin';
 import { createEnforcer } from './casbin-enforcer.server';
 
 export async function checkPermission(subject: string, object: string, action: string): Promise<boolean> {
@@ -5,18 +6,13 @@ export async function checkPermission(subject: string, object: string, action: s
   return enforcer.enforce(subject, object, action);
 }
 
-export type Permission = {
-  subject: string;
-  object: string;
-  action: string;
-};
-
-export async function getAllPermissions(): Promise<Permission[]> {
+export async function getAllPermissions(): Promise<PermissionRule[]> {
   const enforcer = await createEnforcer();
   const policies = await enforcer.getPolicy();
-  return policies.map(([subject, object, action]) => ({
+  return policies.map(([subject, object, action, effect]) => ({
     subject,
     object,
     action,
+    effect,
   }));
 }

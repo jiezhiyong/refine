@@ -40,6 +40,7 @@ export async function getUser(request: Request) {
     let user = null;
     const session = await getUserSession(request);
     const sessionUser = session?.get('user') as SessionUser;
+
     if (sessionUser?.id) {
       user = await getUserById(sessionUser.id);
     }

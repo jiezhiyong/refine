@@ -48,8 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     if (success && user?.id) {
-      const session = await getSession();
-
+      const session = await getSession(request.headers.get('Cookie'));
       session.set('user', user);
 
       return redirect(redirectTo!, {

@@ -1,5 +1,5 @@
 # 管理员权限
-p, administrator, *, list|show|create|edit|delete|field
+p, administrator, *, (list|show|create|edit|delete|field)
 
 # 编辑者权限
 p, editor, playground, list

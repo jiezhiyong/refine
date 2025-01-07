@@ -1,26 +1,40 @@
 import { AccessControlProvider } from '@refinedev/core';
 import { apiBase } from '~/config/base-url';
+import { PermissionRule } from '~/types/casbin';
+
+let permissionRules: PermissionRule[] | null = null;
 
 export const accessControlProvider: AccessControlProvider = {
-  can: async ({ resource, action, params }) => {
+  can: async ({ resource = '', action, params }) => {
     const reason = 'You are not allowed to perform this action';
 
     try {
+      const rules = await loadPermissionRules();
+
+      if (!rules || !rules.length) {
+        return {
+          can: false,
+          reason,
+        };
+      }
+
       if (action === 'delete' || action === 'edit' || action === 'show') {
         resource = `${resource}/${params?.id}`;
       } else if (action === 'field') {
         resource = `${resource}/${params?.field}`;
       }
 
-      const response = await fetch(`${apiBase}/permissions/check`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ object: resource, action }),
-      });
+      const permitted = rules.some((rule) => {
+        if (rule.object === 'post/hit') {
+          console.log('rule', rule, resource, action);
+        }
 
-      const { permitted } = await response.json();
+        return (
+          (rule.object === '*' || keyMatch(resource, rule.object)) &&
+          (rule.action === '*' || regexMatch(action, rule.action)) &&
+          rule.effect !== 'deny'
+        );
+      });
 
       return {
         can: permitted,
@@ -39,3 +53,37 @@ export const accessControlProvider: AccessControlProvider = {
     queryOptions: { cacheTime: 5 * 60 * 1000, staleTime: 0 },
   },
 };
+
+async function loadPermissionRules() {
+  if (permissionRules?.length) return permissionRules;
+
+  const response = await fetch(`${apiBase}/permissions/rules`, {
+    credentials: 'include',
+  });
+  const data = await response.json();
+  permissionRules = data?.permissions as PermissionRule[];
+
+  console.log('permissionRules', permissionRules);
+
+  return permissionRules;
+}
+
+function keyMatch(key1: string, key2: string): boolean {
+  const key2Parts = key2.split('/*');
+
+  if (key2Parts.length === 1) {
+    return key1 === key2;
+  }
+
+  const basePath = key2Parts[0];
+  return key1.startsWith(basePath);
+}
+
+function regexMatch(pattern1: string, pattern2: string): boolean {
+  try {
+    const regex = new RegExp('^' + pattern2 + '$');
+    return regex.test(pattern1);
+  } catch {
+    return pattern1 === pattern2;
+  }
+}
