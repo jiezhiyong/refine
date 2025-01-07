@@ -9,7 +9,7 @@ export type FilterOperator = 'eq' | 'contains' | 'gt' | 'lt' | 'gte' | 'lte' | '
 
 // 类型守卫函数
 function isPrismaModel(resource: string): resource is Resources {
-  return dataResources.some((r) => r.name === resource);
+  return dataResources.some((r) => r.name.endsWith(resource));
 }
 
 // 定义过滤器类型

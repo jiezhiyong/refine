@@ -1,38 +1,41 @@
-p, administrator, user, (list)|(show)|(create)|(edit)|(delete)
-p, administrator, user/*, (list)|(show)|(create)|(edit)|(delete)
+# 管理员权限
+p, administrator, *, list|show|create|edit|delete|field
 
-p, administrator, role, (list)|(show)|(create)|(edit)|(delete)
-p, administrator, role/*, (list)|(show)|(create)|(edit)|(delete)
+# 编辑者权限
+p, editor, playground, list
 
-p, administrator, post, (list)|(show)|(create)|(edit)|(delete)
-p, administrator, post/*, (list)|(show)|(create)|(edit)|(delete)
-p, administrator, post/*, field
+p, editor, dashboard, list
+p, editor, about, list
+p, editor, techstack, list
 
-p, administrator, category, (list)|(show)|(create)|(edit)|(delete)
-p, administrator, category/*, (list)|(show)|(create)|(edit)|(delete)
+p, editor, article, list
+p, editor, post, list|create|field
+p, editor, post/*, show|edit|delete|field
+p, editor, post/hit, field, deny
+p, editor, category, list
+p, editor, category/*, show
 
-p, administrator, log, (list)|(show)|(create)|(edit)|(delete)
-p, administrator, log/*, (list)|(show)|(create)|(edit)|(delete)
+p, editor, system, list
 
-p, editor, user, (list)|(show)|(create)|(edit)|(delete)
-p, editor, use/*, (list)|(show)|(create)|(edit)|(delete)
+p, editor, account, list
+p, editor, user, list
+p, editor, user/*, show
+p, editor, role, list
+p, editor, role/*, show
 
-p, editor, role, (list)|(show)|(create)|(edit)|(delete)
-p, editor, role/*, (list)|(show)|(create)|(edit)|(delete)
+p, editor, admin, list
+p, editor, log, list
+p, editor, log/*, show
 
-p, editor, post, (list)|(show)|(create)|(edit)|(delete)
-p, editor, post/*, (list)|(show)|(create)|(edit)|(delete)
-p, editor, post/*, field
+# 访客权限
+p, guest, playground, list
 
-p, editor, category, (list)|(show)|(create)|(edit)|(delete)
-p, editor, category/*, (list)|(show)|(create)|(edit)|(delete)
+p, guest, dashboard, list
+p, guest, about, list
+p, guest, techstack, list
 
-p, editor, log, (list)|(show)|(create)|(edit)|(delete)
-p, editor, log/*, (list)|(show)|(create)|(edit)|(delete)
-
-p, guest, post, (list)|(show)
-p, guest, post/*, (list)|(show)
-p, guest, post/hit, field, deny
-
-p, guest, category, (list)|(show)
-p, guest, category/*, (list)|(show)
+p, guest, article, list
+p, guest, post, list
+p, guest, post/*, show
+p, guest, category, list
+p, guest, category/*, show

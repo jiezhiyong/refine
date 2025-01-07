@@ -3,5 +3,5 @@ import { requireUserSession } from '~/services/session.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserSession(request);
-  return redirect('/post');
+  return redirect('/playground/dashboard/about');
 }

@@ -1,4 +1,5 @@
 import { ActionFunctionArgs } from '@remix-run/node';
+import { EnumRole } from '~/constants/roles';
 import { checkPermission } from '~/services/casbin-permission.server';
 import { getUser } from '~/services/session.server';
 
@@ -13,11 +14,16 @@ export async function action({ request }: ActionFunctionArgs) {
   const role = user?.role;
 
   if (!role) {
-    return Response.json({ permitted: false, role, object, action });
+    return Response.json({ permitted: false });
   }
 
+  // 管理员
+  if (role === EnumRole.administrator) {
+    return Response.json({ permitted: true });
+  }
+
+  // 其他角色
   const permitted = await checkPermission(role, object, action);
 
-  console.log('checkPermission:', role, object, action, '=>', permitted); // TODO: delete this
-  return Response.json({ permitted, role, object, action });
+  return Response.json({ permitted });
 }

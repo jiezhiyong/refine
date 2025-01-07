@@ -1,4 +1,4 @@
-import { useMenu, useResourceParams } from '@refinedev/core';
+import { CanAccess, useMenu, useResourceParams } from '@refinedev/core';
 import { Link } from '@remix-run/react';
 import { ChevronRight, LucideProps } from 'lucide-react';
 import { TreeMenuItem } from 'node_modules/@refinedev/core/dist/hooks/menu/useMenu';
@@ -34,54 +34,60 @@ export function Sidebar() {
   };
 
   return menuItems.map((menus_1, index) => (
-    <SidebarGroup key={index}>
-      <SidebarGroupLabel>{menus_1.name}</SidebarGroupLabel>
-      <SidebarMenu>
-        {menus_1.children.map((menus_2) => {
-          const isCollapsibleOpen = defaultOpenKeys.includes(menus_2.key);
-          const Icon = menus_2?.meta?.icon as unknown as ForwardRefExoticComponent<
-            Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
-          >;
+    <CanAccess key={menus_1.key} resource={menus_1.name} action="list">
+      <SidebarGroup key={index}>
+        <SidebarGroupLabel>{menus_1.name}</SidebarGroupLabel>
+        <SidebarMenu>
+          {menus_1.children.map((menus_2, idx) => {
+            const isCollapsibleOpen = defaultOpenKeys.includes(menus_2.key);
+            const Icon = menus_2?.meta?.icon as unknown as ForwardRefExoticComponent<
+              Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
+            >;
 
-          return (
-            <Collapsible key={menus_2.key} asChild defaultOpen={isCollapsibleOpen} className="group/collapsible">
-              <SidebarMenuItem>
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip={menus_2.meta?.label}>
-                    {Icon && <Icon />}
-                    <span>{menus_2.meta?.label}</span>
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                  </SidebarMenuButton>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <SidebarMenuSub>
-                    {menus_2.children?.map((item) => {
-                      const paths = getCrudPaths(item);
-                      const isActive =
-                        paths.includes(selectedKey) ||
-                        paths.some((s) => s?.endsWith(selectedKey) || selectedKey?.endsWith(s));
+            return (
+              <CanAccess key={menus_2.key} resource={menus_2.name} action="list">
+                <Collapsible key={idx} asChild defaultOpen={isCollapsibleOpen} className="group/collapsible">
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton tooltip={menus_2.name}>
+                        {Icon && <Icon />}
+                        <span>{menus_2.name}</span>
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {menus_2.children?.map((item) => {
+                          const paths = getCrudPaths(item);
+                          const isActive =
+                            paths.includes(selectedKey) ||
+                            paths.some((s) => s?.endsWith(selectedKey) || selectedKey?.endsWith(s));
 
-                      return (
-                        <SidebarMenuSubItem key={item.key}>
-                          <SidebarMenuSubButton
-                            asChild
-                            isActive={isActive}
-                            className={cn(isActive && '!bg-primary !text-primary-foreground')}
-                          >
-                            <Link to={item.list?.toString() ?? '/#'}>
-                              <span>{item.meta?.label}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      );
-                    })}
-                  </SidebarMenuSub>
-                </CollapsibleContent>
-              </SidebarMenuItem>
-            </Collapsible>
-          );
-        })}
-      </SidebarMenu>
-    </SidebarGroup>
+                          return (
+                            <CanAccess key={item.key} resource={item.name} action="list">
+                              <SidebarMenuSubItem>
+                                <SidebarMenuSubButton
+                                  asChild
+                                  isActive={isActive}
+                                  className={cn(isActive && '!bg-primary !text-primary-foreground')}
+                                >
+                                  <Link to={item.list?.toString() ?? '/#'}>
+                                    <span>{item.name}</span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            </CanAccess>
+                          );
+                        })}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              </CanAccess>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarGroup>
+    </CanAccess>
   ));
 }
