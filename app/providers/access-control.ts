@@ -24,17 +24,31 @@ export const accessControlProvider: AccessControlProvider = {
         resource = `${resource}/${params?.field}`;
       }
 
-      const permitted = rules.some((rule) => {
-        if (rule.object === 'post/hit') {
-          console.log('rule', rule, resource, action);
-        }
-
+      const matchedRules = rules.filter((rule) => {
         return (
           (rule.object === '*' || keyMatch(resource, rule.object)) &&
-          (rule.action === '*' || regexMatch(action, rule.action)) &&
-          rule.effect !== 'deny'
+          (rule.action === '*' || regexMatch(action, rule.action))
         );
       });
+
+      // 如果没有匹配的规则，默认拒绝访问
+      if (matchedRules.length === 0) {
+        return {
+          can: false,
+          reason,
+        };
+      }
+
+      // 按照规则的具体程度排序：具体路径 > 通配符路径
+      const sortedRules = matchedRules.sort((a, b) => {
+        const aSpecificity = (a.object.match(/\*/g) || []).length;
+        const bSpecificity = (b.object.match(/\*/g) || []).length;
+        return aSpecificity - bSpecificity;
+      });
+
+      // 使用最具体的规则（数组第一个元素）
+      const mostSpecificRule = sortedRules[0];
+      const permitted = mostSpecificRule.effect !== 'deny';
 
       return {
         can: permitted,
