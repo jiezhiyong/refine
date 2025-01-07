@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/remix';
 import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import { User } from '@prisma/client';
 import { apiBase } from '~/config/base-url';
+import { PermissionRule } from '~/types/casbin';
 
 type AuthProviderLoginParams = {
   providerName: 'user-pass' | 'github';
@@ -10,11 +11,15 @@ type AuthProviderLoginParams = {
   redirectTo?: string;
 };
 
+let permissionsCache: PermissionRule[] | null = null;
+
 export const authProvider: {
   login: (params: AuthProviderLoginParams) => Promise<AuthActionResponse & { user?: User }>;
   logout: () => Promise<AuthActionResponse>;
   check: () => Promise<CheckResponse>;
   getIdentity: () => Promise<User | null>;
+  getPermissions: (params?: Record<string, any>) => Promise<PermissionRule[]>;
+  setPermissions: (permissions: PermissionRule[]) => void;
   onError: Required<Pick<AuthProvider, 'onError'>>['onError'];
 } = {
   login: async ({ providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
@@ -133,5 +138,12 @@ export const authProvider: {
     }
 
     return { error };
+  },
+
+  setPermissions: (permissions: PermissionRule[]) => {
+    permissionsCache = permissions;
+  },
+  getPermissions: async () => {
+    return permissionsCache || [];
   },
 };

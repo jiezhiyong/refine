@@ -1,20 +1,17 @@
 import { AccessControlProvider } from '@refinedev/core';
-import { apiBase } from '~/config/base-url';
-import { PermissionRule } from '~/types/casbin';
-
-let permissionRules: PermissionRule[] | null = null;
+import { authProvider } from './auth';
 
 export const accessControlProvider: AccessControlProvider = {
   can: async ({ resource = '', action, params }) => {
-    const reason = 'You are not allowed to perform this action';
-
     try {
-      const rules = await loadPermissionRules();
+      const permissions = await authProvider.getPermissions();
 
-      if (!rules || !rules.length) {
+      console.error('permissions', permissions);
+      if (!permissions?.length) {
+        console.error('111');
         return {
           can: false,
-          reason,
+          reason: 'No permission rules found',
         };
       }
 
@@ -24,18 +21,18 @@ export const accessControlProvider: AccessControlProvider = {
         resource = `${resource}/${params?.field}`;
       }
 
-      const matchedRules = rules.filter((rule) => {
+      const matchedRules = permissions.filter((rule) => {
         return (
           (rule.object === '*' || keyMatch(resource, rule.object)) &&
           (rule.action === '*' || regexMatch(action, rule.action))
         );
       });
 
-      // 如果没有匹配的规则，默认拒绝访问
+      // 如果没有匹配的规则，则拒绝访问
       if (matchedRules.length === 0) {
         return {
           can: false,
-          reason,
+          reason: 'No matching permission rules found',
         };
       }
 
@@ -50,15 +47,16 @@ export const accessControlProvider: AccessControlProvider = {
       const mostSpecificRule = sortedRules[0];
       const permitted = mostSpecificRule.effect !== 'deny';
 
+      console.error('333');
       return {
         can: permitted,
-        reason: !permitted ? reason : undefined,
+        reason: !permitted ? 'You are not allowed to perform this action' : undefined,
       };
     } catch (error) {
       console.error('@accessControlProvider - Permission check failed:', error);
       return {
         can: false,
-        reason: reason,
+        reason: 'Permission check failed',
       };
     }
   },
@@ -67,20 +65,6 @@ export const accessControlProvider: AccessControlProvider = {
     queryOptions: { cacheTime: 5 * 60 * 1000, staleTime: 0 },
   },
 };
-
-async function loadPermissionRules() {
-  if (permissionRules?.length) return permissionRules;
-
-  const response = await fetch(`${apiBase}/permissions/rules`, {
-    credentials: 'include',
-  });
-  const data = await response.json();
-  permissionRules = data?.permissions as PermissionRule[];
-
-  console.log('permissionRules', permissionRules);
-
-  return permissionRules;
-}
 
 function keyMatch(key1: string, key2: string): boolean {
   const key2Parts = key2.split('/*');

@@ -37,12 +37,13 @@ import { accessControlProvider } from '~/providers/access-control';
 import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
 import { auditLogProvider } from '~/providers/audit-log';
 import { notificationProvider } from '~/providers/notification';
+import { Role } from './constants/roles';
+import { getPermissions } from './services/casbin-permission.server';
 
 /** 全局样式、插件样式 */
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
-import { Role } from './constants/roles';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -75,20 +76,22 @@ export type RootLoaderData = {
 
 /** 加载器 */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [cookie, user, themeResolver] = await Promise.all([
-    getCookie(request),
+  const [user, permissions, { locale, sidebarIsClose }, themeResolver] = await Promise.all([
     getUser(request),
+    getPermissions(request),
+    getCookie(request),
     themeSessionResolver(request),
   ]);
 
-  const locale = cookie.locale || fallbackLanguage;
-  await syncServiceLocaleToClient(locale);
+  authProvider.setPermissions(permissions);
+  const localeNext = locale || fallbackLanguage;
+  await syncServiceLocaleToClient(localeNext);
 
   return data({
     user,
     theme: themeResolver.getTheme(),
-    locale,
-    sidebarIsClose: cookie?.sidebarIsClose,
+    locale: localeNext,
+    sidebarIsClose,
   });
 }
 
