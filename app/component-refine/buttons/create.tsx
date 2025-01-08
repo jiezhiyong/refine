@@ -13,19 +13,21 @@ export const CreateButton: FC<CreateButtonProps> = ({
   children,
   ...props
 }) => {
-  const { hidden, disabled, label, title, LinkComponent, to } = useCreateButton({
+  const { hidden, disabled, label, title, LinkComponent, to, canAccess } = useCreateButton({
     resource,
     accessControl,
     meta,
   });
 
   if (hidden) return null;
+
+  const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
-        if (disabled) {
+        if (disabledNew) {
           e.preventDefault();
           return;
         }
@@ -35,7 +37,7 @@ export const CreateButton: FC<CreateButtonProps> = ({
         }
       }}
     >
-      <Button disabled={disabled} title={title} icon={<SquarePlusIcon className="mr-2 h-4 w-4" />} {...props}>
+      <Button disabled={disabledNew} title={title} icon={<SquarePlusIcon className="mr-2 h-4 w-4" />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

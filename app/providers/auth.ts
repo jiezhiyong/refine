@@ -3,6 +3,18 @@ import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core
 import { User } from '@prisma/client';
 import { apiBase } from '~/config/base-url';
 import { PermissionRule } from '~/types/casbin';
+import { canUseDOM } from '~/utils/can-use-dom';
+import { generateSignature, verifySignature } from '~/utils/signature';
+
+// 添加全局类型声明
+declare global {
+  interface Window {
+    __PERMISSIONS_DATA__?: {
+      permissions: PermissionRule[];
+      signature: string;
+    };
+  }
+}
 
 type AuthProviderLoginParams = {
   providerName: 'user-pass' | 'github';
@@ -19,7 +31,7 @@ export const authProvider: {
   check: () => Promise<CheckResponse>;
   getIdentity: () => Promise<User | null>;
   getPermissions: (params?: Record<string, any>) => Promise<PermissionRule[]>;
-  setPermissions: (permissions: PermissionRule[]) => void;
+  setPermissions: (permissions: PermissionRule[]) => Promise<void>;
   onError: Required<Pick<AuthProvider, 'onError'>>['onError'];
 } = {
   login: async ({ providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
@@ -140,10 +152,35 @@ export const authProvider: {
     return { error };
   },
 
-  setPermissions: (permissions: PermissionRule[]) => {
+  setPermissions: async (permissions: PermissionRule[]) => {
     permissionsCache = permissions;
+
+    if (canUseDOM()) {
+      const signature = await generateSignature(permissions);
+      window.__PERMISSIONS_DATA__ = {
+        permissions,
+        signature,
+      };
+    }
   },
   getPermissions: async () => {
-    return permissionsCache || [];
+    // 优先使用内存缓存
+    if (permissionsCache?.length) {
+      return permissionsCache;
+    }
+
+    // 尝试从全局变量获取并验证权限数据
+    if (canUseDOM() && window.__PERMISSIONS_DATA__) {
+      const { permissions, signature } = window.__PERMISSIONS_DATA__;
+
+      if (permissions?.length && (await verifySignature({ data: permissions }, signature))) {
+        permissionsCache = permissions;
+        return permissionsCache;
+      } else {
+        console.error('@authProvider.getPermissions - 权限数据验证失败，可能被篡改');
+      }
+    }
+
+    return [];
   },
 };

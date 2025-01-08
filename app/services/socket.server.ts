@@ -53,7 +53,7 @@ export function initSocketIO(httpServer: HttpServer) {
         io?.to(publication.channel).emit(publication.channel, {
           type: publication.type,
           payload: publication.payload,
-          date: publication.date || new Date().toISOString(),
+          date: publication.date || Date.now(),
         });
         console.log(`Published to channel ${publication.channel}:`, publication);
       }

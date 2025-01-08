@@ -44,6 +44,8 @@ import { getPermissions } from './services/casbin-permission.server';
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
+import { generateSignature } from './utils/signature';
+import { PermissionRule } from './types/casbin';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -72,6 +74,8 @@ export type RootLoaderData = {
   theme: Theme | null;
   sidebarIsClose?: string;
   locale: LocaleLanguage;
+  permissions: PermissionRule[];
+  permissionsSignature: string;
 };
 
 /** 加载器 */
@@ -83,15 +87,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
     themeSessionResolver(request),
   ]);
 
-  authProvider.setPermissions(permissions);
   const localeNext = locale || fallbackLanguage;
   await syncServiceLocaleToClient(localeNext);
+
+  // 在服务端生成签名
+  const permissionsSignature = await generateSignature(permissions);
 
   return data({
     user,
     theme: themeResolver.getTheme(),
     locale: localeNext,
     sidebarIsClose,
+    permissions,
+    permissionsSignature,
   });
 }
 
@@ -111,6 +119,8 @@ function Document({
   script = true,
   locale,
 }: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale: LocaleLanguage }>) {
+  const { permissions, permissionsSignature } = useLoaderData<typeof loader>();
+
   return (
     <html lang={locale} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
       <head>
@@ -163,6 +173,18 @@ function Document({
         </DevtoolsProvider>
         <ScrollRestoration />
         {script && <Scripts crossOrigin="anonymous" />}
+
+        {/* 注入权限数据和签名到全局变量 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.__PERMISSIONS_DATA__ = {
+                permissions: ${JSON.stringify(permissions)},
+                signature: "${permissionsSignature}"
+              };
+            `,
+          }}
+        />
       </body>
     </html>
   );

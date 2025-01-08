@@ -71,7 +71,7 @@ export const auditLogProvider: AuditLogProvider = {
       data: JSON.stringify(data),
       previousData: JSON.stringify(previousData),
       meta: JSON.stringify(meta),
-      createdAt: new Date().toISOString(),
+      createdAt: Date.now(),
     };
 
     const response = await dataProvider.create({
@@ -90,7 +90,7 @@ export const auditLogProvider: AuditLogProvider = {
       id,
       variables: {
         name,
-        updatedAt: new Date().toISOString(),
+        updatedAt: Date.now(),
       },
     });
 

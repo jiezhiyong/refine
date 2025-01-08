@@ -48,8 +48,9 @@ export const DeleteButton: FC<DeleteButtonProps> = ({
     accessControl,
   });
 
-  if (hidden || !canAccess?.can) return null;
+  if (hidden) return null;
 
+  const disabledNew = disabled || !canAccess?.can;
   return (
     <ConfirmDialog
       okText={confirmOkText ?? defaultConfirmOkLabel}
@@ -63,7 +64,7 @@ export const DeleteButton: FC<DeleteButtonProps> = ({
     >
       <Button
         variant="destructive"
-        disabled={disabled}
+        disabled={disabledNew}
         title={title}
         loading={loading}
         icon={<Trash2Icon className="mr-2 h-4 w-4" />}

@@ -14,7 +14,7 @@ export const ShowButton: FC<ShowButtonProps> = ({
   onClick,
   ...props
 }) => {
-  const { to, label, title, hidden, disabled, LinkComponent } = useShowButton({
+  const { to, label, title, hidden, disabled, LinkComponent, canAccess } = useShowButton({
     resource: resourceNameFromProps,
     id: recordItemId,
     accessControl,
@@ -23,12 +23,13 @@ export const ShowButton: FC<ShowButtonProps> = ({
 
   if (hidden) return null;
 
+  const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
-        if (disabled) {
+        if (disabledNew) {
           e.preventDefault();
           return;
         }
@@ -38,7 +39,7 @@ export const ShowButton: FC<ShowButtonProps> = ({
         }
       }}
     >
-      <Button icon={<EyeIcon className="mr-2 h-4 w-4" />} title={title} disabled={disabled} {...props}>
+      <Button icon={<EyeIcon className="mr-2 h-4 w-4" />} title={title} disabled={disabledNew} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

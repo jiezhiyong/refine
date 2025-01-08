@@ -14,7 +14,7 @@ export const EditButton: FC<EditButtonProps> = ({
   children,
   ...props
 }) => {
-  const { hidden, disabled, label, title, LinkComponent, to } = useEditButton({
+  const { hidden, disabled, label, title, LinkComponent, to, canAccess } = useEditButton({
     resource,
     id: recordItemId,
     accessControl,
@@ -23,12 +23,13 @@ export const EditButton: FC<EditButtonProps> = ({
 
   if (hidden) return null;
 
+  const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
-        if (disabled) {
+        if (disabledNew) {
           e.preventDefault();
           return;
         }
@@ -38,7 +39,7 @@ export const EditButton: FC<EditButtonProps> = ({
         }
       }}
     >
-      <Button disabled={disabled} title={title} icon={<SquarePenIcon className="mr-2 h-4 w-4" />} {...props}>
+      <Button disabled={disabledNew} title={title} icon={<SquarePenIcon className="mr-2 h-4 w-4" />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

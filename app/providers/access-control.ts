@@ -6,9 +6,7 @@ export const accessControlProvider: AccessControlProvider = {
     try {
       const permissions = await authProvider.getPermissions();
 
-      console.error('permissions', permissions);
       if (!permissions?.length) {
-        console.error('111');
         return {
           can: false,
           reason: 'No permission rules found',
@@ -47,7 +45,6 @@ export const accessControlProvider: AccessControlProvider = {
       const mostSpecificRule = sortedRules[0];
       const permitted = mostSpecificRule.effect !== 'deny';
 
-      console.error('333');
       return {
         can: permitted,
         reason: !permitted ? 'You are not allowed to perform this action' : undefined,

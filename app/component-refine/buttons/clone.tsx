@@ -14,7 +14,7 @@ export const CloneButton: FC<CloneButtonProps> = ({
   children,
   ...props
 }) => {
-  const { to, LinkComponent, label, disabled, hidden, title } = useCloneButton({
+  const { to, LinkComponent, label, disabled, hidden, title, canAccess } = useCloneButton({
     id: recordItemId,
     resource: resource,
     accessControl: accessControl,
@@ -23,12 +23,13 @@ export const CloneButton: FC<CloneButtonProps> = ({
 
   if (hidden) return null;
 
+  const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
-        if (disabled) {
+        if (disabledNew) {
           e.preventDefault();
           return;
         }
@@ -38,7 +39,7 @@ export const CloneButton: FC<CloneButtonProps> = ({
         }
       }}
     >
-      <Button disabled={disabled} title={title} icon={<CopyPlus className="mr-2 h-4 w-4" />} {...props}>
+      <Button disabled={disabledNew} title={title} icon={<CopyPlus className="mr-2 h-4 w-4" />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

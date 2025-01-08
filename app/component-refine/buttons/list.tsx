@@ -13,7 +13,7 @@ export const ListButton: FC<ListButtonProps> = ({
   onClick,
   ...props
 }) => {
-  const { hidden, disabled, label, title, LinkComponent, to } = useListButton({
+  const { hidden, disabled, label, title, LinkComponent, to, canAccess } = useListButton({
     resource: resourceNameFromProps,
     accessControl,
     meta,
@@ -21,12 +21,13 @@ export const ListButton: FC<ListButtonProps> = ({
 
   if (hidden) return null;
 
+  const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
-        if (disabled) {
+        if (disabledNew) {
           e.preventDefault();
           return;
         }
@@ -36,7 +37,7 @@ export const ListButton: FC<ListButtonProps> = ({
         }
       }}
     >
-      <Button disabled={disabled} title={title} icon={<ListIcon className="mr-2 h-4 w-4" />} {...props}>
+      <Button disabled={disabledNew} title={title} icon={<ListIcon className="mr-2 h-4 w-4" />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>
