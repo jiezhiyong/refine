@@ -39,18 +39,18 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
       return cancelIcon;
     }
 
-    return <XIcon className="mr-2 h-4 w-4" />;
+    return <XIcon />;
   }, [cancelIcon]);
 
   const OkIcon = useMemo(() => {
     if (loading) {
-      return <LoadingIcon className="mr-2" />;
+      return <LoadingIcon />;
     }
     if (isValidElement(okIcon)) {
       return okIcon;
     }
 
-    return <CheckIcon className="mr-2 h-4 w-4" />;
+    return <CheckIcon />;
   }, [okIcon, loading]);
 
   return (

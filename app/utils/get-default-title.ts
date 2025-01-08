@@ -1,4 +1,4 @@
-// import { routeBreadcrumbMap } from '~/config/menus';
+import { dataResources } from '~/providers';
 import { TAny } from '~/types/any';
 
 /**
@@ -7,9 +7,16 @@ import { TAny } from '~/types/any';
  * @returns
  */
 export function getDefaultTitle(matches: TAny) {
-  // const matchCurrent = matches[matches.length - 1];
-  // const matchPrev = matches[matches.length - 2];
-  // const titlePrev = routeBreadcrumbMap[matchPrev.id] || '';
-  // const titleCurrent = routeBreadcrumbMap[matchCurrent.id] || matchCurrent.pathname.split('/').pop() || '';
-  // return `${titlePrev}${titlePrev && titleCurrent ? ' - ' : ''}${titleCurrent}`;
+  const { pathname } = matches[matches.length - 1];
+
+  const matchedResource = dataResources.find((r) => pathname.startsWith(r.list));
+  const { name, meta } = matchedResource || {};
+
+  let title = meta?.title || name || 'OSS Inc.';
+  title = title.charAt(0).toUpperCase() + title.slice(1);
+
+  let action = pathname.replace(`${matchedResource?.list}/`, '').split('/').shift();
+  action = action.charAt(0).toUpperCase() + action.slice(1);
+
+  return action ? `${title} - ${action}` : title;
 }

@@ -1,9 +1,8 @@
 import { Category, Post } from '@prisma/client';
-import { useDelete } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { Button } from '~/components-shadcn/button';
+import { DeleteButton, SaveButton } from '~/component-refine';
 import { PageError } from '~/components/500';
 import { dataService } from '~/services/data.server';
 import { getDefaultTitle } from '~/utils/get-default-title';
@@ -33,7 +32,6 @@ export default function PostEdit() {
   const { postRes, categoriesRes } = useLoaderData<typeof loader>();
   const { data: post } = postRes;
   const { data: categories } = categoriesRes;
-  const { mutate: deletePost } = useDelete();
 
   const {
     refineCore: { onFinish, formLoading },
@@ -85,12 +83,8 @@ export default function PostEdit() {
       </div>
 
       <div className="flex gap-2">
-        <Button type="submit" loading={formLoading}>
-          Save
-        </Button>
-        <Button variant={'destructive'} onClick={() => deletePost({ resource: 'post', id: post.id })}>
-          Delete
-        </Button>
+        <SaveButton />
+        <DeleteButton />
       </div>
     </form>
   );

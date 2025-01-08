@@ -1,8 +1,6 @@
 import { Category, Post } from '@prisma/client';
-import { useDelete } from '@refinedev/core';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { Button } from '~/components-shadcn/button';
 import { PageError } from '~/components/500';
 import { dataService } from '~/services/data.server';
 import { getDefaultTitle } from '~/utils/get-default-title';
@@ -33,7 +31,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function PostShow() {
   const { postRes } = useLoaderData<typeof loader>();
   const { data: post } = postRes;
-  const { mutate: deletePost } = useDelete();
 
   return (
     <form className="flex flex-col gap-2">
@@ -44,22 +41,6 @@ export default function PostShow() {
       <select disabled className="w-full border p-2" value={post.categoryId || undefined}>
         <option>{post.category?.title}</option>
       </select>
-
-      <div className="flex gap-2">
-        <Button
-          type="button"
-          variant={'destructive'}
-          onClick={() =>
-            deletePost({
-              resource: 'post',
-              id: post.id,
-              mutationMode: 'undoable',
-            })
-          }
-        >
-          Delete
-        </Button>
-      </div>
     </form>
   );
 }

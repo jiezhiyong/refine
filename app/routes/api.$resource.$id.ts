@@ -24,7 +24,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export async function action({ request, params }: ActionFunctionArgs) {
   const { resource, id } = params;
   if (!resource || !id) {
-    throw new Error('资源类型和ID是必需的');
+    return Response.json({ message: '资源类型和ID是必需的' }, { status: 400 });
   }
 
   try {
@@ -44,17 +44,32 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       // 处理单个删除 deleteOne
       case 'DELETE': {
-        const data = await dataService.deleteOne({
-          resource,
-          id,
-        });
-        return Response.json(data);
+        try {
+          const data = await dataService.deleteOne({
+            resource,
+            id,
+          });
+          return Response.json(data);
+        } catch (error: TAny) {
+          // 处理记录不存在的情况
+          if (error.message.includes('记录不存在')) {
+            return Response.json({ message: error.message }, { status: 404 });
+          }
+          throw error; // 重新抛出其他错误
+        }
       }
 
       default:
-        throw new Error(`不支持的请求方法: ${method}`);
+        return Response.json({ message: `不支持的请求方法: ${method}` }, { status: 405 });
     }
   } catch (error: TAny) {
-    return Response.json({ message: error.message }, { status: 500 });
+    console.error('API错误:', error);
+    return Response.json(
+      {
+        message: '服务器处理请求时发生错误',
+        details: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

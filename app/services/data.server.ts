@@ -172,7 +172,18 @@ export const dataService: DataProvider = {
     }
     const prismaModel = db[resource] as unknown as {
       delete: (args: TAny) => Promise<TAny>;
+      findUnique: (args: TAny) => Promise<TAny>;
     };
+
+    // 先检查记录是否存在
+    const existingRecord = await prismaModel.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    if (!existingRecord) {
+      throw new Error(`要删除的 \`${resource}\` 记录不存在, ID: ${id}`);
+    }
 
     const data = await prismaModel.delete({
       where: { id },

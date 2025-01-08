@@ -139,8 +139,6 @@ export const authProvider: {
   },
 
   onError: async (error) => {
-    console.error('@authProvider.onError', error);
-
     if (error.status === 401 || error.status === 403) {
       return {
         logout: true,

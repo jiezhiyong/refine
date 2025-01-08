@@ -48,7 +48,7 @@ import { useTranslation } from '@refinedev/core';
 import i18next from 'i18next';
 import { PageError } from '~/components/500';
 import { syncServiceLocaleToClient } from '~/providers/i18n';
-import { getCookie } from '~/services/cookie.server';
+import { getPreferencesCookie } from '~/services/cookie.server';
 
 // 元数据
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -68,7 +68,7 @@ export const handle: HandleFunction = {
 // 加载器
 export async function loader({ request }: LoaderFunctionArgs) {
   // 注意：如果要使用 SSR 进行翻译，需要手动同步服务端与客户端的 locale
-  await syncServiceLocaleToClient((await getCookie(request)).locale);
+  await syncServiceLocaleToClient((await getPreferencesCookie(request)).locale);
 
   return { title: i18next.t('title'), description: i18next.t('description') };
 }

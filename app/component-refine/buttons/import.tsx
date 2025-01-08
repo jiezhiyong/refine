@@ -2,7 +2,7 @@ import { ImportButtonProps } from '../types';
 import { Button } from '~/components-shadcn/button';
 import { Slot } from '@radix-ui/react-slot';
 import { CanAccess, useImportButton } from '@refinedev/core';
-import { ImportIcon } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import type { FC } from 'react';
 
 export const ImportButton: FC<ImportButtonProps> = ({
@@ -45,7 +45,7 @@ export const ImportButton: FC<ImportButtonProps> = ({
       action="import"
       {...access}
     >
-      <Button onClick={onClick} icon={<ImportIcon className="mr-2 h-4 w-4" />} {...props}>
+      <Button onClick={onClick} icon={<Upload />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </Com>

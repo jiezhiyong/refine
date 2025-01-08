@@ -1,3 +1,6 @@
+// i18n - 国际化
+// https://flaglog.com/country-codes
+
 import { type I18nProvider } from '@refinedev/core';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -51,9 +54,11 @@ export const i18nProvider: I18nProvider = {
   changeLocale: async (locale: string) => {
     await i18next.changeLanguage(locale);
 
-    const res = await fetch(`/api/set-locale?locale=${locale}`, {
-      method: 'GET',
+    const res = await fetch(`/api/set-preferences`, {
+      method: 'POST',
+      body: JSON.stringify({ locale }),
     });
+
     const { data } = await res.json();
 
     return Promise.resolve(data);

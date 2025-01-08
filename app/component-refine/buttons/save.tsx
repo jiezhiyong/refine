@@ -2,7 +2,7 @@ import { SaveButtonProps } from '../types';
 import { Button } from '~/components-shadcn/button';
 import { Slot } from '@radix-ui/react-slot';
 import { CanAccess, useSaveButton } from '@refinedev/core';
-import { SaveIcon } from 'lucide-react';
+import { CheckCheck } from 'lucide-react';
 import type { FC } from 'react';
 
 export const SaveButton: FC<SaveButtonProps> = ({
@@ -30,7 +30,7 @@ export const SaveButton: FC<SaveButtonProps> = ({
       action="save"
       {...access}
     >
-      <Button icon={<SaveIcon className="mr-2 h-4 w-4" />} {...props}>
+      <Button icon={<CheckCheck />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </Com>

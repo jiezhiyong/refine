@@ -96,7 +96,6 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function PostIndex() {
   const { posts } = useLoaderData<typeof loader>();
   const { data, total } = posts;
-  const { mutate: deletePost } = useDelete();
   const navigate = useNavigate();
 
   const { data: canAccessFieldhit } = useCan({

@@ -26,8 +26,7 @@ import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 import { cn } from '~/utils/cn';
 import { Loader } from 'lucide-react';
 import { User } from '@prisma/client';
-import { getCookie } from '~/services/cookie.server';
-import { themeSessionResolver } from '~/services/theme.server';
+import { getPreferencesCookie } from '~/services/cookie.server';
 import { getUser } from '~/services/session.server';
 import { fallbackLanguage, LocaleLanguage } from './config/i18n';
 import { dataResources, dataProvider } from '~/providers/data';
@@ -80,11 +79,10 @@ export type RootLoaderData = {
 
 /** 加载器 */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [user, permissions, { locale, sidebarIsClose }, themeResolver] = await Promise.all([
+  const [user, permissions, { locale, sidebarIsClose, theme }] = await Promise.all([
     getUser(request),
     getPermissions(request),
-    getCookie(request),
-    themeSessionResolver(request),
+    getPreferencesCookie(request),
   ]);
 
   const localeNext = locale || fallbackLanguage;
@@ -95,7 +93,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return data({
     user,
-    theme: themeResolver.getTheme(),
+    theme: theme || Theme.LIGHT,
     locale: localeNext,
     sidebarIsClose,
     permissions,
@@ -139,10 +137,10 @@ function Document({
             dataProvider={dataProvider}
             authProvider={authProvider}
             accessControlProvider={accessControlProvider}
-            // liveProvider={liveProvider}
             notificationProvider={notificationProvider}
             i18nProvider={i18nProvider}
             auditLogProvider={auditLogProvider}
+            // liveProvider={liveProvider}
             options={{
               title: {
                 icon: undefined,
@@ -198,7 +196,7 @@ function DocumentWithThemeProviders({
   const { theme, locale } = useLoaderData<typeof loader>() || {};
 
   return (
-    <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
+    <ThemeProvider specifiedTheme={theme} themeAction="/api/set-preferences">
       <Document title={title} specifiedTheme={theme} script={script} locale={locale}>
         {children}
         <Toaster richColors position="top-right" />

@@ -1,8 +1,9 @@
 import { CloneButtonProps } from '../types';
 import { Button } from '~/components-shadcn/button';
 import { useCloneButton } from '@refinedev/core';
-import { CopyPlus } from 'lucide-react';
+import { CopyCheck } from 'lucide-react';
 import type { FC } from 'react';
+import { cn } from '~/utils/cn';
 
 export const CloneButton: FC<CloneButtonProps> = ({
   resource,
@@ -26,6 +27,7 @@ export const CloneButton: FC<CloneButtonProps> = ({
   const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
+      className={cn(disabledNew && 'cursor-not-allowed')}
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
@@ -39,7 +41,7 @@ export const CloneButton: FC<CloneButtonProps> = ({
         }
       }}
     >
-      <Button disabled={disabledNew} title={title} icon={<CopyPlus className="mr-2 h-4 w-4" />} {...props}>
+      <Button disabled={disabledNew} title={title} icon={<CopyCheck />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

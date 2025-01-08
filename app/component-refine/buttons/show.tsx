@@ -3,6 +3,7 @@ import { Button } from '~/components-shadcn/button';
 import { useShowButton } from '@refinedev/core';
 import { EyeIcon } from 'lucide-react';
 import type { FC } from 'react';
+import { cn } from '~/utils/cn';
 
 export const ShowButton: FC<ShowButtonProps> = ({
   resource: resourceNameFromProps,
@@ -26,6 +27,7 @@ export const ShowButton: FC<ShowButtonProps> = ({
   const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
+      className={cn(disabledNew && 'cursor-not-allowed')}
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
@@ -39,7 +41,7 @@ export const ShowButton: FC<ShowButtonProps> = ({
         }
       }}
     >
-      <Button icon={<EyeIcon className="mr-2 h-4 w-4" />} title={title} disabled={disabledNew} {...props}>
+      <Button icon={<EyeIcon />} title={title} disabled={disabledNew} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

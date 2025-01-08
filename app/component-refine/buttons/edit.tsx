@@ -1,8 +1,9 @@
 import { EditButtonProps } from '../types';
 import { Button } from '~/components-shadcn/button';
 import { useEditButton } from '@refinedev/core';
-import { SquarePenIcon } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import type { FC } from 'react';
+import { cn } from '~/utils/cn';
 
 export const EditButton: FC<EditButtonProps> = ({
   resource,
@@ -26,6 +27,7 @@ export const EditButton: FC<EditButtonProps> = ({
   const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
+      className={cn(disabledNew && 'cursor-not-allowed')}
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
@@ -39,7 +41,7 @@ export const EditButton: FC<EditButtonProps> = ({
         }
       }}
     >
-      <Button disabled={disabledNew} title={title} icon={<SquarePenIcon className="mr-2 h-4 w-4" />} {...props}>
+      <Button disabled={disabledNew} title={title} icon={<Pencil />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

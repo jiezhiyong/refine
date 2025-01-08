@@ -51,7 +51,7 @@ export function Sidebar() {
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton tooltip={menus_2.name}>
                         {Icon && <Icon />}
-                        <span>{menus_2.name}</span>
+                        <span className="capitalize">{menus_2.name}</span>
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
@@ -72,7 +72,7 @@ export function Sidebar() {
                                   className={cn(isActive && '!bg-primary !text-primary-foreground')}
                                 >
                                   <Link to={item.list?.toString() ?? '/#'}>
-                                    <span>{item.name}</span>
+                                    <span className="capitalize">{item.name}</span>
                                   </Link>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>

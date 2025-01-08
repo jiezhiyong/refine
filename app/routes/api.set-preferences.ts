@@ -1,10 +1,12 @@
 import { ActionFunction } from '@remix-run/node';
-import { setCookie } from '~/services/cookie.server';
+import { getPreferencesNextCookie } from '~/services/cookie.server';
 
 // 设置用户偏好
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const preferences = Object.fromEntries(formData);
+  const data = await request.json();
 
-  return setCookie(request, preferences);
+  const headers = new Headers();
+  headers.append('Set-Cookie', await getPreferencesNextCookie(request, data));
+
+  return Response.json({ data }, { headers });
 };

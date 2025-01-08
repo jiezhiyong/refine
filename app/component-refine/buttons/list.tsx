@@ -3,6 +3,7 @@ import { Button } from '~/components-shadcn/button';
 import { useListButton } from '@refinedev/core';
 import { ListIcon } from 'lucide-react';
 import type { FC } from 'react';
+import { cn } from '~/utils/cn';
 
 export const ListButton: FC<ListButtonProps> = ({
   resource: resourceNameFromProps,
@@ -24,6 +25,7 @@ export const ListButton: FC<ListButtonProps> = ({
   const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
+      className={cn(disabledNew && 'cursor-not-allowed')}
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
@@ -37,7 +39,7 @@ export const ListButton: FC<ListButtonProps> = ({
         }
       }}
     >
-      <Button disabled={disabledNew} title={title} icon={<ListIcon className="mr-2 h-4 w-4" />} {...props}>
+      <Button disabled={disabledNew} title={title} icon={<ListIcon />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

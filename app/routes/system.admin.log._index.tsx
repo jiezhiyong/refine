@@ -3,14 +3,13 @@ import { useLoaderData } from '@remix-run/react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components-shadcn/table';
 import { Button } from '~/components-shadcn/button';
 import { Input } from '~/components-shadcn/input';
-import { Eye } from 'lucide-react';
-import { Link } from '@remix-run/react';
 import { format } from 'date-fns';
 import { dataService } from '~/services/data.server';
 import { PageError } from '~/components/500';
 import { getSearchParams } from '~/utils/search-params';
 import { parseTableParams } from '~/utils/table';
 import { Log } from '@prisma/client';
+import { ShowButton } from '~/component-refine';
 
 // 处理 GET 请求
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -84,11 +83,7 @@ export default function LogIndex() {
                 <TableCell>{log.user.name || log.user.email}</TableCell>
                 <TableCell>{format(new Date(log.createdAt), 'yyyy-MM-dd HH:mm:ss')}</TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="icon" asChild>
-                    <Link to={`/log/show/${log.id}`}>
-                      <Eye className="h-4 w-4" />
-                    </Link>
-                  </Button>
+                  <ShowButton resource="log" recordItemId={log.id} />
                 </TableCell>
               </TableRow>
             ))}

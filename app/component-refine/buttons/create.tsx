@@ -1,8 +1,9 @@
 import { CreateButtonProps } from '../types';
 import { Button } from '~/components-shadcn/button';
 import { useCreateButton } from '@refinedev/core';
-import { SquarePlusIcon } from 'lucide-react';
+import { CirclePlus } from 'lucide-react';
 import type { FC } from 'react';
+import { cn } from '~/utils/cn';
 
 export const CreateButton: FC<CreateButtonProps> = ({
   resource,
@@ -24,6 +25,7 @@ export const CreateButton: FC<CreateButtonProps> = ({
   const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
+      className={cn(disabledNew && 'cursor-not-allowed')}
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
@@ -37,7 +39,7 @@ export const CreateButton: FC<CreateButtonProps> = ({
         }
       }}
     >
-      <Button disabled={disabledNew} title={title} icon={<SquarePlusIcon className="mr-2 h-4 w-4" />} {...props}>
+      <Button disabled={disabledNew} title={title} icon={<CirclePlus />} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </LinkComponent>

@@ -17,6 +17,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       session.set('user', user);
 
       const headers = new Headers();
+
       headers.append('Set-Cookie', await commitSession(session));
 
       return Response.json(user, { headers });

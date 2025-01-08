@@ -2,13 +2,13 @@ import { Theme } from 'remix-themes';
 import { LocaleLanguage } from '~/config/i18n';
 
 export interface CookiePreferences {
-  sidebarIsClose?: boolean;
+  sidebarIsClose?: string;
   locale?: LocaleLanguage;
   theme?: Theme | null;
 }
 
 /** 获取用户偏好Cookie */
-export const getCookie = async (request: Request): Promise<CookiePreferences> => {
+export const getPreferencesCookie = async (request: Request): Promise<CookiePreferences> => {
   const cookieHeader = request.headers.get('Cookie') || '';
   const cookies = cookieHeader.split('; ').find((s) => s.startsWith('preferences='));
 
@@ -20,8 +20,8 @@ export const getCookie = async (request: Request): Promise<CookiePreferences> =>
 };
 
 /** 获取待设置的用户偏好Cookie */
-export const getNextCookie = async (request: Request, cookie: CookiePreferences) => {
-  const exitingCookie = (await getCookie(request)) || {};
+export const getPreferencesNextCookie = async (request: Request, cookie: CookiePreferences) => {
+  const exitingCookie = (await getPreferencesCookie(request)) || {};
 
   const newCookie = JSON.stringify({
     ...exitingCookie,
@@ -32,8 +32,8 @@ export const getNextCookie = async (request: Request, cookie: CookiePreferences)
 };
 
 /** 设置用户偏好Cookie */
-export const setCookie = async (request: Request, cookie: CookiePreferences) => {
-  const newCookie = await getNextCookie(request, cookie);
+export const setPreferencesCookie = async (request: Request, cookie: CookiePreferences) => {
+  const newCookie = await getPreferencesNextCookie(request, cookie);
 
   return new Response(null, {
     headers: {
