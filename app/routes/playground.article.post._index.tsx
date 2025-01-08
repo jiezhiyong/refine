@@ -1,7 +1,5 @@
 import type { UseTableReturnType } from '@refinedev/react-table';
 import {
-  Edit,
-  Eye,
   Trash2,
   Settings2,
   FileText,
@@ -19,10 +17,11 @@ import {
   Plus,
   Search,
   ChevronRight,
+  Link,
 } from 'lucide-react';
 import { BaseRecord, HttpError, useCan, useSelect, useUserFriendlyName } from '@refinedev/core';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Form, Link, UIMatch, useLoaderData, useSearchParams } from '@remix-run/react';
+import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import React from 'react';
 import { Button } from '~/components-shadcn/button';
 import { Calendar } from '~/components-shadcn/calendar';
@@ -63,10 +62,10 @@ export const meta: MetaFunction = ({ matches }) => {
 
 // 创建应用程序约定
 export const handle: HandleFunction = {
-  uiTools: (match: UIMatch, matchs: UIMatch[]) => {
+  uiTools: () => {
     return <UiTools />;
   },
-  uiFilter: (match: UIMatch, matchs: UIMatch[]) => {
+  uiFilter: () => {
     return <UiFilter />;
   },
 };

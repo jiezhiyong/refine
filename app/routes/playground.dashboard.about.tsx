@@ -16,9 +16,10 @@ import {
   Plus,
   Search,
   ChevronRight,
+  Link,
 } from 'lucide-react';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Form, Link, UIMatch, useSearchParams } from '@remix-run/react';
+import { Form, UIMatch, useSearchParams } from '@remix-run/react';
 import React from 'react';
 import { Button } from '~/components-shadcn/button';
 import { Calendar } from '~/components-shadcn/calendar';
@@ -57,10 +58,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 // 创建应用程序约定
 export const handle: HandleFunction = {
-  uiTools: (match: UIMatch, matchs: UIMatch[]) => {
+  uiTools: (_match: UIMatch, _matchs: UIMatch[]) => {
     return <UiTools />;
   },
-  uiFilter: (match: UIMatch, matchs: UIMatch[]) => {
+  uiFilter: (_match: UIMatch, _matchs: UIMatch[]) => {
     return <UiFilter />;
   },
 };

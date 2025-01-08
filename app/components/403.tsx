@@ -9,14 +9,14 @@ export function PermissionDenied() {
           <h1 className="text-forceground absolute left-1/2 top-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase">
             Oops!
           </h1>
-          <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] font-normal uppercase">
+          <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] font-normal capitalize">
             {'403 - Permission Denied'}
           </h2>
         </div>
-        <p className="mb-8 text-red-500">Sorry, You don't have permission to access this page.</p>
+        <p className="mb-8 text-xl text-red-500">Sorry, You don't have permission to access this page.</p>
 
         <Link to="/">
-          <Button size="lg">Back To Home</Button>
+          <Button>Back To Home</Button>
         </Link>
       </div>
     </div>

@@ -21,15 +21,13 @@ export function PageError({ error }: { error?: Error | ErrorResponse | { message
           <h1 className="text-forceground absolute left-1/2 top-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase">
             Oops!
           </h1>
-          <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block max-w-[520px] bg-background px-[5px] pt-5 text-[28px] font-normal uppercase">
+          <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block max-w-[520px] bg-background px-[5px] pt-5 text-[28px] font-normal capitalize">
             {isRouteErrorResponse(error) ? `${error.status} ${error.statusText}` : 'Something went wrong'}
           </h2>
         </div>
-        <p className="mb-8 text-red-500">{(error as Error).message || 'unknown error'}</p>
+        <p className="mb-8 text-xl text-red-500">{(error as Error).message || 'unknown error'}</p>
         <pre className="mb-8 rounded-lg border p-6 text-left">{(error as Error).message || 'unknown error'}</pre>
-        <Button size="lg" onClick={() => location.reload()}>
-          Try Again
-        </Button>
+        <Button onClick={() => location.reload()}>Try Again</Button>
       </div>
     </div>
   );
