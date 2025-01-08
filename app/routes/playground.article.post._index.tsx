@@ -20,9 +20,9 @@ import {
   Search,
   ChevronRight,
 } from 'lucide-react';
-import { BaseRecord, HttpError, useCan, useDelete, useSelect, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, HttpError, useCan, useSelect, useUserFriendlyName } from '@refinedev/core';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Form, Link, UIMatch, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { Form, Link, UIMatch, useLoaderData, useSearchParams } from '@remix-run/react';
 import React from 'react';
 import { Button } from '~/components-shadcn/button';
 import { Calendar } from '~/components-shadcn/calendar';
@@ -96,7 +96,6 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function PostIndex() {
   const { posts } = useLoaderData<typeof loader>();
   const { data, total } = posts;
-  const navigate = useNavigate();
 
   const { data: canAccessFieldhit } = useCan({
     resource: 'post',
