@@ -73,7 +73,12 @@ export function RoleSwitcher() {
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">roles</DropdownMenuLabel>
             {userRoles.map((role, index) => (
-              <DropdownMenuItem key={role.value} onClick={() => switchRole(role)} className="gap-2 p-2">
+              <DropdownMenuItem
+                key={role.value}
+                onClick={() => switchRole(role)}
+                className="gap-2 p-2"
+                disabled={role.value === activeRole?.value}
+              >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <role.icon className="size-4 shrink-0" />
                 </div>
