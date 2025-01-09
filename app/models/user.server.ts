@@ -1,5 +1,6 @@
 import type { Password, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { EnumRoleId } from '~/constants/roles';
 import { db } from '~/services/db.server';
 
 /** 根据 ID 获取用户 */
@@ -12,11 +13,11 @@ export async function getUserByEmail(email: User['email']) {
   return db.user.findUnique({ where: { email } });
 }
 
-/** 创建用户 */
+/** 创建新用户，默认分配 guest 权限 */
 export async function createUser(email: User['email'], password: string) {
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  return db.user.create({
+  const user = await db.user.create({
     data: {
       email,
       name: email.split('@')[0],
@@ -27,6 +28,15 @@ export async function createUser(email: User['email'], password: string) {
       },
     },
   });
+
+  await db.userRole.create({
+    data: {
+      userId: user.id,
+      roleId: EnumRoleId.guest,
+    },
+  });
+
+  return user;
 }
 
 /** 删除用户 */

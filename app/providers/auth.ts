@@ -5,6 +5,7 @@ import { apiBase } from '~/config/base-url';
 import { PermissionRule } from '~/types/casbin';
 import { canUseDOM } from '~/utils/can-use-dom';
 import { generateSignature, verifySignature } from '~/utils/signature';
+import { TAuthProvider } from '~/constants/auth';
 
 // 添加全局类型声明
 declare global {
@@ -17,7 +18,7 @@ declare global {
 }
 
 type AuthProviderLoginParams = {
-  providerName: 'user-pass' | 'github';
+  providerName: TAuthProvider;
   email: string;
   password: string;
   redirectTo?: string;

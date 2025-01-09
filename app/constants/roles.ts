@@ -1,15 +1,21 @@
 import { BicepsFlexed, AudioLines, Baby } from 'lucide-react';
 
-export const EnumRole = {
-  administrator: 'administrator',
-  editor: 'editor',
-  guest: 'guest',
-} as const;
+export enum EnumRole {
+  administrator = 'administrator',
+  editor = 'editor',
+  guest = 'guest',
+}
 
-export type Role = (typeof EnumRole)[keyof typeof EnumRole];
+export type Role = `${EnumRole}`;
 
 export const rolesAll = [
   { label: 'Administrator', value: EnumRole.administrator, icon: BicepsFlexed },
   { label: 'Editor', value: EnumRole.editor, icon: AudioLines },
   { label: 'Guest', value: EnumRole.guest, icon: Baby },
 ];
+
+export enum EnumRoleId {
+  administrator = '1',
+  editor = '2',
+  guest = '3',
+}

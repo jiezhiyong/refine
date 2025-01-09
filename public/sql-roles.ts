@@ -1,5 +1,7 @@
+import { EnumRoleId } from '~/constants/roles';
+
 export const roles = [
-  { id: '1', title: 'administrator' },
-  { id: '2', title: 'editor' },
-  { id: '3', title: 'guest' },
+  { id: EnumRoleId.administrator, title: 'administrator' },
+  { id: EnumRoleId.editor, title: 'editor' },
+  { id: EnumRoleId.guest, title: 'guest' },
 ];

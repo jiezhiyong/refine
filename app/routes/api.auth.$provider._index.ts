@@ -2,6 +2,7 @@ import { type ActionFunctionArgs } from '@remix-run/node';
 import { authenticator } from '~/services/auth.server';
 import { TAny } from '~/types/any';
 import { getSession, commitSession } from '~/services/session.server';
+import { EnumAuthProvider } from '~/constants/auth';
 
 export async function loader() {
   return Response.json({ message: 'Method not allowed' }, { status: 405 });
@@ -9,8 +10,13 @@ export async function loader() {
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
-    const { provider } = params;
-    const user = await authenticator.authenticate(provider || 'unknown', request);
+    const { provider } = params as { provider: EnumAuthProvider };
+    if (!provider || ![EnumAuthProvider.userpass, EnumAuthProvider.tcshuke].includes(provider)) {
+      return Response.json({ message: 'Method not allowed' }, { status: 405 });
+    }
+
+    const user = await authenticator.authenticate(provider, request);
+    console.log('authenticator', provider, user);
 
     if (user) {
       const session = await getSession(request.headers.get('Cookie'));
@@ -25,6 +31,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return Response.json({ message: 'Authentication failed' }, { status: 401 });
   } catch (error: TAny) {
+    console.error('@authenticator', error);
     return Response.json({ message: error?.message || 'Authentication failed' }, { status: 401 });
   }
 };

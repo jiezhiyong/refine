@@ -5,6 +5,7 @@ import { authProvider } from '~/providers/auth';
 import { LoginForm } from '~/components/form-login';
 import { commitSession, getSession, getUser } from '~/services/session.server';
 import { typedFormError } from '~/utils/typed-form-error';
+import { EnumAuthProvider } from '~/constants/auth';
 
 // 定义表单验证 schema
 const loginSchema = z.object({
@@ -37,7 +38,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const { email, password, redirectTo } = loginSchema.parse(formData);
     const { error, success, user } = await authProvider.login({
-      providerName: 'user-pass',
+      providerName: EnumAuthProvider.userpass,
       email,
       password,
       redirectTo,
