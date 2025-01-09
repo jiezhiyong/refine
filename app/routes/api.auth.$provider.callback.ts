@@ -4,5 +4,7 @@ import { authenticator } from '~/services/auth.server';
 
 export const loader = ({ request, params }: LoaderFunctionArgs) => {
   const { provider } = params;
-  return authenticator.authenticate(provider || EnumAuthProvider.tcshuke, request);
+  console.log('loader', provider);
+  //   return authenticator.authenticate(provider || EnumAuthProvider.tcshuke, request);
+  return {};
 };

@@ -17,6 +17,9 @@ export default defineConfig(({ mode }) => {
     define: {
       'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
     },
+    server: {
+      host: '0.0.0.0',
+    },
     plugins: [
       envOnlyMacros(),
       remix({
