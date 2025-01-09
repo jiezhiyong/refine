@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs } from '@remix-run/node';
+import { redirect, type ActionFunctionArgs } from '@remix-run/node';
 import { authenticator } from '~/services/auth.server';
 import { TAny } from '~/types/any';
 import { getSession, commitSession } from '~/services/session.server';
@@ -29,9 +29,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json(user, { headers });
     }
 
-    return Response.json({ message: 'Authentication failed' }, { status: 401 });
+    return Response.json({ message: 'Authentication failed, unable to get user.' }, { status: 401 });
   } catch (error: TAny) {
-    console.error('@authenticator', error);
-    return Response.json({ message: error?.message || 'Authentication failed' }, { status: 401 });
+    // 处理 302 重定向
+    if (error.status === 302) {
+      const redirectUrl = error.headers.get('Location');
+      if (redirectUrl) {
+        return redirect(redirectUrl, { status: 302 });
+      }
+    }
+
+    console.error('@authenticator', error.status, error);
+
+    return Response.json({ message: error?.message || 'Authentication failed, unknown error.' }, { status: 401 });
   }
 };

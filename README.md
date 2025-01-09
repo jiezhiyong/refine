@@ -1,15 +1,18 @@
-https://refine.dev/docs/i18n/i18n-provider/#translation-file
-https://refine.dev/docs/core/components/auto-save-indicator/
-https://refine.dev/docs/core/components/inferencer/
-
-// TODO: 使用最新版本依赖
-
-# Welcome to Remix
+# Refine & Remix
 
 refine 是一个开源的无头 React 框架，供开发人员构建企业内部工具、管理面板、仪表板、B2B 应用程序。
 它消除了 CRUD 操作中的重复性任务，并为关键项目组件（如身份验证、访问控制、路由、网络、状态管理和 i18n）提供行业标准解决方案。
 
 - 📖 [Remix docs](https://remix.run/docs)
+
+# 配置本地 HTTPS 环境
+
+```sh
+brew install mkcert # 安装 mkcert
+mkcert -install # 安装本地 CA
+mkcert oss.tcshuke.com localhost 127.0.0.1 ::1 # 在项目根目录创建证书
+sudo echo "127.0.0.1 oss.tcshuke.com" >> /etc/hosts # 修改 hosts 文件，添加本地域名映射
+```
 
 ## Development
 

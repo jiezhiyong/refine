@@ -4,6 +4,7 @@ import { userAdministrator, users } from '../public/sql-users.ts';
 import { roles } from '../public/sql-roles.ts';
 import { categories } from '../public/sql-categories.ts';
 import { posts } from '../public/sql-posts.ts';
+import { EnumAuthProvider } from '~/constants/auth.ts';
 
 const db = new PrismaClient();
 
@@ -24,6 +25,7 @@ async function seed() {
       email: userAdministrator.email,
       name: userAdministrator.name,
       avatar: userAdministrator.avatar,
+      provider: EnumAuthProvider.userpass,
       password: {
         create: {
           hash: await bcrypt.hash(userAdministrator.password, 10),
@@ -65,6 +67,7 @@ async function seed() {
       const newUser = await db.user.create({
         data: {
           ...rest,
+          provider: EnumAuthProvider.userpass,
           password: {
             create: {
               hash: await bcrypt.hash(password, 10),

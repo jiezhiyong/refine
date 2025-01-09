@@ -1,5 +1,6 @@
 import type { Password, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { EnumAuthProvider } from '~/constants/auth';
 import { EnumRoleId } from '~/constants/roles';
 import { db } from '~/services/db.server';
 
@@ -21,6 +22,7 @@ export async function createUser(email: User['email'], password: string) {
     data: {
       email,
       name: email.split('@')[0],
+      provider: EnumAuthProvider.userpass,
       password: {
         create: {
           hash: hashedPassword,
