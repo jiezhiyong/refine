@@ -21,7 +21,7 @@
 //   if (typeof window !== 'undefined') {
 //     // 客户端：使用 Socket.IO
 //     if (!socket) {
-//       socket = io(`http://oss.tcshuke.com:${SOCKET_PORT}`, socketConfig);
+//       socket = io(`https://oss.tcshuke.com:${SOCKET_PORT}`, socketConfig);
 
 //       // 添加事件监听器
 //       socket.on('connect', () => {
@@ -47,7 +47,7 @@
 //     socket.emit(eventName, data);
 //   } else {
 //     // 服务器端：使用 HTTP 请求
-//     fetch(`http://oss.tcshuke.com:${SOCKET_PORT}/api/publish`, {
+//     fetch(`https://oss.tcshuke.com:${SOCKET_PORT}/api/publish`, {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json',
@@ -174,7 +174,7 @@
 // }
 
 // // 创建 socket 管理器实例
-// const socketManager = new SocketManager(`http://oss.tcshuke.com:${SOCKET_PORT}`);
+// const socketManager = new SocketManager(`https://oss.tcshuke.com:${SOCKET_PORT}`);
 
 // // 导出 LiveProvider 实现
 // export const liveProvider: LiveProvider = {
@@ -187,7 +187,7 @@
 //     }
 
 //     if (!socket) {
-//       socket = io(`http://oss.tcshuke.com:${SOCKET_PORT}`, socketConfig);
+//       socket = io(`https://oss.tcshuke.com:${SOCKET_PORT}`, socketConfig);
 //     }
 
 //     const { ids } = params;

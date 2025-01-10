@@ -5,7 +5,7 @@ import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
 import { PrivacyPolicy } from './privacy-policy';
 import { ErrorMessage } from './error';
-import { TcskAuthButton } from './tcsk-auth-button';
+import { TcskOAuth2 } from './tcsk-oauth2';
 
 // 定义错误类型
 interface ActionData {
@@ -82,7 +82,7 @@ export function LoginForm() {
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">or</span>
               </div>
 
-              <TcskAuthButton redirectTo={redirectTo} />
+              <TcskOAuth2 redirectTo={redirectTo} />
 
               <div className="text-center text-sm">
                 {`Don't have an account? `}

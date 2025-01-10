@@ -1,4 +1,5 @@
 import { ActionFunctionArgs } from '@remix-run/node';
+import { TRole } from '~/constants/roles';
 import { commitSession, requireUser } from '~/services/session.server';
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -7,7 +8,9 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   try {
-    const { role: nextRole } = await request.json();
+    const formData = await request.formData();
+    const nextRole = formData.get('role') as TRole;
+
     if (!nextRole) {
       throw new Error('Role is required');
     }

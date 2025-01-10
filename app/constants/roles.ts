@@ -6,7 +6,7 @@ export enum EnumRole {
   guest = 'guest',
 }
 
-export type Role = `${EnumRole}`;
+export type TRole = `${EnumRole}`;
 
 export const rolesAll = [
   { label: 'Administrator', value: EnumRole.administrator, icon: BicepsFlexed },

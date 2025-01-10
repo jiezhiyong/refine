@@ -1,11 +1,11 @@
 import * as Sentry from '@sentry/remix';
 import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import { User } from '@prisma/client';
-import { apiBase } from '~/config/base-url';
 import { PermissionRule } from '~/types/casbin';
 import { canUseDOM } from '~/utils/can-use-dom';
 import { generateSignature, verifySignature } from '~/utils/signature';
 import { TAuthProvider } from '~/constants/auth';
+import { webapi } from '~/utils/webapi';
 
 // 添加全局类型声明
 declare global {
@@ -37,15 +37,9 @@ export const authProvider: {
 } = {
   login: async ({ providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
     try {
-      const formData = new FormData();
-
-      formData.append('email', email);
-      formData.append('password', password);
-
-      const response = await fetch(`${apiBase}/auth/${providerName}`, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
+      const response = await webapi.post(`/auth/${providerName}`, {
+        email,
+        password,
       });
 
       const res = await response.json();
@@ -94,7 +88,7 @@ export const authProvider: {
     const redirectTo = `/login?redirectTo=${window.location.href}`;
 
     try {
-      const response = await fetch(`${apiBase}/auth/me`);
+      const response = await webapi.get(`/auth/me`);
       const { data } = await response.json();
       if (data && data.id) {
         return {
@@ -126,7 +120,7 @@ export const authProvider: {
 
   getIdentity: async () => {
     try {
-      const response = await fetch(`${apiBase}/auth/me`);
+      const response = await webapi.get(`/auth/me`);
       const { data } = await response.json();
       if (data && data.id) {
         return data;

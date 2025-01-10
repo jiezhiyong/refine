@@ -14,7 +14,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/c
 import { rolesAll } from '~/constants/roles';
 import { useRouteLoaderData } from '@remix-run/react';
 import { RootLoaderData } from '~/root';
-import { apiBase } from '~/config/base-url';
+import { webapi } from '~/utils/webapi';
 
 export function RoleSwitcher() {
   const { isMobile } = useSidebar();
@@ -31,12 +31,8 @@ export function RoleSwitcher() {
 
   const switchRole = React.useCallback(async (selectedRole: typeof activeRole) => {
     try {
-      await fetch(`${apiBase}/permissions/switch`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ role: selectedRole?.value }),
+      await webapi.post('/permissions/switch', {
+        role: selectedRole?.value,
       });
       setActiveRole(selectedRole);
 

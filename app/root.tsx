@@ -36,7 +36,7 @@ import { accessControlProvider } from '~/providers/access-control';
 import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
 import { auditLogProvider } from '~/providers/audit-log';
 import { notificationProvider } from '~/providers/notification';
-import { Role } from './constants/roles';
+import { TRole } from './constants/roles';
 import { getPermissions } from './services/casbin-permission.server';
 
 /** 全局样式、插件样式 */
@@ -69,7 +69,7 @@ export const handle = { i18n: ['translation'] };
 
 /** 加载器返回数据类型定义 */
 export type RootLoaderData = {
-  user: (User & { role: Role; roles: Role[] }) | null;
+  user: (User & { role: TRole; roles: TRole[] }) | null;
   theme: Theme | null;
   sidebarIsClose?: string;
   locale: LocaleLanguage;

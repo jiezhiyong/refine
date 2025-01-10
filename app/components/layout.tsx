@@ -8,10 +8,10 @@ import { loader, type RootLoaderData } from '~/root';
 import { Breadcrumbs } from '~/component-refine/components';
 
 export default function Layout() {
-  const data = useRouteLoaderData<typeof loader>('root') as RootLoaderData;
+  const { sidebarIsClose } = useRouteLoaderData<typeof loader>('root') as RootLoaderData;
 
   return (
-    <SidebarProvider open={!data.sidebarIsClose}>
+    <SidebarProvider open={!sidebarIsClose || sidebarIsClose !== 'true'}>
       <SidebarLeft />
       <SidebarInset>
         <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-background transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

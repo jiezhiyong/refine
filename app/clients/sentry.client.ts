@@ -28,7 +28,7 @@ export function initSentry() {
     ],
     sendDefaultPii: true,
     tracesSampleRate: 1.0,
-    tracePropagationTargets: ['localhost', /^\/api/, 'http://oss.tcshuke.com.com'],
+    tracePropagationTargets: ['localhost', /^\/api/, 'https://oss.tcshuke.com.com'],
     profilesSampleRate: 1.0,
     replaysSessionSampleRate: isProduction ? 0.1 : 1.0,
     replaysOnErrorSampleRate: 1.0,

@@ -1,9 +1,9 @@
 import { Bot, Brain, UsersRound } from 'lucide-react';
 import { DataProvider, ResourceProps } from '@refinedev/core';
 import dataProviderSimpleRest from '@refinedev/simple-rest';
-import { apiBase } from '~/config/base-url';
 import { PieChart } from 'lucide-react';
 import { TAny } from '~/types/any';
+import { apiBase } from '~/config/base-url';
 
 // 使用 @refinedev/simple-rest, 并配置正确的基础 URL
 export const dataProvider: DataProvider = dataProviderSimpleRest(apiBase);

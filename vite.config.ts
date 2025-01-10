@@ -19,11 +19,23 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
     },
     server: {
-      host: 'oss.tcshuke.com',
-      // https: {
-      //   key: fs.readFileSync('./localhost-key.pem'),
-      //   cert: fs.readFileSync('./localhost.pem'),
-      // },
+      host: '0.0.0.0',
+      port: 5173,
+      strictPort: true,
+      https: {
+        key: fs.readFileSync('./oss.tcshuke.com+3-key.pem'),
+        cert: fs.readFileSync('./oss.tcshuke.com+3.pem'),
+      },
+      proxy: {
+        '/*': {
+          target: 'https://oss.tcshuke.com:5173',
+          secure: false,
+          changeOrigin: true,
+          headers: {
+            'X-Forwarded-Proto': 'https',
+          },
+        },
+      },
     },
     plugins: [
       envOnlyMacros(),

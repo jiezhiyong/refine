@@ -64,15 +64,12 @@ const SidebarProvider = React.forwardRef<
         _setOpen(openState);
       }
 
-      // 使用 fetcher 更新 cookie
-      fetcher.submit(
-        { [SIDEBAR_COOKIE_NAME]: !openState },
-        {
-          method: 'post',
-          action: '/api/set-preferences',
-          encType: 'application/json',
-        }
-      );
+      const formData = new FormData();
+      formData.append(SIDEBAR_COOKIE_NAME, String(!openState));
+      fetcher.submit(formData, {
+        method: 'post',
+        action: '/api/set-preferences',
+      });
     },
     [setOpenProp, open, fetcher]
   );

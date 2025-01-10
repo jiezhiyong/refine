@@ -1,4 +1,4 @@
 import { User } from '@prisma/client';
-import { Role } from '~/constants/roles';
+import { TRole } from '~/constants/roles';
 
-export type SessionUser = User & { role: Role; roles: Role[] };
+export type SessionUser = User & { role: TRole; roles: TRole[] };
