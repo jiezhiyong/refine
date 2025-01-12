@@ -6,11 +6,14 @@ import { Label } from '~/components-shadcn/label';
 import { PrivacyPolicy } from './privacy-policy';
 import { ErrorMessage } from './error';
 import { TcskOAuth2 } from './tcsk-oauth2';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 // 定义错误类型
 interface ActionData {
   errors?: {
     email?: string[];
+    code?: string[];
     password?: string[];
     default?: string[];
   };
@@ -22,6 +25,47 @@ export function RegisterForm() {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
   const navigation = useNavigation();
+  const [isSending, setIsSending] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
+  async function sendVerificationCode(email: string) {
+    setIsSending(true);
+    try {
+      const response = await fetch('/api/send-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || '发送验证码失败');
+      }
+
+      toast.success('验证码已发送', {
+        description: '请查看您的邮箱',
+      });
+
+      // 开始倒计时
+      setCountdown(60);
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch (error) {
+      toast.error('错误', {
+        description: error instanceof Error ? error.message : '发送验证码失败',
+      });
+    } finally {
+      setIsSending(false);
+    }
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -48,17 +92,33 @@ export function RegisterForm() {
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input
-                name="email"
-                id="email"
-                type="email"
-                placeholder="Goodman@example.com"
-                required
-                autoFocus
-                autoComplete="email"
-                defaultValue="administrator@goodman.com"
-              />
+              <div className="flex gap-2">
+                <Input
+                  name="email"
+                  id="email"
+                  type="email"
+                  placeholder="Goodman@example.com"
+                  required
+                  autoFocus
+                  autoComplete="email"
+                  defaultValue="administrator@goodman.com"
+                />
+                <Button
+                  type="button"
+                  disabled={isSending || countdown > 0 || !field.value}
+                  variant="outline"
+                  onClick={sendVerificationCode}
+                >
+                  {countdown > 0 ? `${countdown}s` : 'Send Code'}
+                </Button>
+              </div>
               <ErrorMessage error={errors?.email?.[0]} />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="code">Validate Code</Label>
+              <Input name="code" id="code" type="code" required minLength={6} maxLength={6} />
+              <ErrorMessage error={errors?.code?.[0]} />
             </div>
 
             <div className="grid gap-2">
@@ -85,7 +145,7 @@ export function RegisterForm() {
           </div>
 
           <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">Or</span>
+            <span className="relative z-10 bg-background px-2 text-muted-foreground">or</span>
           </div>
 
           <TcskOAuth2 redirectTo={redirectTo} />
