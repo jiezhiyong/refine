@@ -98,7 +98,6 @@ export default function LogIndex() {
         <div className="space-x-2">
           <Button
             variant="outline"
-            size="sm"
             disabled={page <= 1}
             onClick={() => {
               const searchParams = new URLSearchParams(window.location.search);
@@ -110,7 +109,6 @@ export default function LogIndex() {
           </Button>
           <Button
             variant="outline"
-            size="sm"
             disabled={page >= totalPages}
             onClick={() => {
               const searchParams = new URLSearchParams(window.location.search);

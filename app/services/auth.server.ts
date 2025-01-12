@@ -20,6 +20,43 @@ invariant(process.env.TCSK_PROFILE, 'TCSK_PROFILE must be set.');
 // 创建认证器实例
 export const authenticator = new Authenticator<User>();
 
+// TCSK OAuth2 策略
+const tcskStrategy = new OAuth2Strategy<User>(
+  {
+    clientId: process.env.TCSK_CLIENT_ID,
+    clientSecret: process.env.TCSK_CLIENT_SECRET,
+    authorizationEndpoint: process.env.TCSK_AUTHORIZE,
+    tokenEndpoint: process.env.TCSK_TOKEN,
+    redirectURI: process.env.TCSK_REDIRECT,
+    scopes: ['profile'],
+  },
+  async ({ tokens }) => {
+    const { access_token } = (tokens?.data || {}) as Record<string, string>;
+    try {
+      const response = await fetch(process.env.TCSK_PROFILE!, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch user profile');
+      }
+
+      const data = await response.json();
+      const { email, realName } = data || {};
+
+      return {
+        email,
+        name: realName,
+      } as User;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      throw error;
+    }
+  }
+);
+
 // 表单登录策略
 const strategyForm = new FormStrategy(async ({ form }) => {
   const email = form.get('email') as string;
@@ -32,44 +69,6 @@ const strategyForm = new FormStrategy(async ({ form }) => {
 
   return user;
 });
-
-// TCSK OAuth2 策略
-const tcskStrategy = new OAuth2Strategy(
-  {
-    clientId: process.env.TCSK_CLIENT_ID,
-    clientSecret: process.env.TCSK_CLIENT_SECRET,
-    authorizationEndpoint: process.env.TCSK_AUTHORIZE,
-    tokenEndpoint: process.env.TCSK_TOKEN,
-    redirectURI: process.env.TCSK_REDIRECT,
-    scopes: ['profile'],
-  },
-  async ({ accessToken, refreshToken, extraParams, profile }) => {
-    console.log('OAuth2 callback', { accessToken, refreshToken, extraParams, profile });
-
-    try {
-      const response = await fetch(process.env.TCSK_PROFILE!, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch user profile');
-      }
-
-      const data = await response.json();
-
-      return {
-        id: data.id,
-        email: data.email,
-        name: data.name,
-      } as User;
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-      throw error;
-    }
-  }
-);
 
 // 注册认证策略
 authenticator.use(strategyForm, EnumAuthProvider.userpass);

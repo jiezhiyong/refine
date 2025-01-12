@@ -29,7 +29,7 @@ export async function action({ request }: ActionFunctionArgs) {
       throw { email: ['A user already exists with this email.'] };
     }
 
-    await createUser(email, password);
+    await createUser({ email, password });
 
     return redirect(`/login?email=${email}`);
   } catch (error) {

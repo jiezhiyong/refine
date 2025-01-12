@@ -15,19 +15,27 @@ export async function getUserByEmail(email: User['email']) {
 }
 
 /** 创建新用户，默认分配 guest 权限 */
-export async function createUser(email: User['email'], password: string) {
-  const hashedPassword = await bcrypt.hash(password, 10);
-
+export async function createUser({
+  email,
+  name,
+  password,
+}: {
+  email: User['email'];
+  password?: string;
+  name?: string;
+}) {
   const user = await db.user.create({
     data: {
       email,
-      name: email.split('@')[0],
+      name: name || email.split('@')[0],
       provider: EnumAuthProvider.userpass,
-      password: {
-        create: {
-          hash: hashedPassword,
-        },
-      },
+      password: password
+        ? {
+            create: {
+              hash: await bcrypt.hash(password, 10),
+            },
+          }
+        : undefined,
     },
   });
 

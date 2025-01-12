@@ -42,3 +42,6 @@ Thumbs.db
 .vercel
 .netlify
 
+# cert
+oss.tcshuke.com+3-key.pem
+oss.tcshuke.com+3.pem

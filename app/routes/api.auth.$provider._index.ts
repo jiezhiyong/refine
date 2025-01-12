@@ -1,4 +1,4 @@
-import { redirect, type ActionFunctionArgs } from '@remix-run/node';
+import { type ActionFunctionArgs } from '@remix-run/node';
 import { authenticator } from '~/services/auth.server';
 import { TAny } from '~/types/any';
 import { getSession, commitSession } from '~/services/session.server';
@@ -33,10 +33,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   } catch (error: TAny) {
     // 处理 OAuth2.tcshuke 认证提供者 302 重定向
     if (error.status === 302) {
-      const redirectUrl = error.headers.get('Location');
-      // if (redirectUrl) {
-      //   return redirect(redirectUrl, { status: 302 });
-      // }
+      return error;
     }
 
     console.error('@authenticator', error);

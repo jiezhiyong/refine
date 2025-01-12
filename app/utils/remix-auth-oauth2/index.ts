@@ -75,7 +75,6 @@ export class OAuth2Strategy<User> extends Strategy<User, OAuth2Strategy.VerifyOp
 
       debug('Authorization URL', url.toString());
 
-      console.log('request1', url.toString());
       let store = StateStore.fromRequest(request, this.cookieName);
       store.set(state, codeVerifier);
 
@@ -90,7 +89,6 @@ export class OAuth2Strategy<User> extends Strategy<User, OAuth2Strategy.VerifyOp
 
     if (!code) throw new ReferenceError('Missing code in the URL');
 
-    console.log('request2', request.url);
     let store = StateStore.fromRequest(request, this.cookieName);
 
     if (!store.has()) {
@@ -108,12 +106,14 @@ export class OAuth2Strategy<User> extends Strategy<User, OAuth2Strategy.VerifyOp
     }
 
     debug('Validating authorization code');
+
     let tokens = await this.validateAuthorizationCode(code, codeVerifier);
 
     debug('Verifying the user profile');
     let user = await this.verify({ request, tokens });
 
     debug('User authenticated');
+
     return user;
   }
 
