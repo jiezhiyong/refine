@@ -208,6 +208,7 @@ function DocumentWithThemeProviders({
 function App() {
   const navigation = useNavigation();
 
+  nProgress.configure({ showSpinner: false });
   useEffect(() => {
     if (navigation.state === 'idle') nProgress.done();
     else nProgress.start();

@@ -58,6 +58,7 @@ export function Sidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {menus_2.children?.map((item) => {
+                          const { meta } = item;
                           const paths = getCrudPaths(item);
                           const isActive =
                             paths.includes(selectedKey) ||
@@ -72,7 +73,7 @@ export function Sidebar() {
                                   className={cn(isActive && '!bg-primary !text-primary-foreground')}
                                 >
                                   <Link to={item.list?.toString() ?? '/#'}>
-                                    <span className="capitalize">{item.name}</span>
+                                    <span className="capitalize">{meta?.label || item.name}</span>
                                   </Link>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>

@@ -103,14 +103,14 @@ export function RegisterForm() {
                   autoComplete="email"
                   defaultValue="administrator@goodman.com"
                 />
-                <Button
+                {/* <Button
                   type="button"
                   disabled={isSending || countdown > 0 || !field.value}
                   variant="outline"
                   onClick={sendVerificationCode}
                 >
                   {countdown > 0 ? `${countdown}s` : 'Send Code'}
-                </Button>
+                </Button> */}
               </div>
               <ErrorMessage error={errors?.email?.[0]} />
             </div>

@@ -5,21 +5,21 @@ let lastNotificationKey: string | undefined = undefined;
 
 export const notificationProvider: NotificationProvider = {
   open: ({ key, message, description, type }) => {
+    lastNotificationKey = key;
+    const id = key === lastNotificationKey ? key : undefined;
+
     // 成功通知
     if (type === 'success') {
-      toast.success(message, { description });
+      toast.success(message, { description, id });
     }
 
     // 失败通知
     else if (type === 'error') {
-      toast.error(message, { description });
+      toast.error(message, { description, id });
     }
 
     // 处理中通知
     else if (type === 'progress') {
-      lastNotificationKey = key;
-      const id = key === lastNotificationKey ? key : undefined;
-
       toast.loading(message, { description, id });
     }
   },
