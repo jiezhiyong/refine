@@ -34,6 +34,11 @@ export const dataResources: ResourceProps[] = [
     list: '/playground/dashboard/techstack',
     meta: { parent: 'dashboard' },
   },
+  {
+    name: 'demo',
+    list: '/playground/dashboard/demo',
+    meta: { parent: 'dashboard' },
+  },
 
   // 二级菜单 playground/document
   {

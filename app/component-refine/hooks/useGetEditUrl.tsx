@@ -18,8 +18,6 @@ export const useGetEditUrl = (resource: string, recordItemId: string, meta?: TAn
   const accessControlContext = useContext(AccessControlContext);
   const accessControlEnabled = accessControlContext.options.buttons.enableAccessControl;
 
-  const hideIfUnauthorized = accessControlContext.options.buttons.hideIfUnauthorized;
-
   const { editUrl: generateEditUrl } = useNavigation();
 
   const { resource: _resource } = useResource(resource);
@@ -45,7 +43,7 @@ export const useGetEditUrl = (resource: string, recordItemId: string, meta?: TAn
   const editUrl = resource && (recordItemId ?? id) ? generateEditUrl(resource, recordItemId! ?? id!, meta) : '';
 
   return {
-    can: !(accessControlEnabled && hideIfUnauthorized && !data?.can),
+    can: !(accessControlEnabled && !data?.can),
     reason: reason(),
     url: editUrl,
   };

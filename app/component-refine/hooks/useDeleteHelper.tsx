@@ -24,8 +24,6 @@ export const useDeleteHelper = (resource: string, recordItemId: string, meta?: T
 
   const accessControlEnabled = accessControlContext.options.buttons.enableAccessControl;
 
-  const hideIfUnauthorized = accessControlContext.options.buttons.hideIfUnauthorized;
-
   const translate = useTranslate();
 
   const id = useResourceParams();
@@ -54,7 +52,7 @@ export const useDeleteHelper = (resource: string, recordItemId: string, meta?: T
   const { setWarnWhen } = useWarnAboutChange();
 
   const onDeleteMutate = (options?: MutateOptions<unknown, unknown, unknown, unknown>): TAny => {
-    if (accessControlEnabled && hideIfUnauthorized && !data?.can) {
+    if (accessControlEnabled && !data?.can) {
       return;
     }
     if ((recordItemId ?? id) && identifier) {
@@ -75,7 +73,7 @@ export const useDeleteHelper = (resource: string, recordItemId: string, meta?: T
   };
 
   return {
-    can: !(accessControlEnabled && hideIfUnauthorized && !data?.can),
+    can: !(accessControlEnabled && !data?.can),
     reason: reason(),
     mutate: onDeleteMutate,
     isLoading,

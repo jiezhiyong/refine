@@ -11,7 +11,7 @@ import {
 } from '~/components-shadcn/dropdown-menu';
 
 import { BaseRecord, HttpError, useTranslate } from '@refinedev/core';
-import { UseTableReturnType } from '@refinedev/react-table';
+import { UseTableReturnType } from '~/lib/refinedev-react-table';
 
 import { FC, forwardRef, PropsWithChildren } from 'react';
 

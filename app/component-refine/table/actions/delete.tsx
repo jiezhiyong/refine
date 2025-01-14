@@ -4,11 +4,12 @@ import { useContext } from 'react';
 import type { RowActionProps } from '.';
 import { RowAction } from '.';
 import { TAny } from '~/types/any';
+import { Trash2 } from 'lucide-react';
 
 type DeleteActionProps = RowActionProps & {
   row: TAny;
   resource: string;
-  title: string;
+  title?: string;
   onAfterHandle?: () => void;
 };
 
@@ -19,8 +20,9 @@ export function DeleteAction({ row, resource, title, disabled, onAfterHandle, ..
   return (
     <RowAction
       {...props}
+      icon={<Trash2 size={16} />}
       disabled={!can || disabled}
-      title={!can ? reason : title}
+      title={!can ? reason : title || 'Delete'}
       onClick={() =>
         deleteContext?.updateData({
           row,

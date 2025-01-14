@@ -7,7 +7,7 @@ import { PrivacyPolicy } from './privacy-policy';
 import { ErrorMessage } from './error';
 import { TcskOAuth2 } from './tcsk-oauth2';
 import { useState } from 'react';
-import { toast } from 'sonner';
+import { useNotification } from '@refinedev/core';
 
 // 定义错误类型
 interface ActionData {
@@ -21,6 +21,7 @@ interface ActionData {
 
 // 注册表单
 export function RegisterForm() {
+  const { open } = useNotification();
   const { errors } = useActionData<ActionData>() || {};
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
@@ -43,8 +44,11 @@ export function RegisterForm() {
         throw new Error(data.error || '发送验证码失败');
       }
 
-      toast.success('验证码已发送', {
+      open?.({
+        key: 'register-email-sent',
+        message: '验证码已发送',
         description: '请查看您的邮箱',
+        type: 'success',
       });
 
       // 开始倒计时
@@ -59,8 +63,11 @@ export function RegisterForm() {
         });
       }, 1000);
     } catch (error) {
-      toast.error('错误', {
+      open?.({
+        key: 'register-email-sent',
+        message: 'Error',
         description: error instanceof Error ? error.message : '发送验证码失败',
+        type: 'error',
       });
     } finally {
       setIsSending(false);

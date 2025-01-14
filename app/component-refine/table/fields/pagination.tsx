@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
-import { UseTableReturnType as Table } from '@refinedev/react-table';
+import { UseTableReturnType as Table } from '~/lib/refinedev-react-table';
 
 import { BaseRecord, useTranslate } from '@refinedev/core';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components-shadcn/select';

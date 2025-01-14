@@ -1,4 +1,4 @@
-import type { UseTableReturnType } from '@refinedev/react-table';
+import { useTable, type UseTableReturnType } from '~/lib/refinedev-react-table';
 import {
   Trash2,
   Settings2,
@@ -18,8 +18,10 @@ import {
   Search,
   ChevronRight,
   Link,
+  Eye,
+  Edit,
 } from 'lucide-react';
-import { BaseRecord, HttpError, useCan, useSelect, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, HttpError, useCan, useNavigation, useSelect, useUserFriendlyName } from '@refinedev/core';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import React from 'react';
@@ -54,6 +56,9 @@ import { CreateButton, DeleteButton, EditButton, ShowButton } from '~/component-
 import { parseTableParams } from '@refinedev/remix-router';
 import { Category, Post } from '@prisma/client';
 import { dataService } from '~/services/data.server';
+import { Table, TableFilterProps } from '~/component-refine/table';
+import { ColumnDef, flexRender } from '@tanstack/react-table';
+import { IPost } from '~/types/post';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {
@@ -93,34 +98,91 @@ export async function action({ request }: ActionFunctionArgs) {
 
 // UI
 export default function PostIndex() {
-  const { posts } = useLoaderData<typeof loader>();
-  const { data, total } = posts;
+  const friendly = useUserFriendlyName();
+  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
+    const label = `Delete Selected (${table.getSelectedRowModel().rows.length}) ${friendly(
+      'Row',
+      table.getSelectedRowModel().rows.length > 1 ? 'plural' : 'singular'
+    )}`;
 
-  const { data: canAccessFieldhit } = useCan({
-    resource: 'post',
-    action: 'field',
-    params: { field: 'hit' },
-  });
-
+    return {
+      label,
+      onClick: () => {
+        alert('Delete Selected');
+      },
+    };
+  };
   return (
-    <ul className="space-y-2">
-      <CreateButton />
-
-      {data.map((post) => (
-        <li key={post.id} className="flex border border-gray-200 p-2">
-          <div className="flex-1">
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
-            {canAccessFieldhit?.can && <p>{post.hit}</p>}
-          </div>
-          <div className="flex gap-2">
-            <ShowButton resource="post" recordItemId={post.id} />
-            <EditButton resource="post" recordItemId={post.id} />
-            <DeleteButton resource="post" recordItemId={post.id} />
-          </div>
-        </li>
-      ))}
-    </ul>
+    <Table enableSorting enableFilters>
+      <Table.Column
+        accessorKey="id"
+        id={'select'}
+        header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
+        cell={({ row }) => (
+          <Checkbox
+            className="translate-y-[2px]"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+            key={`checkbox-${row.original.id}`}
+          />
+        )}
+      />
+      <Table.Column header={'ID'} id="id" accessorKey="id" enableSorting enableHiding />
+      <Table.Column
+        header={'Title'}
+        accessorKey="title"
+        id="title"
+        enableSorting
+        enableHiding
+        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Title" />}
+      />
+      <Table.Column
+        header={'Status'}
+        accessorKey="status"
+        id="status"
+        enableSorting
+        enableHiding
+        filter={(props: TableFilterProps) => (
+          <Table.Filter.Dropdown
+            {...props}
+            options={[
+              {
+                label: 'Published',
+                value: 'published',
+              },
+              {
+                label: 'Draft',
+                value: 'draft',
+              },
+              {
+                label: 'Rejected',
+                value: 'rejected',
+              },
+            ]}
+          />
+        )}
+      />
+      <Table.Column
+        header={'CreatedAt'}
+        accessorKey="createdAt"
+        id="createdAt"
+        enableSorting
+        enableHiding
+        filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
+      />
+      <Table.Column
+        accessorKey={'id'}
+        id={'actions'}
+        cell={({ row: { original } }) => (
+          <Table.Actions>
+            <Table.ShowAction row={original} resource="post" />
+            <Table.EditAction row={original} resource="post" />
+            <Table.DeleteAction row={original} withForceDelete={true} resource="post" />
+          </Table.Actions>
+        )}
+      />
+    </Table>
   );
 }
 

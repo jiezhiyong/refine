@@ -4,7 +4,7 @@
  */
 import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
-import { OAuth2Strategy } from '~/utils/remix-auth-oauth2';
+import { OAuth2Strategy } from '~/lib/remix-auth-oauth2';
 import { User } from '@prisma/client';
 import { verifyLogin } from '~/models/user.server';
 import { EnumAuthProvider } from '~/constants/auth';

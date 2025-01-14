@@ -1,9 +1,11 @@
-import { MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useNotification } from '@refinedev/core';
 import { PageError } from '~/components/500';
 import { getDefaultTitle } from '~/utils/get-default-title';
 import { Button } from '~/components-shadcn/button';
 import { H1, H2 } from '~/components-shadcn/typography';
+import { requireUserSession } from '~/services/session.server';
+import { getAllParams } from '~/utils/get-all-params';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {
@@ -11,7 +13,15 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 // 加载器
-export async function loader() {
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  await requireUserSession(request);
+  const mergedParams = await getAllParams<{ redirectTo?: string }>(request, params);
+  return {};
+}
+
+// 处理 POST、PATCH、DELETE 请求
+export async function action({ request, params }: ActionFunctionArgs) {
+  const mergedParams = await getAllParams<{ id?: string }>(request, params);
   return {};
 }
 

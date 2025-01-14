@@ -17,7 +17,7 @@ COPY --from=deps /app/refine/node_modules ./node_modules
 
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
 
 FROM base as production-deps
 
@@ -27,7 +27,7 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
 
 ENV NODE_ENV production
 
-RUN npm prune
+RUN pnpm prune
 
 FROM base AS runner
 
@@ -40,4 +40,4 @@ COPY --from=builder --chown=refine:nodejs /app/refine/package.json ./package.jso
 
 USER refine
 
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "run", "start"]

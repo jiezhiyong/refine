@@ -1,7 +1,7 @@
 import Loader from '../components/loader';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as TableUi } from '~/components-shadcn/table';
 import { BaseOption, BaseRecord, HttpError, useTranslate } from '@refinedev/core';
-import { UseTableProps, UseTableReturnType, useTable } from '@refinedev/react-table';
+import { UseTableProps, UseTableReturnType, useTable } from '~/lib/refinedev-react-table';
 import {
   CellContext,
   Column,

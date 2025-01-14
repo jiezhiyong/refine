@@ -91,7 +91,7 @@ export const dataService: DataProvider = {
   // 获取列表数据
   getList: async ({ resource, pagination, sorters, filters, meta }) => {
     const { current = 1, pageSize = 10 } = pagination ?? {};
-    const skip = (current - 1) * pageSize;
+    const skip = (Number(current) - 1) * Number(pageSize);
 
     // 构建过滤条件
     const parsedFilters = filters ? parseRefineFilters(filters as Filter[]) : [];
@@ -113,7 +113,7 @@ export const dataService: DataProvider = {
       prismaModel.count({ where }),
       prismaModel.findMany({
         skip,
-        take: pageSize,
+        take: Number(pageSize),
         where,
         orderBy,
         ...meta,

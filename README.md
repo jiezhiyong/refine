@@ -81,3 +81,15 @@ https://docs.sentry.io/platforms/javascript/guides/remix/
 ## 功能搜索
 
 ## 单点登录、多重身份验证
+
+<!-- TODO: -->
+
+https://refine.dev/docs/guides-concepts/forms/#server-side-validation-
+https://refine.dev/docs/guides-concepts/forms/#auto-save
+https://refine.dev/docs/guides-concepts/forms/#autosaveindicator-
+https://refine.dev/docs/guides-concepts/forms/#modifying-data-before-submission
+
+## Issues
+
+- Cannot find module '.prisma/client/default'
+- npx prisma generate & pnpm dev

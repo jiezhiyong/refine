@@ -9,6 +9,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { TAny } from '~/types/any';
 import { Button } from '~/components-shadcn/button';
+import { cn } from '~/utils/cn';
 
 interface RowActionsProps {
   children?: ReactNode;
@@ -28,6 +29,7 @@ export const RowAction: FC<RowActionProps> = (props) => {
   return (
     <DropdownMenuItem
       disabled={props.disabled}
+      // className={cn(!props.disabled && 'cursor-pointer')}
       asChild={!(!props.to || (!props.to && !props.children))}
       onClick={props.onClick}
     >

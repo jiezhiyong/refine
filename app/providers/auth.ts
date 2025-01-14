@@ -76,11 +76,12 @@ export const authProvider: {
   logout: async () => {
     Sentry.setUser(null);
 
-    window.location.href = '/api/auth/logout';
+    const redirectTo = encodeURIComponent(window.location.href);
+    window.location.href = `/api/auth/logout?redirectTo=${redirectTo}`;
 
     return {
       success: true,
-      redirectTo: '/login',
+      redirectTo: `/login?redirectTo=${redirectTo}`,
     };
   },
 
