@@ -6,7 +6,7 @@ import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
 import { OAuth2Strategy } from '~/lib/remix-auth-oauth2';
 import { User } from '@prisma/client';
-import { verifyLogin } from '~/models/user.server';
+import { verifyUserpassLogin } from '~/models/user.server';
 import { EnumAuthProvider } from '~/constants/auth';
 import invariant from 'tiny-invariant';
 
@@ -62,7 +62,7 @@ const strategyForm = new FormStrategy(async ({ form }) => {
   const email = form.get('email') as string;
   const password = form.get('password') as string;
 
-  const user = await verifyLogin(email, password);
+  const user = await verifyUserpassLogin(email, password);
   if (!user) {
     throw new Error('Invalid email or password.');
   }

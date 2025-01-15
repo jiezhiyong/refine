@@ -1,6 +1,7 @@
 import { redirect, type ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
 import { z } from 'zod';
 import { RegisterForm } from '~/components/form-register';
+import { EnumAuthProvider } from '~/constants/auth';
 import { createUser, getUserByEmail } from '~/models/user.server';
 import { typedFormError } from '~/utils/typed-form-error';
 
@@ -29,7 +30,7 @@ export async function action({ request }: ActionFunctionArgs) {
       throw { email: ['A user already exists with this email.'] };
     }
 
-    await createUser({ email, password });
+    await createUser({ email, password, provider: EnumAuthProvider.userpass });
 
     return redirect(`/login?email=${email}`);
   } catch (error) {

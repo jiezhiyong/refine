@@ -91,5 +91,8 @@ https://refine.dev/docs/guides-concepts/forms/#modifying-data-before-submission
 
 ## Issues
 
-- Cannot find module '.prisma/client/default'
-- npx prisma generate & pnpm dev
+1. Cannot find module '.prisma/client/default'
+   重新执行 `npx prisma generate` 并重启开发服务 `pnpm dev`
+
+2. 数据库删除了数据，但 `db` 依然可以查询到数据
+   重启开发服务 `pnpm dev`

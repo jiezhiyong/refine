@@ -15,7 +15,7 @@ export function PermissionDenied() {
         </div>
         <p className="mb-8 text-xl text-red-500">Sorry, You don't have permission to access this page.</p>
 
-        <Link to="/">
+        <Link to="/api/auth/logout">
           <Button>Back To Home</Button>
         </Link>
       </div>

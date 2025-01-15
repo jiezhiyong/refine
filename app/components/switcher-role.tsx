@@ -87,7 +87,7 @@ export function RoleSwitcher() {
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">Add Role</div>
+              <div className="font-medium text-muted-foreground">Apply Role</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

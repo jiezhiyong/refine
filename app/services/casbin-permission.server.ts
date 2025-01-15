@@ -8,10 +8,12 @@ export async function checkPermission(subject: string, object: string, action: s
 }
 
 export async function getPermissions(request?: Request): Promise<PermissionRule[]> {
+  let rules: PermissionRule[] = [];
+
   const enforcer = await createEnforcer();
   const policies = await enforcer.getPolicy();
 
-  let rules = policies.map(([subject, object, action, effect]) => ({
+  const rulesAll = policies.map(([subject, object, action, effect]) => ({
     subject,
     object,
     action,
@@ -22,7 +24,7 @@ export async function getPermissions(request?: Request): Promise<PermissionRule[
     const session = await getUserSession(request);
     const user = session?.get('user');
     if (user?.role) {
-      rules = rules.filter((rule) => rule.subject === user.role);
+      rules = rulesAll.filter((rule) => rule.subject === user.role);
     }
   }
 

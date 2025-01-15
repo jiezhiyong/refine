@@ -1,4 +1,5 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
+import { EnumAuthProvider } from '~/constants/auth';
 import { createUser, getUserByEmail } from '~/models/user.server';
 import { authenticator } from '~/services/auth.server';
 import { commitSession, getSession } from '~/services/session.server';
@@ -25,10 +26,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
     const session = await getSession(secureRequest.headers.get('Cookie'));
     const existingUser = await getUserByEmail(email);
+
     if (existingUser?.id) {
       session.set('user', existingUser);
     } else {
-      const userNew = await createUser({ email, name });
+      const userNew = await createUser({ email, name, provider: EnumAuthProvider.tcshuke });
       session.set('user', userNew);
     }
 

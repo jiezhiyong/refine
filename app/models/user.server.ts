@@ -1,17 +1,39 @@
 import type { Password, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { EnumAuthProvider } from '~/constants/auth';
-import { EnumRoleId } from '~/constants/roles';
+import { TAuthProvider } from '~/constants/auth';
+import { EnumRole, EnumRoleId } from '~/constants/roles';
 import { db } from '~/services/db.server';
 
 /** 根据 ID 获取用户 */
 export async function getUserById(id: User['id']) {
-  return db.user.findUnique({ where: { id } });
+  const user = await db.user.findUnique({
+    where: { id },
+    include: {
+      roles: {
+        include: {
+          role: true,
+        },
+      },
+    },
+  });
+
+  return withRoles(user);
 }
 
 /** 根据 Email 获取用户 */
 export async function getUserByEmail(email: User['email']) {
-  return db.user.findUnique({ where: { email } });
+  const user = await db.user.findUnique({
+    where: { email },
+    include: {
+      roles: {
+        include: {
+          role: true,
+        },
+      },
+    },
+  });
+
+  return withRoles(user);
 }
 
 /** 创建新用户，默认分配 guest 权限 */
@@ -19,16 +41,18 @@ export async function createUser({
   email,
   name,
   password,
+  provider,
 }: {
   email: User['email'];
   password?: string;
   name?: string;
+  provider: TAuthProvider;
 }) {
   const user = await db.user.create({
     data: {
       email,
       name: name || email.split('@')[0],
-      provider: EnumAuthProvider.userpass,
+      provider,
       password: password
         ? {
             create: {
@@ -46,7 +70,7 @@ export async function createUser({
     },
   });
 
-  return user;
+  return { ...user, role: EnumRole.guest, roles: [EnumRole.guest] };
 }
 
 /** 删除用户 */
@@ -55,8 +79,8 @@ export async function deleteUserByEmail(email: User['email']) {
 }
 
 /** 验证用户登录 */
-export async function verifyLogin(email: User['email'], password: Password['hash']) {
-  const userWithPasswordAndRoles = await db.user.findUnique({
+export async function verifyUserpassLogin(email: User['email'], password: Password['hash']) {
+  const user = await db.user.findUnique({
     where: { email },
     include: {
       password: true,
@@ -68,23 +92,31 @@ export async function verifyLogin(email: User['email'], password: Password['hash
     },
   });
 
-  if (!userWithPasswordAndRoles || !userWithPasswordAndRoles.password) {
+  if (!user || !user.password) {
     return null;
   }
 
-  const isValid = await bcrypt.compare(password, userWithPasswordAndRoles.password.hash);
+  const isValid = await bcrypt.compare(password, user.password.hash);
   if (!isValid) {
     return null;
   }
 
-  // 提取角色
-  const roles = userWithPasswordAndRoles.roles.map((userRole) => userRole.role.title);
+  return withRoles(user);
+}
+
+// 提取角色
+const withRoles = (_userWithRoles: (User & { roles: { role: { title: string } & Record<string, any> }[] }) | null) => {
+  if (!_userWithRoles) {
+    return null;
+  }
+
+  const roles = _userWithRoles.roles.map((userRole) => userRole.role.title);
   const userWithRoles = {
-    ...userWithPasswordAndRoles,
+    ..._userWithRoles,
     password: '******',
     roles,
     role: roles[0],
   };
 
   return userWithRoles;
-}
+};
