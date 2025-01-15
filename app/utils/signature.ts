@@ -63,6 +63,10 @@ interface TimestampedPayload<T = any> {
 
 // 根据运行环境选择合适的签名方法
 export async function generateSignature(payload: any, timestamp?: number): Promise<string> {
+  if (!payload) {
+    return '';
+  }
+
   const timestampedPayload: TimestampedPayload = {
     data: payload,
     timestamp,

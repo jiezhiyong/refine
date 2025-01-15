@@ -22,11 +22,11 @@ export function PageError({ error }: { error?: Error | ErrorResponse | { message
             Oops!
           </h1>
           <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block max-w-[520px] bg-background px-[5px] pt-5 text-[28px] font-normal capitalize">
+            <span className="absolute -bottom-1 -left-1 -right-1 -top-1 z-10 bg-background blur-xl" />
             {isRouteErrorResponse(error) ? `${error.status} ${error.statusText}` : 'Something went wrong'}
           </h2>
         </div>
         <p className="mb-8 text-xl text-red-500">{(error as Error).message || 'unknown error'}</p>
-        <pre className="mb-8 rounded-lg border p-6 text-left">{(error as Error).message || 'unknown error'}</pre>
         <Button onClick={() => location.reload()}>Try Again</Button>
       </div>
     </div>

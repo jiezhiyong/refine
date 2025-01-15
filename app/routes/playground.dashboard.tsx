@@ -11,7 +11,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 // UI
-export default function Post() {
+export default function Dashboard() {
   return (
     <CanAccess fallback={<PermissionDenied />}>
       <Layout />

@@ -81,14 +81,14 @@ export type RootLoaderData = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const [user, permissions, { locale, sidebarIsClose, theme }] = await Promise.all([
     getUser(request),
-    getPermissions(request),
+    getPermissions({ request }),
     getPreferencesCookie(request),
   ]);
 
   const localeNext = locale || fallbackLanguage;
   await syncServiceLocaleToClient(localeNext);
 
-  // 在服务端生成签名
+  // 在服务端为权限数据生成签名
   const permissionsSignature = await generateSignature(permissions);
 
   return data({
@@ -118,6 +118,10 @@ function Document({
   locale,
 }: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale: LocaleLanguage }>) {
   const { permissions, permissionsSignature } = useLoaderData<typeof loader>();
+
+  // 重新登录后因为 window.__PERMISSIONS_DATA__ 设置成功时机不能确保早于客户端内层路由调用 useCan 的时机
+  // 所以这里手动设置一下
+  authProvider.setPermissions(permissions);
 
   return (
     <html lang={locale} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>

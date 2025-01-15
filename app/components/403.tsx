@@ -10,13 +10,14 @@ export function PermissionDenied() {
             Oops!
           </h1>
           <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] font-normal capitalize">
+            <span className="absolute -bottom-1 -left-1 -right-1 -top-1 z-10 bg-background blur-xl" />
             {'403 - Permission Denied'}
           </h2>
         </div>
         <p className="mb-8 text-xl text-red-500">Sorry, You don't have permission to access this page.</p>
 
         <Link to="/api/auth/logout">
-          <Button>Back To Home</Button>
+          <Button>Back To Login</Button>
         </Link>
       </div>
     </div>

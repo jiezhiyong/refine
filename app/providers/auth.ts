@@ -3,9 +3,10 @@ import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core
 import { User } from '@prisma/client';
 import { PermissionRule } from '~/types/casbin';
 import { canUseDOM } from '~/utils/can-use-dom';
-import { generateSignature, verifySignature } from '~/utils/signature';
+import { verifySignature } from '~/utils/signature';
 import { TAuthProvider } from '~/constants/auth';
 import { webapi } from '~/utils/webapi';
+import { TRole } from '~/constants/roles';
 
 // 添加全局类型声明
 declare global {
@@ -27,7 +28,9 @@ type AuthProviderLoginParams = {
 let permissionsCache: PermissionRule[] | null = null;
 
 export const authProvider: {
-  login: (params: AuthProviderLoginParams) => Promise<AuthActionResponse & { user?: User }>;
+  login: (
+    params: AuthProviderLoginParams
+  ) => Promise<AuthActionResponse & { user?: User & { role: TRole; roles: TRole[] } }>;
   logout: () => Promise<AuthActionResponse>;
   check: () => Promise<CheckResponse>;
   getIdentity: () => Promise<User | null>;
@@ -148,14 +151,6 @@ export const authProvider: {
 
   setPermissions: async (permissions: PermissionRule[]) => {
     permissionsCache = permissions;
-
-    if (canUseDOM()) {
-      const signature = await generateSignature(permissions);
-      window.__PERMISSIONS_DATA__ = {
-        permissions,
-        signature,
-      };
-    }
   },
   getPermissions: async () => {
     // 优先使用内存缓存
@@ -167,7 +162,11 @@ export const authProvider: {
     if (canUseDOM() && window.__PERMISSIONS_DATA__) {
       const { permissions, signature } = window.__PERMISSIONS_DATA__;
 
-      if (permissions?.length && (await verifySignature({ data: permissions }, signature))) {
+      if (!permissions?.length) {
+        return [];
+      }
+
+      if (await verifySignature({ data: permissions }, signature)) {
         permissionsCache = permissions;
         return permissionsCache;
       } else {

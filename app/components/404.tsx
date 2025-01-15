@@ -9,10 +9,12 @@ export function NotFound() {
           <h1 className="text-forceground absolute left-1/2 top-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase">
             Oops!
           </h1>
-          <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] text-xl font-normal capitalize">
+          <h2 className="text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] font-normal capitalize">
+            <span className="absolute -bottom-1 -left-1 -right-1 -top-1 z-10 bg-background blur-xl" />
             {"404 - The Page can't be found"}
           </h2>
         </div>
+        <p className="mb-8 text-xl text-red-500">Sorry, You are looking for something that isn't here.</p>
 
         <Link to="/">
           <Button>Back To Home</Button>
