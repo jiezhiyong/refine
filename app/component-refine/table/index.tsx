@@ -23,6 +23,7 @@ import { DeleteAction } from './actions/delete';
 import { DeleteProvider } from '../providers';
 import { TAny } from '~/types/any';
 import { PopoverContentProps } from '@radix-ui/react-popover';
+import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
 
 export type TableListFilterOption = BaseOption & {
   icon?: React.ComponentType<{ className?: string }>;
@@ -114,6 +115,18 @@ export function Table<
 
   const table = useTable({
     columns,
+    refineCoreProps: {
+      pagination: {
+        mode: 'server',
+        current: 1,
+        pageSize: DEFAULT_PAGE_SIZE,
+      },
+      meta: {
+        total: (headers: Headers) => {
+          return Number(headers.get('X-Total-Count') || 0);
+        },
+      },
+    },
     ...props,
   });
 
@@ -126,7 +139,7 @@ export function Table<
 
   return (
     <DeleteProvider>
-      <div className="space-y-4">
+      <div className="mt-1 space-y-4">
         <DataTableToolbar table={table} />
         <div className="rounded-md border border-border">
           <TableUi>

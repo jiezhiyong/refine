@@ -49,7 +49,7 @@ export async function syncServiceLocaleToClient(locale?: LocaleLanguage) {
 
 export const i18nProvider: I18nProvider = {
   translate: (key: string, defaultMessage?: string) => {
-    return i18next.t(key, defaultMessage || '');
+    return i18next.t(key, defaultMessage || key);
   },
 
   changeLocale: async (locale: string) => {

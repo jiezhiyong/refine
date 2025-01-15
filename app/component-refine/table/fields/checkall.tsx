@@ -27,13 +27,14 @@ type CheckAllProps = React.ComponentPropsWithoutRef<typeof Checkbox> &
 export const CheckAll: FC<CheckAllProps> = forwardRef<React.ElementRef<typeof Checkbox>, CheckAllProps>(
   ({ table, children, options }, ref) => {
     const t = useTranslate();
+
     return (
       <>
         <Checkbox
           ref={ref}
           checked={table.getIsSomeRowsSelected() ? 'indeterminate' : table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          className="translate-y-[2px]"
+          className="ml-2"
           aria-label={t('Select all')}
         />
         {children ||
@@ -44,7 +45,6 @@ export const CheckAll: FC<CheckAllProps> = forwardRef<React.ElementRef<typeof Ch
                   disabled={!(table.getIsSomeRowsSelected() || table.getIsAllPageRowsSelected())}
                   size={'icon'}
                   variant={'ghost'}
-                  className="w-5 px-0"
                 >
                   <DotsVerticalIcon className="h-4 w-4" />
                 </Button>

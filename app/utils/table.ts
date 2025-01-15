@@ -1,4 +1,5 @@
 import { CrudFilters, CrudSorting } from '@refinedev/core';
+import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
 
 export interface TableParams {
   pagination?: {
@@ -19,7 +20,7 @@ export function parseTableParams(search: string): TableParams {
 
   // 解析分页参数
   const page = parseInt(searchParams.get('page') || '1');
-  const pageSize = parseInt(searchParams.get('pageSize') || '10');
+  const pageSize = parseInt(searchParams.get('pageSize') || DEFAULT_PAGE_SIZE.toString());
 
   // 解析排序参数
   const sort = searchParams.get('sort');

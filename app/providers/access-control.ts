@@ -30,7 +30,7 @@ export const accessControlProvider: AccessControlProvider = {
       if (matchedRules.length === 0) {
         return {
           can: false,
-          reason: 'No matching permission rules found',
+          reason: 'Permission denied',
         };
       }
 

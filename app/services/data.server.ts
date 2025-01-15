@@ -1,4 +1,5 @@
 import { DataProvider } from '@refinedev/core';
+import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
 import { Resources } from '~/constants/resource';
 import { dataResources } from '~/providers';
 import { db } from '~/services/db.server';
@@ -90,7 +91,7 @@ function parseRefineFilters(filters: Filter[]): Filter[] {
 export const dataService: DataProvider = {
   // 获取列表数据
   getList: async ({ resource, pagination, sorters, filters, meta }) => {
-    const { current = 1, pageSize = 10 } = pagination ?? {};
+    const { current = 1, pageSize = DEFAULT_PAGE_SIZE } = pagination ?? {};
     const skip = (Number(current) - 1) * Number(pageSize);
 
     // 构建过滤条件

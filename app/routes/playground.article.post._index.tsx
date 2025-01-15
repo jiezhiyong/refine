@@ -1,4 +1,4 @@
-import { useTable, type UseTableReturnType } from '~/lib/refinedev-react-table';
+import { type UseTableReturnType } from '~/lib/refinedev-react-table';
 import {
   Trash2,
   Settings2,
@@ -18,10 +18,8 @@ import {
   Search,
   ChevronRight,
   Link,
-  Eye,
-  Edit,
 } from 'lucide-react';
-import { BaseRecord, HttpError, useCan, useNavigation, useSelect, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, HttpError, useUserFriendlyName } from '@refinedev/core';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import React from 'react';
@@ -49,16 +47,12 @@ import { DateRange } from 'react-day-picker';
 import { tryParse } from '~/utils/try-parse';
 import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
 import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
-import { getSearchParams } from '~/utils/search-params';
 import { getDefaultTitle } from '~/utils/get-default-title';
 import { PageError } from '~/components/500';
-import { CreateButton, DeleteButton, EditButton, ShowButton } from '~/component-refine';
-import { parseTableParams } from '@refinedev/remix-router';
-import { Category, Post } from '@prisma/client';
-import { dataService } from '~/services/data.server';
 import { Table, TableFilterProps } from '~/component-refine/table';
-import { ColumnDef, flexRender } from '@tanstack/react-table';
-import { IPost } from '~/types/post';
+import { dataService } from '~/services/data.server';
+import { Post } from '@prisma/client';
+import { parseTableParams } from '~/utils/table';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {
@@ -77,7 +71,6 @@ export const handle: HandleFunction = {
 
 // 处理 GET 请求
 export async function loader({ request }: LoaderFunctionArgs) {
-  const searchParams = getSearchParams(request);
   const { pagination, filters, sorters } = parseTableParams(new URL(request.url).search);
   const posts = await dataService.getList<Post>({
     resource: 'post',
@@ -99,6 +92,8 @@ export async function action({ request }: ActionFunctionArgs) {
 // UI
 export default function PostIndex() {
   const friendly = useUserFriendlyName();
+  const { posts } = useLoaderData<typeof loader>();
+
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const label = `Delete Selected (${table.getSelectedRowModel().rows.length}) ${friendly(
       'Row',
@@ -112,15 +107,16 @@ export default function PostIndex() {
       },
     };
   };
+
   return (
-    <Table enableSorting enableFilters>
+    <Table enableSorting enableFilters enableHiding>
       <Table.Column
         accessorKey="id"
         id={'select'}
         header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
         cell={({ row }) => (
           <Checkbox
-            className="translate-y-[2px]"
+            className="ml-2"
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label="Select row"
@@ -128,20 +124,30 @@ export default function PostIndex() {
           />
         )}
       />
-      <Table.Column header={'ID'} id="id" accessorKey="id" enableSorting enableHiding />
+
+      <Table.Column header={'Index'} accessorKey="id" id="id" enableHiding />
+
       <Table.Column
         header={'Title'}
         accessorKey="title"
         id="title"
-        enableSorting
         enableHiding
         filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Title" />}
       />
+
+      <Table.Column
+        header={'Hit'}
+        accessorKey="hit"
+        id="hit"
+        enableSorting
+        enableHiding
+        cell={({ row: { original } }) => <span>{original.hit.toLocaleString()}</span>}
+      />
+
       <Table.Column
         header={'Status'}
         accessorKey="status"
         id="status"
-        enableSorting
         enableHiding
         filter={(props: TableFilterProps) => (
           <Table.Filter.Dropdown
@@ -163,6 +169,7 @@ export default function PostIndex() {
           />
         )}
       />
+
       <Table.Column
         header={'CreatedAt'}
         accessorKey="createdAt"
@@ -171,14 +178,15 @@ export default function PostIndex() {
         enableHiding
         filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
       />
+
       <Table.Column
         accessorKey={'id'}
         id={'actions'}
         cell={({ row: { original } }) => (
-          <Table.Actions>
-            <Table.ShowAction row={original} resource="post" />
-            <Table.EditAction row={original} resource="post" />
-            <Table.DeleteAction row={original} withForceDelete={true} resource="post" />
+          <Table.Actions row={original} resource="post">
+            <Table.ShowAction />
+            <Table.EditAction />
+            <Table.DeleteAction />
           </Table.Actions>
         )}
       />

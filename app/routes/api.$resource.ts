@@ -3,6 +3,7 @@ import { dataService } from '~/services/data.server';
 import type { CrudFilters, CrudOperators, CrudSorting, Pagination } from '@refinedev/core';
 import { TAny } from '~/types/any';
 import { getSession } from '~/services/session.server';
+import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
 
 // 处理 getList 请求
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -26,7 +27,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       meta: {},
     });
 
-    return Response.json(res?.data || []);
+    return Response.json(res.data || [], {
+      headers: { 'X-Total-Count': String(res.total || 0) },
+    });
   } catch (error: TAny) {
     return Response.json({ message: error.message }, { status: 500 });
   }
@@ -66,8 +69,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 // 从 URL 参数中解析分页信息
 function getPaginationFromUrl(url: URL): Pagination {
-  const current = Number(url.searchParams.get('page')) || 1;
-  const pageSize = Number(url.searchParams.get('limit')) || 10;
+  const current = Number(url.searchParams.get('_start')) || 1;
+  const pageSize = Number(url.searchParams.get('_end')) || DEFAULT_PAGE_SIZE;
   return {
     current,
     pageSize,

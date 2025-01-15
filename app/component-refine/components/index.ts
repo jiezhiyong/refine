@@ -4,5 +4,4 @@ export * from './confirm';
 export * from './field';
 export * from './form';
 export * from './link';
-export * from './page-header';
 export * from './select';

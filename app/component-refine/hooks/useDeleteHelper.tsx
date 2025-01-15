@@ -16,7 +16,7 @@ import { TAny } from '~/types/any';
 
 type DeleteHelperReturnType = CanReturnType & {
   isLoading: boolean;
-  mutate: (e?: MutateOptions<unknown, unknown, unknown, unknown>) => TAny; // TODO: UseDeleteReturnType fix
+  mutate: (e?: MutateOptions<unknown, unknown, unknown, unknown>) => DeleteHelperReturnType;
 };
 
 export const useDeleteHelper = (resource: string, recordItemId: string, meta?: TAny): DeleteHelperReturnType => {

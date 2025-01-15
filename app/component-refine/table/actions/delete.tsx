@@ -7,14 +7,14 @@ import { TAny } from '~/types/any';
 import { Trash2 } from 'lucide-react';
 
 type DeleteActionProps = RowActionProps & {
-  row: TAny;
-  resource: string;
+  row?: TAny;
+  resource?: string;
   title?: string;
   onAfterHandle?: () => void;
 };
 
 export function DeleteAction({ row, resource, title, disabled, onAfterHandle, ...props }: DeleteActionProps) {
-  const { can, reason } = useDeleteHelper(resource, row.id);
+  const { can, reason } = useDeleteHelper(resource!, row.id);
   const deleteContext = useContext(DeleteContext);
 
   return (
@@ -22,11 +22,11 @@ export function DeleteAction({ row, resource, title, disabled, onAfterHandle, ..
       {...props}
       icon={<Trash2 size={16} />}
       disabled={!can || disabled}
-      title={!can ? reason : title || 'Delete'}
+      title={`${title || 'Delete'}${!can ? `（${reason}）` : ''}`}
       onClick={() =>
         deleteContext?.updateData({
           row,
-          resource,
+          resource: resource!,
           toogle: true,
           onAfterHandle,
         })
