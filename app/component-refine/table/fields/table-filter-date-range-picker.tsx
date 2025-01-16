@@ -29,7 +29,7 @@ export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseReco
       const dates = Object.values(date).filter(Boolean);
       if (dates.length) {
         column?.setFilterValue(
-          dates.map((date: Date | undefined) => (date ? format(date, 'yyyy-MM-dd').toString() : ''))
+          dates.map((date: Date | undefined) => (date ? date.toISOString().split('T')[0] + 'T00:00:00.000Z' : ''))
         );
       }
     }
@@ -39,7 +39,12 @@ export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseReco
     <Popover>
       <PopoverTrigger asChild>
         <div className="inline-flex flex-row items-center gap-x-0.5">
-          <Button title={title} variant="ghost" size="sm" className="h-5 border-dashed px-1 py-2.5">
+          <Button
+            title={title}
+            variant="ghost"
+            size="sm"
+            className={cn('h-5 border-dashed px-1 py-2.5', selectedValues.size > 0 && 'text-green-500')}
+          >
             <FilterIcon className={cn('h-3.5 w-3.5')} />
             {date?.from ? (
               <>

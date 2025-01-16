@@ -26,11 +26,16 @@ export function TableFilterDropdown({ column, title, options, align = 'start' }:
     <Popover>
       <PopoverTrigger asChild>
         <div className="inline-flex flex-row items-center gap-x-0.5">
-          <Button title={title} variant="ghost" size="sm" className="h-5 border-dashed px-1 py-2.5">
+          <Button
+            title={title}
+            variant="ghost"
+            size="sm"
+            className={cn('h-5 border-dashed px-1 py-2.5', selectedValues.size > 0 && 'text-green-500')}
+          >
             <FilterIcon className={cn('h-3.5 w-3.5')} />
             {selectedValues?.size > 0 && (
               <>
-                <Separator orientation="vertical" className="mx-2 h-4" />
+                <Separator orientation="vertical" className="h-4" />
                 <Badge variant="secondary" className="h-3.5 rounded-sm p-1 text-xs font-normal lg:hidden">
                   {selectedValues.size}
                 </Badge>
@@ -57,9 +62,9 @@ export function TableFilterDropdown({ column, title, options, align = 'start' }:
             )}
           </Button>
 
-          {selectedValues.size > 0 && (
+          {/* {selectedValues.size > 0 && (
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               className="h-5 border-dashed px-1 py-2.5 text-green-500"
               onClick={(e) => {
@@ -69,7 +74,7 @@ export function TableFilterDropdown({ column, title, options, align = 'start' }:
             >
               <FilterX className={cn('h-3.5 w-3.5')} />
             </Button>
-          )}
+          )} */}
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align={align}>

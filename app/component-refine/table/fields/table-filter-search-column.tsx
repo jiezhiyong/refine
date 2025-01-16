@@ -1,4 +1,4 @@
-import { FilterIcon, FilterX } from 'lucide-react';
+import { FilterIcon, FilterX, Search } from 'lucide-react';
 import type { TableFilterProps } from '..';
 import { cn } from '~/utils/cn';
 import { Button } from '~/components-shadcn/button';
@@ -6,15 +6,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/pop
 import { Input } from '~/components-shadcn/input';
 import { Separator } from '~/components-shadcn/separator';
 import { useTranslate } from '@refinedev/core';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from '~/components-shadcn/command';
 
 export function TableFilterSearchColumn({ column, title, align = 'start' }: TableFilterProps) {
   const selectedValue = column?.getFilterValue() as string;
@@ -24,7 +15,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
     <Popover>
       <PopoverTrigger asChild>
         <div className="inline-flex flex-row items-center gap-x-0.5">
-          {selectedValue ? (
+          {/* {selectedValue ? (
             <Button
               variant="ghost"
               size="sm"
@@ -36,64 +27,29 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
             >
               <FilterX className={cn('h-3.5 w-3.5')} />
             </Button>
-          ) : (
-            <Button title={title} variant="ghost" size="sm" className="h-4 border-dashed px-1 py-2.5">
-              <FilterIcon className={cn('h-3.5 w-3.5')} />
-            </Button>
-          )}
+          ) : ( */}
+          <Button
+            title={title}
+            variant="ghost"
+            size="sm"
+            className={cn('h-4 border-dashed px-1 py-2.5', selectedValue && 'text-green-500')}
+          >
+            <FilterIcon className={cn('h-3.5 w-3.5')} />
+          </Button>
+          {/* )} */}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align={align}>
-        <Command>
-          <CommandInput
-            placeholder={title}
-            onValueChange={(e) => {
-              column?.setFilterValue(e);
-            }}
-          />
-          <CommandList>
-            {selectedValue && (
-              <>
-                <CommandSeparator />
-                <CommandGroup>
-                  <CommandItem
-                    onSelect={() => column?.setFilterValue(undefined)}
-                    className="justify-center text-center"
-                  >
-                    {t('Clear filters')}
-                  </CommandItem>
-                </CommandGroup>
-              </>
-            )}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-
-      {/* <PopoverContent className="w-[200px] overflow-hidden border-0 p-0 ring-0" align={align}>
+      <PopoverContent className="w-[200px] overflow-hidden p-0 ring-0" align={align}>
         <div className="relative">
           <div className="flex flex-row items-center bg-popover px-3 text-popover-foreground">
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 15 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="mr-2 h-4 w-4 shrink-0 opacity-50"
-            >
-              <path
-                d="M10 6.5C10 8.433 8.433 10 6.5 10C4.567 10 3 8.433 3 6.5C3 4.567 4.567 3 6.5 3C8.433 3 10 4.567 10 6.5ZM9.30884 10.0159C8.53901 10.6318 7.56251 11 6.5 11C4.01472 11 2 8.98528 2 6.5C2 4.01472 4.01472 2 6.5 2C8.98528 2 11 4.01472 11 6.5C11 7.56251 10.6318 8.53901 10.0159 9.30884L12.8536 12.1464C13.0488 12.3417 13.0488 12.6583 12.8536 12.8536C12.6583 13.0488 12.3417 13.0488 12.1464 12.8536L9.30884 10.0159Z"
-                fill="currentColor"
-                fillRule="evenodd"
-                clipRule="evenodd"
-              ></path>
-            </svg>
+            <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
             <Input
               defaultValue={selectedValue ?? ''}
               onChange={(e) => {
                 column?.setFilterValue(e.target.value);
               }}
               className={cn(
-                'h-10 rounded-md border-0 bg-transparent py-3 text-sm shadow-none outline-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
+                'h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm shadow-none outline-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
               )}
               placeholder={title}
             />
@@ -101,9 +57,9 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
           {selectedValue && (
             <>
               <Separator />
-              <div className="flex flex-row items-center justify-center p-3">
+              <div className="flex flex-row items-center justify-center p-1">
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
                   className="h-8 w-full border-dashed px-2"
                   onClick={() => {
@@ -116,7 +72,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
             </>
           )}
         </div>
-      </PopoverContent> */}
+      </PopoverContent>
     </Popover>
   );
 }
