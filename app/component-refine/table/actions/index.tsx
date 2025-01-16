@@ -29,6 +29,7 @@ export type RowActionProps = PropsWithChildren & {
 export const RowAction: FC<RowActionProps> = (props) => {
   return (
     <DropdownMenuItem
+      className={props.className}
       disabled={props.disabled}
       asChild={!(props.disabled || !props.to || (!props.to && !props.children))}
       onClick={props.onClick}

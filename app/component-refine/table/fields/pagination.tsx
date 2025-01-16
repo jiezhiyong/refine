@@ -4,6 +4,7 @@ import { UseTableReturnType as Table } from '~/lib/refinedev-react-table';
 import { BaseRecord, useTranslate } from '@refinedev/core';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components-shadcn/select';
 import { Button } from '~/components-shadcn/button';
+import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
 
 interface DataTablePaginationProps<TData extends BaseRecord = BaseRecord> {
   table: Table<TData>;
@@ -29,7 +30,7 @@ export const Pagination = <TData extends BaseRecord = BaseRecord>({ table }: Dat
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent>
-              {[10, 20, 30, 40, 50, 100].map((pageSize) => (
+              {[DEFAULT_PAGE_SIZE, 20, 30, 40, 50, 100].map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

@@ -43,6 +43,7 @@ CREATE TABLE "Post" (
     "content" TEXT NOT NULL,
     "hit" INTEGER NOT NULL DEFAULT 0,
     "image" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'DRAFT',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME,
     "categoryId" TEXT,

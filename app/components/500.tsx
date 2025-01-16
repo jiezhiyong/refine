@@ -27,6 +27,7 @@ export function PageError({ error }: { error?: Error | ErrorResponse | { message
           </h2>
         </div>
         <p className="mb-8 text-xl text-red-500">{(error as Error).message || 'unknown error'}</p>
+        {/* <pre className="mb-8 rounded-lg border p-6 text-left">{(error as Error).message || 'unknown error'}</pre> */}
         <Button onClick={() => location.reload()}>Try Again</Button>
       </div>
     </div>

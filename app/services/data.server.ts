@@ -1,7 +1,7 @@
 import { DataProvider } from '@refinedev/core';
+import { dataResources } from '~/config/resources';
 import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
 import { Resources } from '~/constants/resource';
-import { dataResources } from '~/providers';
 import { db } from '~/services/db.server';
 import { TAny } from '~/types/any';
 
@@ -110,15 +110,33 @@ export const dataService: DataProvider = {
       findMany: (args: TAny) => Promise<TAny[]>;
     };
 
+    // 处理关联字段的查询条件
+    // 例如: { 'user.name': { contains: 'sha' } } => { user: { name: { contains: 'sha' } } }
+    const whereCondition = Object.entries(where).reduce((acc, [key, value]) => {
+      if (key.includes('.')) {
+        const [relation, field] = key.split('.');
+        return {
+          ...acc,
+          [relation]: {
+            [field]: value,
+          },
+        };
+      }
+      return { ...acc, [key]: value };
+    }, {});
+
+    // 添加 Prisma 查询参数的日志
+    const queryParams = {
+      skip,
+      take: Number(pageSize),
+      where: whereCondition,
+      orderBy,
+      ...meta,
+    };
+
     const [total, items] = await Promise.all([
-      prismaModel.count({ where }),
-      prismaModel.findMany({
-        skip,
-        take: Number(pageSize),
-        where,
-        orderBy,
-        ...meta,
-      }),
+      prismaModel.count({ where: whereCondition }),
+      prismaModel.findMany(queryParams),
     ]);
 
     // 确保返回的数据格式符合 Refine 的期望

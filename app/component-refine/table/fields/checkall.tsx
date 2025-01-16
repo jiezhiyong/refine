@@ -14,12 +14,14 @@ import { BaseRecord, HttpError, useTranslate } from '@refinedev/core';
 import { UseTableReturnType } from '~/lib/refinedev-react-table';
 
 import { FC, forwardRef, PropsWithChildren } from 'react';
+import { cn } from '~/utils/cn';
 
 type CheckAllProps = React.ComponentPropsWithoutRef<typeof Checkbox> &
   PropsWithChildren<{
     table: UseTableReturnType<BaseRecord, HttpError>;
     options?: {
       label: string;
+      className?: string;
       onClick: () => void;
     }[];
   }>;
@@ -54,7 +56,7 @@ export const CheckAll: FC<CheckAllProps> = forwardRef<React.ElementRef<typeof Ch
                 <DropdownMenuSeparator />
                 {!children && Array.isArray(options) && options?.length > 0
                   ? options.map((option, key) => (
-                      <DropdownMenuItem key={key} onSelect={option.onClick}>
+                      <DropdownMenuItem key={key} onSelect={option.onClick} className={cn(option?.className)}>
                         {option.label}
                       </DropdownMenuItem>
                     ))

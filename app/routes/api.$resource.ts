@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, type ActionFunctionArgs } from '@remix-run/node';
 import { dataService } from '~/services/data.server';
-import type { CrudFilters, CrudOperators, CrudSorting, Pagination } from '@refinedev/core';
+import type { CrudFilters, CrudSorting, Pagination } from '@refinedev/core';
 import { TAny } from '~/types/any';
 import { getSession } from '~/services/session.server';
 import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
@@ -18,18 +18,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const pagination = getPaginationFromUrl(url);
     const sorters = getSortersFromUrl(url);
     const filters = getFiltersFromUrl(url);
+    const join = getJoinFromUrl(url);
 
     const res = await dataService.getList({
       resource,
       pagination,
       sorters,
       filters,
-      meta: {},
+      meta: join ? { include: join } : {},
     });
 
-    return Response.json(res.data || [], {
-      headers: { 'X-Total-Count': String(res.total || 0) },
-    });
+    return Response.json(res);
   } catch (error: TAny) {
     return Response.json({ message: error.message }, { status: 500 });
   }
@@ -69,24 +68,24 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 // 从 URL 参数中解析分页信息
 function getPaginationFromUrl(url: URL): Pagination {
-  const current = Number(url.searchParams.get('_start')) || 1;
-  const pageSize = Number(url.searchParams.get('_end')) || DEFAULT_PAGE_SIZE;
+  const limit = Number(url.searchParams.get('limit')) || DEFAULT_PAGE_SIZE;
+  const page = Number(url.searchParams.get('page')) || 1;
+
   return {
-    current,
-    pageSize,
+    current: page,
+    pageSize: limit,
   };
 }
 
 // 从 URL 参数中解析排序信息
 function getSortersFromUrl(url: URL): CrudSorting {
-  const sort = url.searchParams.get('sort');
-  const order = url.searchParams.get('order');
+  const sortParam = url.searchParams.get('sort[0]');
+  if (!sortParam) return [];
 
-  if (!sort || !order) return [];
-
+  const [field, order] = sortParam.split(',');
   return [
     {
-      field: sort,
+      field,
       order: order.toLowerCase() as 'asc' | 'desc',
     },
   ];
@@ -94,20 +93,68 @@ function getSortersFromUrl(url: URL): CrudSorting {
 
 // 从 URL 参数中解析过滤信息
 function getFiltersFromUrl(url: URL): CrudFilters {
-  const filters: CrudFilters = [];
+  const searchParam = url.searchParams.get('s');
+  if (!searchParam) return [];
 
-  // NestJS CRUD 过滤语法
-  for (const [key, value] of url.searchParams.entries()) {
-    if (!['page', 'limit', 'offset', 'sort', 'order'].includes(key)) {
-      // 支持常见的过滤操作符
-      const [field, operator = 'eq'] = key.split('_');
-      filters.push({
+  try {
+    const searchObj = JSON.parse(decodeURIComponent(searchParam));
+    if (!searchObj.$and) return [];
+
+    return searchObj.$and.map((condition: Record<string, { $eq?: string; $contL?: string; $in?: string[] }>) => {
+      const [field] = Object.keys(condition);
+      const operatorMap = {
+        $eq: 'eq',
+        $contL: 'contains',
+        $in: 'in',
+      } as const;
+
+      // 找到第一个存在的操作符
+      const operator = Object.keys(condition[field])[0] as keyof typeof operatorMap;
+      const mappedOperator = operatorMap[operator] || 'contains';
+      const value = condition[field][operator];
+
+      return {
         field,
-        operator: operator as Exclude<CrudOperators, 'or' | 'and'>,
+        operator: mappedOperator,
         value,
-      });
-    }
+      };
+    });
+  } catch (error) {
+    console.error('解析过滤参数错误:', error);
+    return [];
+  }
+}
+
+// 从 URL 参数中解析 join 信息
+function getJoinFromUrl(url: URL) {
+  // 收集所有的 join 参数
+  const joinParams: string[] = [];
+  for (let i = 0; ; i++) {
+    const param = url.searchParams.get(`join[${i}]`);
+    if (!param) break;
+    joinParams.push(param);
   }
 
-  return filters;
+  if (joinParams.length === 0) return undefined;
+
+  // 解析 join 参数并转换为 Prisma include 格式
+  const include: Record<string, { select: Record<string, boolean> }> = {};
+
+  joinParams.forEach((param) => {
+    // 格式：relation||field1,field2,field3
+    const [relation, fields] = param.split('||');
+    if (!relation || !fields) return;
+
+    include[relation] = {
+      select: fields.split(',').reduce(
+        (acc, field) => ({
+          ...acc,
+          [field]: true,
+        }),
+        {}
+      ),
+    };
+  });
+
+  return Object.keys(include).length > 0 ? include : undefined;
 }

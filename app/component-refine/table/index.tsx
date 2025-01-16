@@ -7,6 +7,7 @@ import {
   Column,
   ColumnDef,
   ColumnDefTemplate,
+  ColumnMeta,
   TableOptionsResolved,
   flexRender,
 } from '@tanstack/react-table';
@@ -54,6 +55,7 @@ export type ColumnProps<
   cell?: ColumnDefTemplate<CellContext<TData, TValue>>;
   children?: ReactElement;
   filter?: FC<TableFilterProps<TData>>;
+  meta?: ColumnMeta<TData, TValue>;
 };
 
 type CustomColumnDef<TData extends BaseRecord = BaseRecord, TError extends HttpError = HttpError> = ColumnDef<
@@ -73,7 +75,7 @@ export function Table<
   TQueryFnData extends BaseRecord = BaseRecord,
   TData extends BaseRecord = TQueryFnData,
   TError extends HttpError = HttpError,
->({ children, showHeader = true, columns = [], ...props }: TableProps<TData, TError>) {
+>({ children, showHeader = true, columns = [], refineCoreProps, ...props }: TableProps<TData, TError>) {
   const t = useTranslate();
   const mapColumn = useCallback(
     ({
@@ -84,6 +86,7 @@ export function Table<
       enableHiding,
       filter,
       cell,
+      meta,
     }: ColumnProps<TData, TError>): ColumnDef<TData> => {
       const column: TAny = {
         id,
@@ -94,6 +97,7 @@ export function Table<
         enableColumnFilter: true,
         enableResizing: true,
         filter,
+        meta,
       };
 
       if (cell) {
@@ -116,16 +120,8 @@ export function Table<
   const table = useTable({
     columns,
     refineCoreProps: {
-      pagination: {
-        mode: 'server',
-        current: 1,
-        pageSize: DEFAULT_PAGE_SIZE,
-      },
-      meta: {
-        total: (headers: Headers) => {
-          return Number(headers.get('X-Total-Count') || 0);
-        },
-      },
+      initialPageSize: DEFAULT_PAGE_SIZE,
+      ...refineCoreProps,
     },
     ...props,
   });

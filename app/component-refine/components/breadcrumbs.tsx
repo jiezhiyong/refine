@@ -30,7 +30,7 @@ export const Breadcrumbs: FC<BreadcrumbProps> = ({ showHome = true, meta }) => {
     <Fragment key={key}>
       <BreadcrumbItem>
         {href ? (
-          <BreadcrumbLink asChild className="text-link">
+          <BreadcrumbLink asChild className="text-link hover:bg-transparent">
             <Link href={href}>{label}</Link>
           </BreadcrumbLink>
         ) : (
@@ -53,6 +53,7 @@ export const Breadcrumbs: FC<BreadcrumbProps> = ({ showHome = true, meta }) => {
                 title={dashboardResource?.meta?.title ?? dashboardResource.name ?? 'Dashboard'}
               >
                 <Link
+                  className="hover:bg-transparent"
                   href={dashboardResource.list?.toString()}
                   title={dashboardResource?.meta?.title ?? dashboardResource.name ?? 'Dashboard'}
                 >

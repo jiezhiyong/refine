@@ -5,6 +5,7 @@ import type { RowActionProps } from '.';
 import { RowAction } from '.';
 import { TAny } from '~/types/any';
 import { Trash2 } from 'lucide-react';
+import { cn } from '~/utils/cn';
 
 type DeleteActionProps = RowActionProps & {
   row?: TAny;
@@ -13,7 +14,15 @@ type DeleteActionProps = RowActionProps & {
   onAfterHandle?: () => void;
 };
 
-export function DeleteAction({ row, resource, title, disabled, onAfterHandle, ...props }: DeleteActionProps) {
+export function DeleteAction({
+  row,
+  resource,
+  title,
+  disabled,
+  onAfterHandle,
+  className,
+  ...props
+}: DeleteActionProps) {
   const { can, reason } = useDeleteHelper(resource!, row.id);
   const deleteContext = useContext(DeleteContext);
 
@@ -23,6 +32,7 @@ export function DeleteAction({ row, resource, title, disabled, onAfterHandle, ..
       icon={<Trash2 size={16} />}
       disabled={!can || disabled}
       title={`${title || 'Delete'}${!can ? `（${reason}）` : ''}`}
+      className={cn('!text-destructive', className)}
       onClick={() =>
         deleteContext?.updateData({
           row,

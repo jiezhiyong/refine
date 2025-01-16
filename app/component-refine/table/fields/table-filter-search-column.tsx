@@ -6,6 +6,15 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/pop
 import { Input } from '~/components-shadcn/input';
 import { Separator } from '~/components-shadcn/separator';
 import { useTranslate } from '@refinedev/core';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from '~/components-shadcn/command';
 
 export function TableFilterSearchColumn({ column, title, align = 'start' }: TableFilterProps) {
   const selectedValue = column?.getFilterValue() as string;
@@ -17,9 +26,9 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
         <div className="inline-flex flex-row items-center gap-x-0.5">
           {selectedValue ? (
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
-              className="h-5 border-dashed px-1 py-2.5"
+              className="h-5 border-dashed px-1 py-2.5 text-green-500"
               onClick={(e) => {
                 e.preventDefault();
                 column?.setFilterValue(undefined);
@@ -28,13 +37,39 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
               <FilterX className={cn('h-3.5 w-3.5')} />
             </Button>
           ) : (
-            <Button title={title} variant="outline" size="sm" className="h-4 border-dashed px-1 py-2.5">
+            <Button title={title} variant="ghost" size="sm" className="h-4 border-dashed px-1 py-2.5">
               <FilterIcon className={cn('h-3.5 w-3.5')} />
             </Button>
           )}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] overflow-hidden border-0 p-0 ring-0" align={align}>
+      <PopoverContent className="w-[200px] p-0" align={align}>
+        <Command>
+          <CommandInput
+            placeholder={title}
+            onValueChange={(e) => {
+              column?.setFilterValue(e);
+            }}
+          />
+          <CommandList>
+            {selectedValue && (
+              <>
+                <CommandSeparator />
+                <CommandGroup>
+                  <CommandItem
+                    onSelect={() => column?.setFilterValue(undefined)}
+                    className="justify-center text-center"
+                  >
+                    {t('Clear filters')}
+                  </CommandItem>
+                </CommandGroup>
+              </>
+            )}
+          </CommandList>
+        </Command>
+      </PopoverContent>
+
+      {/* <PopoverContent className="w-[200px] overflow-hidden border-0 p-0 ring-0" align={align}>
         <div className="relative">
           <div className="flex flex-row items-center bg-popover px-3 text-popover-foreground">
             <svg
@@ -66,23 +101,22 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
           {selectedValue && (
             <>
               <Separator />
-              <div className="flex flex-row items-center justify-center py-3">
+              <div className="flex flex-row items-center justify-center p-3">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-8 border-dashed px-2"
+                  className="h-8 w-full border-dashed px-2"
                   onClick={() => {
                     column?.setFilterValue(undefined);
                   }}
                 >
-                  <FilterX size={16} className="mr-2" />
-                  {t('Clear')}
+                  {t('Clear filters')}
                 </Button>
               </div>
             </>
           )}
         </div>
-      </PopoverContent>
+      </PopoverContent> */}
     </Popover>
   );
 }

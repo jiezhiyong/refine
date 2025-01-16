@@ -10,6 +10,7 @@ export const posts = [
     createdAt: '2023-02-11T07:35:17.656Z',
     updatedAt: '2023-12-29T21:33:56.604Z',
     image: '/dog.jpg',
+    status: 'PUBLISHED',
   },
   {
     title: 'Ut beatae aut quos neque dolor atque eaque corrupti.',
@@ -22,6 +23,7 @@ export const posts = [
     createdAt: '2024-09-13T11:46:10.239Z',
     updatedAt: '2024-09-27T13:01:09.971Z',
     image: '/dog.jpg',
+    status: 'REJECTED',
   },
   {
     title: 'Aspernatur assumenda mollitia accusamus vel.',
@@ -34,6 +36,7 @@ export const posts = [
     createdAt: '2024-04-03T11:34:58.187Z',
     updatedAt: '2023-02-28T11:35:52.857Z',
     image: '/dog.jpg',
+    status: 'PUBLISHED',
   },
   {
     title: 'Architecto distinctio eveniet minima suscipit asperiores quis dolore quaerat aut.',
@@ -1174,6 +1177,7 @@ export const posts = [
     createdAt: '2024-12-07T09:56:32.484Z',
     updatedAt: '2023-09-22T21:29:48.045Z',
     image: '/dog.jpg',
+    status: 'REJECTED',
   },
   {
     title: 'Minus enim atque reprehenderit nulla sunt aut et laborum est.',
@@ -1186,6 +1190,7 @@ export const posts = [
     createdAt: '2024-01-04T00:36:18.257Z',
     updatedAt: '2023-10-30T14:01:03.549Z',
     image: '/dog.jpg',
+    status: 'PUBLISHED',
   },
   {
     title: 'Aut nisi atque.',
@@ -1198,5 +1203,6 @@ export const posts = [
     createdAt: '2024-07-18T11:29:20.986Z',
     updatedAt: '2024-02-25T09:58:24.165Z',
     image: '/dog.jpg',
+    status: 'PUBLISHED',
   },
 ];

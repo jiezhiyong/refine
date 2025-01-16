@@ -63,6 +63,7 @@ model Post {
   content    String
   hit        Int       @default(0)
   image      String?
+  status     String    @default("DRAFT") // 状态：DRAFT（草稿）, PUBLISHED（已发布）, REJECTED（已拒绝）
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
   category   Category? @relation(fields: [categoryId], references: [id])

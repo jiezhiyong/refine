@@ -29,7 +29,7 @@ import { User } from '@prisma/client';
 import { getPreferencesCookie } from '~/services/cookie.server';
 import { getUser } from '~/services/session.server';
 import { fallbackLanguage, LocaleLanguage } from './config/i18n';
-import { dataResources, dataProvider } from '~/providers/data';
+import { dataProvider } from '~/providers/data';
 import { authProvider } from '~/providers/auth';
 import { accessControlProvider } from '~/providers/access-control';
 // import { liveProvider } from '~/providers/live';
@@ -45,6 +45,7 @@ import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
 import { generateSignature } from './utils/signature';
 import { PermissionRule } from './types/casbin';
+import { dataResources } from './config/resources';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [

@@ -1,4 +1,4 @@
-import { dataResources } from '~/providers';
+import { dataResources } from '~/config/resources';
 import { TAny } from '~/types/any';
 
 /**
