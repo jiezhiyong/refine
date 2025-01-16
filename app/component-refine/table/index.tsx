@@ -25,6 +25,7 @@ import { DeleteProvider } from '../providers';
 import { TAny } from '~/types/any';
 import { PopoverContentProps } from '@radix-ui/react-popover';
 import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
+import { CloneAction } from './actions/clone';
 
 export type TableListFilterOption = BaseOption & {
   icon?: React.ComponentType<{ className?: string }>;
@@ -69,13 +70,14 @@ export type TableProps<TData extends BaseRecord = BaseRecord, TError extends Htt
 > & {
   children?: ReactElement<ColumnProps<TData, TError>>[];
   showHeader?: boolean;
+  toolbar?: React.ReactNode;
 };
 
 export function Table<
   TQueryFnData extends BaseRecord = BaseRecord,
   TData extends BaseRecord = TQueryFnData,
   TError extends HttpError = HttpError,
->({ children, showHeader = true, columns = [], refineCoreProps, ...props }: TableProps<TData, TError>) {
+>({ children, showHeader = true, columns = [], refineCoreProps, toolbar, ...props }: TableProps<TData, TError>) {
   const t = useTranslate();
   const mapColumn = useCallback(
     ({
@@ -136,7 +138,7 @@ export function Table<
   return (
     <DeleteProvider>
       <div className="mt-1 space-y-4">
-        <DataTableToolbar table={table} />
+        <DataTableToolbar table={table} toolbar={toolbar} />
         <div className="rounded-md border border-border">
           <TableUi>
             {showHeader && (
@@ -215,6 +217,7 @@ Table.Actions = RowActions;
 Table.Action = RowAction;
 Table.EditAction = EditAction;
 Table.ShowAction = ShowAction;
+Table.CloneAction = CloneAction;
 Table.DeleteAction = DeleteAction;
 Table.Filter = {
   DateRangePicker: TableFilterDateRangePickerFilter,

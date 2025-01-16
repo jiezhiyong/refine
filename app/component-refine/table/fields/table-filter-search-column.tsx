@@ -27,7 +27,6 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
           {selectedValue ? (
             <Button
               variant="ghost"
-              size="sm"
               className="h-5 border-dashed px-1 py-2.5 text-green-500"
               onClick={(e) => {
                 e.preventDefault();
@@ -37,7 +36,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
               <FilterX className={cn('h-3.5 w-3.5')} />
             </Button>
           ) : (
-            <Button title={title} variant="ghost" size="sm" className="h-4 border-dashed px-1 py-2.5">
+            <Button title={title} variant="ghost" className="h-4 border-dashed px-1 py-2.5">
               <FilterIcon className={cn('h-3.5 w-3.5')} />
             </Button>
           )}
@@ -60,6 +59,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
                     onSelect={() => column?.setFilterValue(undefined)}
                     className="justify-center text-center"
                   >
+                    <FilterX size={16} />
                     {t('Clear filters')}
                   </CommandItem>
                 </CommandGroup>
@@ -104,7 +104,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
               <div className="flex flex-row items-center justify-center p-3">
                 <Button
                   variant="outline"
-                  size="sm"
+                 
                   className="h-8 w-full border-dashed px-2"
                   onClick={() => {
                     column?.setFilterValue(undefined);

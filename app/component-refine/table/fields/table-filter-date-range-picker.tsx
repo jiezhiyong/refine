@@ -28,9 +28,7 @@ export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseReco
     if (date) {
       const dates = Object.values(date).filter(Boolean);
       if (dates.length) {
-        column?.setFilterValue(
-          dates.map((date: Date | undefined) => (date ? format(date, 'yyyy-MM-dd').toString() : ''))
-        );
+        column?.setFilterValue(dates.map((date: Date | undefined) => (date ? date : '')));
       }
     }
   }, [column, date]);
@@ -39,7 +37,7 @@ export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseReco
     <Popover>
       <PopoverTrigger asChild>
         <div className="inline-flex flex-row items-center gap-x-0.5">
-          <Button title={title} variant="ghost" size="sm" className="h-5 border-dashed px-1 py-2.5">
+          <Button title={title} variant="ghost" className="h-5 border-dashed px-1 py-2.5">
             <FilterIcon className={cn('h-3.5 w-3.5')} />
             {date?.from ? (
               <>
@@ -57,7 +55,6 @@ export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseReco
           {selectedValues.size > 0 && (
             <Button
               variant="outline"
-              size="sm"
               className="h-5 border-dashed px-1 py-2.5 text-green-500"
               onClick={(e) => {
                 e.preventDefault();
@@ -82,18 +79,17 @@ export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseReco
         {selectedValues.size > 0 && (
           <>
             <Separator />
-            <div className="flex flex-row items-center justify-center py-3">
+            <div className="flex flex-row items-center justify-center p-1">
               <Button
-                variant="outline"
-                size="sm"
-                className="h-8 border-dashed px-2"
+                variant="ghost"
+                className="h-8 w-full border-dashed px-2"
                 onClick={() => {
                   column?.setFilterValue(undefined);
                   setDate({ from: undefined, to: undefined });
                 }}
               >
-                <FilterX size={16} className="mr-2" />
-                {t('Clear')}
+                <FilterX size={16} />
+                {t('Clear filters')}
               </Button>
             </div>
           </>

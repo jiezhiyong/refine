@@ -27,7 +27,7 @@ export const DataTableViewOptions = <TData,>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">
+        <Button variant="outline" className="ml-auto hidden h-8 lg:flex">
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
           {t('Columns')}
         </Button>
@@ -42,6 +42,7 @@ export const DataTableViewOptions = <TData,>({
               className="capitalize"
               checked={column.getIsVisible()}
               onCheckedChange={(value) => column.toggleVisibility(value)}
+              onSelect={(event) => event.preventDefault()}
             >
               {column?.columnDef?.header?.toString() || t(column.id)}
             </DropdownMenuCheckboxItem>

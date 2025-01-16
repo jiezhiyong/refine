@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { BaseRecord, HttpError, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, HttpError, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Checkbox } from '~/components-shadcn/checkbox';
@@ -13,6 +13,7 @@ import { parseTableParams } from '@refinedev/remix-router';
 import { Badge } from '~/components-shadcn/badge';
 import { POST_STATUS, POST_STATUS_MAP, PostStatus } from '~/types/post';
 import { TAny } from '~/types/any';
+import { CreateButton } from '~/component-refine';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -28,6 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     meta: {
       include: {
         user: { select: { name: true } },
+        category: { select: { title: true } },
       },
     },
   });
@@ -39,6 +41,7 @@ export default function PostIndex() {
   const { initialData } = useLoaderData<typeof loader>();
 
   const friendly = useUserFriendlyName();
+  const { mutate: deleteMany } = useDeleteMany();
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const label = `Delete Selected (${table.getSelectedRowModel().rows.length}) ${friendly(
@@ -50,6 +53,7 @@ export default function PostIndex() {
       className: '!text-destructive',
       label,
       onClick: () => {
+        // deleteMany();
         alert('Delete Selected');
       },
     };
@@ -60,6 +64,12 @@ export default function PostIndex() {
       enableSorting
       enableFilters
       enableHiding
+      toolbar={<CreateButton variant="outline" className="border-dashed" />}
+      initialState={{
+        columnVisibility: {
+          updatedAt: false,
+        },
+      }}
       refineCoreProps={{
         queryOptions: { initialData },
         meta: {
@@ -67,6 +77,10 @@ export default function PostIndex() {
             {
               field: 'user',
               select: ['name'],
+            },
+            {
+              field: 'category',
+              select: ['title'],
             },
           ],
         },
@@ -91,7 +105,6 @@ export default function PostIndex() {
         header={'Title'}
         accessorKey="title"
         id="title"
-        enableHiding
         meta={{
           filterOperator: 'contains',
         }}
@@ -106,6 +119,14 @@ export default function PostIndex() {
             </>
           );
         }}
+      />
+
+      <Table.Column
+        header={'Category'}
+        accessorKey="category.title"
+        id="category.title"
+        enableHiding
+        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Category" />}
       />
 
       <Table.Column
@@ -125,14 +146,14 @@ export default function PostIndex() {
         enableHiding
         cell={({ row: { original } }) => (
           <Badge variant={POST_STATUS_MAP[original.status as PostStatus]?.badge as TAny}>
-            {original.status.charAt(0).toUpperCase() + original.status.slice(1).toLowerCase()}
+            {original.status?.charAt(0)?.toUpperCase() + original.status?.slice(1)?.toLowerCase()}
           </Badge>
         )}
         filter={(props: TableFilterProps) => (
           <Table.Filter.Dropdown
             {...props}
             options={Object.entries(POST_STATUS).map(([key, value]) => ({
-              label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+              label: key?.charAt(0)?.toUpperCase() + key?.slice(1)?.toLowerCase(),
               value,
             }))}
           />
@@ -147,6 +168,16 @@ export default function PostIndex() {
         enableHiding
         filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
         cell={({ row: { original } }) => dayjs(original.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+      />
+
+      <Table.Column
+        header={'UpdatedAt'}
+        accessorKey="updatedAt"
+        id="updatedAt"
+        enableSorting
+        enableHiding
+        filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
+        cell={({ row: { original } }) => dayjs(original.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
       />
 
       <Table.Column
@@ -168,6 +199,7 @@ export default function PostIndex() {
           <Table.Actions row={original} resource="post">
             <Table.ShowAction />
             <Table.EditAction />
+            <Table.CloneAction />
             <Table.DeleteAction />
           </Table.Actions>
         )}

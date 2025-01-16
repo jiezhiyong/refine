@@ -26,7 +26,7 @@ export function TableFilterDropdown({ column, title, options, align = 'start' }:
     <Popover>
       <PopoverTrigger asChild>
         <div className="inline-flex flex-row items-center gap-x-0.5">
-          <Button title={title} variant="ghost" size="sm" className="h-5 border-dashed px-1 py-2.5">
+          <Button title={title} variant="ghost" className="h-5 border-dashed px-1 py-2.5">
             <FilterIcon className={cn('h-3.5 w-3.5')} />
             {selectedValues?.size > 0 && (
               <>
@@ -60,7 +60,6 @@ export function TableFilterDropdown({ column, title, options, align = 'start' }:
           {selectedValues.size > 0 && (
             <Button
               variant="outline"
-              size="sm"
               className="h-5 border-dashed px-1 py-2.5 text-green-500"
               onClick={(e) => {
                 e.preventDefault();
@@ -120,6 +119,7 @@ export function TableFilterDropdown({ column, title, options, align = 'start' }:
                     onSelect={() => column?.setFilterValue(undefined)}
                     className="justify-center text-center"
                   >
+                    <FilterX size={16} />
                     {t('Clear filters')}
                   </CommandItem>
                 </CommandGroup>
