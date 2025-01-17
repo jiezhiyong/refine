@@ -18,7 +18,6 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
           {/* {selectedValue ? (
             <Button
               variant="ghost"
-              size="sm"
               className="h-5 border-dashed px-1 py-2.5 text-green-500"
               onClick={(e) => {
                 e.preventDefault();
@@ -31,7 +30,6 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
           <Button
             title={title}
             variant="ghost"
-            size="sm"
             className={cn('h-4 border-dashed px-1 py-2.5', selectedValue && 'text-green-500')}
           >
             <FilterIcon className={cn('h-3.5 w-3.5')} />
@@ -60,7 +58,6 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
               <div className="flex flex-row items-center justify-center p-1">
                 <Button
                   variant="ghost"
-                  size="sm"
                   className="h-8 w-full border-dashed px-2"
                   onClick={() => {
                     column?.setFilterValue(undefined);
