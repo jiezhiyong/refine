@@ -10,7 +10,7 @@ export type PostStatus = (typeof POST_STATUS)[keyof typeof POST_STATUS];
 
 // 文章状态映射
 export const POST_STATUS_MAP = {
-  DRAFT: { badge: 'secondary' },
+  DRAFT: { badge: 'outline' },
   PUBLISHED: { badge: undefined },
   REJECTED: { badge: 'destructive' },
 };
