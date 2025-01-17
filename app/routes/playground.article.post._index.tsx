@@ -55,7 +55,17 @@ export default function PostIndex() {
       label,
       disabled: !deletePermission?.can,
       onClick: () => {
-        deleteMany({ resource: 'post', ids: rows.map((row) => row.original.id!) });
+        deleteMany(
+          {
+            resource: 'post',
+            ids: rows.map((row) => row.original.id!),
+          },
+          {
+            onSuccess: () => {
+              table.resetRowSelection();
+            },
+          }
+        );
       },
     };
   };
@@ -65,7 +75,7 @@ export default function PostIndex() {
       enableSorting
       enableFilters
       enableHiding
-      toolbar={[<CreateButton />, <ImportButton />, <ExportButton />, <RefreshButton />]}
+      toolbar={[<CreateButton />, <ImportButton />, <ExportButton />, <RefreshButton resource="post" />]}
       initialState={{
         columnVisibility: {
           createdAt: false,

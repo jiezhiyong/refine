@@ -6,6 +6,7 @@ import { HandleFunction } from '~/types/handle';
 import { LanguageSwitcher } from './switcher-language';
 import { FullscreenSwitcher } from './switcher-fullscreen';
 import { cn } from '~/utils/cn';
+import { BackButton } from '~/component-refine/buttons/back';
 
 /**
  * 工具栏
@@ -19,6 +20,7 @@ export function NavTools() {
 
   const defaultTools = (
     <>
+      <BackButton variant="ghost" size="icon" />
       <LanguageSwitcher />
       <FullscreenSwitcher />
     </>

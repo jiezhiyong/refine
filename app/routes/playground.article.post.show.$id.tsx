@@ -4,7 +4,6 @@ import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { CalendarIcon, ClockIcon, LeafyGreen, MailIcon } from 'lucide-react';
 import { CloneButton, DeleteButton, EditButton, RefreshButton } from '~/component-refine';
-import { BackButton } from '~/component-refine/buttons/back';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Badge } from '~/components-shadcn/badge';
 import { H1, Image, P } from '~/components-shadcn/typography';
@@ -104,7 +103,6 @@ export default function PostShow() {
 function UiTools() {
   return (
     <div className="flex items-center gap-1 text-sm">
-      <BackButton variant="ghost" size="icon" />
       <EditButton variant="ghost" size="icon" />
       <DeleteButton variant="ghost" size="icon" />
       <CloneButton variant="ghost" size="icon" />
