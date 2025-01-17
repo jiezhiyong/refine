@@ -6,7 +6,6 @@ export const FullscreenSwitcher = () => {
     <Button
       variant="ghost"
       size="icon"
-      className="h-7 w-7"
       onClick={() => {
         if (document.fullscreenElement) {
           document.exitFullscreen();

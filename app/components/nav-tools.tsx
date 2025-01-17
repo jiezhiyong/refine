@@ -5,6 +5,7 @@ import { Separator } from '~/components-shadcn/separator';
 import { HandleFunction } from '~/types/handle';
 import { LanguageSwitcher } from './switcher-language';
 import { FullscreenSwitcher } from './switcher-fullscreen';
+import { cn } from '~/utils/cn';
 
 /**
  * 工具栏
@@ -42,14 +43,19 @@ export function NavTools() {
   return (
     <div className="flex items-center gap-1">
       {uiFilter && (
-        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => changeParams('filter', !filter)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(filter && 'text-green-500')}
+          onClick={() => changeParams('filter', !filter)}
+        >
           {filter ? <FilterX /> : <Filter />}
         </Button>
       )}
 
       {defaultTools}
 
-      <Separator orientation="vertical" className="mr-2 h-4" />
+      <Separator orientation="vertical" className="h-4" />
 
       {domUiTools}
     </div>

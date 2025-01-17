@@ -16,7 +16,6 @@ export function LanguageSwitcher() {
     <Button
       variant="ghost"
       size="icon"
-      className="h-7 w-7"
       type="submit"
       onClick={async () => {
         const nextLocale = currentLocale === 'zh' ? 'en' : 'zh';

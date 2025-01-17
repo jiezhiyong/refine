@@ -123,7 +123,7 @@ function UiTools() {
   const starred = Boolean(searchParams.get('starred'));
   return (
     <div className="flex items-center gap-1 text-sm">
-      <div className="hidden font-medium text-muted-foreground md:inline-block">Edit Oct 08</div>
+      <div className="ml-2 hidden font-medium text-muted-foreground md:inline-block">Edit Oct 08</div>
 
       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => updateSearchParams({ starred: !starred })}>
         <Star className={starred ? 'fill-yellow-400' : ''} />
