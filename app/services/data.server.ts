@@ -4,87 +4,11 @@ import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
 import { Resources } from '~/constants/resource';
 import { db } from '~/services/db.server';
 import { TAny } from '~/types/any';
-
-// 定义操作符
-export type FilterOperator = 'eq' | 'contains' | 'gt' | 'lt' | 'gte' | 'lte' | 'in';
+import { buildOrderByClause, buildWhereClause, Filter, parseRefineFilters, processDateFields } from '~/utils';
 
 // 类型守卫函数
 function isPrismaModel(resource: string): resource is Resources {
   return dataResources.some((r) => r.name.endsWith(resource));
-}
-
-// 定义过滤器类型
-interface Filter {
-  field: string;
-  operator: FilterOperator;
-  value: TAny;
-}
-
-// 定义排序类型
-interface Sorter {
-  field: string;
-  order: 'asc' | 'desc';
-}
-
-// 处理过滤条件的函数
-function buildWhereClause(filters: Filter[] = []): Record<string, TAny> {
-  return filters.reduce((acc, filter) => {
-    switch (filter.operator) {
-      case 'eq':
-        return { ...acc, [filter.field]: filter.value };
-      case 'contains':
-        return { ...acc, [filter.field]: { contains: filter.value } };
-      case 'gt':
-        return { ...acc, [filter.field]: { gt: filter.value } };
-      case 'lt':
-        return { ...acc, [filter.field]: { lt: filter.value } };
-      case 'gte':
-        return { ...acc, [filter.field]: { gte: filter.value } };
-      case 'lte':
-        return { ...acc, [filter.field]: { lte: filter.value } };
-      case 'in':
-        // 如果值已经是数组，直接使用；否则尝试将其转换为数组
-        const values = Array.isArray(filter.value) ? filter.value : filter.value.toString().split(',');
-
-        // 对于 id 字段，保持字符串类型；对于其他字段，尝试转换为数字
-        const parsedValues =
-          filter.field === 'id'
-            ? values
-            : values.map((v: unknown) => {
-                const num = Number(v);
-                return isNaN(num) ? v : num;
-              });
-        return { ...acc, [filter.field]: { in: parsedValues } };
-      default:
-        return acc;
-    }
-  }, {});
-}
-
-// 处理排序条件的函数
-function buildOrderByClause(sorters: Sorter[] = []): Record<string, 'asc' | 'desc'> {
-  return sorters.reduce(
-    (acc, sorter) => ({
-      ...acc,
-      [sorter.field]: sorter.order,
-    }),
-    {}
-  );
-}
-
-// 处理 Refine 的过滤参数格式
-function parseRefineFilters(filters: Filter[]): Filter[] {
-  return filters.map((filter) => {
-    if (filter.field.startsWith('filter[')) {
-      const [field, operator, value] = filter.value.split('||');
-      return {
-        field,
-        operator: operator.replace('$', '') as FilterOperator,
-        value,
-      };
-    }
-    return filter;
-  });
 }
 
 // 数据提供者
@@ -111,7 +35,6 @@ export const dataService: DataProvider = {
     };
 
     // 处理关联字段的查询条件
-    // 例如: { 'user.name': { contains: 'sha' } } => { user: { name: { contains: 'sha' } } }
     const whereCondition = Object.entries(where).reduce((acc, [key, value]) => {
       if (key.includes('.')) {
         const [relation, field] = key.split('.');
@@ -125,17 +48,19 @@ export const dataService: DataProvider = {
       return { ...acc, [key]: value };
     }, {});
 
-    // 添加 Prisma 查询参数的日志
+    // 处理所有查询条件中的日期字段
+    const processedWhereCondition = processDateFields(whereCondition);
+
     const queryParams = {
       skip,
       take: Number(pageSize),
-      where: whereCondition,
+      where: processedWhereCondition,
       orderBy,
       ...meta,
     };
 
     const [total, items] = await Promise.all([
-      prismaModel.count({ where: whereCondition }),
+      prismaModel.count({ where: processedWhereCondition }),
       prismaModel.findMany(queryParams),
     ]);
 
@@ -163,7 +88,10 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return { data };
+    return {
+      success: true,
+      data,
+    };
   },
 
   // 更新数据
@@ -181,7 +109,10 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return { data };
+    return {
+      success: true,
+      data,
+    };
   },
 
   // 删除数据
@@ -209,7 +140,10 @@ export const dataService: DataProvider = {
       ...meta,
     });
 
-    return { data };
+    return {
+      success: true,
+      data,
+    };
   },
 
   // 获取单条数据
@@ -230,7 +164,10 @@ export const dataService: DataProvider = {
       throw new Error(`${resource} 中没有找到 id 为 ${id} 的数据`);
     }
 
-    return { data };
+    return {
+      success: true,
+      data,
+    };
   },
 
   // 获取 API URL
@@ -259,6 +196,7 @@ export const dataService: DataProvider = {
     });
 
     return {
+      success: true,
       data,
     };
   },
@@ -279,6 +217,7 @@ export const dataService: DataProvider = {
     });
 
     return {
+      success: true,
       data,
     };
   },
@@ -303,6 +242,7 @@ export const dataService: DataProvider = {
     });
 
     return {
+      success: true,
       data,
     };
   },
@@ -328,6 +268,7 @@ export const dataService: DataProvider = {
     });
 
     return {
+      success: true,
       data,
     };
   },

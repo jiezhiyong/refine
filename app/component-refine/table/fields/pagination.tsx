@@ -12,12 +12,14 @@ interface DataTablePaginationProps<TData extends BaseRecord = BaseRecord> {
 
 export const Pagination = <TData extends BaseRecord = BaseRecord>({ table }: DataTablePaginationProps<TData>) => {
   const t = useTranslate();
+
   return (
     <div className="sm-gap-y-0 flex flex-col items-center justify-between gap-y-4 sm:flex-row">
       <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
       <div className="relative flex flex-col-reverse items-center gap-y-4 space-x-6 sm:flex-row sm:gap-y-0 lg:space-x-8">
+        <p className="text-sm font-medium">Total: {table?.refineCore?.tableQuery?.data?.total ?? 0}</p>
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Select

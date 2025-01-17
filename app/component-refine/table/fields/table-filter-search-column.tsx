@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/pop
 import { Input } from '~/components-shadcn/input';
 import { Separator } from '~/components-shadcn/separator';
 import { useTranslate } from '@refinedev/core';
+import { Badge } from '~/components-shadcn/badge';
 
 export function TableFilterSearchColumn({ column, title, align = 'start' }: TableFilterProps) {
   const selectedValue = column?.getFilterValue() as string;
@@ -15,28 +16,33 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
     <Popover>
       <PopoverTrigger asChild>
         <div className="inline-flex flex-row items-center gap-x-0.5">
-          {/* {selectedValue ? (
-            <Button
-              variant="ghost"
-              className="h-5 border-dashed px-1 py-2.5 text-green-500"
-              onClick={(e) => {
-                e.preventDefault();
-                column?.setFilterValue(undefined);
-              }}
-            >
-              <FilterX className={cn('h-3.5 w-3.5')} />
-            </Button>
-          ) : ( */}
           <Button
             title={title}
             variant="ghost"
             className={cn('h-4 border-dashed px-1 py-2.5', selectedValue && 'text-green-500')}
+            onClick={(e) => {
+              if (!selectedValue) {
+                return;
+              }
+
+              e.preventDefault();
+              column?.setFilterValue(undefined);
+            }}
           >
-            <FilterIcon className={cn('h-3.5 w-3.5')} />
+            {selectedValue ? <FilterX className={cn('h-3.5 w-3.5')} /> : <FilterIcon className={cn('h-3.5 w-3.5')} />}
           </Button>
-          {/* )} */}
+
+          {selectedValue && (
+            <>
+              <Separator orientation="vertical" className="mr-1 h-4" />
+              <Badge variant="secondary" className="cursor-pointer text-xs text-muted-foreground">
+                {selectedValue}
+              </Badge>
+            </>
+          )}
         </div>
       </PopoverTrigger>
+
       <PopoverContent className="w-[200px] overflow-hidden p-0 ring-0" align={align}>
         <div className="relative">
           <div className="flex flex-row items-center bg-popover px-3 text-popover-foreground">
@@ -63,6 +69,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
                     column?.setFilterValue(undefined);
                   }}
                 >
+                  <FilterX size={16} />
                   {t('Clear filters')}
                 </Button>
               </div>

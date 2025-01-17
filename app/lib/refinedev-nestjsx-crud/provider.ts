@@ -1,5 +1,5 @@
 import { CondOperator, RequestQueryBuilder } from '@nestjsx/crud-request';
-import type { DataProvider, HttpError } from '@refinedev/core';
+import type { DataProvider } from '@refinedev/core';
 import type { AxiosInstance } from 'axios';
 import queryString from 'query-string';
 import { axiosInstance, handleFilter, handleJoin, handlePagination, handleSort, transformHttpError } from './utils';
@@ -82,33 +82,26 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
   },
 
   updateMany: async ({ resource, ids, variables }) => {
-    const errors: HttpError[] = [];
+    const url = `${apiUrl}/${resource}/bulk`;
 
-    const response = await Promise.all(
-      ids.map(async (id) => {
-        try {
-          const { data } = await httpClient.patch(`${apiUrl}/${resource}/${id}`, variables);
-          return data;
-        } catch (error) {
-          const httpError = transformHttpError(error);
+    try {
+      const { data } = await httpClient.put(url, { ids, variables });
 
-          errors.push(httpError);
-        }
-      })
-    );
+      return {
+        data,
+      };
+    } catch (error) {
+      const httpError = transformHttpError(error);
 
-    if (errors.length > 0) {
-      throw errors;
+      throw httpError;
     }
-
-    return { data: response };
   },
 
   createMany: async ({ resource, variables }) => {
     const url = `${apiUrl}/${resource}/bulk`;
 
     try {
-      const { data } = await httpClient.post(url, { bulk: variables });
+      const { data } = await httpClient.post(url, { variables });
 
       return {
         data,
@@ -145,13 +138,21 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
   },
 
   deleteMany: async ({ resource, ids }) => {
-    const response = await Promise.all(
-      ids.map(async (id) => {
-        const { data } = await httpClient.delete(`${apiUrl}/${resource}/${id}`);
-        return data;
-      })
-    );
-    return { data: response };
+    const url = `${apiUrl}/${resource}/bulk`;
+
+    try {
+      const { data } = await httpClient.delete(url, {
+        data: { ids },
+      });
+
+      return {
+        data,
+      };
+    } catch (error) {
+      const httpError = transformHttpError(error);
+
+      throw httpError;
+    }
   },
 
   getApiUrl: () => {

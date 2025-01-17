@@ -107,3 +107,14 @@ export function Muted({ children, className, ...props }: TypographyProps) {
     </p>
   );
 }
+
+export function Image({ src, alt, className, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) {
+  return (
+    <img
+      src={src || '/placeholder.svg'}
+      alt={alt}
+      className={cn('w-full rounded-lg object-cover', className)}
+      {...props}
+    />
+  );
+}

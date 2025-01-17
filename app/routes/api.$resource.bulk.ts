@@ -70,6 +70,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         if (!ids) {
           throw new Error('批量删除时 ids 是必需的');
         }
+
         const data = await dataService.deleteMany!({
           resource,
           ids,

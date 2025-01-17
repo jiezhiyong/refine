@@ -14,13 +14,7 @@ export function EditAction({ row, resource, title, disabled, ...props }: EditAct
   const { can, reason, url } = useGetEditUrl(resource!, row.id);
 
   return (
-    <RowAction
-      {...props}
-      icon={<Pencil size={16} />}
-      disabled={!can || disabled}
-      title={`${title || 'Edit'}${!can ? `（${reason}）` : ''}`}
-      to={url}
-    />
+    <RowAction {...props} icon={<Pencil size={16} />} disabled={!can || disabled} title={title || 'Edit'} to={url} />
   );
 }
 

@@ -20,6 +20,7 @@ type CheckAllProps = React.ComponentPropsWithoutRef<typeof Checkbox> &
   PropsWithChildren<{
     table: UseTableReturnType<BaseRecord, HttpError>;
     options?: {
+      disabled?: boolean;
       label: string;
       className?: string;
       onClick: () => void;
@@ -30,11 +31,14 @@ export const CheckAll: FC<CheckAllProps> = forwardRef<React.ElementRef<typeof Ch
   ({ table, children, options }, ref) => {
     const t = useTranslate();
 
+    const isSomeSelected = table.getIsSomeRowsSelected();
+    const isAllSelected = table.getIsAllPageRowsSelected();
+
     return (
       <>
         <Checkbox
           ref={ref}
-          checked={table.getIsSomeRowsSelected() ? 'indeterminate' : table.getIsAllPageRowsSelected()}
+          checked={isSomeSelected ? 'indeterminate' : isAllSelected}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           className="ml-2"
           aria-label={t('Select all')}
@@ -43,12 +47,8 @@ export const CheckAll: FC<CheckAllProps> = forwardRef<React.ElementRef<typeof Ch
           (Array.isArray(options) && options.length && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  disabled={!(table.getIsSomeRowsSelected() || table.getIsAllPageRowsSelected())}
-                  size={'icon'}
-                  variant={'ghost'}
-                >
-                  <DotsVerticalIcon className="h-4 w-4" />
+                <Button disabled={!(isSomeSelected || isAllSelected)} size={'icon'} variant={'ghost'}>
+                  <DotsVerticalIcon className={cn('h-4 w-4', (isSomeSelected || isAllSelected) && 'text-green-500')} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
@@ -56,7 +56,12 @@ export const CheckAll: FC<CheckAllProps> = forwardRef<React.ElementRef<typeof Ch
                 <DropdownMenuSeparator />
                 {!children && Array.isArray(options) && options?.length > 0
                   ? options.map((option, key) => (
-                      <DropdownMenuItem key={key} onSelect={option.onClick} className={cn(option?.className)}>
+                      <DropdownMenuItem
+                        key={key}
+                        onSelect={option.onClick}
+                        className={cn(option?.className)}
+                        disabled={option?.disabled}
+                      >
                         {option.label}
                       </DropdownMenuItem>
                     ))

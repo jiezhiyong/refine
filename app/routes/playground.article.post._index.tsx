@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { BaseRecord, HttpError, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Checkbox } from '~/components-shadcn/checkbox';
@@ -13,7 +13,8 @@ import { parseTableParams } from '@refinedev/remix-router';
 import { Badge } from '~/components-shadcn/badge';
 import { POST_STATUS, POST_STATUS_MAP, PostStatus } from '~/types/post';
 import { TAny } from '~/types/any';
-import { CreateButton } from '~/component-refine';
+import { CreateButton, ExportButton, ImportButton, RefreshButton, ShowButton } from '~/component-refine';
+import { useCallback } from 'react';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -37,24 +38,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { initialData: data };
 }
 
+// FIXME: 删除后数据未更新
 export default function PostIndex() {
   const { initialData } = useLoaderData<typeof loader>();
 
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
+  const { data: deletePermission } = useCan({ resource: 'post', action: 'delete' });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const label = `Delete Selected (${table.getSelectedRowModel().rows.length}) ${friendly(
-      'Row',
-      table.getSelectedRowModel().rows.length > 1 ? 'plural' : 'singular'
-    )}`;
+    const rows = table.getSelectedRowModel().rows;
+    const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
       className: '!text-destructive',
       label,
+      disabled: !deletePermission?.can,
       onClick: () => {
-        // deleteMany();
-        alert('Delete Selected');
+        deleteMany({ resource: 'post', ids: rows.map((row) => row.original.id!) });
       },
     };
   };
@@ -64,11 +65,17 @@ export default function PostIndex() {
       enableSorting
       enableFilters
       enableHiding
-      toolbar={<CreateButton variant="outline" className="border-dashed" />}
+      toolbar={[<CreateButton />, <ImportButton />, <ExportButton />, <RefreshButton />]}
       initialState={{
         columnVisibility: {
-          updatedAt: false,
+          createdAt: false,
         },
+        sorting: [
+          {
+            id: 'updatedAt',
+            desc: true,
+          },
+        ],
       }}
       refineCoreProps={{
         queryOptions: { initialData },
@@ -88,7 +95,7 @@ export default function PostIndex() {
     >
       <Table.Column
         accessorKey="id"
-        id={'select'}
+        id="id"
         header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
         cell={({ row }) => (
           <Checkbox
@@ -102,7 +109,7 @@ export default function PostIndex() {
       />
 
       <Table.Column
-        header={'Title'}
+        header="Title"
         accessorKey="title"
         id="title"
         meta={{
@@ -113,16 +120,16 @@ export default function PostIndex() {
           const pageIndex = table.getState().pagination.pageIndex;
           const pageSize = table.getState().pagination.pageSize;
           return (
-            <>
+            <ShowButton recordItemId={original.id} asChild>
               <span className="text-muted-foreground">{pageIndex * pageSize + index + 1}.&nbsp;</span>
-              <span>{original.title}</span>
-            </>
+              <span className="underline-offset-2 hover:text-green-600 hover:underline">{original.title}</span>
+            </ShowButton>
           );
         }}
       />
 
       <Table.Column
-        header={'Category'}
+        header="Category"
         accessorKey="category.title"
         id="category.title"
         enableHiding
@@ -130,7 +137,7 @@ export default function PostIndex() {
       />
 
       <Table.Column
-        header={'Hit'}
+        header="Hit"
         accessorKey="hit"
         id="hit"
         enableSorting
@@ -139,7 +146,7 @@ export default function PostIndex() {
       />
 
       <Table.Column
-        header={'Status'}
+        header="Status"
         accessorKey="status"
         id="status"
         enableSorting
@@ -161,7 +168,7 @@ export default function PostIndex() {
       />
 
       <Table.Column
-        header={'CreatedAt'}
+        header="CreatedAt"
         accessorKey="createdAt"
         id="createdAt"
         enableSorting
@@ -171,7 +178,7 @@ export default function PostIndex() {
       />
 
       <Table.Column
-        header={'UpdatedAt'}
+        header="UpdatedAt"
         accessorKey="updatedAt"
         id="updatedAt"
         enableSorting
@@ -181,7 +188,7 @@ export default function PostIndex() {
       />
 
       <Table.Column
-        header={'Author'}
+        header="Author"
         accessorKey="user.name"
         id="user.name"
         enableHiding
@@ -193,15 +200,18 @@ export default function PostIndex() {
       />
 
       <Table.Column
-        accessorKey={'id'}
-        id={'actions'}
-        cell={({ row: { original } }) => (
-          <Table.Actions row={original} resource="post">
-            <Table.ShowAction />
-            <Table.EditAction />
-            <Table.CloneAction />
-            <Table.DeleteAction />
-          </Table.Actions>
+        accessorKey="id"
+        id="actions"
+        cell={useCallback(
+          ({ row: { original } }: { row: { original: BaseRecord } }) => (
+            <Table.Actions row={original} resource="post">
+              <Table.ShowAction />
+              <Table.EditAction />
+              <Table.CloneAction />
+              <Table.DeleteAction />
+            </Table.Actions>
+          ),
+          []
         )}
       />
     </Table>

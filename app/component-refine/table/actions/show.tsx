@@ -14,13 +14,7 @@ export function ShowAction({ row, resource, title, disabled, ...props }: ShowAct
   const { can, reason, url } = useGetShowUrl(resource!, row.id);
 
   return (
-    <RowAction
-      {...props}
-      icon={<Eye size={16} />}
-      disabled={!can || disabled}
-      title={`${title || 'Detail'}${!can ? `（${reason}）` : ''}`}
-      to={url}
-    />
+    <RowAction {...props} icon={<Eye size={16} />} disabled={!can || disabled} title={title || 'Detail'} to={url} />
   );
 }
 

@@ -18,7 +18,7 @@ export function CloneAction({ row, resource, title, disabled, ...props }: CloneA
       {...props}
       icon={<CopyCheck size={16} />}
       disabled={!can || disabled}
-      title={`${title || 'Clone'}${!can ? `（${reason}）` : ''}`}
+      title={title || 'Clone'}
       to={url}
     />
   );

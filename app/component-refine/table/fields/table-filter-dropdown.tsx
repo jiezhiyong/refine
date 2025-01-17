@@ -29,50 +29,50 @@ export function TableFilterDropdown({ column, title, options, align = 'start' }:
           <Button
             title={title}
             variant="ghost"
-            className={cn('h-5 border-dashed px-1 py-2.5', selectedValues.size > 0 && 'text-green-500')}
+            className={cn('h-5 border-dashed px-1 py-2.5', selectedValues.size > 0 && '!text-green-500')}
+            onClick={(e) => {
+              if (!selectedValues.size) {
+                return;
+              }
+
+              e.preventDefault();
+              column?.setFilterValue(undefined);
+            }}
           >
-            <FilterIcon className={cn('h-3.5 w-3.5')} />
-            {selectedValues?.size > 0 && (
-              <>
-                <Separator orientation="vertical" className="h-4" />
-                <Badge variant="secondary" className="h-3.5 rounded-sm p-1 text-xs font-normal lg:hidden">
-                  {selectedValues.size}
-                </Badge>
-                <div className="hidden space-x-1 lg:flex">
-                  {selectedValues.size > 2 ? (
-                    <Badge variant="secondary" className="h-3.5 rounded-sm p-1 text-xs font-normal">
-                      {selectedValues.size} {t('selected')}
-                    </Badge>
-                  ) : (
-                    options
-                      ?.filter((option) => selectedValues.has(option.value))
-                      .map((option) => (
-                        <Badge
-                          variant="secondary"
-                          key={option.value}
-                          className="h-3.5 rounded-sm p-1 text-xs font-normal"
-                        >
-                          {option.label}
-                        </Badge>
-                      ))
-                  )}
-                </div>
-              </>
+            {selectedValues.size > 0 ? (
+              <FilterX className={cn('h-3.5 w-3.5')} />
+            ) : (
+              <FilterIcon className={cn('h-3.5 w-3.5')} />
             )}
           </Button>
 
-          {/* {selectedValues.size > 0 && (
-            <Button
-              variant="ghost"
-              className="h-5 border-dashed px-1 py-2.5 text-green-500"
-              onClick={(e) => {
-                e.preventDefault();
-                column?.setFilterValue(undefined);
-              }}
-            >
-              <FilterX className={cn('h-3.5 w-3.5')} />
-            </Button>
-          )} */}
+          {selectedValues?.size > 0 && (
+            <>
+              <Separator orientation="vertical" className="mr-1 h-4" />
+              <Badge variant="secondary" className="cursor-pointer text-xs text-muted-foreground lg:hidden">
+                {selectedValues.size}
+              </Badge>
+              <div className="hidden space-x-1 lg:flex">
+                {selectedValues.size > 2 ? (
+                  <Badge variant="secondary" className="cursor-pointer text-xs text-muted-foreground">
+                    {selectedValues.size} {t('selected')}
+                  </Badge>
+                ) : (
+                  options
+                    ?.filter((option) => selectedValues.has(option.value))
+                    .map((option) => (
+                      <Badge
+                        variant="secondary"
+                        key={option.value}
+                        className="cursor-pointer text-xs text-muted-foreground"
+                      >
+                        {option.label}
+                      </Badge>
+                    ))
+                )}
+              </div>
+            </>
+          )}
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align={align}>
