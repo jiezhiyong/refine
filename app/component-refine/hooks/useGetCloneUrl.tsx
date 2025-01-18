@@ -18,7 +18,7 @@ export const useGetCloneUrl = (resource: string, recordItemId: string, meta?: TA
   const accessControlContext = useContext(AccessControlContext);
   const accessControlEnabled = accessControlContext.options.buttons.enableAccessControl;
 
-  const { editUrl: generateEditUrl } = useNavigation();
+  const { cloneUrl: generateCloneUrl } = useNavigation();
 
   const { resource: _resource } = useResource(resource);
   const { id } = useResourceParams();
@@ -40,7 +40,7 @@ export const useGetCloneUrl = (resource: string, recordItemId: string, meta?: TA
     else return translate('buttons.notAccessTitle', "You don't have permission to access");
   };
 
-  const editUrl = resource && (recordItemId ?? id) ? generateEditUrl(resource, recordItemId! ?? id!, meta) : '';
+  const editUrl = resource && (recordItemId ?? id) ? generateCloneUrl(resource, recordItemId! ?? id!, meta) : '';
 
   return {
     can: !(accessControlEnabled && !data?.can),

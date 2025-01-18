@@ -1,54 +1,45 @@
-import { ImportButtonProps } from '../types';
-import { Button } from '~/components-shadcn/button';
-import { Slot } from '@radix-ui/react-slot';
-import { CanAccess, useImportButton } from '@refinedev/core';
+import { Button, ButtonProps } from '~/components-shadcn/button';
+import { useCan, useImport, useImportButton } from '@refinedev/core';
 import { Upload } from 'lucide-react';
-import type { FC } from 'react';
+import type { ChangeEvent, FC } from 'react';
 
-export const ImportButton: FC<ImportButtonProps> = ({
-  hideText = false,
-  resource,
-  onChange,
-  accept = 'image/*,application/*',
-  recordItemId,
-  accessControl,
-  access,
-  children,
-  ...props
-}) => {
+export const ImportButton: FC<ButtonProps> = (props) => {
+  const { inputProps } = useImport({
+    onFinish: (data) => {
+      console.log(data);
+    },
+  });
   const { label } = useImportButton();
-  const Com = !accessControl?.enabled ? Slot : CanAccess;
+  const { data: canAccess } = useCan({ action: 'import' });
 
   const onClick = () => {
     const el = document.createElement('input');
-    el.type = 'file';
-    el.accept = accept;
+    el.type = inputProps.type;
+    el.accept = inputProps.accept;
     el.onchange = (e) => {
-      if (e.target instanceof HTMLInputElement) {
-        onChange(Array.from(e.target.files ?? []));
-        el.remove();
-      }
+      inputProps.onChange(e as unknown as ChangeEvent<HTMLInputElement>);
+      el.remove();
     };
     el.click();
   };
 
-  if (accessControl?.hideIfUnauthorized && accessControl.enabled) {
-    return null;
-  }
-
+  const disabled = !canAccess?.can;
   return (
-    <Com
-      params={{
-        id: recordItemId,
+    <Button
+      icon={<Upload />}
+      disabled={disabled}
+      {...props}
+      onClick={(e) => {
+        if (disabled) {
+          e.preventDefault();
+          return;
+        }
+
+        onClick();
       }}
-      resource={resource}
-      action="import"
-      {...access}
     >
-      <Button onClick={onClick} icon={<Upload />} {...props}>
-        {!hideText && (children ?? label)}
-      </Button>
-    </Com>
+      {label}
+    </Button>
   );
 };
 

@@ -13,11 +13,18 @@ import { parseTableParams } from '@refinedev/remix-router';
 import { Badge } from '~/components-shadcn/badge';
 import { POST_STATUS, POST_STATUS_MAP, PostStatus } from '~/types/post';
 import { TAny } from '~/types/any';
-import { CreateButton, ExportButton, ImportButton, RefreshButton, ShowButton } from '~/component-refine';
+import { CreateButton, ExportButton, ImportButton, ShowButton } from '~/component-refine';
 import { useCallback } from 'react';
+import { HandleFunction } from '~/types/handle';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
+};
+
+export const handle: HandleFunction = {
+  uiTools: () => {
+    return <UiTools />;
+  },
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -75,7 +82,7 @@ export default function PostIndex() {
       enableSorting
       enableFilters
       enableHiding
-      toolbar={[<CreateButton />, <ImportButton />, <ExportButton />, <RefreshButton resource="post" />]}
+      toolbar={[<CreateButton />]}
       initialState={{
         columnVisibility: {
           createdAt: false,
@@ -225,6 +232,15 @@ export default function PostIndex() {
         )}
       />
     </Table>
+  );
+}
+
+function UiTools() {
+  return (
+    <div className="flex items-center gap-1 text-sm">
+      <ImportButton variant="ghost" size="icon" />
+      <ExportButton variant="ghost" size="icon" />
+    </div>
   );
 }
 

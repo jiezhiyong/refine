@@ -1,7 +1,7 @@
 import { ExportButtonProps } from '../types';
 import { Button } from '~/components-shadcn/button';
 import { Slot } from '@radix-ui/react-slot';
-import { CanAccess, useExportButton } from '@refinedev/core';
+import { CanAccess, useExport, useExportButton } from '@refinedev/core';
 import { Download } from 'lucide-react';
 
 import type { FC } from 'react';
@@ -16,6 +16,8 @@ export const ExportButton: FC<ExportButtonProps> = ({
   ...props
 }) => {
   const { label } = useExportButton();
+  const { triggerExport } = useExport();
+
   const Com = !accessControl?.enabled ? Slot : CanAccess;
 
   if (accessControl?.hideIfUnauthorized && accessControl.enabled) {
@@ -31,7 +33,7 @@ export const ExportButton: FC<ExportButtonProps> = ({
       action="export"
       {...access}
     >
-      <Button icon={<Download />} {...props}>
+      <Button icon={<Download />} onClick={triggerExport} {...props}>
         {!hideText && (children ?? label)}
       </Button>
     </Com>

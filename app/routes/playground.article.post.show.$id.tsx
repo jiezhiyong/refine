@@ -3,7 +3,7 @@ import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { CalendarIcon, ClockIcon, LeafyGreen, MailIcon } from 'lucide-react';
-import { CloneButton, DeleteButton, EditButton, RefreshButton } from '~/component-refine';
+import { CloneButton, DeleteButton, EditButton } from '~/component-refine';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Badge } from '~/components-shadcn/badge';
 import { H1, Image, P } from '~/components-shadcn/typography';
@@ -106,7 +106,6 @@ function UiTools() {
       <EditButton variant="ghost" size="icon" />
       <DeleteButton variant="ghost" size="icon" />
       <CloneButton variant="ghost" size="icon" />
-      <RefreshButton variant="ghost" size="icon" />
     </div>
   );
 }

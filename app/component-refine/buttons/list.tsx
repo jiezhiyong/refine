@@ -25,7 +25,7 @@ export const ListButton: FC<ListButtonProps> = ({
   const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
-      className={cn(disabledNew && 'cursor-not-allowed')}
+      className={cn(disabledNew && 'pointer-events-none')}
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
