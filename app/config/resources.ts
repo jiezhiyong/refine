@@ -48,11 +48,11 @@ export const dataResources: ResourceProps[] = [
     create: '/playground/article/post/create',
     edit: '/playground/article/post/edit/:id',
     show: '/playground/article/post/show/:id',
+    clone: '/playground/article/post/clone/:id',
     meta: { parent: 'article' },
   },
   {
     name: 'category',
-    list: '/playground/article/category',
     meta: { parent: 'article' },
   },
 

@@ -42,18 +42,21 @@ export const processDateValue = (value: any, operator?: FilterOperator): any => 
     const allDates = dates.every((d) => d instanceof Date);
 
     // 如果是日期数组，根据操作符转换查询条件
-    if (allDates && dates.length === 2) {
+    if (allDates && dates.length) {
       if (operator === 'gte') {
         return { gte: dates[0] };
       }
       if (operator === 'lte') {
         return { lte: dates[1] };
       }
+
       // 默认使用日期范围
-      return {
-        gte: dates[0],
-        lte: dates[1],
-      };
+      const condition: { gte: Date; lte?: Date } = { gte: dates[0] };
+      if (dates[1]) {
+        condition.lte = dates[1];
+      }
+
+      return condition;
     }
     return dates;
   }

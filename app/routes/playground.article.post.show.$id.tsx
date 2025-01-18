@@ -50,7 +50,7 @@ export default function PostShow() {
   const { data: post } = postRes;
 
   return (
-    <article className="mx-auto px-4 pb-4 pt-8">
+    <article className="mx-auto px-8 pb-4 pt-8">
       <header className="mb-8">
         <H1 className="relative mb-4 inline-flex gap-3 text-4xl font-bold">
           <span>{post.title}</span>

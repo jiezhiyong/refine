@@ -46,7 +46,7 @@ export const Combobox = forwardRef<ElementRef<typeof Command>, ComboboxProps>(({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn('flex w-full justify-between sm:w-[250px]', !value() && 'text-muted-foreground')}
+            className={cn('flex w-full justify-between sm:w-[400px]', !value() && 'text-muted-foreground')}
           >
             {value()
               ? props.options?.find((option) => option.value === value())?.label
@@ -55,7 +55,7 @@ export const Combobox = forwardRef<ElementRef<typeof Command>, ComboboxProps>(({
           </Button>
         </FormControl>
       </PopoverTrigger>
-      <PopoverContent className="w-full max-w-full p-0 sm:w-[250px]">
+      <PopoverContent className="w-full max-w-full p-0 sm:w-[400px]">
         <Command className="rounded-lg border shadow-md" ref={ref}>
           <CommandInput placeholder="Type a command or search..." />
           <CommandList>

@@ -7,7 +7,7 @@ import { SidebarRight } from './sidebar-right';
 import { loader, type RootLoaderData } from '~/root';
 import { Breadcrumbs } from '~/component-refine/components';
 
-export default function Layout() {
+export function Layout() {
   const { sidebarIsClose } = useRouteLoaderData<typeof loader>('root') as RootLoaderData;
 
   return (

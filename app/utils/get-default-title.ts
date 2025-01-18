@@ -18,5 +18,5 @@ export function getDefaultTitle(matches: TAny) {
   let action = pathname.replace(`${matchedResource?.list}/`, '').split('/').shift();
   action = action.charAt(0).toUpperCase() + action.slice(1);
 
-  return action ? `${title} - ${action}` : title;
+  return action ? `${title} · ${action}` : title;
 }

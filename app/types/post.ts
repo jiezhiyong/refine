@@ -5,6 +5,8 @@ export const POST_STATUS = {
   REJECTED: 'REJECTED',
 } as const;
 
+export const POST_STATUS_LIST = Object.values(POST_STATUS);
+
 // 文章状态
 export type PostStatus = (typeof POST_STATUS)[keyof typeof POST_STATUS];
 

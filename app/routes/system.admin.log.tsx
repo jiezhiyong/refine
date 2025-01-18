@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { requireUserSession } from '~/services/session.server';
 import { PageError } from '~/components/500';
-import Layout from '~/components/layout';
+import { Layout } from '~/components/layout';
 import { CanAccess } from '@refinedev/core';
 import { PermissionDenied } from '~/components/403';
 

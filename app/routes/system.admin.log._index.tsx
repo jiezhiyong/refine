@@ -1,129 +1,207 @@
-// import { LoaderFunctionArgs } from '@remix-run/node';
-// import { useLoaderData } from '@remix-run/react';
-// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components-shadcn/table';
-// import { Button } from '~/components-shadcn/button';
-// import { Input } from '~/components-shadcn/input';
-// import { format } from 'date-fns';
-// import { dataService } from '~/services/data.server';
-// import { PageError } from '~/components/500';
-// import { getSearchParams } from '~/utils/search-params';
-// import { Log } from '@prisma/client';
-// import { ShowButton } from '~/component-refine';
+import dayjs from 'dayjs';
+import { type UseTableReturnType } from '~/lib/refinedev-react-table';
+import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+import { Checkbox } from '~/components-shadcn/checkbox';
+import { getDefaultTitle } from '~/utils/get-default-title';
+import { PageError } from '~/components/500';
+import { Table, TableFilterProps } from '~/component-refine/table';
+import { dataService } from '~/services/data.server';
+import { Post } from '@prisma/client';
+import { parseTableParams } from '@refinedev/remix-router';
+import { Badge } from '~/components-shadcn/badge';
+import { TAny } from '~/types/any';
+import { ExportButton, ShowButton } from '~/component-refine';
+import { HandleFunction } from '~/types/handle';
+import { LOG_STATUS_MAP, LogStatus } from '~/types/log';
 
-// // 处理 GET 请求
-// export async function loader({ request }: LoaderFunctionArgs) {
-//   const searchParams = getSearchParams(request);
-//   const { pagination, filters, sorters } = parseTableParams(new URL(request.url).search);
+export const meta: MetaFunction = ({ matches }) => {
+  return [{ title: getDefaultTitle(matches) }];
+};
 
-//   const search = searchParams['search'];
-//   if (search) {
-//     const searchValue = Array.isArray(search) ? search[0] : search;
-//     filters?.push(
-//       { field: 'resource', operator: 'contains', value: searchValue },
-//       { field: 'action', operator: 'contains', value: searchValue },
-//       { field: 'data', operator: 'contains', value: searchValue }
-//     );
-//   }
+export const handle: HandleFunction = {
+  uiTools: () => {
+    return <UiTools />;
+  },
+};
 
-//   const logs = await dataService.getList<Log & { user: { name: string; email: string } }>({
-//     resource: 'log',
-//     filters,
-//     pagination,
-//     sorters,
-//     meta: {
-//       include: {
-//         user: {
-//           select: {
-//             name: true,
-//             email: true,
-//           },
-//         },
-//       },
-//     },
-//   });
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const tableParams = parseTableParams(url.search);
 
-//   return {
-//     logs: logs.data,
-//     total: logs.total,
-//     page: pagination?.current || 1,
-//     pageSize: pagination?.pageSize || 10,
-//   };
-// }
+  const data = await dataService.getList<Post>({
+    ...tableParams,
+    resource: 'log',
+    meta: {
+      include: {
+        user: { select: { name: true } },
+      },
+    },
+  });
 
-// export default function LogIndex() {
-//   const { logs, total, page, pageSize } = useLoaderData<typeof loader>();
-//   const totalPages = Math.ceil(total / pageSize);
+  return { initialData: data };
+}
 
-//   return (
-//     <div className="">
-//       <div className="mb-6">
-//         <h1 className="mb-4 text-2xl font-bold">审计日志</h1>
-//         <div className="flex gap-4">
-//           <Input placeholder="搜索资源、动作或数据..." className="max-w-sm" name="search" />
-//         </div>
-//       </div>
+export default function LogIndex() {
+  const { initialData } = useLoaderData<typeof loader>();
 
-//       <div className="rounded-md border">
-//         <Table>
-//           <TableHeader>
-//             <TableRow>
-//               <TableHead>资源</TableHead>
-//               <TableHead>动作</TableHead>
-//               <TableHead>操作人</TableHead>
-//               <TableHead>时间</TableHead>
-//               <TableHead>操作</TableHead>
-//             </TableRow>
-//           </TableHeader>
-//           <TableBody>
-//             {logs.map((log) => (
-//               <TableRow key={log.id}>
-//                 <TableCell>{log.resource}</TableCell>
-//                 <TableCell>{log.action}</TableCell>
-//                 <TableCell>{log.user.name || log.user.email}</TableCell>
-//                 <TableCell>{format(new Date(log.createdAt), 'yyyy-MM-dd HH:mm:ss')}</TableCell>
-//                 <TableCell>
-//                   <ShowButton resource="log" recordItemId={log.id} />
-//                 </TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </div>
+  const friendly = useUserFriendlyName();
+  const { mutate: deleteMany } = useDeleteMany();
+  const { data: deletePermission } = useCan({ resource: 'log', action: 'delete' });
 
-//       <div className="flex items-center justify-between space-x-2 py-4">
-//         <div className="text-sm text-muted-foreground">
-//           共 {total} 条记录，第 {page} / {totalPages} 页
-//         </div>
-//         <div className="space-x-2">
-//           <Button
-//             variant="outline"
-//             disabled={page <= 1}
-//             onClick={() => {
-//               const searchParams = new URLSearchParams(window.location.search);
-//               searchParams.set('page', String(page - 1));
-//               window.location.search = searchParams.toString();
-//             }}
-//           >
-//             上一页
-//           </Button>
-//           <Button
-//             variant="outline"
-//             disabled={page >= totalPages}
-//             onClick={() => {
-//               const searchParams = new URLSearchParams(window.location.search);
-//               searchParams.set('page', String(page + 1));
-//               window.location.search = searchParams.toString();
-//             }}
-//           >
-//             下一页
-//           </Button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
+    const rows = table.getSelectedRowModel().rows;
+    const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
-// // 错误边界处理
-// export function ErrorBoundary() {
-//   return <PageError />;
-// }
+    return {
+      className: '!text-destructive',
+      label,
+      disabled: !deletePermission?.can,
+      onClick: () => {
+        deleteMany(
+          {
+            resource: 'log',
+            ids: rows.map((row) => row.original.id!),
+          },
+          {
+            onSuccess: () => {
+              table.resetRowSelection();
+            },
+          }
+        );
+      },
+    };
+  };
+
+  return (
+    <Table
+      enableSorting
+      enableFilters
+      enableHiding
+      initialState={{
+        sorting: [
+          {
+            id: 'createdAt',
+            desc: true,
+          },
+        ],
+      }}
+      refineCoreProps={{
+        queryOptions: { initialData },
+        meta: {
+          join: [
+            {
+              field: 'user',
+              select: ['name'],
+            },
+          ],
+        },
+      }}
+    >
+      <Table.Column
+        accessorKey="id"
+        id="id"
+        header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
+        cell={({ row }) => (
+          <Checkbox
+            className="ml-2"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+            key={`checkbox-${row.original.id}`}
+          />
+        )}
+      />
+
+      <Table.Column
+        header="Resource"
+        accessorKey="resource"
+        id="resource"
+        meta={{
+          filterOperator: 'contains',
+        }}
+        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Resource" />}
+        cell={({ row: { index, original }, table }) => {
+          const pageIndex = table.getState().pagination.pageIndex;
+          const pageSize = table.getState().pagination.pageSize;
+          return (
+            <ShowButton recordItemId={original.id} asChild>
+              <span className="text-muted-foreground">{pageIndex * pageSize + index + 1}.&nbsp;</span>
+              <span className="py-3 capitalize underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
+                {original.resource}
+                {original.tit}
+              </span>
+            </ShowButton>
+          );
+        }}
+      />
+
+      <Table.Column
+        header="Action"
+        accessorKey="action"
+        id="action"
+        enableSorting
+        enableHiding
+        cell={({ row: { original } }) => (
+          <Badge variant={LOG_STATUS_MAP[original.action as LogStatus]?.badge as TAny}>
+            {original.action?.charAt(0)?.toUpperCase() + original.action?.slice(1)?.toLowerCase()}
+          </Badge>
+        )}
+        filter={(props: TableFilterProps) => (
+          <Table.Filter.Radio
+            {...props}
+            options={Object.entries(LOG_STATUS_MAP).map(([key, value]) => ({
+              label: key?.charAt(0)?.toUpperCase() + key?.slice(1)?.toLowerCase(),
+              value,
+            }))}
+          />
+        )}
+      />
+
+      <Table.Column
+        header="CreatedAt"
+        accessorKey="createdAt"
+        id="createdAt"
+        enableSorting
+        enableHiding
+        filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
+        cell={({ row: { original } }) => dayjs(original.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+      />
+
+      <Table.Column
+        header="Author"
+        accessorKey="user.name"
+        id="user.name"
+        enableHiding
+        meta={{
+          filterOperator: 'contains',
+        }}
+        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
+        cell={({ row: { original } }) => original.user?.name}
+      />
+
+      <Table.Column
+        header="Actions"
+        accessorKey="id"
+        id="actions"
+        cell={({ row: { original } }: { row: { original: BaseRecord } }) => (
+          <ShowButton recordItemId={original.id} size="icon" variant="ghost" />
+        )}
+      />
+    </Table>
+  );
+}
+
+function UiTools() {
+  return (
+    <div className="flex items-center gap-1 text-sm">
+      <ExportButton variant="ghost" size="icon" />
+    </div>
+  );
+}
+
+// 错误边界处理
+export function ErrorBoundary() {
+  return <PageError />;
+}

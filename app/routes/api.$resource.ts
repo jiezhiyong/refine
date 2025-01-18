@@ -3,7 +3,7 @@ import { dataService } from '~/services/data.server';
 import type { CrudFilters, CrudSorting, Pagination } from '@refinedev/core';
 import { TAny } from '~/types/any';
 import { getSession } from '~/services/session.server';
-import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
+import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
 
 // 处理 getList 请求
 export async function loader({ request, params }: LoaderFunctionArgs) {

@@ -11,7 +11,7 @@ import { dataService } from '~/services/data.server';
 import { Post } from '@prisma/client';
 import { parseTableParams } from '@refinedev/remix-router';
 import { Badge } from '~/components-shadcn/badge';
-import { POST_STATUS, POST_STATUS_MAP, PostStatus } from '~/types/post';
+import { POST_STATUS_MAP, PostStatus } from '~/types/post';
 import { TAny } from '~/types/any';
 import { CreateButton, ExportButton, ImportButton, ShowButton } from '~/component-refine';
 import { useCallback } from 'react';
@@ -45,7 +45,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { initialData: data };
 }
 
-// FIXME: 删除后数据未更新
 export default function PostIndex() {
   const { initialData } = useLoaderData<typeof loader>();
 
@@ -139,7 +138,9 @@ export default function PostIndex() {
           return (
             <ShowButton recordItemId={original.id} asChild>
               <span className="text-muted-foreground">{pageIndex * pageSize + index + 1}.&nbsp;</span>
-              <span className="underline-offset-2 hover:text-green-600 hover:underline">{original.title}</span>
+              <span className="py-3 underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
+                {original.title}
+              </span>
             </ShowButton>
           );
         }}
@@ -176,7 +177,7 @@ export default function PostIndex() {
         filter={(props: TableFilterProps) => (
           <Table.Filter.Dropdown
             {...props}
-            options={Object.entries(POST_STATUS).map(([key, value]) => ({
+            options={Object.keys(POST_STATUS_MAP).map(([key, value]) => ({
               label: key?.charAt(0)?.toUpperCase() + key?.slice(1)?.toLowerCase(),
               value,
             }))}
@@ -217,6 +218,7 @@ export default function PostIndex() {
       />
 
       <Table.Column
+        header="Actions"
         accessorKey="id"
         id="actions"
         cell={useCallback(

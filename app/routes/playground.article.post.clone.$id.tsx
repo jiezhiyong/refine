@@ -1,5 +1,5 @@
-import { Category } from '@prisma/client';
-import { MetaFunction } from '@remix-run/node';
+import { Category, Post } from '@prisma/client';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { PageError } from '~/components/500';
 import { dataService } from '~/services/data.server';
@@ -12,20 +12,24 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 // 页面初始化时的`GET`请求 && 表单`GET`请求
-export async function loader() {
-  const [categoriesRes] = await Promise.all([
+export async function loader({ params }: LoaderFunctionArgs) {
+  const [postRes, categoriesRes] = await Promise.all([
+    dataService.getOne<Post>({
+      resource: 'post',
+      id: params?.id || '',
+    }),
     dataService.getList<Category>({
       resource: 'category',
     }),
   ]);
 
-  return { categoriesRes };
+  return { postRes, categoriesRes };
 }
 
 // UI
-export default function PostCreate() {
-  const { categoriesRes } = useLoaderData<typeof loader>();
-  return <PostForm categoriesRes={categoriesRes} />;
+export default function PostClone() {
+  const { postRes, categoriesRes } = useLoaderData<typeof loader>();
+  return <PostForm postRes={postRes} categoriesRes={categoriesRes} />;
 }
 
 // 错误边界处理

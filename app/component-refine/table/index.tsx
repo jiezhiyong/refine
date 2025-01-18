@@ -24,8 +24,9 @@ import { DeleteAction } from './actions/delete';
 import { DeleteProvider } from '../providers';
 import { TAny } from '~/types/any';
 import { PopoverContentProps } from '@radix-ui/react-popover';
-import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
+import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
 import { CloneAction } from './actions/clone';
+import { TableFilterRadio } from './fields/table-filter-radio';
 
 export type TableListFilterOption = BaseOption & {
   icon?: React.ComponentType<{ className?: string }>;
@@ -223,6 +224,7 @@ Table.Filter = {
   DateRangePicker: TableFilterDateRangePickerFilter,
   Dropdown: TableFilterDropdown,
   Search: TableFilterSearchColumn,
+  Radio: TableFilterRadio,
 };
 
 Table.displayName = 'Table';

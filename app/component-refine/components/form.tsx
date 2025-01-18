@@ -6,6 +6,7 @@ import { type FieldValues } from 'react-hook-form';
 import { SaveButton } from '../buttons';
 import { Card, CardContent, CardFooter } from '~/components-shadcn/card';
 import { Button } from '~/components-shadcn/button';
+import { Undo2 } from 'lucide-react';
 
 type NativeFormProps = Omit<DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>, 'onSubmit'>;
 
@@ -59,17 +60,23 @@ export const Form = <
   return (
     <FormUI {...props}>
       <form {...formProps} onSubmit={onSubmit}>
-        <Card className="border-border/40 shadow-sm">
-          <CardContent className="space-y-4 pt-6">{props.children}</CardContent>
+        <Card className="mx-auto border-none px-2 pb-4 pt-8">
+          <CardContent className="space-y-4">{props.children}</CardContent>
 
           <CardFooter className="flex justify-end gap-x-4">
+            <SaveButton type="submit" loading={props.refineCore.formLoading} {...saveButtonProps} />
+
             {!props.hideCancel && (
-              <Button type="button" onClick={onBack} disabled={props.refineCore.formLoading} variant="outline">
+              <Button
+                icon={<Undo2 />}
+                type="button"
+                onClick={onBack}
+                disabled={props.refineCore.formLoading}
+                variant="outline"
+              >
                 Cancel
               </Button>
             )}
-
-            <SaveButton type="submit" loading={props.refineCore.formLoading} {...saveButtonProps} />
           </CardFooter>
         </Card>
       </form>

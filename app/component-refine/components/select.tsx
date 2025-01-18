@@ -21,7 +21,7 @@ export const Select = forwardRef<React.ElementRef<typeof SelectContentType>, Sel
       value={props.value}
     >
       <FormControl>
-        <SelectTrigger ref={triggerRef}>
+        <SelectTrigger ref={triggerRef} className="sm:w-[400px]">
           <SelectValue placeholder={props.placeholder ?? 'Select'} />
         </SelectTrigger>
       </FormControl>

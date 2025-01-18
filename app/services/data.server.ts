@@ -1,6 +1,6 @@
 import { DataProvider } from '@refinedev/core';
 import { dataResources } from '~/config/resources';
-import { DEFAULT_PAGE_SIZE } from '~/constants/pagination';
+import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
 import { Resources } from '~/constants/resource';
 import { db } from '~/services/db.server';
 import { TAny } from '~/types/any';
