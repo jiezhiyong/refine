@@ -26,6 +26,7 @@ type AuthProviderLoginParams = {
 };
 
 let permissionsCache: PermissionRule[] | null = null;
+let identityCache: User | null = null;
 
 export const authProvider: {
   login: (
@@ -124,9 +125,14 @@ export const authProvider: {
 
   getIdentity: async () => {
     try {
+      if (identityCache) {
+        return identityCache;
+      }
+
       const response = await webapi.get(`/auth/me`);
       const { data } = await response.json();
       if (data && data.id) {
+        identityCache = data;
         return data;
       }
 

@@ -14,7 +14,8 @@ import { Badge } from '~/components-shadcn/badge';
 import { TAny } from '~/types/any';
 import { ExportButton, ShowButton } from '~/component-refine';
 import { HandleFunction } from '~/types/handle';
-import { LOG_STATUS_MAP, LogStatus } from '~/types/log';
+import { LOG_STATUS, LOG_STATUS_MAP, LogStatus } from '~/types/log';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -35,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     resource: 'log',
     meta: {
       include: {
-        user: { select: { name: true } },
+        user: { select: { name: true, avatar: true } },
       },
     },
   });
@@ -93,7 +94,7 @@ export default function LogIndex() {
           join: [
             {
               field: 'user',
-              select: ['name'],
+              select: ['name', 'avatar'],
             },
           ],
         },
@@ -125,12 +126,16 @@ export default function LogIndex() {
         cell={({ row: { index, original }, table }) => {
           const pageIndex = table.getState().pagination.pageIndex;
           const pageSize = table.getState().pagination.pageSize;
+
+          const title = JSON.parse(original.data || '{}').title;
+          const ids = JSON.parse(original.meta || '{}').ids;
           return (
             <ShowButton recordItemId={original.id} asChild>
               <span className="text-muted-foreground">{pageIndex * pageSize + index + 1}.&nbsp;</span>
               <span className="py-3 capitalize underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
-                {original.resource}
-                {original.tit}
+                {JSON.parse(original.meta).parent}.{original.resource} - {title}
+                {original.action === 'deleteMany' && `x${ids.length}`}
+                {original.action === 'delete' && `x1`}
               </span>
             </ShowButton>
           );
@@ -145,14 +150,14 @@ export default function LogIndex() {
         enableHiding
         cell={({ row: { original } }) => (
           <Badge variant={LOG_STATUS_MAP[original.action as LogStatus]?.badge as TAny}>
-            {original.action?.charAt(0)?.toUpperCase() + original.action?.slice(1)?.toLowerCase()}
+            {original.action?.charAt(0)?.toUpperCase() + original.action?.slice(1)}
           </Badge>
         )}
         filter={(props: TableFilterProps) => (
           <Table.Filter.Radio
             {...props}
-            options={Object.entries(LOG_STATUS_MAP).map(([key, value]) => ({
-              label: key?.charAt(0)?.toUpperCase() + key?.slice(1)?.toLowerCase(),
+            options={Object.entries(LOG_STATUS).map(([key, value]) => ({
+              label: key?.charAt(0)?.toUpperCase() + key?.slice(1),
               value,
             }))}
           />
@@ -178,7 +183,15 @@ export default function LogIndex() {
           filterOperator: 'contains',
         }}
         filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
-        cell={({ row: { original } }) => original.user?.name}
+        cell={({ row: { original } }) => (
+          <div className="flex items-center gap-2">
+            <Avatar className="size-6">
+              <AvatarImage src={original.user?.avatar || ''} alt={original.user?.name || ''} />
+              <AvatarFallback>{original.user?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <span>{original.user?.name}</span>
+          </div>
+        )}
       />
 
       <Table.Column

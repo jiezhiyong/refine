@@ -80,7 +80,7 @@ const formSchema = z.object({
 });
 
 export const PostForm = ({
-  redirect = 'edit',
+  redirect = 'list',
   postRes,
   categoriesRes: { data: categories },
 }: {

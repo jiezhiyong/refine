@@ -2,7 +2,7 @@ import { LoaderFunctionArgs, type ActionFunctionArgs } from '@remix-run/node';
 import { dataService } from '~/services/data.server';
 import type { CrudFilters, CrudSorting, Pagination } from '@refinedev/core';
 import { TAny } from '~/types/any';
-import { getSession } from '~/services/session.server';
+import { requireUser } from '~/services/session.server';
 import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
 
 // 处理 getList 请求
@@ -37,6 +37,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 // 处理单个创建 create
 // 注意：默认所有数据模型都应该关联用户
 export async function action({ request, params }: ActionFunctionArgs) {
+  const { user } = await requireUser(request);
+
   const { resource } = params;
   if (!resource) {
     throw new Error('资源类型是必需的');
@@ -48,9 +50,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     switch (method) {
       case 'POST': {
-        const session = await getSession(request.headers.get('Cookie'));
-        const user = session.get('user');
-
         const created = await dataService.create({
           resource,
           variables: { ...body, userId: user?.id },

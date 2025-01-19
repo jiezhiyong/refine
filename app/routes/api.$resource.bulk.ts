@@ -1,5 +1,6 @@
 import { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
 import { dataService } from '~/services/data.server';
+import { requireUser } from '~/services/session.server';
 import { TAny } from '~/types/any';
 
 // 处理批量获取请求 getMany
@@ -30,6 +31,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 // 处理批量操作请求
 export async function action({ request, params }: ActionFunctionArgs) {
+  await requireUser(request);
+
   const { resource } = params;
   if (!resource) {
     throw new Error('资源类型是必需的');

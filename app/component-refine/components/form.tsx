@@ -1,5 +1,5 @@
 import { Form as FormUI } from '~/components-shadcn/form';
-import { useBack, useNavigation, useParsed, useRouterType, type BaseRecord, type HttpError } from '@refinedev/core';
+import { useBack, useParsed, type BaseRecord, type HttpError } from '@refinedev/core';
 import type { UseFormReturnType } from '@refinedev/react-hook-form';
 import { useRef, type DetailedHTMLProps, type FormHTMLAttributes, type PropsWithChildren } from 'react';
 import { type FieldValues } from 'react-hook-form';
@@ -41,12 +41,9 @@ export const Form = <
 }: FormProps<TQueryFnData, TError, TVariables, TContext, TData, TResponse, TResponseError>) => {
   const watchable = useRef<boolean>(false);
   const { resource: _resource, action } = useParsed();
-  const routerType = useRouterType();
   const back = useBack();
-  const { goBack } = useNavigation();
 
-  const onBack =
-    action !== 'list' || typeof action !== 'undefined' ? (routerType === 'legacy' ? goBack : back) : undefined;
+  const onBack = action !== 'list' || typeof action !== 'undefined' ? back : undefined;
 
   if (isWatchable && !watchable.current) {
     watchable.current = true;
@@ -60,7 +57,7 @@ export const Form = <
   return (
     <FormUI {...props}>
       <form {...formProps} onSubmit={onSubmit}>
-        <Card className="mx-auto border-none px-2 pb-4 pt-8">
+        <Card className="mx-auto border-none px-2 pb-4 pt-8 shadow-none">
           <CardContent className="space-y-4">{props.children}</CardContent>
 
           <CardFooter className="flex justify-end gap-x-4">

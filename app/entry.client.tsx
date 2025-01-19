@@ -4,7 +4,7 @@ import { hydrateRoot } from 'react-dom/client';
 import { initSentry } from './clients/sentry.client';
 
 /** 初始化客户端 Sentry */
-initSentry();
+// initSentry();
 
 /** 初始化 Mock Service Worker */
 async function prepareApp() {

@@ -50,13 +50,13 @@ export default function PostShow() {
   const { data: post } = postRes;
 
   return (
-    <article className="mx-auto px-8 pb-4 pt-8">
+    <article className="px-8 pb-4 pt-8">
       <header className="mb-8">
         <H1 className="relative mb-4 inline-flex gap-3 text-4xl font-bold">
           <span>{post.title}</span>
           <div className="inline-flex shrink-0 items-start pt-3.5">
             <Badge className="tracking-wide" variant={POST_STATUS_MAP[post.status as PostStatus]?.badge as TAny}>
-              Status: {post.status?.charAt(0)?.toUpperCase() + post.status?.slice(1)?.toLowerCase()}
+              {post.status?.charAt(0)?.toUpperCase() + post.status?.slice(1)?.toLowerCase()}
             </Badge>
           </div>
         </H1>

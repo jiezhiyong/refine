@@ -1,28 +1,26 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { format } from 'date-fns';
-import { Card, CardContent, CardHeader, CardTitle } from '~/components-shadcn/card';
 import { Label } from '~/components-shadcn/label';
-import { Button } from '~/components-shadcn/button';
-import { ArrowLeft } from 'lucide-react';
-import { Link } from '@remix-run/react';
+import { CalendarIcon, LeafyGreen, MailIcon } from 'lucide-react';
 import { dataService } from '~/services/data.server';
 import { PageError } from '~/components/500';
 import { Log } from '@prisma/client';
+import { H1 } from '~/components-shadcn/typography';
+import { Badge } from '~/components-shadcn/badge';
+import { LOG_STATUS_MAP, LogStatus } from '~/types/log';
+import { TAny } from '~/types/any';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
 
-  const { data: log } = await dataService.getOne<Log & { user: { name: string; email: string } }>({
+  const { data: log } = await dataService.getOne<Log & { user: { name: string; email: string; avatar?: string } }>({
     resource: 'log',
     id: id as string,
     meta: {
       include: {
         user: {
-          select: {
-            name: true,
-            email: true,
-          },
+          select: { name: true, email: true, avatar: true },
         },
       },
     },
@@ -38,70 +36,81 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function LogShow() {
   const { log } = useLoaderData<typeof loader>();
 
+  const data = JSON.parse(log.data || '{}');
+  const previousData = JSON.parse(log.previousData || '{}');
+  const meta = JSON.parse(log.meta || '{}');
+
   return (
-    <div className="">
-      <div className="mb-6">
-        <Button variant="ghost" asChild>
-          <Link to="/log">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            返回列表
-          </Link>
-        </Button>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>日志详情</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>资源</Label>
-              <div className="mt-1">{log.resource}</div>
-            </div>
-            <div>
-              <Label>动作</Label>
-              <div className="mt-1">{log.action}</div>
-            </div>
-            <div>
-              <Label>操作人</Label>
-              <div className="mt-1">{log.user.name || log.user.email}</div>
-            </div>
-            <div>
-              <Label>操作时间</Label>
-              <div className="mt-1">{format(new Date(log.createdAt), 'yyyy-MM-dd HH:mm:ss')}</div>
-            </div>
+    <article className="px-8 pb-4 pt-8">
+      <header className="mb-8">
+        <H1 className="relative mb-4 inline-flex gap-3 text-4xl font-bold">
+          <span className="capitalize">
+            Audit Log Detail - {meta.parent}.{log.resource}
+          </span>
+          <div className="inline-flex shrink-0 items-start pt-3.5">
+            <Badge className="tracking-wide" variant={LOG_STATUS_MAP[log.action as LogStatus]?.badge as TAny}>
+              {log.action}
+            </Badge>
           </div>
+        </H1>
 
-          {log.data && (
-            <div>
-              <Label>数据</Label>
-              <pre className="mt-1 whitespace-pre rounded-lg bg-muted p-4">
-                {JSON.stringify(JSON.parse(log.data), null, 2)}
-              </pre>
-            </div>
-          )}
+        <div className="mb-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center">
+            <LeafyGreen className="mr-2 h-4 w-4" />
+            <span>
+              Resource: {meta.parent}.{log.resource}
+            </span>
+          </div>
+          <div className="flex items-center">
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            <span>Created: {new Date(log.createdAt).toLocaleDateString()}</span>
+          </div>
+        </div>
 
-          {log.previousData && (
-            <div>
-              <Label>旧数据</Label>
-              <pre className="mt-1 whitespace-pre rounded-lg bg-muted p-4">
-                {JSON.stringify(JSON.parse(log.previousData), null, 2)}
-              </pre>
-            </div>
-          )}
+        <div className="flex items-center gap-4">
+          <Avatar>
+            <AvatarImage src={log.user?.avatar || ''} alt={log.user?.name || ''} />
+            <AvatarFallback>{log.user?.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="font-medium">{log.user?.name}</p>
+            <p className="flex items-center text-sm text-muted-foreground">
+              <MailIcon className="mr-2 h-4 w-4" />
+              {log.user?.email}
+            </p>
+          </div>
+        </div>
+      </header>
 
-          {log.meta && (
-            <div>
-              <Label>元数据</Label>
-              <pre className="mt-1 whitespace-pre rounded-lg bg-muted p-4">
-                {JSON.stringify(JSON.parse(log.meta), null, 2)}
-              </pre>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+      <div className="space-y-6">
+        {log.data && (
+          <div>
+            <Label>Data</Label>
+            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4">
+              {JSON.stringify(data, null, 2)}
+            </pre>
+          </div>
+        )}
+
+        {log.previousData && (
+          <div>
+            <Label>Previous Data</Label>
+            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4">
+              {JSON.stringify(previousData, null, 2)}
+            </pre>
+          </div>
+        )}
+
+        {log.meta && (
+          <div>
+            <Label>Meta Data</Label>
+            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4">
+              {JSON.stringify(meta, null, 2)}
+            </pre>
+          </div>
+        )}
+      </div>
+    </article>
   );
 }
 

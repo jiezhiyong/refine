@@ -1,8 +1,8 @@
 import { DeleteButtonProps } from '../types';
 import { Button } from '~/components-shadcn/button';
-import { useDeleteButton } from '@refinedev/core';
+import { useBack, useDeleteButton } from '@refinedev/core';
 import { Trash2Icon } from 'lucide-react';
-import type { FC } from 'react';
+import { type FC } from 'react';
 import { ConfirmDialog } from '../components';
 
 export const DeleteButton: FC<DeleteButtonProps> = ({
@@ -24,6 +24,14 @@ export const DeleteButton: FC<DeleteButtonProps> = ({
   children,
   ...props
 }) => {
+  const back = useBack();
+
+  const defaultOnSuccess = () => {
+    setTimeout(() => {
+      back();
+    }, 300);
+  };
+
   const {
     title,
     label,
@@ -41,7 +49,7 @@ export const DeleteButton: FC<DeleteButtonProps> = ({
     dataProviderName,
     invalidates,
     meta,
-    onSuccess,
+    onSuccess: onSuccess || defaultOnSuccess,
     mutationMode: mutationModeProp,
     errorNotification,
     successNotification,

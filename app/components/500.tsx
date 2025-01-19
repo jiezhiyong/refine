@@ -1,3 +1,4 @@
+import { useBack } from '@refinedev/core';
 import { ErrorResponse } from '@remix-run/node';
 import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
@@ -5,6 +6,7 @@ import { useMountEffect } from '~/hooks/use-mount-effect';
 
 export function PageError({ error }: { error?: Error | ErrorResponse | { message: string } | unknown }) {
   const routeError = useRouteError();
+  const back = useBack();
 
   if (!error) {
     error = routeError;
@@ -28,6 +30,9 @@ export function PageError({ error }: { error?: Error | ErrorResponse | { message
         </div>
         <p className="mb-8 text-xl text-red-500">{(error as Error).message || 'unknown error'}</p>
         {/* <pre className="mb-8 rounded-lg border p-6 text-left">{(error as Error).message || 'unknown error'}</pre> */}
+        <Button onClick={back} className="mr-3">
+          Go Back
+        </Button>
         <Button onClick={() => location.reload()}>Try Again</Button>
       </div>
     </div>

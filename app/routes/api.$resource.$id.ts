@@ -1,5 +1,6 @@
 import { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
 import { dataService } from '~/services/data.server';
+import { requireUser } from '~/services/session.server';
 import { TAny } from '~/types/any';
 
 // 处理单个获取 getOne
@@ -22,6 +23,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 // 处理 PATCH、DELETE 请求
 export async function action({ request, params }: ActionFunctionArgs) {
+  await requireUser(request);
+
   const { resource, id } = params;
   if (!resource || !id) {
     return Response.json({ message: '资源类型和ID是必需的' }, { status: 400 });

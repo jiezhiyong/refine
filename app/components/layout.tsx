@@ -24,7 +24,7 @@ export function Layout() {
             <NavTools />
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex max-w-[calc(100vw-var(--sidebar-width))] flex-1 flex-col gap-4 p-4 pt-0 transition-[max-width] duration-200 ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:max-w-[calc(100vw-var(--sidebar-width-icon))] group-data-[collapsible=offcanvas]/sidebar-wrapper:max-w-[100vw]">
           <Outlet />
         </div>
       </SidebarInset>

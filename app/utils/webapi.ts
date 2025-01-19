@@ -1,5 +1,6 @@
 import { apiBase, isServer } from '~/config/base-url';
 import { generateSignature } from './signature';
+import * as https from 'node:https';
 
 // 类型定义
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -11,21 +12,18 @@ type RequestOptions = RequestInit & {
 let makeServerRequest: ((url: string, options: RequestOptions) => Promise<Response>) | undefined;
 
 if (isServer) {
-  const https = require('https');
-  const url = require('url');
-
   makeServerRequest = (requestUrl: string, options: RequestOptions = {}): Promise<Response> => {
     return new Promise((resolve, reject) => {
-      const parsedUrl = url.parse(requestUrl);
-      const requestOptions = {
-        ...options,
+      const parsedUrl = new URL(requestUrl);
+      const requestOptions: https.RequestOptions = {
+        method: options.method || 'GET',
         hostname: parsedUrl.hostname,
         port: parsedUrl.port,
-        path: parsedUrl.path,
+        path: parsedUrl.pathname + parsedUrl.search,
         rejectUnauthorized: false,
         headers: {
-          ...options.headers,
           'Content-Type': 'application/x-www-form-urlencoded',
+          ...(options.headers as Record<string, string>),
         },
       };
 

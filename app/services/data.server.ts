@@ -87,7 +87,6 @@ export const dataService: DataProvider = {
       data: variables,
       ...meta,
     });
-
     return {
       success: true,
       data,

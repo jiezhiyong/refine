@@ -11,11 +11,12 @@ import { dataService } from '~/services/data.server';
 import { Post } from '@prisma/client';
 import { parseTableParams } from '@refinedev/remix-router';
 import { Badge } from '~/components-shadcn/badge';
-import { POST_STATUS_MAP, PostStatus } from '~/types/post';
+import { POST_STATUS, POST_STATUS_MAP, PostStatus } from '~/types/post';
 import { TAny } from '~/types/any';
 import { CreateButton, ExportButton, ImportButton, ShowButton } from '~/component-refine';
 import { useCallback } from 'react';
 import { HandleFunction } from '~/types/handle';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -36,7 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     resource: 'post',
     meta: {
       include: {
-        user: { select: { name: true } },
+        user: { select: { name: true, avatar: true } },
         category: { select: { title: true } },
       },
     },
@@ -99,7 +100,7 @@ export default function PostIndex() {
           join: [
             {
               field: 'user',
-              select: ['name'],
+              select: ['name', 'avatar'],
             },
             {
               field: 'category',
@@ -177,7 +178,7 @@ export default function PostIndex() {
         filter={(props: TableFilterProps) => (
           <Table.Filter.Dropdown
             {...props}
-            options={Object.keys(POST_STATUS_MAP).map(([key, value]) => ({
+            options={Object.entries(POST_STATUS).map(([key, value]) => ({
               label: key?.charAt(0)?.toUpperCase() + key?.slice(1)?.toLowerCase(),
               value,
             }))}
@@ -214,7 +215,15 @@ export default function PostIndex() {
           filterOperator: 'contains',
         }}
         filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
-        cell={({ row: { original } }) => original.user?.name}
+        cell={({ row: { original } }) => (
+          <div className="flex items-center gap-2">
+            <Avatar className="size-6">
+              <AvatarImage src={original.user?.avatar || ''} alt={original.user?.name || ''} />
+              <AvatarFallback>{original.user?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <span>{original.user?.name}</span>
+          </div>
+        )}
       />
 
       <Table.Column

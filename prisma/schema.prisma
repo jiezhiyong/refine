@@ -89,14 +89,14 @@ model Category {
 // Log 相关模型
 // ========================
 model Log {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   resource     String
   action       String
-  user         User     @relation(references: [id], fields: [userId])
+  user         User      @relation(references: [id], fields: [userId])
   userId       String
   data         String?
   previousData String?
   meta         String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
 }

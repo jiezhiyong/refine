@@ -64,6 +64,8 @@ export const auditLogProvider: AuditLogProvider = {
     meta?: Record<number | string, any>;
   }) => {
     const { resource, action, data, previousData, meta } = params;
+    // FIXME: previousData = null
+    console.log('params', params);
 
     const logEntry = {
       resource,

@@ -8,7 +8,7 @@ export const posts = [
       id: '7',
     },
     createdAt: '2025-02-11T07:35:17.656Z',
-    updatedAt: '2025-02-20T21:33:56.604Z',
+    updatedAt: '2025-02-18T21:33:56.604Z',
     image: '/dog.jpg',
     status: 'PUBLISHED',
   },
@@ -21,7 +21,7 @@ export const posts = [
       id: '13',
     },
     createdAt: '2025-02-13T11:46:10.239Z',
-    updatedAt: '2025-02-27T13:01:09.971Z',
+    updatedAt: '2025-02-18T13:01:09.971Z',
     image: '/dog.jpg',
     status: 'REJECTED',
   },
@@ -34,7 +34,7 @@ export const posts = [
       id: '12',
     },
     createdAt: '2025-02-03T11:34:58.187Z',
-    updatedAt: '2025-02-28T11:35:52.857Z',
+    updatedAt: '2025-02-18T11:35:52.857Z',
     image: '/dog.jpg',
     status: 'PUBLISHED',
   },
@@ -47,7 +47,7 @@ export const posts = [
       id: '5',
     },
     createdAt: '2025-02-01T10:01:37.084Z',
-    updatedAt: '2025-02-22T07:25:37.671Z',
+    updatedAt: '2025-02-18T07:25:37.671Z',
     image: '/dog.jpg',
   },
   {
@@ -82,7 +82,7 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2025-02-27T01:34:41.155Z',
+    createdAt: '2025-02-18T01:34:41.155Z',
     updatedAt: '2025-02-02T13:38:46.007Z',
     image: '/dog.jpg',
   },
@@ -119,7 +119,7 @@ export const posts = [
       id: '8',
     },
     createdAt: '2025-01-11T13:36:23.224Z',
-    updatedAt: '2025-02-27T00:14:46.460Z',
+    updatedAt: '2025-02-18T00:14:46.460Z',
     image: '/dog.jpg',
   },
   {
@@ -142,7 +142,7 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2025-02-26T00:02:33.687Z',
+    createdAt: '2025-02-18T00:02:33.687Z',
     updatedAt: '2025-02-15T11:50:41.788Z',
     image: '/dog.jpg',
   },
@@ -166,7 +166,7 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2025-02-22T21:52:18.692Z',
+    createdAt: '2025-02-18T21:52:18.692Z',
     updatedAt: '2025-02-02T23:44:45.012Z',
     image: '/dog.jpg',
   },
@@ -238,7 +238,7 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2025-02-21T18:56:03.996Z',
+    createdAt: '2025-02-18T18:56:03.996Z',
     updatedAt: '2025-02-14T08:11:52.279Z',
     image: '/dog.jpg',
   },
@@ -262,7 +262,7 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2025-02-24T11:06:43.298Z',
+    createdAt: '2025-02-18T11:06:43.298Z',
     updatedAt: '2025-02-10T04:15:38.707Z',
     image: '/dog.jpg',
   },
@@ -275,7 +275,7 @@ export const posts = [
       id: '2',
     },
     createdAt: '2025-02-13T03:57:30.335Z',
-    updatedAt: '2025-02-20T02:13:31.866Z',
+    updatedAt: '2025-02-18T02:13:31.866Z',
     image: '/dog.jpg',
   },
   {
@@ -287,7 +287,7 @@ export const posts = [
       id: '4',
     },
     createdAt: '2025-02-19T17:59:07.030Z',
-    updatedAt: '2025-02-28T11:24:21.200Z',
+    updatedAt: '2025-02-18T11:24:21.200Z',
     image: '/dog.jpg',
   },
   {
@@ -311,7 +311,7 @@ export const posts = [
       id: '3',
     },
     createdAt: '2025-01-07T18:04:58.804Z',
-    updatedAt: '2025-02-28T09:01:01.913Z',
+    updatedAt: '2025-02-18T09:01:01.913Z',
     image: '/dog.jpg',
   },
   {
@@ -346,8 +346,8 @@ export const posts = [
     category: {
       id: '12',
     },
-    createdAt: '2025-02-22T06:08:27.364Z',
-    updatedAt: '2025-02-25T18:32:16.775Z',
+    createdAt: '2025-02-18T06:08:27.364Z',
+    updatedAt: '2025-02-18T18:32:16.775Z',
     image: '/dog.jpg',
   },
   {
@@ -358,8 +358,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2025-02-22T21:28:10.907Z',
-    updatedAt: '2025-02-23T18:30:48.164Z',
+    createdAt: '2025-02-18T21:28:10.907Z',
+    updatedAt: '2025-02-18T18:30:48.164Z',
     image: '/dog.jpg',
   },
   {
@@ -395,7 +395,7 @@ export const posts = [
       id: '11',
     },
     createdAt: '2025-01-01T13:03:09.431Z',
-    updatedAt: '2025-02-20T11:37:39.105Z',
+    updatedAt: '2025-02-18T11:37:39.105Z',
     image: '/dog.jpg',
   },
   {
@@ -418,7 +418,7 @@ export const posts = [
     category: {
       id: '4',
     },
-    createdAt: '2025-02-24T08:32:57.519Z',
+    createdAt: '2025-02-18T08:32:57.519Z',
     updatedAt: '2025-02-17T05:14:46.181Z',
     image: '/dog.jpg',
   },
@@ -455,7 +455,7 @@ export const posts = [
       id: '14',
     },
     createdAt: '2025-01-27T19:05:22.869Z',
-    updatedAt: '2025-02-25T13:45:17.785Z',
+    updatedAt: '2025-02-18T13:45:17.785Z',
     image: '/dog.jpg',
   },
   {
@@ -466,8 +466,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2025-02-23T20:29:36.062Z',
-    updatedAt: '2025-02-26T15:54:35.421Z',
+    createdAt: '2025-02-18T20:29:36.062Z',
+    updatedAt: '2025-02-18T15:54:35.421Z',
     image: '/dog.jpg',
   },
   {
@@ -479,7 +479,7 @@ export const posts = [
       id: '7',
     },
     createdAt: '2025-02-13T12:46:07.215Z',
-    updatedAt: '2025-02-25T14:21:15.278Z',
+    updatedAt: '2025-02-18T14:21:15.278Z',
     image: '/dog.jpg',
   },
   {
@@ -538,7 +538,7 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2025-02-22T13:10:07.499Z',
+    createdAt: '2025-02-18T13:10:07.499Z',
     updatedAt: '2025-01-06T16:23:03.294Z',
     image: '/dog.jpg',
   },
@@ -587,7 +587,7 @@ export const posts = [
       id: '15',
     },
     createdAt: '2025-02-01T09:37:07.824Z',
-    updatedAt: '2025-02-25T14:06:18.638Z',
+    updatedAt: '2025-02-18T14:06:18.638Z',
     image: '/dog.jpg',
   },
   {
@@ -598,7 +598,7 @@ export const posts = [
     category: {
       id: '13',
     },
-    createdAt: '2025-02-26T19:40:28.219Z',
+    createdAt: '2025-02-18T19:40:28.219Z',
     updatedAt: '2025-01-21T20:54:07.507Z',
     image: '/dog.jpg',
   },
@@ -622,8 +622,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2025-02-24T07:55:23.707Z',
-    updatedAt: '2025-02-25T16:03:09.803Z',
+    createdAt: '2025-02-18T07:55:23.707Z',
+    updatedAt: '2025-02-18T16:03:09.803Z',
     image: '/dog.jpg',
   },
   {
@@ -647,7 +647,7 @@ export const posts = [
       id: '15',
     },
     createdAt: '2025-02-18T03:01:34.268Z',
-    updatedAt: '2025-02-26T18:24:13.667Z',
+    updatedAt: '2025-02-18T18:24:13.667Z',
     image: '/dog.jpg',
   },
   {
@@ -658,7 +658,7 @@ export const posts = [
     category: {
       id: '6',
     },
-    createdAt: '2025-02-22T16:40:31.425Z',
+    createdAt: '2025-02-18T16:40:31.425Z',
     updatedAt: '2025-02-03T06:02:19.092Z',
     image: '/dog.jpg',
   },
@@ -671,7 +671,7 @@ export const posts = [
       id: '8',
     },
     createdAt: '2025-02-19T09:55:01.566Z',
-    updatedAt: '2025-02-27T05:51:57.000Z',
+    updatedAt: '2025-02-18T05:51:57.000Z',
     image: '/dog.jpg',
   },
   {
@@ -682,7 +682,7 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2025-02-26T01:21:30.381Z',
+    createdAt: '2025-02-18T01:21:30.381Z',
     updatedAt: '2025-02-16T14:42:27.426Z',
     image: '/dog.jpg',
   },
@@ -695,7 +695,7 @@ export const posts = [
       id: '11',
     },
     createdAt: '2025-02-08T00:03:46.309Z',
-    updatedAt: '2025-02-26T09:54:17.534Z',
+    updatedAt: '2025-02-18T09:54:17.534Z',
     image: '/dog.jpg',
   },
   {
@@ -730,7 +730,7 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2025-02-26T10:06:16.277Z',
+    createdAt: '2025-02-18T10:06:16.277Z',
     updatedAt: '2025-01-06T16:44:47.506Z',
     image: '/dog.jpg',
   },
@@ -742,7 +742,7 @@ export const posts = [
     category: {
       id: '5',
     },
-    createdAt: '2025-02-21T21:52:03.565Z',
+    createdAt: '2025-02-18T21:52:03.565Z',
     updatedAt: '2025-02-04T17:31:45.221Z',
     image: '/dog.jpg',
   },
@@ -767,7 +767,7 @@ export const posts = [
       id: '8',
     },
     createdAt: '2025-01-11T06:03:14.870Z',
-    updatedAt: '2025-02-23T04:37:05.264Z',
+    updatedAt: '2025-02-18T04:37:05.264Z',
     image: '/dog.jpg',
   },
   {
@@ -779,7 +779,7 @@ export const posts = [
       id: '13',
     },
     createdAt: '2025-01-01T23:27:48.097Z',
-    updatedAt: '2025-02-20T07:26:58.660Z',
+    updatedAt: '2025-02-18T07:26:58.660Z',
     image: '/dog.jpg',
   },
   {
@@ -802,7 +802,7 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2025-02-22T19:38:48.078Z',
+    createdAt: '2025-02-18T19:38:48.078Z',
     updatedAt: '2025-02-11T02:05:39.085Z',
     image: '/dog.jpg',
   },
@@ -815,7 +815,7 @@ export const posts = [
       id: '13',
     },
     createdAt: '2025-01-26T03:01:12.024Z',
-    updatedAt: '2025-02-20T14:06:24.345Z',
+    updatedAt: '2025-02-18T14:06:24.345Z',
     image: '/dog.jpg',
   },
   {
@@ -826,7 +826,7 @@ export const posts = [
     category: {
       id: '5',
     },
-    createdAt: '2025-02-24T00:07:23.868Z',
+    createdAt: '2025-02-18T00:07:23.868Z',
     updatedAt: '2025-02-02T13:52:59.819Z',
     image: '/dog.jpg',
   },
@@ -874,7 +874,7 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2025-02-21T01:55:20.526Z',
+    createdAt: '2025-02-18T01:55:20.526Z',
     updatedAt: '2025-02-10T00:37:32.049Z',
     image: '/dog.jpg',
   },
@@ -887,7 +887,7 @@ export const posts = [
       id: '11',
     },
     createdAt: '2025-01-01T16:25:22.665Z',
-    updatedAt: '2025-02-23T11:05:56.384Z',
+    updatedAt: '2025-02-18T11:05:56.384Z',
     image: '/dog.jpg',
   },
   {
@@ -911,7 +911,7 @@ export const posts = [
       id: '9',
     },
     createdAt: '2025-02-12T05:02:53.780Z',
-    updatedAt: '2025-02-28T02:00:03.260Z',
+    updatedAt: '2025-02-18T02:00:03.260Z',
     image: '/dog.jpg',
   },
   {
@@ -922,8 +922,8 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2025-02-23T03:16:31.006Z',
-    updatedAt: '2025-02-26T11:07:49.112Z',
+    createdAt: '2025-02-18T03:16:31.006Z',
+    updatedAt: '2025-02-18T11:07:49.112Z',
     image: '/dog.jpg',
   },
   {
@@ -935,7 +935,7 @@ export const posts = [
       id: '1',
     },
     createdAt: '2025-01-01T19:39:21.495Z',
-    updatedAt: '2025-02-20T23:06:03.922Z',
+    updatedAt: '2025-02-18T23:06:03.922Z',
     image: '/dog.jpg',
   },
   {
@@ -959,7 +959,7 @@ export const posts = [
       id: '12',
     },
     createdAt: '2025-02-01T10:02:37.125Z',
-    updatedAt: '2025-02-21T15:36:03.317Z',
+    updatedAt: '2025-02-18T15:36:03.317Z',
     image: '/dog.jpg',
   },
   {
@@ -971,7 +971,7 @@ export const posts = [
       id: '15',
     },
     createdAt: '2025-01-05T16:38:38.227Z',
-    updatedAt: '2025-02-20T01:43:41.212Z',
+    updatedAt: '2025-02-18T01:43:41.212Z',
     image: '/dog.jpg',
   },
   {
@@ -994,7 +994,7 @@ export const posts = [
     category: {
       id: '14',
     },
-    createdAt: '2025-02-25T15:40:05.529Z',
+    createdAt: '2025-02-18T15:40:05.529Z',
     updatedAt: '2025-01-24T10:12:50.968Z',
     image: '/dog.jpg',
   },
@@ -1007,7 +1007,7 @@ export const posts = [
       id: '8',
     },
     createdAt: '2025-02-08T03:56:45.181Z',
-    updatedAt: '2025-02-27T22:30:13.654Z',
+    updatedAt: '2025-02-18T22:30:13.654Z',
     image: '/dog.jpg',
   },
   {
@@ -1030,7 +1030,7 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2025-02-26T05:25:09.517Z',
+    createdAt: '2025-02-18T05:25:09.517Z',
     updatedAt: '2025-02-09T02:49:27.068Z',
     image: '/dog.jpg',
   },
@@ -1042,7 +1042,7 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2025-02-21T04:01:04.345Z',
+    createdAt: '2025-02-18T04:01:04.345Z',
     updatedAt: '2025-01-17T06:16:39.590Z',
     image: '/dog.jpg',
   },
@@ -1090,8 +1090,8 @@ export const posts = [
     category: {
       id: '5',
     },
-    createdAt: '2025-02-28T04:53:43.480Z',
-    updatedAt: '2025-02-20T18:14:17.265Z',
+    createdAt: '2025-02-18T04:53:43.480Z',
+    updatedAt: '2025-02-18T18:14:17.265Z',
     image: '/dog.jpg',
   },
   {
@@ -1114,7 +1114,7 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2025-02-25T02:27:03.957Z',
+    createdAt: '2025-02-18T02:27:03.957Z',
     updatedAt: '2025-02-03T08:05:29.112Z',
     image: '/dog.jpg',
   },
@@ -1162,8 +1162,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2025-02-28T22:33:43.681Z',
-    updatedAt: '2025-02-20T04:24:53.264Z',
+    createdAt: '2025-02-18T22:33:43.681Z',
+    updatedAt: '2025-02-18T04:24:53.264Z',
     image: '/dog.jpg',
   },
   {
@@ -1175,7 +1175,7 @@ export const posts = [
       id: '2',
     },
     createdAt: '2025-02-07T09:56:32.484Z',
-    updatedAt: '2025-02-22T21:29:48.045Z',
+    updatedAt: '2025-02-18T21:29:48.045Z',
     image: '/dog.jpg',
     status: 'REJECTED',
   },
@@ -1188,7 +1188,7 @@ export const posts = [
       id: '10',
     },
     createdAt: '2025-01-04T00:36:18.257Z',
-    updatedAt: '2025-02-20T14:01:03.549Z',
+    updatedAt: '2025-02-18T14:01:03.549Z',
     image: '/dog.jpg',
     status: 'PUBLISHED',
   },
@@ -1201,7 +1201,7 @@ export const posts = [
       id: '15',
     },
     createdAt: '2025-02-18T11:29:20.986Z',
-    updatedAt: '2025-02-25T09:58:24.165Z',
+    updatedAt: '2025-02-18T09:58:24.165Z',
     image: '/dog.jpg',
     status: 'PUBLISHED',
   },
