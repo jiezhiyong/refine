@@ -41,7 +41,7 @@ const ABORT_DELAY = 5_000;
 // }
 
 /** 初始化服务端 Sentry */
-// initSentry();
+initSentry();
 
 /** 处理请求 */
 export default async function handleRequest(

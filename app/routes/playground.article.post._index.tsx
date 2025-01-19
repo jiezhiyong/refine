@@ -52,6 +52,7 @@ export default function PostIndex() {
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
   const { data: deletePermission } = useCan({ resource: 'post', action: 'delete' });
+  const { data: filedHitPermission } = useCan({ resource: 'post', action: 'field', params: { field: 'hit' } });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const rows = table.getSelectedRowModel().rows;

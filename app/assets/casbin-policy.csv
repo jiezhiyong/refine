@@ -1,5 +1,5 @@
 # 管理员权限
-p, administrator, *, (list|show|create|edit|delete|field|import|export|clone)
+p, administrator, *, list|show|create|edit|delete|field|import|export|clone
 
 # 编辑者权限
 p, editor, playground, list
@@ -9,22 +9,22 @@ p, editor, about, list
 p, editor, techstack, list
 
 p, editor, article, list
-p, editor, post, list|create|field
-p, editor, post/*, show|edit|delete|field
+p, editor, post, list|create|field|import|export
+p, editor, post/*, show|edit|field|delete|clone
 p, editor, post/hit, field, deny
-p, editor, category, list
-p, editor, category/*, show
+p, editor, category, list|import|export
+p, editor, category/*, show|clone
 
 p, editor, system, list
 
 p, editor, account, list
-p, editor, user, list
+p, editor, user, list|import|export
 p, editor, user/*, show
-p, editor, role, list
+p, editor, role, list|import|export
 p, editor, role/*, show
 
 p, editor, admin, list
-p, editor, log, list
+p, editor, log, list|import|export
 p, editor, log/*, show
 
 # 访客权限

@@ -1,6 +1,7 @@
 export default {
-  title: 'Remix (en)',
-  description: 'Focused on web standards and modern web app UX, you’re simply going to build better websites.',
+  title: 'Full-stack WEB framework (en)',
+  description:
+    'Focus on building data-intensive web applications more quickly and easily, while providing a fast, smooth user experience.',
 
   pages: {
     login: {

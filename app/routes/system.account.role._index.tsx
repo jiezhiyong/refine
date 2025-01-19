@@ -34,7 +34,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     resource: 'role',
     meta: {
       include: {
-        user: { select: { name: true, avatar: true } },
+        creator: { select: { name: true, avatar: true } },
       },
     },
   });
@@ -88,14 +88,14 @@ export default function RoleIndex() {
       }}
       refineCoreProps={{
         queryOptions: { initialData },
-        // meta: {
-        //   join: [
-        //     {
-        //       field: 'user',
-        //       select: ['name', 'avatar'],
-        //     },
-        //   ],
-        // },
+        meta: {
+          join: [
+            {
+              field: 'creator',
+              select: ['name', 'avatar'],
+            },
+          ],
+        },
       }}
     >
       <Table.Column
@@ -149,22 +149,22 @@ export default function RoleIndex() {
       />
 
       <Table.Column
-        header="Author"
-        accessorKey="user.name"
-        id="user.name"
+        header="Creator"
+        accessorKey="creator"
+        id="creator"
         enableHiding
         meta={{
           filterOperator: 'contains',
         }}
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
+        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Creator" />}
         cell={useCallback(
           ({ row: { original } }: { row: { original: BaseRecord } }) => (
             <div className="flex items-center gap-2">
               <Avatar className="size-6">
-                <AvatarImage src={original.user?.avatar || ''} alt={original.user?.name || ''} />
-                <AvatarFallback>{original.user?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={original.creator?.avatar || ''} alt={original.creator?.name || ''} />
+                <AvatarFallback>{original.creator?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
-              <span>{original.user?.name}</span>
+              <span>{original.creator?.name}</span>
             </div>
           ),
           []

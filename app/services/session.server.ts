@@ -39,12 +39,12 @@ export async function getUser(request: Request) {
   try {
     let user = null;
     const session = await getUserSession(request);
-    const sessionUser = session?.get('user') as SessionUser;
+    const { role, ...sessionUser } = session?.get('user') as SessionUser;
 
     if (sessionUser?.id) {
       user = await getUserById(sessionUser.id);
     }
-    return { ...sessionUser, ...user };
+    return { ...sessionUser, ...user, role };
   } catch (error) {
     return null;
   }

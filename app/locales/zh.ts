@@ -1,6 +1,6 @@
 export default {
-  title: 'Remix (zh)',
-  description: '专注于 Web 标准和现代 Web 应用程序 UX，你将能轻松构建更好的网站。',
+  title: '全栈式 WEB 框架 (zh)',
+  description: '专注于更快速、轻松的构建数据密集型 Web 应用程序，同时提供快速、流畅的用户体验。',
 
   pages: {
     login: {

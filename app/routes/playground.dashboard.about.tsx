@@ -50,6 +50,7 @@ import i18next from 'i18next';
 import { PageError } from '~/components/500';
 import { syncServiceLocaleToClient } from '~/providers/i18n';
 import { getPreferencesCookie } from '~/services/cookie.server';
+import { Badge } from '~/components-shadcn/badge';
 
 // 元数据
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -78,9 +79,29 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function DashboardAbout() {
   const { translate: t } = useTranslation();
   return (
-    <div className="flex flex-1 flex-col items-center justify-center">
+    <div className="flex flex-1 flex-col items-center justify-center text-center">
       <h1 className="text-6xl text-[#3defe9]">{t('title', '')}</h1>
       <p className="my-10 text-3xl text-[#fecc1b]">{t('description', '')}</p>
+
+      <div className="space-x-2 space-y-2 *:py-1 *:text-sm">
+        <Badge>前后端一体化架构</Badge>
+        <Badge>SSR 服务端渲染</Badge>
+        <Badge>路由并行加载</Badge>
+        <Badge>CRUD 开发简化</Badge>
+        <Badge>状态持久化</Badge>
+        <br />
+        <Badge>身份验证</Badge>
+        <Badge>访问控制</Badge>
+        <Badge>审计日志</Badge>
+        <Badge>实时数据</Badge>
+        <Badge>调试辅助</Badge>
+        <Badge>日志上报 & 监控告警</Badge>
+        <Badge>主题切换</Badge>
+        <Badge>多国语言</Badge>
+        <br />
+        <Badge>TypeScript 类型安全</Badge>
+        <Badge>漂亮的UI设计</Badge>
+      </div>
     </div>
   );
 }
@@ -197,8 +218,21 @@ function UiFilter() {
   const debounceSubmit = useDebounceSubmit();
 
   return (
-    <Form className="flex flex-1 flex-col" onChange={(event) => debounceSubmit(event)}>
+    <Form className="flex flex-1 flex-col overflow-x-hidden" onChange={(event) => debounceSubmit(event)}>
       <SidebarContent>
+        <SidebarGroup className="p-0">
+          <Calendar
+            className="[&_[role=gridcell]]:w-[33px]"
+            mode="range"
+            selected={dateRange}
+            onSelect={(res) => {
+              updateSearchParams({ dateRange: JSON.stringify(res) });
+            }}
+          />
+        </SidebarGroup>
+
+        <SidebarSeparator className="mx-0" />
+
         <SidebarGroup>
           <div className="relative">
             <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />
@@ -214,17 +248,6 @@ function UiFilter() {
               className="pl-8"
             />
           </div>
-        </SidebarGroup>
-
-        <SidebarGroup className="p-0">
-          <Calendar
-            className="[&_[role=gridcell]]:w-[33px]"
-            mode="range"
-            selected={dateRange}
-            onSelect={(res) => {
-              updateSearchParams({ dateRange: JSON.stringify(res) });
-            }}
-          />
         </SidebarGroup>
 
         {dataFilter.checkbox.map((group, index) => (

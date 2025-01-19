@@ -25,13 +25,8 @@ export const dataResources: ResourceProps[] = [
     meta: { parent: 'dashboard' },
   },
   {
-    name: 'techstack',
-    list: '/playground/dashboard/techstack',
-    meta: { parent: 'dashboard' },
-  },
-  {
-    name: 'demo',
-    list: '/playground/dashboard/demo',
+    name: 'health',
+    list: '/playground/dashboard/health',
     meta: { parent: 'dashboard' },
   },
 
