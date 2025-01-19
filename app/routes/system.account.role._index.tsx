@@ -8,15 +8,12 @@ import { getDefaultTitle } from '~/utils/get-default-title';
 import { PageError } from '~/components/500';
 import { Table, TableFilterProps } from '~/component-refine/table';
 import { dataService } from '~/services/data.server';
-import { Post } from '@prisma/client';
+import { Role } from '@prisma/client';
 import { parseTableParams } from '@refinedev/remix-router';
-import { Badge } from '~/components-shadcn/badge';
-import { POST_STATUS, POST_STATUS_MAP, PostStatus } from '~/types/post';
-import { TAny } from '~/types/any';
-import { CreateButton, ExportButton, ImportButton, ShowButton } from '~/component-refine';
-import { useCallback } from 'react';
+import { ExportButton, ShowButton } from '~/component-refine';
 import { HandleFunction } from '~/types/handle';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
+import { useCallback } from 'react';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -32,13 +29,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const tableParams = parseTableParams(url.search);
 
-  const data = await dataService.getList<Post>({
+  const data = await dataService.getList<Role>({
     ...tableParams,
-    resource: 'post',
+    resource: 'role',
     meta: {
       include: {
         user: { select: { name: true, avatar: true } },
-        category: { select: { title: true } },
       },
     },
   });
@@ -46,12 +42,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { initialData: data };
 }
 
-export default function PostIndex() {
+export default function RoleIndex() {
   const { initialData } = useLoaderData<typeof loader>();
 
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
-  const { data: deletePermission } = useCan({ resource: 'post', action: 'delete' });
+  const { data: deletePermission } = useCan({ resource: 'role', action: 'delete' });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const rows = table.getSelectedRowModel().rows;
@@ -64,7 +60,7 @@ export default function PostIndex() {
       onClick: () => {
         deleteMany(
           {
-            resource: 'post',
+            resource: 'role',
             ids: rows.map((row) => row.original.id!),
           },
           {
@@ -82,11 +78,7 @@ export default function PostIndex() {
       enableSorting
       enableFilters
       enableHiding
-      toolbar={[<CreateButton />]}
       initialState={{
-        columnVisibility: {
-          updatedAt: false,
-        },
         sorting: [
           {
             id: 'createdAt',
@@ -96,18 +88,14 @@ export default function PostIndex() {
       }}
       refineCoreProps={{
         queryOptions: { initialData },
-        meta: {
-          join: [
-            {
-              field: 'user',
-              select: ['name', 'avatar'],
-            },
-            {
-              field: 'category',
-              select: ['title'],
-            },
-          ],
-        },
+        // meta: {
+        //   join: [
+        //     {
+        //       field: 'user',
+        //       select: ['name', 'avatar'],
+        //     },
+        //   ],
+        // },
       }}
     >
       <Table.Column
@@ -136,56 +124,18 @@ export default function PostIndex() {
         cell={({ row: { index, original }, table }) => {
           const pageIndex = table.getState().pagination.pageIndex;
           const pageSize = table.getState().pagination.pageSize;
+
           return (
             <ShowButton recordItemId={original.id} asChild>
               <span className="inline-block min-w-8 text-muted-foreground">
                 {pageIndex * pageSize + index + 1}.&nbsp;
               </span>
-              <span className="py-3 underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
+              <span className="py-3 capitalize underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
                 {original.title}
               </span>
             </ShowButton>
           );
         }}
-      />
-
-      <Table.Column
-        header="Category"
-        accessorKey="category.title"
-        id="category.title"
-        enableHiding
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Category" />}
-      />
-
-      <Table.Column
-        header="Hit"
-        accessorKey="hit"
-        id="hit"
-        enableSorting
-        enableHiding
-        cell={({ row: { original } }) => <span>{original.hit.toLocaleString()}</span>}
-      />
-
-      <Table.Column
-        header="Status"
-        accessorKey="status"
-        id="status"
-        enableSorting
-        enableHiding
-        cell={({ row: { original } }) => (
-          <Badge variant={POST_STATUS_MAP[original.status as PostStatus]?.badge as TAny}>
-            {original.status?.charAt(0)?.toUpperCase() + original.status?.slice(1)?.toLowerCase()}
-          </Badge>
-        )}
-        filter={(props: TableFilterProps) => (
-          <Table.Filter.Dropdown
-            {...props}
-            options={Object.entries(POST_STATUS).map(([key, value]) => ({
-              label: key?.charAt(0)?.toUpperCase() + key?.slice(1)?.toLowerCase(),
-              value,
-            }))}
-          />
-        )}
       />
 
       <Table.Column
@@ -196,16 +146,6 @@ export default function PostIndex() {
         enableHiding
         filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
         cell={({ row: { original } }) => dayjs(original.createdAt).format('YYYY-MM-DD HH:mm:ss')}
-      />
-
-      <Table.Column
-        header="UpdatedAt"
-        accessorKey="updatedAt"
-        id="updatedAt"
-        enableSorting
-        enableHiding
-        filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
-        cell={({ row: { original } }) => dayjs(original.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
       />
 
       <Table.Column
@@ -235,16 +175,8 @@ export default function PostIndex() {
         header="Actions"
         accessorKey="id"
         id="actions"
-        cell={useCallback(
-          ({ row: { original } }: { row: { original: BaseRecord } }) => (
-            <Table.Actions row={original} resource="post">
-              <Table.ShowAction />
-              <Table.EditAction />
-              <Table.CloneAction />
-              <Table.DeleteAction />
-            </Table.Actions>
-          ),
-          []
+        cell={({ row: { original } }: { row: { original: BaseRecord } }) => (
+          <ShowButton recordItemId={original.id} size="icon" variant="ghost" />
         )}
       />
     </Table>
@@ -254,7 +186,6 @@ export default function PostIndex() {
 function UiTools() {
   return (
     <div className="flex items-center gap-1 text-sm">
-      <ImportButton variant="ghost" size="icon" />
       <ExportButton variant="ghost" size="icon" />
     </div>
   );

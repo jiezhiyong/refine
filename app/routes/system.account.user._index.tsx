@@ -8,15 +8,14 @@ import { getDefaultTitle } from '~/utils/get-default-title';
 import { PageError } from '~/components/500';
 import { Table, TableFilterProps } from '~/component-refine/table';
 import { dataService } from '~/services/data.server';
-import { Post } from '@prisma/client';
+import { User } from '@prisma/client';
 import { parseTableParams } from '@refinedev/remix-router';
 import { Badge } from '~/components-shadcn/badge';
-import { TAny } from '~/types/any';
-import { ExportButton, ShowButton } from '~/component-refine';
+import { DeleteButton, ExportButton, ShowButton } from '~/component-refine';
 import { HandleFunction } from '~/types/handle';
-import { LOG_STATUS, LOG_STATUS_MAP, LogStatus } from '~/types/log';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { useCallback } from 'react';
+import { USER_PROVIDER } from '~/types/user';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -32,12 +31,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const tableParams = parseTableParams(url.search);
 
-  const data = await dataService.getList<Post>({
+  const data = await dataService.getList<User>({
     ...tableParams,
-    resource: 'log',
+    resource: 'user',
     meta: {
       include: {
-        user: { select: { name: true, avatar: true } },
+        _count: {
+          select: {
+            Post: true,
+          },
+        },
       },
     },
   });
@@ -45,12 +48,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { initialData: data };
 }
 
-export default function LogIndex() {
+export default function UserIndex() {
   const { initialData } = useLoaderData<typeof loader>();
 
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
-  const { data: deletePermission } = useCan({ resource: 'log', action: 'delete' });
+  const { data: deletePermission } = useCan({ resource: 'user', action: 'delete' });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const rows = table.getSelectedRowModel().rows;
@@ -63,7 +66,7 @@ export default function LogIndex() {
       onClick: () => {
         deleteMany(
           {
-            resource: 'log',
+            resource: 'user',
             ids: rows.map((row) => row.original.id!),
           },
           {
@@ -94,8 +97,8 @@ export default function LogIndex() {
         meta: {
           join: [
             {
-              field: 'user',
-              select: ['name', 'avatar'],
+              field: 'post',
+              count: true,
             },
           ],
         },
@@ -117,49 +120,57 @@ export default function LogIndex() {
       />
 
       <Table.Column
-        header="Resource"
-        accessorKey="resource"
-        id="resource"
+        header="Name"
+        accessorKey="name"
+        id="name"
+        enableHiding
         meta={{
           filterOperator: 'contains',
         }}
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Resource" />}
-        cell={({ row: { index, original }, table }) => {
-          const pageIndex = table.getState().pagination.pageIndex;
-          const pageSize = table.getState().pagination.pageSize;
+        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
+        cell={useCallback(
+          ({ row: { index, original }, table }: { row: { index: number; original: BaseRecord }; table: any }) => {
+            const pageIndex = table.getState().pagination.pageIndex;
+            const pageSize = table.getState().pagination.pageSize;
 
-          return (
-            <ShowButton recordItemId={original.id} asChild>
-              <span className="inline-block min-w-8 text-muted-foreground">
-                {pageIndex * pageSize + index + 1}.&nbsp;
-              </span>
-              <span className="py-3 capitalize underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
-                {JSON.parse(original.meta).parent}.{original.resource}
-              </span>
-            </ShowButton>
-          );
-        }}
+            return (
+              <ShowButton recordItemId={original.id} asChild>
+                <div className="flex items-center">
+                  <span className="inline-block min-w-8 text-muted-foreground">
+                    {pageIndex * pageSize + index + 1}.&nbsp;
+                  </span>
+
+                  <Avatar className="mr-2 size-6">
+                    <AvatarImage src={original.avatar || ''} alt={original.name || ''} />
+                    <AvatarFallback>{original.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+
+                  <span className="py-3 capitalize underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
+                    {original.name}
+                  </span>
+                </div>
+              </ShowButton>
+            );
+          },
+          []
+        )}
       />
 
       <Table.Column
-        header="Type"
-        accessorKey="action"
-        id="action"
+        header="Provider"
+        accessorKey="provider"
+        id="provider"
         enableSorting
         enableHiding
         cell={({ row: { original } }) => {
-          const ids = JSON.parse(original.meta || '{}').ids;
           return (
-            <Badge variant={LOG_STATUS_MAP[original.action as LogStatus]?.badge as TAny}>
-              {original.action?.charAt(0)?.toUpperCase() + original.action?.slice(1)}
-              {ids?.length > 1 ? ` x${ids.length}` : ''}
-            </Badge>
+            <Badge variant="outline">{original.provider?.charAt(0)?.toUpperCase() + original.provider?.slice(1)}</Badge>
           );
         }}
         filter={(props: TableFilterProps) => (
           <Table.Filter.Radio
             {...props}
-            options={Object.entries(LOG_STATUS).map(([key, value]) => ({
+            options={Object.entries(USER_PROVIDER).map(([key, value]) => ({
               label: key?.charAt(0)?.toUpperCase() + key?.slice(1),
               value,
             }))}
@@ -178,34 +189,11 @@ export default function LogIndex() {
       />
 
       <Table.Column
-        header="Author"
-        accessorKey="user.name"
-        id="user.name"
-        enableHiding
-        meta={{
-          filterOperator: 'contains',
-        }}
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
-        cell={useCallback(
-          ({ row: { original } }: { row: { original: BaseRecord } }) => (
-            <div className="flex items-center gap-2">
-              <Avatar className="size-6">
-                <AvatarImage src={original.user?.avatar || ''} alt={original.user?.name || ''} />
-                <AvatarFallback>{original.user?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <span>{original.user?.name}</span>
-            </div>
-          ),
-          []
-        )}
-      />
-
-      <Table.Column
         header="Actions"
         accessorKey="id"
         id="actions"
         cell={({ row: { original } }: { row: { original: BaseRecord } }) => (
-          <ShowButton recordItemId={original.id} size="icon" variant="ghost" />
+          <DeleteButton recordItemId={original.id} size="icon" variant="ghost" className="!text-destructive" />
         )}
       />
     </Table>

@@ -95,9 +95,8 @@ export const PostForm = ({
     defaultValues: post,
     warnWhenUnsavedChanges: true,
     refineCoreProps: {
-      autoSave: {
-        enabled: false,
-      },
+      queryOptions: postRes ? { queryFn: () => postRes, initialData: postRes } : undefined, // FIXME: tslint
+      autoSave: { enabled: false },
       redirect,
     },
   });

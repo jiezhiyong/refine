@@ -24,6 +24,9 @@ export const dataService: DataProvider = {
 
     // 构建排序条件
     const orderBy = sorters ? buildOrderByClause(sorters) : {};
+    if (!Object.keys(orderBy).length) {
+      orderBy.createdAt = 'desc';
+    }
 
     // 确保 resource 是有效的 Prisma 模型
     if (!isPrismaModel(resource)) {
