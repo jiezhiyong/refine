@@ -58,11 +58,6 @@ Make sure to deploy the output of `pnpm run build`
 - `build/server`
 - `build/client`
 
-<!-- TODO: -->
-
-https://refine.dev/docs/guides-concepts/forms/#server-side-validation-
-https://refine.dev/docs/guides-concepts/forms/#modifying-data-before-submission
-
 ## Issues
 
 1. Cannot find module '.prisma/client/default'
@@ -70,3 +65,7 @@ https://refine.dev/docs/guides-concepts/forms/#modifying-data-before-submission
 
 2. 数据库删除了数据，但 `db` 依然可以查询到数据
    重启开发服务 `pnpm dev`
+
+<!-- TODO: -->
+
+https://refine.dev/docs/guides-concepts/forms/#modifying-data-before-submission

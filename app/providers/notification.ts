@@ -5,8 +5,6 @@ let lastNotificationKey: string | undefined = undefined;
 
 export const notificationProvider: NotificationProvider = {
   open: ({ key, message, description, type }) => {
-    console.log(message, description);
-
     lastNotificationKey = key;
     const id = key === lastNotificationKey ? key : undefined;
 

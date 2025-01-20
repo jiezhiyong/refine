@@ -38,17 +38,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
     switch (method) {
       // 处理单个更新 update
       case 'PATCH': {
-        throw new Error(
-          JSON.stringify({
-            title: ['Title is required'],
-            content: {
-              key: 'form.error.content',
-              message: 'Content is required.',
-            },
-            status: true,
-          })
-        );
-
         const variables = await request.json();
 
         const data = await dataService.update({
