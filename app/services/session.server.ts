@@ -39,12 +39,13 @@ export async function getUser(request: Request) {
   try {
     let user = null;
     const session = await getUserSession(request);
-    const { role, ...sessionUser } = session?.get('user') as SessionUser;
+    const { role, id } = session?.get('user') as SessionUser;
 
-    if (sessionUser?.id) {
-      user = await getUserById(sessionUser.id);
+    if (id) {
+      user = await getUserById(id);
     }
-    return { ...sessionUser, ...user, role };
+
+    return { ...user, role };
   } catch (error) {
     return null;
   }
@@ -68,6 +69,7 @@ export async function requireUserSession(request: Request, redirectTo: string = 
 export async function requireUser(request: Request) {
   try {
     const user = await getUser(request);
+
     if (!user?.id) {
       throw new Error('Unauthorized');
     }

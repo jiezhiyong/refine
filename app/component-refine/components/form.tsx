@@ -1,12 +1,12 @@
-import { Form as FormUI } from '~/components-shadcn/form';
-import { useBack, useParsed, type BaseRecord, type HttpError } from '@refinedev/core';
+import { AutoSaveIndicator, useBack, useParsed, type BaseRecord, type HttpError } from '@refinedev/core';
 import type { UseFormReturnType } from '@refinedev/react-hook-form';
+import { Undo2 } from 'lucide-react';
 import { useRef, type DetailedHTMLProps, type FormHTMLAttributes, type PropsWithChildren } from 'react';
 import { type FieldValues } from 'react-hook-form';
-import { SaveButton } from '../buttons';
-import { Card, CardContent, CardFooter } from '~/components-shadcn/card';
 import { Button } from '~/components-shadcn/button';
-import { Undo2 } from 'lucide-react';
+import { Card, CardContent, CardFooter } from '~/components-shadcn/card';
+import { Form as FormUI } from '~/components-shadcn/form';
+import { SaveButton } from '../buttons';
 
 type NativeFormProps = Omit<DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>, 'onSubmit'>;
 
@@ -61,7 +61,9 @@ export const Form = <
           <CardContent className="space-y-4">{props.children}</CardContent>
 
           <CardFooter className="flex justify-end gap-x-4">
-            <SaveButton type="submit" loading={props.refineCore.formLoading} {...saveButtonProps} />
+            <SaveButton type="submit" loading={props.refineCore.formLoading} {...saveButtonProps}>
+              <AutoSaveIndicator {...props.refineCore.autoSaveProps} />
+            </SaveButton>
 
             {!props.hideCancel && (
               <Button

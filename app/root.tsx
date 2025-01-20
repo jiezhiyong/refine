@@ -1,51 +1,50 @@
-import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
+import { User } from '@prisma/client';
 import { Refine } from '@refinedev/core';
+import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
-import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
-import nProgress from 'nprogress';
-import { type PropsWithChildren } from 'react';
 import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
 import {
+  data,
+  isRouteErrorResponse,
   Links,
   Meta,
+  Outlet,
   Scripts,
   ScrollRestoration,
-  useRouteError,
-  isRouteErrorResponse,
-  useNavigation,
-  Outlet,
-  data,
   useLoaderData,
+  useNavigation,
+  useRouteError,
 } from '@remix-run/react';
-import { useEffect } from 'react';
-import { Toaster } from '~/components-shadcn/sonner';
-import { PageError } from '~/components/500';
-import { NotFound } from '~/components/404';
-import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
-import { cn } from '~/utils/cn';
+import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import { Loader } from 'lucide-react';
-import { User } from '@prisma/client';
+import nProgress from 'nprogress';
+import { useEffect, type PropsWithChildren } from 'react';
+import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
+import { Toaster } from '~/components-shadcn/sonner';
+import { NotFound } from '~/components/404';
+import { PageError } from '~/components/500';
+import { accessControlProvider } from '~/providers/access-control';
+import { authProvider } from '~/providers/auth';
+import { dataProvider } from '~/providers/data';
 import { getPreferencesCookie } from '~/services/cookie.server';
 import { getUser } from '~/services/session.server';
+import { cn } from '~/utils/cn';
 import { fallbackLanguage, LocaleLanguage } from './config/i18n';
-import { dataProvider } from '~/providers/data';
-import { authProvider } from '~/providers/auth';
-import { accessControlProvider } from '~/providers/access-control';
 // import { liveProvider } from '~/providers/live';
-import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
 import { auditLogProvider } from '~/providers/audit-log';
+import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
 import { notificationProvider } from '~/providers/notification';
 import { TRole } from './constants/roles';
 import { getPermissions } from './services/casbin-permission.server';
 
 /** 全局样式、插件样式 */
-import tailwindStyles from '~/styles/tailwind.css?url';
-import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
-import { generateSignature } from './utils/signature';
-import { PermissionRule } from './types/casbin';
+import baseStyles from '~/styles/base.css?url';
+import tailwindStyles from '~/styles/tailwind.css?url';
 import { dataResources } from './config/resources';
+import { PermissionRule } from './types/casbin';
+import { generateSignature } from './utils/signature';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -147,23 +146,18 @@ function Document({
             auditLogProvider={auditLogProvider}
             // liveProvider={liveProvider}
             options={{
-              title: {
-                icon: undefined,
-                text: 'Refine & Remix',
-              },
-
+              projectId: 'v08e3x-vauZUB-n1Ntw2',
+              disableTelemetry: true,
+              title: { icon: undefined, text: 'Refine & Remix' },
               mutationMode: 'pessimistic',
               syncWithLocation: true,
               warnWhenUnsavedChanges: true,
               liveMode: 'auto',
-
               reactQuery: {
                 clientConfig: {
                   defaultOptions: { queries: { networkMode: 'always' }, mutations: { networkMode: 'always' } },
                 },
               },
-
-              projectId: 'v08e3x-vauZUB-n1Ntw2',
             }}
             onLiveEvent={(event) => {
               console.log('@onLiveEvent', event);
