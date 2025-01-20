@@ -61,8 +61,6 @@ Make sure to deploy the output of `pnpm run build`
 <!-- TODO: -->
 
 https://refine.dev/docs/guides-concepts/forms/#server-side-validation-
-https://refine.dev/docs/guides-concepts/forms/#auto-save
-https://refine.dev/docs/guides-concepts/forms/#autosaveindicator-
 https://refine.dev/docs/guides-concepts/forms/#modifying-data-before-submission
 
 ## Issues

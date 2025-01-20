@@ -1,6 +1,6 @@
 /* eslint-disable import/namespace */
-import * as Sentry from '@sentry/remix';
 import { useLocation, useMatches } from '@remix-run/react';
+import * as Sentry from '@sentry/remix';
 import { useEffect } from 'react';
 
 let isInitialized = false;
@@ -32,13 +32,15 @@ export function initSentry() {
     profilesSampleRate: 1.0,
     replaysSessionSampleRate: isProduction ? 0.1 : 1.0,
     replaysOnErrorSampleRate: 1.0,
-    beforeSend(event) {
-      if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
-        window._isRenderedReortDialog = true;
-        Sentry.showReportDialog({ eventId: event.event_id });
-      }
-      return event;
-    },
+
+    // 出现错误时自动弹窗、引导用户反馈
+    // beforeSend(event) {
+    //   if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
+    //     window._isRenderedReortDialog = true;
+    //     Sentry.showReportDialog({ eventId: event.event_id });
+    //   }
+    //   return event;
+    // },
   });
 
   isInitialized = true;

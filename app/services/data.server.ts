@@ -1,17 +1,15 @@
 import { DataProvider } from '@refinedev/core';
-import { dataResources } from '~/config/resources';
 import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
+import { dataResources } from '~/config/resources';
 import { Resources } from '~/constants/resource';
 import { db } from '~/services/db.server';
-import { TAny } from '~/types/any';
+import { PrismaFunc } from '~/types';
 import { buildOrderByClause, buildWhereClause, Filter, parseRefineFilters, processDateFields } from '~/utils';
 
-// 类型守卫函数
 function isPrismaModel(resource: string): resource is Resources {
   return dataResources.some((r) => r.name.endsWith(resource));
 }
 
-// 数据提供者
 export const dataService: DataProvider = {
   // 获取列表数据
   getList: async ({ resource, pagination, sorters, filters, meta }) => {
@@ -30,12 +28,9 @@ export const dataService: DataProvider = {
 
     // 确保 resource 是有效的 Prisma 模型
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
-    const prismaModel = db[resource] as unknown as {
-      count: (args: TAny) => Promise<number>;
-      findMany: (args: TAny) => Promise<TAny[]>;
-    };
+    const prismaModel = db[resource] as PrismaFunc;
 
     // 处理关联字段的查询条件
     const whereCondition = Object.entries(where).reduce((acc, [key, value]) => {
@@ -79,12 +74,9 @@ export const dataService: DataProvider = {
   // 创建数据
   create: async ({ resource, variables, meta }) => {
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
-
-    const prismaModel = db[resource] as unknown as {
-      create: (args: TAny) => Promise<TAny>;
-    };
+    const prismaModel = db[resource] as PrismaFunc;
 
     const data = await prismaModel.create({
       data: variables,
@@ -99,11 +91,19 @@ export const dataService: DataProvider = {
   // 更新数据
   update: async ({ resource, id, variables, meta }) => {
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
-    const prismaModel = db[resource] as unknown as {
-      update: (args: TAny) => Promise<TAny>;
-    };
+    const prismaModel = db[resource] as PrismaFunc;
+
+    // 先检查记录是否存在
+    const existingRecord = await prismaModel.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    if (!existingRecord) {
+      throw new Error(`要更新的 \`${resource}\` 记录不存在, ID: ${id}`);
+    }
 
     const data = await prismaModel.update({
       where: { id },
@@ -120,12 +120,9 @@ export const dataService: DataProvider = {
   // 删除数据
   deleteOne: async ({ resource, id, meta }) => {
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
-    const prismaModel = db[resource] as unknown as {
-      delete: (args: TAny) => Promise<TAny>;
-      findUnique: (args: TAny) => Promise<TAny>;
-    };
+    const prismaModel = db[resource] as PrismaFunc;
 
     // 先检查记录是否存在
     const existingRecord = await prismaModel.findUnique({
@@ -151,11 +148,9 @@ export const dataService: DataProvider = {
   // 获取单条数据
   getOne: async ({ resource, id, meta }) => {
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
-    const prismaModel = db[resource] as unknown as {
-      findUnique: (args: TAny) => Promise<TAny>;
-    };
+    const prismaModel = db[resource] as PrismaFunc;
 
     const data = await prismaModel.findUnique({
       where: { id },
@@ -172,21 +167,12 @@ export const dataService: DataProvider = {
     };
   },
 
-  // 获取 API URL
-  // 用 db 时不需要 API URL
-  getApiUrl: () => {
-    return '';
-  },
-
   // 获取多条数据
   getMany: async ({ resource, ids, meta }) => {
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
-
-    const prismaModel = db[resource] as unknown as {
-      findMany: (args: TAny) => Promise<TAny[]>;
-    };
+    const prismaModel = db[resource] as PrismaFunc;
 
     const data = await prismaModel.findMany({
       where: {
@@ -206,12 +192,9 @@ export const dataService: DataProvider = {
   // 批量创建
   createMany: async ({ resource, variables, meta }) => {
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
-
-    const prismaModel = db[resource] as unknown as {
-      createMany: (args: TAny) => Promise<TAny>;
-    };
+    const prismaModel = db[resource] as PrismaFunc;
 
     const data = await prismaModel.createMany({
       data: variables,
@@ -227,12 +210,27 @@ export const dataService: DataProvider = {
   // 批量删除
   deleteMany: async ({ resource, ids, meta }) => {
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
+    const prismaModel = db[resource] as PrismaFunc;
 
-    const prismaModel = db[resource] as unknown as {
-      deleteMany: (args: TAny) => Promise<TAny>;
-    };
+    // 检查所有要删除的记录是否存在
+    const existingRecords = await prismaModel.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      select: { id: true },
+    });
+
+    // 找出不存在的ID
+    const existingIds = existingRecords.map((record) => record.id);
+    const nonExistingIds = ids.filter((id) => !existingIds.includes(id));
+
+    if (nonExistingIds.length > 0) {
+      throw new Error(`要删除的 \`${resource}\` 记录不存在, ID: ${nonExistingIds.join(', ')}`);
+    }
 
     const data = await prismaModel.deleteMany({
       where: {
@@ -252,12 +250,27 @@ export const dataService: DataProvider = {
   // 批量更新
   updateMany: async ({ resource, ids, variables, meta }) => {
     if (!isPrismaModel(resource)) {
-      throw new Error(`无效的资源类型: ${resource}`);
+      throw new Error(`invalid resource type: ${resource}`);
     }
+    const prismaModel = db[resource] as PrismaFunc;
 
-    const prismaModel = db[resource] as unknown as {
-      updateMany: (args: TAny) => Promise<TAny>;
-    };
+    // 先检查记录是否存在
+    const existingRecords = await prismaModel.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      select: { id: true },
+    });
+
+    // 找出不存在的ID
+    const existingIds = existingRecords.map((record) => record.id);
+    const nonExistingIds = ids.filter((id) => !existingIds.includes(id));
+
+    if (nonExistingIds.length > 0) {
+      throw new Error(`要更新的 \`${resource}\` 记录不存在, ID: ${nonExistingIds.join(', ')}`);
+    }
 
     const data = await prismaModel.updateMany({
       where: {
@@ -275,8 +288,14 @@ export const dataService: DataProvider = {
     };
   },
 
+  // 获取 API URL
+  // 用 db 时不需要 API URL，但为了展示完整性保留
+  getApiUrl: () => {
+    return '';
+  },
+
   // 自定义请求
-  // 由于使用 db，通常不需要这个方法，但为了完整性保留
+  // 由于使用 db，通常不需要这个方法，但为了展示完整性保留
   custom: async () => {
     throw new Error('Custom method not implemented');
   },

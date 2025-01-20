@@ -6,11 +6,12 @@ import { TAny } from '~/types';
 // 处理批量获取请求 getMany
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { resource } = params;
-  if (!resource) {
-    throw new Error('resource is required');
-  }
 
   try {
+    if (!resource) {
+      throw new Error('resource is required');
+    }
+
     const url = new URL(request.url);
     const ids = url.searchParams.get('ids');
 
@@ -25,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
     return Response.json(data);
   } catch (error: TAny) {
-    return Response.json({ message: error.message }, { status: 500 });
+    return Response.json({ message: error?.message || '处理请求失败' }, { status: 500 });
   }
 }
 
@@ -34,11 +35,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await requireUser(request);
 
   const { resource } = params;
-  if (!resource) {
-    throw new Error('resource is required');
-  }
 
   try {
+    if (!resource) {
+      throw new Error('resource is required');
+    }
+
     const method = request.method;
     const body = await request.json();
 
@@ -50,6 +52,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
           resource,
           variables,
         });
+
         return Response.json(data);
       }
 
@@ -59,11 +62,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
         if (!ids) {
           throw new Error('批量更新时 ids 是必需的');
         }
+
         const data = await dataService.updateMany!({
           resource,
           ids,
           variables,
         });
+
         return Response.json(data);
       }
 
@@ -78,6 +83,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
           resource,
           ids,
         });
+
         return Response.json(data);
       }
 
@@ -85,6 +91,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
         throw new Error(`不支持的请求方法: ${method}`);
     }
   } catch (error: TAny) {
-    return Response.json({ message: error.message }, { status: 500 });
+    return Response.json({ message: error?.message || '处理请求失败' }, { status: 500 });
   }
 }

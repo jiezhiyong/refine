@@ -1,4 +1,103 @@
+import { CrudFilters, CrudSorting, Pagination } from '@refinedev/core';
+import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
 import { TAny } from '~/types/any';
+
+// 从 URL 参数中解析分页信息
+export function getPaginationFromUrl(url: URL): Pagination {
+  const limit = Number(url.searchParams.get('limit')) || DEFAULT_PAGE_SIZE;
+  const page = Number(url.searchParams.get('page')) || 1;
+
+  return {
+    current: page,
+    pageSize: limit,
+  };
+}
+
+// 从 URL 参数中解析排序信息
+export function getSortersFromUrl(url: URL): CrudSorting {
+  const sortParam = url.searchParams.get('sort[0]');
+  if (!sortParam) return [];
+
+  const [field, order] = sortParam.split(',');
+  return [
+    {
+      field,
+      order: order.toLowerCase() as 'asc' | 'desc',
+    },
+  ];
+}
+
+// 从 URL 参数中解析过滤信息
+export function getFiltersFromUrl(url: URL): CrudFilters {
+  const searchParam = url.searchParams.get('s');
+  if (!searchParam) {
+    return [];
+  }
+
+  try {
+    const searchObj = JSON.parse(decodeURIComponent(searchParam));
+    if (!searchObj.$and) {
+      return [];
+    }
+
+    return searchObj.$and.map((condition: Record<string, { $eq?: string; $contL?: string; $in?: string[] }>) => {
+      const [field] = Object.keys(condition);
+      const operatorMap = {
+        $eq: 'eq',
+        $contL: 'contains',
+        $in: 'in',
+      } as const;
+
+      // 找到第一个存在的操作符
+      const operator = Object.keys(condition[field])[0] as keyof typeof operatorMap;
+      const mappedOperator = operatorMap[operator] || 'contains';
+      const value = condition[field][operator];
+
+      return {
+        field,
+        operator: mappedOperator,
+        value,
+      };
+    });
+  } catch (error) {
+    console.error('解析过滤参数错误:', error);
+    return [];
+  }
+}
+
+// 从 URL 参数中解析 join 信息
+export function getJoinFromUrl(url: URL) {
+  // 收集所有的 join 参数
+  const joinParams: string[] = [];
+  for (let i = 0; ; i++) {
+    const param = url.searchParams.get(`join[${i}]`);
+    if (!param) break;
+    joinParams.push(param);
+  }
+
+  if (joinParams.length === 0) return undefined;
+
+  // 解析 join 参数并转换为 Prisma include 格式
+  const include: Record<string, { select: Record<string, boolean> }> = {};
+
+  joinParams.forEach((param) => {
+    // 格式：relation||field1,field2,field3
+    const [relation, fields] = param.split('||');
+    if (!relation || !fields) return;
+
+    include[relation] = {
+      select: fields.split(',').reduce(
+        (acc, field) => ({
+          ...acc,
+          [field]: true,
+        }),
+        {}
+      ),
+    };
+  });
+
+  return Object.keys(include).length > 0 ? include : undefined;
+}
 
 // 定义操作符
 export type FilterOperator = 'eq' | 'contains' | 'gt' | 'lt' | 'gte' | 'lte' | 'in';

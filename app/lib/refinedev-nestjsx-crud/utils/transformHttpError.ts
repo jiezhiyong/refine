@@ -1,18 +1,21 @@
-import type { HttpError } from '@refinedev/core';
+import type { HttpError, ValidationErrors } from '@refinedev/core';
+import { tryParse } from '~/utils/try-parse';
 
-import { transformErrorMessages } from './transformErrorMessages';
-
+/**
+ * 服务器端验证
+ * https://refine.dev/docs/guides-concepts/forms/#server-side-validation-
+ * https://refine.dev/docs/core/interface-references/#httperror
+ */
 export const transformHttpError = (error: any): HttpError => {
-  const message = error.response.data.error || error.response.statusText;
-  const statusCode = error.response.data.statusCode || error.response.status;
-  const errorMessages = error.response.data.message;
+  const { status, data, original } = tryParse(error?.message);
 
-  const errors = transformErrorMessages(Array.isArray(errorMessages) ? errorMessages : [errorMessages]);
+  const message = (!status ? original : '') || error.response?.data?.name || error.response.statusText;
+  const statusCode = error.status || error.response.status;
 
   const httpError: HttpError = {
-    statusCode,
     message,
-    errors,
+    statusCode,
+    errors: status ? (data as ValidationErrors) : undefined,
   };
 
   return httpError;
