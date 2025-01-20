@@ -89,6 +89,7 @@ export default function DashboardAbout() {
         <Badge>路由并行加载</Badge>
         <Badge>CRUD 开发简化</Badge>
         <Badge>状态持久化</Badge>
+        <Badge>TypeScript 类型安全</Badge>
         <br />
         <Badge>身份验证</Badge>
         <Badge>访问控制</Badge>
@@ -99,7 +100,6 @@ export default function DashboardAbout() {
         <Badge>多国语言</Badge>
         <br />
         <Badge>日志上报 & 监控告警</Badge>
-        <Badge>TypeScript 类型安全</Badge>
       </div>
     </div>
   );
