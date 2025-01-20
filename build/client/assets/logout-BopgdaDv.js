@@ -1,1 +1,0 @@
-import{j as o}from"./jsx-runtime-D2HyDbKh.js";import{F as t}from"./components-2w3IXkXI.js";import"./index-BabtBpse.js";function e(){return o.jsx(t,{method:"post",children:o.jsx("button",{children:"Logout"})})}export{e as default};

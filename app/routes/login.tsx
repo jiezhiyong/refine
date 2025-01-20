@@ -1,11 +1,11 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
+import { authProvider } from '~/providers/auth';
 import { LoginForm } from '~/components/form-login';
-import { getUser, createUserSession } from '~/services/session.server';
-import { verifyLogin } from '~/models/user.server';
-import { safeRedirect } from '~/utils/safe-redirect';
+import { commitSession, getSession, getUser } from '~/services/session.server';
 import { typedFormError } from '~/utils/typed-form-error';
+import { EnumAuthProvider } from '~/constants/auth';
 
 // 定义表单验证 schema
 const loginSchema = z.object({
@@ -23,7 +23,7 @@ export const meta: MetaFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await getUser(request);
 
-  if (user?.id) {
+  if (user && user.id) {
     return redirect('/');
   }
 
@@ -32,21 +32,32 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const rawData = Object.fromEntries(formData) as z.infer<typeof loginSchema>;
-
   try {
-    const { email, password } = loginSchema.parse(rawData);
-    const user = await verifyLogin(email, password);
-    if (!user) {
-      throw new Error('Invalid email or password.');
+    const form = await request.formData();
+    const formData = Object.fromEntries(form) as z.infer<typeof loginSchema>;
+
+    const { email, password, redirectTo } = loginSchema.parse(formData);
+    const { error, success, user } = await authProvider.login({
+      providerName: EnumAuthProvider.userpass,
+      email,
+      password,
+      redirectTo,
+    });
+
+    if (error) {
+      throw { default: [error.message] };
     }
 
-    return createUserSession({
-      redirectTo: safeRedirect(rawData.redirectTo),
-      request,
-      userId: user.id,
-    });
+    if (success && user?.id) {
+      const session = await getSession(request.headers.get('Cookie'));
+      session.set('user', user);
+
+      return redirect(redirectTo!, {
+        headers: {
+          'Set-Cookie': await commitSession(session),
+        },
+      });
+    }
   } catch (error) {
     return typedFormError(error);
   }

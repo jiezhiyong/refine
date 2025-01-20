@@ -6,6 +6,7 @@
     "Prisma.prisma",
     "DavidAnson.vscode-markdownlint",
     "unifiedjs.vscode-mdx",
-    "Gruntfuggly.todo-tree"
+    "Gruntfuggly.todo-tree",
+    "graphql.vscode-graphql"
   ]
 }

@@ -1,4 +1,4 @@
-import { useSearchParams, useSubmit } from '@remix-run/react';
+import { useSearchParams } from '@remix-run/react';
 import { useDebounceFn } from 'ahooks';
 
 /**
@@ -6,27 +6,34 @@ import { useDebounceFn } from 'ahooks';
  * @returns function debounceSubmit
  */
 export function useDebounceSubmit() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const submit = useSubmit();
-  const { run: debounceSubmit } = useDebounceFn((formData: FormData) => submit(formData, { replace: true }), {
-    wait: 300,
-  });
+  const { run: debounceSubmit } = useDebounceFn(
+    (searchParamsNew: URLSearchParams) => setSearchParams(searchParamsNew, { replace: true }),
+    { wait: 300 }
+  );
 
   return (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
+
+    // 创建一个新的 URLSearchParams 实例，避免修改原有的实例
+    const searchParamsNew = new URLSearchParams(searchParams);
+
+    // 获取所有的表单键
+    const formKeys = new Set(Array.from(formData.keys()));
+
+    // 先清除所有将要更新的键的旧值
+    formKeys.forEach((key) => {
+      searchParamsNew.delete(key);
+    });
+
+    // 重新添加所有值
     formData.forEach((value, key) => {
-      if (!value) {
-        formData.delete(key);
+      if (value) {
+        searchParamsNew.append(key, value.toString());
       }
     });
 
-    searchParams.forEach((value, key) => {
-      if (!formData.has(key)) {
-        formData.append(key, value);
-      }
-    });
-
-    debounceSubmit(formData);
+    debounceSubmit(searchParamsNew);
   };
 }

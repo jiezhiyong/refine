@@ -1,25 +1,26 @@
-import { useMatches, useNavigate, useSearchParams } from '@remix-run/react';
+import { useMatches, useSearchParams } from '@remix-run/react';
 import { Filter, FilterX } from 'lucide-react';
 import { Button } from '~/components-shadcn/button';
 import { Separator } from '~/components-shadcn/separator';
 import { HandleFunction } from '~/types/handle';
 import { LanguageSwitcher } from './switcher-language';
 import { FullscreenSwitcher } from './switcher-fullscreen';
+import { cn } from '~/utils/cn';
+import { BackButton } from '~/component-refine/buttons/back';
 
 /**
  * 工具栏
  */
 export function NavTools() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const newParams = new URLSearchParams(searchParams);
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const matches = useMatches();
+
   const lastMatch = matches[matches.length - 1];
   const handle = lastMatch.handle as HandleFunction;
 
   const defaultTools = (
     <>
+      <BackButton variant="ghost" size="icon" />
       <LanguageSwitcher />
       <FullscreenSwitcher />
     </>
@@ -32,12 +33,11 @@ export function NavTools() {
 
   function changeParams(key: string, value: boolean) {
     if (value) {
-      newParams.set(key, '1');
+      searchParams.set(key, '1');
     } else {
-      newParams.delete(key);
+      searchParams.delete(key);
     }
-
-    navigate(`./?${newParams.toString()}`, { replace: true });
+    setSearchParams(searchParams, { replace: true });
   }
 
   const domUiTools = typeof uiTools === 'function' ? uiTools(lastMatch, matches) : uiTools;
@@ -45,14 +45,19 @@ export function NavTools() {
   return (
     <div className="flex items-center gap-1">
       {uiFilter && (
-        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => changeParams('filter', !filter)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(filter && 'text-green-500')}
+          onClick={() => changeParams('filter', !filter)}
+        >
           {filter ? <FilterX /> : <Filter />}
         </Button>
       )}
 
       {defaultTools}
 
-      <Separator orientation="vertical" className="mr-2 h-4" />
+      <Separator orientation="vertical" className="h-4" />
 
       {domUiTools}
     </div>

@@ -4,6 +4,7 @@ import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { envOnlyMacros } from 'vite-env-only';
+import * as fs from 'fs';
 
 declare module '@remix-run/node' {
   interface Future {
@@ -16,6 +17,25 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
       'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
+    },
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+      strictPort: true,
+      https: {
+        key: fs.readFileSync('./oss.tcshuke.com+3-key.pem'),
+        cert: fs.readFileSync('./oss.tcshuke.com+3.pem'),
+      },
+      proxy: {
+        '/*': {
+          target: 'https://oss.tcshuke.com:5173',
+          secure: false,
+          changeOrigin: true,
+          headers: {
+            'X-Forwarded-Proto': 'https',
+          },
+        },
+      },
     },
     plugins: [
       envOnlyMacros(),

@@ -1,4 +1,6 @@
-import * as Sentry from '@sentry/remix';
+import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
+import { Refine } from '@refinedev/core';
+import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import nProgress from 'nprogress';
 import { type PropsWithChildren } from 'react';
@@ -16,26 +18,34 @@ import {
   data,
   useLoaderData,
 } from '@remix-run/react';
-import { ClientOnly } from 'remix-utils/client-only';
-import { getUser, themeSessionResolver } from '~/services/session.server';
 import { useEffect } from 'react';
 import { Toaster } from '~/components-shadcn/sonner';
-import { ModalProvider } from '~/hooks/use-modal';
-import PageError from '~/components/500';
-import NotFound from '~/components/404';
+import { PageError } from '~/components/500';
+import { NotFound } from '~/components/404';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 import { cn } from '~/utils/cn';
 import { Loader } from 'lucide-react';
-import i18nServer from '~/services/i18n.server';
-import { useChangeLanguage } from 'remix-i18next/react';
 import { User } from '@prisma/client';
-import { getCookie, preferencesCookie } from '~/services/cookie.server';
-import { TypeLocaleLanguage } from '~/config/i18n';
+import { getPreferencesCookie } from '~/services/cookie.server';
+import { getUser } from '~/services/session.server';
+import { fallbackLanguage, LocaleLanguage } from './config/i18n';
+import { dataProvider } from '~/providers/data';
+import { authProvider } from '~/providers/auth';
+import { accessControlProvider } from '~/providers/access-control';
+// import { liveProvider } from '~/providers/live';
+import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
+import { auditLogProvider } from '~/providers/audit-log';
+import { notificationProvider } from '~/providers/notification';
+import { TRole } from './constants/roles';
+import { getPermissions } from './services/casbin-permission.server';
 
 /** 全局样式、插件样式 */
 import tailwindStyles from '~/styles/tailwind.css?url';
 import baseStyles from '~/styles/base.css?url';
 import nProgressStyles from 'nprogress/nprogress.css?url';
+import { generateSignature } from './utils/signature';
+import { PermissionRule } from './types/casbin';
+import { dataResources } from './config/resources';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -60,38 +70,36 @@ export const handle = { i18n: ['translation'] };
 
 /** 加载器返回数据类型定义 */
 export type RootLoaderData = {
-  user: User;
+  user: (User & { role: TRole; roles: TRole[] }) | null;
   theme: Theme | null;
   sidebarIsClose?: string;
-  locale: TypeLocaleLanguage;
+  locale: LocaleLanguage;
+  permissions: PermissionRule[];
+  permissionsSignature: string;
 };
 
 /** 加载器 */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [cookie, user, themeResolver, locale] = await Promise.all([
-    getCookie(request),
+  const [user, permissions, { locale, sidebarIsClose, theme }] = await Promise.all([
     getUser(request),
-    themeSessionResolver(request),
-    i18nServer.getLocale(request),
+    getPermissions({ request }),
+    getPreferencesCookie(request),
   ]);
 
-  if (user?.id) {
-    Sentry.setUser({ email: user?.email, username: user?.username || '?', id: user?.id });
-  }
+  const localeNext = locale || fallbackLanguage;
+  await syncServiceLocaleToClient(localeNext);
 
-  return data(
-    {
-      user: user || ({} as User),
-      theme: themeResolver.getTheme(),
-      sidebarIsClose: cookie?.sidebarIsClose,
-      locale,
-    },
-    {
-      headers: {
-        'Set-Cookie': await preferencesCookie.serialize({ ...cookie, lng: locale }),
-      },
-    }
-  );
+  // 在服务端为权限数据生成签名
+  const permissionsSignature = await generateSignature(permissions);
+
+  return data({
+    user,
+    theme: theme || Theme.LIGHT,
+    locale: localeNext,
+    sidebarIsClose,
+    permissions,
+    permissionsSignature,
+  });
 }
 
 /** 水和回退处理 */
@@ -109,9 +117,15 @@ function Document({
   specifiedTheme,
   script = true,
   locale,
-}: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale?: string }>) {
+}: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale: LocaleLanguage }>) {
+  const { permissions, permissionsSignature } = useLoaderData<typeof loader>();
+
+  // 重新登录后因为 window.__PERMISSIONS_DATA__ 设置成功时机不能确保早于客户端内层路由调用 useCan 的时机
+  // 所以这里手动设置一下
+  authProvider.setPermissions(permissions);
+
   return (
-    <html lang={locale ?? 'en'} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
+    <html lang={locale} className={cn(specifiedTheme ?? 'light')} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -121,10 +135,59 @@ function Document({
         <Links />
       </head>
       <body>
-        {/* FIXME: 修复水和问题 */}
-        <ClientOnly fallback={<HydrateFallback />}>{() => children}</ClientOnly>
+        <DevtoolsProvider>
+          <Refine
+            resources={dataResources}
+            routerProvider={routerProvider}
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            accessControlProvider={accessControlProvider}
+            notificationProvider={notificationProvider}
+            i18nProvider={i18nProvider}
+            auditLogProvider={auditLogProvider}
+            // liveProvider={liveProvider}
+            options={{
+              title: {
+                icon: undefined,
+                text: 'Refine & Remix',
+              },
+
+              mutationMode: 'pessimistic',
+              syncWithLocation: true,
+              warnWhenUnsavedChanges: true,
+              liveMode: 'auto',
+
+              reactQuery: {
+                clientConfig: {
+                  defaultOptions: { queries: { networkMode: 'always' }, mutations: { networkMode: 'always' } },
+                },
+              },
+
+              projectId: 'v08e3x-vauZUB-n1Ntw2',
+            }}
+            onLiveEvent={(event) => {
+              console.log('@onLiveEvent', event);
+            }}
+          >
+            {children}
+            <UnsavedChangesNotifier />
+            <DevtoolsPanel />
+          </Refine>
+        </DevtoolsProvider>
         <ScrollRestoration />
         {script && <Scripts crossOrigin="anonymous" />}
+
+        {/* 注入权限数据和签名到全局变量 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.__PERMISSIONS_DATA__ = {
+                permissions: ${JSON.stringify(permissions)},
+                signature: "${permissionsSignature}"
+              };
+            `,
+          }}
+        />
       </body>
     </html>
   );
@@ -138,10 +201,10 @@ function DocumentWithThemeProviders({
   const { theme, locale } = useLoaderData<typeof loader>() || {};
 
   return (
-    <ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
+    <ThemeProvider specifiedTheme={theme} themeAction="/api/set-preferences">
       <Document title={title} specifiedTheme={theme} script={script} locale={locale}>
-        <ModalProvider>{children}</ModalProvider>
-        <Toaster richColors position="top-center" />
+        {children}
+        <Toaster richColors position="top-right" />
       </Document>
     </ThemeProvider>
   );
@@ -149,9 +212,8 @@ function DocumentWithThemeProviders({
 
 function App() {
   const navigation = useNavigation();
-  const { locale } = useLoaderData<typeof loader>();
-  useChangeLanguage(locale);
 
+  nProgress.configure({ showSpinner: false });
   useEffect(() => {
     if (navigation.state === 'idle') nProgress.done();
     else nProgress.start();

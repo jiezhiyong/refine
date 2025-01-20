@@ -5,16 +5,29 @@
       "id": "root",
       "file": "root.tsx"
     },
-    "routes/agreement.$agreementId[.pdf]": {
-      "file": "routes/agreement.$agreementId[.pdf].tsx",
-      "id": "routes/agreement.$agreementId[.pdf]",
-      "path": "agreement/:agreementId.pdf",
+    "routes/api.agreement.$agreementId[.pdf]": {
+      "file": "routes/api.agreement.$agreementId[.pdf].ts",
+      "id": "routes/api.agreement.$agreementId[.pdf]",
+      "path": "api/agreement/:agreementId.pdf",
       "parentId": "root"
     },
-    "routes/client-only-components": {
-      "file": "routes/client-only-components.tsx",
-      "id": "routes/client-only-components",
-      "path": "client-only-components",
+    "routes/api.auth.$provider.callback": {
+      "file": "routes/api.auth.$provider.callback.ts",
+      "id": "routes/api.auth.$provider.callback",
+      "path": "api/auth/:provider/callback",
+      "parentId": "root"
+    },
+    "routes/api.auth.$provider._index": {
+      "file": "routes/api.auth.$provider._index.ts",
+      "id": "routes/api.auth.$provider._index",
+      "path": "api/auth/:provider",
+      "index": true,
+      "parentId": "root"
+    },
+    "routes/api.set-preferences": {
+      "file": "routes/api.set-preferences.ts",
+      "id": "routes/api.set-preferences",
+      "path": "api/set-preferences",
       "parentId": "root"
     },
     "routes/contacts.$contactId": {
@@ -23,10 +36,10 @@
       "path": "contacts/:contactId",
       "parentId": "root"
     },
-    "routes/sharing-loader-data": {
-      "file": "routes/sharing-loader-data.tsx",
-      "id": "routes/sharing-loader-data",
-      "path": "sharing-loader-data",
+    "routes/api.image-resize.$": {
+      "file": "routes/api.image-resize.$.ts",
+      "id": "routes/api.image-resize.$",
+      "path": "api/image-resize/*",
       "parentId": "root"
     },
     "routes/infinite-scrolling": {
@@ -41,16 +54,82 @@
       "path": ":id/update",
       "parentId": "routes/issues"
     },
-    "routes/image-resize.$": {
-      "file": "routes/image-resize.$.ts",
-      "id": "routes/image-resize.$",
-      "path": "image-resize/*",
+    "routes/api.check-health": {
+      "file": "routes/api.check-health.ts",
+      "id": "routes/api.check-health",
+      "path": "api/check-health",
       "parentId": "root"
     },
-    "routes/framer-motion": {
-      "file": "routes/framer-motion.tsx",
-      "id": "routes/framer-motion",
-      "path": "framer-motion",
+    "routes/api.upload-local": {
+      "file": "routes/api.upload-local.tsx",
+      "id": "routes/api.upload-local",
+      "path": "api/upload-local",
+      "parentId": "root"
+    },
+    "routes/api.upload-video": {
+      "file": "routes/api.upload-video.tsx",
+      "id": "routes/api.upload-video",
+      "path": "api/upload-video",
+      "parentId": "root"
+    },
+    "routes/techstack.sentry": {
+      "file": "routes/techstack.sentry.tsx",
+      "id": "routes/techstack.sentry",
+      "path": "sentry",
+      "parentId": "routes/techstack"
+    },
+    "routes/api.auth.logout": {
+      "file": "routes/api.auth.logout.ts",
+      "id": "routes/api.auth.logout",
+      "path": "api/auth/logout",
+      "parentId": "root"
+    },
+    "routes/api.set-locales": {
+      "file": "routes/api.set-locales.ts",
+      "id": "routes/api.set-locales",
+      "path": "api/set-locales",
+      "parentId": "root"
+    },
+    "routes/dashboard.image": {
+      "file": "routes/dashboard.image.tsx",
+      "id": "routes/dashboard.image",
+      "path": "dashboard/image",
+      "parentId": "root"
+    },
+    "routes/forgot-password": {
+      "file": "routes/forgot-password.tsx",
+      "id": "routes/forgot-password",
+      "path": "forgot-password",
+      "parentId": "root"
+    },
+    "routes/update-password": {
+      "file": "routes/update-password.tsx",
+      "id": "routes/update-password",
+      "path": "update-password",
+      "parentId": "root"
+    },
+    "routes/techstack.i18n": {
+      "file": "routes/techstack.i18n.tsx",
+      "id": "routes/techstack.i18n",
+      "path": "i18n",
+      "parentId": "routes/techstack"
+    },
+    "routes/api.$resource": {
+      "file": "routes/api.$resource.tsx",
+      "id": "routes/api.$resource",
+      "path": "api/:resource",
+      "parentId": "root"
+    },
+    "routes/api.set-theme": {
+      "file": "routes/api.set-theme.ts",
+      "id": "routes/api.set-theme",
+      "path": "api/set-theme",
+      "parentId": "root"
+    },
+    "routes/api.upload-s3": {
+      "file": "routes/api.upload-s3.tsx",
+      "id": "routes/api.upload-s3",
+      "path": "api/upload-s3",
       "parentId": "root"
     },
     "routes/issues-events": {
@@ -59,22 +138,46 @@
       "path": "issues-events",
       "parentId": "root"
     },
-    "routes/upload-local": {
-      "file": "routes/upload-local.tsx",
-      "id": "routes/upload-local",
-      "path": "upload-local",
-      "parentId": "root"
+    "routes/issues._index": {
+      "file": "routes/issues._index.tsx",
+      "id": "routes/issues._index",
+      "index": true,
+      "parentId": "routes/issues"
     },
-    "routes/upload-video": {
-      "file": "routes/upload-video.tsx",
-      "id": "routes/upload-video",
-      "path": "upload-video",
-      "parentId": "root"
+    "routes/post.edit.$id": {
+      "file": "routes/post.edit.$id.tsx",
+      "id": "routes/post.edit.$id",
+      "path": "edit/:id",
+      "parentId": "routes/post"
     },
-    "routes/healthcheck": {
-      "file": "routes/healthcheck.tsx",
-      "id": "routes/healthcheck",
-      "path": "healthcheck",
+    "routes/post.show.$id": {
+      "file": "routes/post.show.$id.tsx",
+      "id": "routes/post.show.$id",
+      "path": "show/:id",
+      "parentId": "routes/post"
+    },
+    "routes/techstack.msw": {
+      "file": "routes/techstack.msw.tsx",
+      "id": "routes/techstack.msw",
+      "path": "msw",
+      "parentId": "routes/techstack"
+    },
+    "routes/users.$userid": {
+      "file": "routes/users.$userid.tsx",
+      "id": "routes/users.$userid",
+      "path": ":userid",
+      "parentId": "routes/users"
+    },
+    "routes/users._index": {
+      "file": "routes/users._index.tsx",
+      "id": "routes/users._index",
+      "index": true,
+      "parentId": "routes/users"
+    },
+    "routes/api.publish": {
+      "file": "routes/api.publish.ts",
+      "id": "routes/api.publish",
+      "path": "api/publish",
       "parentId": "root"
     },
     "routes/issues_.$id": {
@@ -83,28 +186,40 @@
       "path": "issues/:id",
       "parentId": "root"
     },
+    "routes/post._index": {
+      "file": "routes/post._index.tsx",
+      "id": "routes/post._index",
+      "index": true,
+      "parentId": "routes/post"
+    },
+    "routes/post.create": {
+      "file": "routes/post.create.tsx",
+      "id": "routes/post.create",
+      "path": "create",
+      "parentId": "routes/post"
+    },
+    "routes/users.role": {
+      "file": "routes/users.role.tsx",
+      "id": "routes/users.role",
+      "path": "role",
+      "parentId": "routes/users"
+    },
     "routes/socket-io": {
       "file": "routes/socket-io.tsx",
       "id": "routes/socket-io",
       "path": "socket-io",
       "parentId": "root"
     },
-    "routes/upload-s3": {
-      "file": "routes/upload-s3.tsx",
-      "id": "routes/upload-s3",
-      "path": "upload-s3",
+    "routes/techstack": {
+      "file": "routes/techstack.tsx",
+      "id": "routes/techstack",
+      "path": "techstack",
       "parentId": "root"
     },
     "routes/register": {
       "file": "routes/register.tsx",
       "id": "routes/register",
       "path": "register",
-      "parentId": "root"
-    },
-    "routes/sidebar": {
-      "file": "routes/sidebar.tsx",
-      "id": "routes/sidebar",
-      "path": "sidebar",
       "parentId": "root"
     },
     "routes/_index": {
@@ -117,12 +232,6 @@
       "file": "routes/issues.tsx",
       "id": "routes/issues",
       "path": "issues",
-      "parentId": "root"
-    },
-    "routes/logout": {
-      "file": "routes/logout.tsx",
-      "id": "routes/logout",
-      "path": "logout",
       "parentId": "root"
     },
     "routes/login": {
@@ -143,16 +252,28 @@
       "path": "redis",
       "parentId": "root"
     },
+    "routes/users": {
+      "file": "routes/users.tsx",
+      "id": "routes/users",
+      "path": "users",
+      "parentId": "root"
+    },
+    "routes/post": {
+      "file": "routes/post.tsx",
+      "id": "routes/post",
+      "path": "post",
+      "parentId": "root"
+    },
     "routes/bff": {
       "file": "routes/bff.tsx",
       "id": "routes/bff",
       "path": "bff",
       "parentId": "root"
     },
-    "routes/msw": {
-      "file": "routes/msw.tsx",
-      "id": "routes/msw",
-      "path": "msw",
+    "routes/$": {
+      "file": "routes/$.tsx",
+      "id": "routes/$",
+      "path": "*",
       "parentId": "root"
     }
   }

@@ -1,9 +1,8 @@
-import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
+import { redirect, type ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
 import { z } from 'zod';
-import { createUserSession } from '~/services/session.server';
-import { createUser, getUserByEmail } from '~/models/user.server';
-import { safeRedirect } from '~/utils/safe-redirect';
 import { RegisterForm } from '~/components/form-register';
+import { EnumAuthProvider } from '~/constants/auth';
+import { createUser, getUserByEmail } from '~/models/user.server';
 import { typedFormError } from '~/utils/typed-form-error';
 
 // 定义表单验证 schema
@@ -20,22 +19,20 @@ export const meta: MetaFunction = () => {
 
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const rawData = Object.fromEntries(formData) as z.infer<typeof registerSchema>;
-
   try {
+    const formData = await request.formData();
+    const rawData = Object.fromEntries(formData) as z.infer<typeof registerSchema>;
+
     const { email, password } = registerSchema.parse(rawData);
     const existingUser = await getUserByEmail(email);
+
     if (existingUser) {
       throw { email: ['A user already exists with this email.'] };
     }
 
-    const user = await createUser(email, password);
-    return createUserSession({
-      redirectTo: safeRedirect(rawData.redirectTo),
-      request,
-      userId: user.id,
-    });
+    await createUser({ email, password, provider: EnumAuthProvider.userpass });
+
+    return redirect(`/login?email=${email}`);
   } catch (error) {
     return typedFormError(error);
   }

@@ -1,6 +1,7 @@
-import { redirect } from '@remix-run/node';
+import { LoaderFunctionArgs, redirect } from '@remix-run/node';
+import { requireUserSession } from '~/services/session.server';
 
-// 加载器 - 初始化 && 处理表单`GET`请求
-export async function loader() {
-  return redirect('/dashboard');
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requireUserSession(request);
+  return redirect('/playground/dashboard/about');
 }

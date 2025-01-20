@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { setLocalStorage, setCookie, expectMatchScreenshot, expectVisible } from '../e2e-utils';
+import { setLocalStorage, setCookie, expectMatchScreenshot, expectVisible } from '../e2e-lib';
 
 test.beforeAll(async ({ baseURL, context }) => {
   await setCookie({ baseURL, context, name: 'accessToken', value: 'abc' });

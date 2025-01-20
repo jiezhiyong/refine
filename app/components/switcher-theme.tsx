@@ -1,6 +1,5 @@
 import { Moon, Sun } from 'lucide-react';
 import { Theme } from 'remix-themes';
-import { useFetcher } from '@remix-run/react';
 
 // 主题切换
 export function ThemeSwitcher({
@@ -10,12 +9,11 @@ export function ThemeSwitcher({
   theme: Theme | null;
   setTheme: React.Dispatch<React.SetStateAction<Theme | null>>;
 }) {
-  const fetcher = useFetcher();
-
   const toggleTheme = () => {
-    const newTheme = theme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT;
-    setTheme(newTheme);
-    fetcher.submit({ theme: newTheme }, { method: 'POST', action: '/api/set-theme', encType: 'application/json' });
+    const themeNext = theme && theme === Theme.DARK ? Theme.LIGHT : Theme.DARK;
+    setTheme(themeNext);
+    document.documentElement.classList.remove(theme || Theme.LIGHT);
+    document.documentElement.classList.add(themeNext);
   };
 
   return (

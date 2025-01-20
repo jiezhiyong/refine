@@ -1,1 +1,0 @@
-import{j as t}from"./jsx-runtime-D2HyDbKh.js";import{m as e}from"./proxy-BJEPBpP_.js";function r(){return t.jsx("div",{style:{display:"flex",width:"100%",height:"100vh",justifyContent:"center"},children:t.jsx(e.div,{animate:{rotate:360},transition:{duration:2},children:t.jsx("h1",{children:"Welcome to remix!"})})})}export{r as default};

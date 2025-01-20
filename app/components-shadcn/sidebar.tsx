@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { VariantProps, cva } from 'class-variance-authority';
 import { PanelLeft } from 'lucide-react';
-
 import { useIsMobile } from '~/hooks/use-mobile';
 import { cn } from '~/utils/cn';
 import { Button } from '~/components-shadcn/button';
@@ -65,8 +64,12 @@ const SidebarProvider = React.forwardRef<
         _setOpen(openState);
       }
 
-      // 使用 fetcher 更新 cookie
-      fetcher.submit({ [SIDEBAR_COOKIE_NAME]: !openState }, { method: 'post', action: '/api/set-preferences' });
+      const formData = new FormData();
+      formData.append(SIDEBAR_COOKIE_NAME, String(!openState));
+      fetcher.submit(formData, {
+        method: 'post',
+        action: '/api/set-preferences',
+      });
     },
     [setOpenProp, open, fetcher]
   );
@@ -142,7 +145,7 @@ const Sidebar = React.forwardRef<
   if (collapsible === 'none') {
     return (
       <div
-        className={cn('flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground', className)}
+        className={cn('z-10 flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground', className)}
         ref={ref}
         {...props}
       >
@@ -174,7 +177,7 @@ const Sidebar = React.forwardRef<
   return (
     <div
       ref={ref}
-      className="group peer hidden text-sidebar-foreground md:block"
+      className="group peer z-10 hidden text-sidebar-foreground md:block"
       data-state={state}
       data-collapsible={state === 'collapsed' ? collapsible : ''}
       data-variant={variant}

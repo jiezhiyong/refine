@@ -15,7 +15,7 @@ import { useMountEffect } from '~/hooks/use-mount-effect';
 import { ThemeSwitcher } from './switcher-theme';
 
 // 次要菜单
-const items = [{ title: 'Service Health Check', url: '#', icon: Activity }];
+const items = [{ title: 'Service Health Check', url: '/playground/dashboard/health', icon: Activity }];
 
 export function NavSecondary() {
   const [theme, setTheme] = useTheme();

@@ -7,19 +7,23 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// ========================
+// 用户认证相关模型
+// ========================
 model User {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  email         String    @unique
-  name          String?
-  username      String?   @unique
-  emailVerified DateTime? @default(now())
-  avatar        String?
-  provider      String?
-  role          Role[]
-  password      Password?
-  jokes         Joke[]
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  email        String     @unique
+  name         String?
+  avatar       String?
+  provider     String?
+  roles        UserRole[]
+  password     Password?
+  Post         Post[]
+  Category     Category[]
+  createdRoles Role[]     @relation("RoleCreator")
+  Log          Log[]
 }
 
 model Password {
@@ -29,19 +33,70 @@ model Password {
 }
 
 model Role {
-  id     String  @id @default(uuid())
-  label  String
-  value  String
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  id        String     @id @default(uuid())
+  title     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  users     UserRole[]
+  creator   User       @relation("RoleCreator", fields: [creatorId], references: [id]) // 角色创建者
+  creatorId String
 }
 
-model Joke {
+// 用户-角色关联表
+model UserRole {
   id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId    String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@unique([userId, roleId])
+}
+
+// ========================
+// Post 相关模型
+// ========================
+model Post {
+  id         String    @id @default(uuid())
+  title      String
+  content    String
+  hit        Int       @default(0)
+  image      String?
+  status     String    @default("DRAFT") // 状态：DRAFT（草稿）, PUBLISHED（已发布）, REJECTED（已拒绝）
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  user       User      @relation(references: [id], fields: [userId])
+  userId     String
+}
+
+// ========================
+// category 相关模型
+// ========================
+model Category {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
   title     String
-  content   String
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  Post      Post[]
+  user      User      @relation(references: [id], fields: [userId])
+  userId    String
+}
+
+// ========================
+// Log 相关模型
+// ========================
+model Log {
+  id           String    @id @default(uuid())
+  resource     String
+  action       String
+  user         User      @relation(references: [id], fields: [userId])
+  userId       String
+  data         String?
+  previousData String?
+  meta         String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
 }

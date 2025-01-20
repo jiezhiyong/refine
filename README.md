@@ -1,25 +1,34 @@
-// TODO: 使用最新版本依赖
+# Refine & Remix OSS Template.
 
-# Welcome to Remix
+[Refine](https://refine.dev/) 是一个开源的无头 React 框架，供开发人员构建企业内部工具、管理面板、仪表板、B2B 应用程序。
+它消除了 CRUD 操作中的重复性任务，并为关键项目组件（如身份验证、访问控制、路由、网络、状态管理和 i18n）提供行业标准解决方案。
 
-- 📖 [Remix docs](https://remix.run/docs)
+[Remix](https://remix.run/) 是一个全栈式 Web 框架，可让您专注于用户界面，并通过 Web 标准进行工作，以提供快速、流畅且有弹性的用户体验。
+
+# 配置本地 HTTPS 环境
+
+```sh
+brew install mkcert # 安装 mkcert
+mkcert -install # 安装本地 CA
+mkcert oss.tcshuke.com localhost 127.0.0.1 ::1 # 在项目根目录创建证书
+sudo echo "127.0.0.1 oss.tcshuke.com" >> /etc/hosts # 修改 hosts 文件，添加本地域名映射
+```
 
 ## Development
 
-Run the dev server:
+Run the dev server, then open `https://oss.tcshuke.com:5173` in your browser. (note: proxy may influence this origin)
 
-```shellscript
+```sh
 pnpm i
 pnpm dev
 ```
 
 ## prisma
 
-```shellscript
-npx prisma migrate dev --name init
-pnpm db:setup
-npx prisma generate | npx prisma db push
-npx prisma studio
+```sh
+npx prisma migrate dev --name init # 创建数据库
+npx prisma generate # 更新 schema.prisma 文件后，重新生成 Prisma Client
+npx prisma studio # 查看数据库
 ```
 
 ## Deployment
@@ -28,6 +37,8 @@ First, build your app for production:
 
 ```sh
 pnpm build
+docker build -t remix -f Dockerfile .
+docker run -p 3000:3000 remix
 ```
 
 Then run the app in production mode:
@@ -47,26 +58,14 @@ Make sure to deploy the output of `pnpm run build`
 - `build/server`
 - `build/client`
 
-## Styling
+## Issues
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+1. Cannot find module '.prisma/client/default'
+   重新执行 `npx prisma generate` 并重启开发服务 `pnpm dev`
 
-## 消息队列和批处理 - https://github.com/taskforcesh/bullmq
+2. 数据库删除了数据，但 `db` 依然可以查询到数据
+   重启开发服务 `pnpm dev`
 
-[![Open in codesandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/remix-run/examples/tree/main/bullmq-task-queue)
+<!-- TODO: -->
 
-https://github.com/redis/ioredis
-
-## 批处理、数据缓存
-
-https://github.com/graphql/dataloader
-
-## Sentry
-
-https://docs.sentry.io/platforms/javascript/guides/remix/
-
-## qrcode sign in
-
-## 功能搜索
-
-## 单点登录、多重身份验证
+https://refine.dev/docs/guides-concepts/forms/#modifying-data-before-submission
