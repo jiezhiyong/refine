@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { userAdministrator, users } from '../public/sql-users.ts';
-import { roles } from '../public/sql-roles.ts';
+import { EnumAuthProvider } from '~/constants';
 import { categories } from '../public/sql-categories.ts';
 import { posts } from '../public/sql-posts.ts';
-import { EnumAuthProvider } from '~/constants/auth.ts';
+import { roles } from '../public/sql-roles.ts';
+import { userAdministrator, users } from '../public/sql-users.ts';
 
 const db = new PrismaClient();
 

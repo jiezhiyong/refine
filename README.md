@@ -58,30 +58,6 @@ Make sure to deploy the output of `pnpm run build`
 - `build/server`
 - `build/client`
 
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
-
-## 消息队列和批处理 - https://github.com/taskforcesh/bullmq
-
-[![Open in codesandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/remix-run/examples/tree/main/bullmq-task-queue)
-
-https://github.com/redis/ioredis
-
-## 批处理、数据缓存
-
-https://github.com/graphql/dataloader
-
-## Sentry
-
-https://docs.sentry.io/platforms/javascript/guides/remix/
-
-## qrcode sign in
-
-## 功能搜索
-
-## 单点登录、多重身份验证
-
 <!-- TODO: -->
 
 https://refine.dev/docs/guides-concepts/forms/#server-side-validation-

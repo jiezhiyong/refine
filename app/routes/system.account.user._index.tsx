@@ -1,21 +1,18 @@
-import dayjs from 'dayjs';
-import { type UseTableReturnType } from '~/lib/refinedev-react-table';
+import { User } from '@prisma/client';
 import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
+import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { Checkbox } from '~/components-shadcn/checkbox';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { PageError } from '~/components/500';
-import { Table, TableFilterProps } from '~/component-refine/table';
-import { dataService } from '~/services/data.server';
-import { User } from '@prisma/client';
-import { parseTableParams } from '@refinedev/remix-router';
-import { Badge } from '~/components-shadcn/badge';
-import { DeleteButton, ExportButton, ShowButton } from '~/component-refine';
-import { HandleFunction } from '~/types/handle';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
+import dayjs from 'dayjs';
 import { useCallback } from 'react';
-import { USER_PROVIDER } from '~/types/user';
+import { DeleteButton, ExportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
+import { Badge } from '~/components-shadcn/badge';
+import { Checkbox } from '~/components-shadcn/checkbox';
+import { PageError } from '~/components/500';
+import { type UseTableReturnType } from '~/lib/refinedev-react-table';
+import { dataService } from '~/services/data.server';
+import { HandleFunction, USER_PROVIDER } from '~/types';
+import { getDefaultTitle } from '~/utils/get-default-title';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -135,20 +132,13 @@ export default function UserIndex() {
 
             return (
               <ShowButton recordItemId={original.id} asChild>
-                <div className="flex items-center">
-                  <span className="inline-block min-w-8 text-muted-foreground">
-                    {pageIndex * pageSize + index + 1}.&nbsp;
-                  </span>
+                <span className="inline-block min-w-8 text-muted-foreground">
+                  {pageIndex * pageSize + index + 1}.&nbsp;
+                </span>
 
-                  <Avatar className="mr-2 size-6">
-                    <AvatarImage src={original.avatar || ''} alt={original.name || ''} />
-                    <AvatarFallback>{original.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
-                  </Avatar>
-
-                  <span className="py-3 capitalize underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
-                    {original.name}
-                  </span>
-                </div>
+                <span className="py-3 capitalize underline-offset-2 hover:text-green-600 hover:underline">
+                  {original.name}
+                </span>
               </ShowButton>
             );
           },

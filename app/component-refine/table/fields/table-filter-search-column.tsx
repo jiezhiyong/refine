@@ -1,12 +1,12 @@
-import { FilterIcon, FilterX, Search } from 'lucide-react';
-import type { TableFilterProps } from '..';
-import { cn } from '~/utils/cn';
-import { Button } from '~/components-shadcn/button';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
-import { Input } from '~/components-shadcn/input';
-import { Separator } from '~/components-shadcn/separator';
 import { useTranslate } from '@refinedev/core';
+import { FilterIcon, FilterX, Search } from 'lucide-react';
 import { Badge } from '~/components-shadcn/badge';
+import { Button } from '~/components-shadcn/button';
+import { Input } from '~/components-shadcn/input';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
+import { Separator } from '~/components-shadcn/separator';
+import { cn } from '~/utils/cn';
+import type { TableFilterProps } from '..';
 
 export function TableFilterSearchColumn({ column, title, align = 'start' }: TableFilterProps) {
   const selectedValue = column?.getFilterValue() as string;
@@ -35,7 +35,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
           {selectedValue && (
             <>
               <Separator orientation="vertical" className="mr-1 h-4" />
-              <Badge variant="secondary" className="cursor-pointer text-xs text-muted-foreground">
+              <Badge variant="secondary" className="cursor-pointer text-nowrap text-xs text-muted-foreground">
                 {selectedValue}
               </Badge>
             </>

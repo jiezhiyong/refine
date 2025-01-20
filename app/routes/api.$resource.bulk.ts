@@ -1,13 +1,13 @@
-import { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { dataService } from '~/services/data.server';
 import { requireUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
+import { TAny } from '~/types';
 
 // 处理批量获取请求 getMany
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { resource } = params;
   if (!resource) {
-    throw new Error('资源类型是必需的');
+    throw new Error('resource is required');
   }
 
   try {
@@ -35,7 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { resource } = params;
   if (!resource) {
-    throw new Error('资源类型是必需的');
+    throw new Error('resource is required');
   }
 
   try {

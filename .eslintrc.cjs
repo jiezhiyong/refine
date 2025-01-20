@@ -15,6 +15,28 @@ module.exports = {
   },
   ignorePatterns: ['!**/.server', '!**/.client'],
   extends: ['eslint:recommended', 'prettier'],
+  rules: {
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
+    'sort-imports': [
+      'error',
+      {
+        ignoreCase: true,
+        ignoreDeclarationSort: true,
+        ignoreMemberSort: false,
+        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+      },
+    ],
+  },
   overrides: [
     {
       files: ['**/*.{js,jsx,ts,tsx}'],

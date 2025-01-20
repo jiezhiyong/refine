@@ -1,15 +1,15 @@
-import { LoaderFunctionArgs, type ActionFunctionArgs } from '@remix-run/node';
-import { dataService } from '~/services/data.server';
 import type { CrudFilters, CrudSorting, Pagination } from '@refinedev/core';
-import { TAny } from '~/types/any';
-import { requireUser } from '~/services/session.server';
+import { LoaderFunctionArgs, type ActionFunctionArgs } from '@remix-run/node';
 import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
+import { dataService } from '~/services/data.server';
+import { requireUser } from '~/services/session.server';
+import { TAny } from '~/types';
 
 // 处理 getList 请求
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { resource } = params;
   if (!resource) {
-    throw new Error('资源类型是必需的');
+    throw new Error('resource is required');
   }
 
   try {
@@ -41,7 +41,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { resource } = params;
   if (!resource) {
-    throw new Error('资源类型是必需的');
+    throw new Error('resource is required');
   }
 
   try {

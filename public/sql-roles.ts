@@ -1,4 +1,4 @@
-import { EnumRoleId } from '~/constants/roles';
+import { EnumRoleId } from '~/constants';
 
 export const roles = [
   { id: EnumRoleId.administrator, title: 'administrator' },

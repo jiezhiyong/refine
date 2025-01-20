@@ -1,9 +1,9 @@
-import { ShowButtonProps } from '../types';
-import { Button } from '~/components-shadcn/button';
 import { useShowButton } from '@refinedev/core';
 import { EyeIcon } from 'lucide-react';
 import type { FC } from 'react';
+import { Button } from '~/components-shadcn/button';
 import { cn } from '~/utils/cn';
+import { ShowButtonProps } from '../types';
 
 export const ShowButton: FC<ShowButtonProps> = ({
   resource: resourceNameFromProps,
@@ -27,7 +27,7 @@ export const ShowButton: FC<ShowButtonProps> = ({
   const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
-      className={cn(disabledNew && 'pointer-events-none')}
+      className={cn('visited:!text-blue-700', disabledNew && 'pointer-events-none')}
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {

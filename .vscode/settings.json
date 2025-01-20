@@ -3,15 +3,26 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "files.associations": {
     "*.css": "tailwindcss"
   },
   "plantuml.server": "http://www.plantuml.com/plantuml",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "editor.suggest.showModules": true,
+
   "todo-tree.highlights.enabled": true,
   "todo-tree.general.tags": ["TODO", "FIXME", "BUG", "NOTE", "HACK"],
   "todo-tree.highlights.customHighlight": {
@@ -41,7 +52,5 @@
       "iconColour": "#8bc34a"
     }
   },
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  }
+  
 }

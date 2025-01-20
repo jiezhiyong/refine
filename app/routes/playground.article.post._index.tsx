@@ -1,22 +1,19 @@
-import dayjs from 'dayjs';
-import { type UseTableReturnType } from '~/lib/refinedev-react-table';
+import { Post } from '@prisma/client';
 import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
+import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { Checkbox } from '~/components-shadcn/checkbox';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { PageError } from '~/components/500';
-import { Table, TableFilterProps } from '~/component-refine/table';
-import { dataService } from '~/services/data.server';
-import { Post } from '@prisma/client';
-import { parseTableParams } from '@refinedev/remix-router';
-import { Badge } from '~/components-shadcn/badge';
-import { POST_STATUS, POST_STATUS_MAP, PostStatus } from '~/types/post';
-import { TAny } from '~/types/any';
-import { CreateButton, ExportButton, ImportButton, ShowButton } from '~/component-refine';
+import dayjs from 'dayjs';
 import { useCallback } from 'react';
-import { HandleFunction } from '~/types/handle';
+import { CreateButton, ExportButton, ImportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
+import { Badge } from '~/components-shadcn/badge';
+import { Checkbox } from '~/components-shadcn/checkbox';
+import { PageError } from '~/components/500';
+import { type UseTableReturnType } from '~/lib/refinedev-react-table';
+import { dataService } from '~/services/data.server';
+import { HandleFunction, POST_STATUS, POST_STATUS_MAP, PostStatus, TAny } from '~/types';
+import { getDefaultTitle } from '~/utils/get-default-title';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -142,9 +139,7 @@ export default function PostIndex() {
               <span className="inline-block min-w-8 text-muted-foreground">
                 {pageIndex * pageSize + index + 1}.&nbsp;
               </span>
-              <span className="py-3 underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
-                {original.title}
-              </span>
+              <span className="py-3 underline-offset-2 hover:text-green-600 hover:underline">{original.title}</span>
             </ShowButton>
           );
         }}
@@ -154,6 +149,9 @@ export default function PostIndex() {
         header="Category"
         accessorKey="category.title"
         id="category.title"
+        meta={{
+          filterOperator: 'contains',
+        }}
         enableHiding
         filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Category" />}
       />

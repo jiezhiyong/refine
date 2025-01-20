@@ -4,4 +4,6 @@ export * from './confirm';
 export * from './field';
 export * from './form';
 export * from './link';
+export * from './loader';
 export * from './select';
+export * from './sidebar';

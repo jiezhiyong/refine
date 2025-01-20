@@ -1,56 +1,56 @@
+import { useTranslation } from '@refinedev/core';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { Form, UIMatch, useSearchParams } from '@remix-run/react';
+import i18next from 'i18next';
 import {
-  Trash2,
-  Settings2,
-  FileText,
-  Copy,
-  CornerUpRight,
-  CornerUpLeft,
-  LineChart,
-  GalleryVerticalEnd,
-  Trash,
-  Bell,
-  ArrowUp,
   ArrowDown,
-  Star,
+  ArrowUp,
+  Bell,
+  ChevronRight,
+  Copy,
+  CornerUpLeft,
+  CornerUpRight,
+  FileText,
+  GalleryVerticalEnd,
+  LineChart,
+  Link,
   MoreHorizontal,
   Plus,
   Search,
-  ChevronRight,
-  Link,
+  Settings2,
+  Star,
+  Trash,
+  Trash2,
 } from 'lucide-react';
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Form, UIMatch, useSearchParams } from '@remix-run/react';
 import React from 'react';
+import { DateRange } from 'react-day-picker';
+import { Badge } from '~/components-shadcn/badge';
 import { Button } from '~/components-shadcn/button';
 import { Calendar } from '~/components-shadcn/calendar';
+import { Checkbox } from '~/components-shadcn/checkbox';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components-shadcn/collapsible';
 import { Label } from '~/components-shadcn/label';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarInput,
-  SidebarSeparator,
   SidebarGroupLabel,
+  SidebarInput,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarSeparator,
 } from '~/components-shadcn/sidebar';
-import { HandleFunction } from '~/types/handle';
-import { Checkbox } from '~/components-shadcn/checkbox';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components-shadcn/collapsible';
-import { DateRange } from 'react-day-picker';
-import { tryParse } from '~/utils/try-parse';
-import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
-import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
-import { useTranslation } from '@refinedev/core';
-import i18next from 'i18next';
 import { PageError } from '~/components/500';
-import { syncServiceLocaleToClient } from '~/providers/i18n';
+import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
+import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
+import { syncServiceLocaleToClient } from '~/providers';
 import { getPreferencesCookie } from '~/services/cookie.server';
-import { Badge } from '~/components-shadcn/badge';
+import { HandleFunction } from '~/types';
+import { tryParse } from '~/utils/try-parse';
 
 // 元数据
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -95,12 +95,11 @@ export default function DashboardAbout() {
         <Badge>审计日志</Badge>
         <Badge>实时数据</Badge>
         <Badge>调试辅助</Badge>
-        <Badge>日志上报 & 监控告警</Badge>
         <Badge>主题切换</Badge>
         <Badge>多国语言</Badge>
         <br />
+        <Badge>日志上报 & 监控告警</Badge>
         <Badge>TypeScript 类型安全</Badge>
-        <Badge>漂亮的UI设计</Badge>
       </div>
     </div>
   );

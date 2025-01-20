@@ -1,15 +1,15 @@
+import { BaseRecord, useTranslate } from '@refinedev/core';
 import { format } from 'date-fns';
 import { FilterIcon, FilterX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import type { TableFilterProps } from '..';
-import { cn } from '~/utils/cn';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
-import { Button } from '~/components-shadcn/button';
-import { Separator } from '~/components-shadcn/separator';
 import { Badge } from '~/components-shadcn/badge';
+import { Button } from '~/components-shadcn/button';
 import { Calendar } from '~/components-shadcn/calendar';
-import { BaseRecord, useTranslate } from '@refinedev/core';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
+import { Separator } from '~/components-shadcn/separator';
+import { cn } from '~/utils/cn';
+import type { TableFilterProps } from '..';
 
 export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseRecord>({
   column,
@@ -72,7 +72,7 @@ export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseReco
           {date?.from ? (
             <>
               <Separator orientation="vertical" className="mr-1 h-4" />
-              <Badge variant="secondary" className="cursor-pointer text-xs text-muted-foreground">
+              <Badge variant="secondary" className="cursor-pointer text-nowrap text-xs text-muted-foreground">
                 {date.to ? (
                   <>{[format(date.from, 'LLL dd, y'), format(date.to, 'LLL dd, y')].join(' - ')}</>
                 ) : (

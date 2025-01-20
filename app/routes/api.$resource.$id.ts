@@ -1,13 +1,13 @@
-import { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { dataService } from '~/services/data.server';
 import { requireUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
+import { TAny } from '~/types';
 
 // 处理单个获取 getOne
 export async function loader({ params }: LoaderFunctionArgs) {
   const { resource, id } = params;
   if (!resource || !id) {
-    throw new Error('资源类型和ID是必需的');
+    throw new Error('resource、id is required');
   }
 
   try {
@@ -17,7 +17,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     });
     return Response.json(data);
   } catch (error: TAny) {
-    return Response.json({ message: error.message }, { status: 500 });
+    return Response.json(error, { status: 500 });
   }
 }
 
@@ -27,12 +27,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { resource, id } = params;
   if (!resource || !id) {
-    return Response.json({ message: '资源类型和ID是必需的' }, { status: 400 });
+    return Response.json({ message: 'resource、id is required' }, { status: 400 });
   }
 
   try {
     const method = request.method;
-
     switch (method) {
       // 处理单个更新 update
       case 'PATCH': {
