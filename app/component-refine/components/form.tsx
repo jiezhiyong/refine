@@ -54,6 +54,7 @@ export const Form = <
     props.refineCore.onFinish(props.getValues()).then();
   });
 
+  const { disabled, ...rest } = saveButtonProps || {};
   return (
     <FormUI {...props}>
       <form {...formProps} onSubmit={onSubmit}>
@@ -61,7 +62,12 @@ export const Form = <
           <CardContent className="space-y-4">{props.children}</CardContent>
 
           <CardFooter className="flex justify-end gap-x-4">
-            <SaveButton type="submit" loading={props.refineCore.formLoading} {...saveButtonProps}>
+            <SaveButton
+              type="submit"
+              loading={props.refineCore.formLoading}
+              disabled={disabled || !props.formState.isDirty}
+              {...rest}
+            >
               <AutoSaveIndicator {...props.refineCore.autoSaveProps} />
             </SaveButton>
 

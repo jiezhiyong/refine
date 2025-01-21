@@ -11,7 +11,7 @@ import { PageError } from '~/components';
 import { Input } from '~/components-shadcn/input';
 import { Textarea } from '~/components-shadcn/textarea';
 import { dataService } from '~/services';
-import { HandleFunction, POST_STATUS, POST_STATUS_LIST } from '~/types';
+import { HandleFunction, POST_STATUS_LIST } from '~/types';
 import { getDefaultTitle } from '~/utils';
 
 // 元数据
@@ -67,15 +67,9 @@ const formSchema = z.object({
   title: z.string().min(2, {
     message: 'Title must be at least 2 characters.',
   }),
-  content: z.string().min(2, {
-    message: 'Content must be at least 2 characters.',
-  }),
-  status: z.enum([POST_STATUS.PUBLISHED, POST_STATUS.DRAFT, POST_STATUS.REJECTED], {
-    errorMap: () => ({
-      message: `Status must one of ${POST_STATUS_LIST.join(', ')}`,
-    }),
-  }),
-  categoryId: z.string().or(z.number()),
+  content: z.string().min(2),
+  status: z.string(),
+  categoryId: z.string(),
 });
 
 export const PostForm = ({
@@ -94,7 +88,7 @@ export const PostForm = ({
     defaultValues: post,
     warnWhenUnsavedChanges: true,
     refineCoreProps: {
-      queryOptions: postRes ? { queryFn: () => postRes, initialData: postRes } : undefined, // FIXME: tslint
+      queryOptions: postRes ? { queryFn: () => postRes, initialData: postRes } : undefined,
       autoSave: { enabled: true },
       redirect,
     },

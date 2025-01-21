@@ -2,7 +2,7 @@ import { data } from '@remix-run/node';
 import { z } from 'zod';
 
 /**
- * 使用 zod 进行表单验证时，根据错误类型返回不同的响应
+ * 使用 zod 进行表单验证时，根据错误类型返回不同的响应 // TODO: 需要优化
  */
 export function typedFormError(error: z.ZodError | Error | unknown) {
   if (error instanceof z.ZodError) {

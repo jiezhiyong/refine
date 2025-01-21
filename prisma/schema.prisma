@@ -66,8 +66,8 @@ model Post {
   status     String    @default("DRAFT") // 状态：DRAFT（草稿）, PUBLISHED（已发布）, REJECTED（已拒绝）
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId String?
+  category   Category  @relation(fields: [categoryId], references: [id])
+  categoryId String
   user       User      @relation(references: [id], fields: [userId])
   userId     String
 }
