@@ -47,11 +47,9 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, icon = null, loading = false, asChild = false, children, disabled, ...props }, ref) => {
     disabled = disabled || loading;
+
     const Icon = React.useMemo(() => {
-      if (React.isValidElement(icon)) {
-        return icon;
-      }
-      return loading ? <LoadingIcon /> : null;
+      return loading ? <LoadingIcon /> : React.isValidElement(icon) ? icon : null;
     }, [icon, loading]);
 
     const Comp = asChild ? Slot : 'button';

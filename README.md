@@ -85,7 +85,6 @@ Make sure to deploy the output of `pnpm run build`
 
 - https://refine.dev/docs/guides-concepts/realtime/、https://refine.dev/docs/realtime/live-provider/
 
-- https://refine.dev/docs/guides-concepts/forms/#modifying-data-before-submission
 - https://refine.dev/docs/core/hooks/utilities/use-modal/
 - https://refine.dev/docs/packages/react-hook-form/use-modal-form/
 - https://refine.dev/docs/packages/react-hook-form/use-steps-form/

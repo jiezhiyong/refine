@@ -1,15 +1,12 @@
-import * as Sentry from '@sentry/remix';
 import type { EntryContext } from '@remix-run/node';
-import { PassThrough } from 'node:stream';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
-import { renderToPipeableStream } from 'react-dom/server';
-import { TAny } from './types/any';
+import * as Sentry from '@sentry/remix';
 import { isbot } from 'isbot';
-import { server } from '../mock/node';
-import { createServer } from 'http';
-import { initSocketIO } from './services/socket.server';
+import { PassThrough } from 'node:stream';
+import { renderToPipeableStream } from 'react-dom/server';
 import { initSentry } from './services/sentry.server';
+import { TAny } from './types/any';
 
 const ABORT_DELAY = 5_000;
 

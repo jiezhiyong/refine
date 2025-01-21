@@ -1,3 +1,4 @@
+export * from './autoSaveIndicator';
 export * from './breadcrumbs';
 export * from './combobox';
 export * from './confirm';

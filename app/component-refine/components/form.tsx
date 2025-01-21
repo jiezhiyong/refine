@@ -1,11 +1,13 @@
-import { AutoSaveIndicator, useBack, useParsed, type BaseRecord, type HttpError } from '@refinedev/core';
+import { useBack, useParsed, type BaseRecord, type HttpError } from '@refinedev/core';
 import type { UseFormReturnType } from '@refinedev/react-hook-form';
 import { Undo2 } from 'lucide-react';
 import { useRef, type DetailedHTMLProps, type FormHTMLAttributes, type PropsWithChildren } from 'react';
 import { type FieldValues } from 'react-hook-form';
+import { AutoSaveIndicator } from '~/component-refine';
 import { Button } from '~/components-shadcn/button';
 import { Card, CardContent, CardFooter } from '~/components-shadcn/card';
 import { Form as FormUI } from '~/components-shadcn/form';
+import { TAny } from '~/types';
 import { SaveButton } from '../buttons';
 
 type NativeFormProps = Omit<DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>, 'onSubmit'>;
@@ -23,7 +25,8 @@ export type FormProps<
     formProps?: NativeFormProps;
     isWatchable?: boolean;
     hideCancel?: boolean;
-    modifyingDataBeforeSubmission?: (values: TVariables) => TVariables;
+    autoSave?: boolean;
+    modifyingDataBeforeSubmission?: (values: TAny) => TAny;
   };
 
 export const Form = <
@@ -35,6 +38,7 @@ export const Form = <
   TResponse extends BaseRecord = TData,
   TResponseError extends HttpError = TError,
 >({
+  autoSave,
   modifyingDataBeforeSubmission,
   formProps,
   isWatchable,
@@ -53,12 +57,12 @@ export const Form = <
   }
 
   const onSubmit = props.handleSubmit((_data: TVariables) => {
-    // const values = props.getValues();
-    // const data = modifyingDataBeforeSubmission ? modifyingDataBeforeSubmission(values) : values;
-    props.refineCore.onFinish(props.getValues()).then();
+    const values = props.getValues();
+    const data = modifyingDataBeforeSubmission ? modifyingDataBeforeSubmission(values) : values;
+    props.refineCore.onFinish(data);
   });
 
-  const { disabled, ...rest } = saveButtonProps || {};
+  const { disabled } = saveButtonProps || {};
   return (
     <FormUI {...props}>
       <form {...formProps} onSubmit={onSubmit}>
@@ -70,9 +74,8 @@ export const Form = <
               type="submit"
               loading={props.refineCore.formLoading}
               disabled={disabled || !props.formState.isDirty}
-              {...rest}
             >
-              <AutoSaveIndicator {...props.refineCore.autoSaveProps} />
+              {autoSave ? <AutoSaveIndicator {...props.refineCore.autoSaveProps} /> : undefined}
             </SaveButton>
 
             {!props.hideCancel && (

@@ -1,5 +1,6 @@
 import type { HttpError, ValidationErrors } from '@refinedev/core';
 import { tryParse } from '~/utils';
+import { transformPrismaError } from './transformPrismaError';
 
 /**
  * 服务器端验证
@@ -21,7 +22,8 @@ import { tryParse } from '~/utils';
 export const transformHttpError = (error: any): HttpError => {
   const { status, data, original } = tryParse(error?.message);
 
-  const message = (!status ? original : '') || error.response?.data?.name || error.response.statusText;
+  const tryTransformPrismaError = transformPrismaError(!status ? String(original) : '');
+  const message = tryTransformPrismaError || error.response?.data?.name || error.response.statusText;
   const statusCode = error.status || error.response.status;
 
   const httpError: HttpError = {

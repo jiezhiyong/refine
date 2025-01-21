@@ -4,6 +4,7 @@ import { GetOneResponse, RedirectAction } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
+import { useCallback } from 'react';
 import { z } from 'zod';
 import { CloneButton, DeleteButton, ShowButton } from '~/component-refine';
 import { Combobox, Field, Form, Select } from '~/component-refine/components';
@@ -82,25 +83,37 @@ export const PostForm = ({
 }) => {
   const { data: post } = postRes || {};
 
+  const enableAutoSave = true;
   const { ...form } = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: post,
     warnWhenUnsavedChanges: true,
     refineCoreProps: {
-      queryOptions: postRes ? { queryFn: () => postRes, initialData: postRes } : undefined,
-      autoSave: { enabled: false },
+      queryOptions: postRes
+        ? {
+            queryFn: () => postRes,
+            initialData: postRes,
+          }
+        : undefined,
       redirect,
+      autoSave: {
+        enabled: enableAutoSave,
+        debounce: 2000,
+        invalidateOnUnmount: true,
+        onFinish: (values) => {
+          return modifyingDataBeforeSubmission(values as TFormSchema);
+        },
+      },
     },
   });
 
-  // 提交前修改数据
-  // const modifyingDataBeforeSubmission = useCallback((values: TFormSchema) => {
-  //   values.abc = 'abc';
-  //   return values;
-  // }, []);
+  // 提交前修改数据，返回新的数据对象而不是修改原对象
+  const modifyingDataBeforeSubmission = useCallback((values: TFormSchema) => {
+    return { abc: 'abc', ...values };
+  }, []);
 
   return (
-    <Form {...form}>
+    <Form {...form} autoSave={enableAutoSave} modifyingDataBeforeSubmission={modifyingDataBeforeSubmission}>
       <Field {...form} name="title" label="Title">
         <Input placeholder="Title" />
       </Field>
