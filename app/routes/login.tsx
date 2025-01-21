@@ -1,11 +1,11 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { z } from 'zod';
-import { authProvider } from '~/providers/auth';
-import { LoginForm } from '~/components/form-login';
-import { commitSession, getSession, getUser } from '~/services/session.server';
+import { LoginForm } from '~/components';
+import { EnumAuthProvider } from '~/constants';
+import { authProvider } from '~/providers';
+import { commitSession, getSession, getUser } from '~/services';
 import { typedFormError } from '~/utils/typed-form-error';
-import { EnumAuthProvider } from '~/constants/auth';
 
 // 定义表单验证 schema
 const loginSchema = z.object({

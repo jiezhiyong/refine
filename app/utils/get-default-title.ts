@@ -1,5 +1,5 @@
-import { dataResources } from '~/config/resources';
-import { TAny } from '~/types/any';
+import { dataResources } from '~/config';
+import { TAny } from '~/types';
 
 /**
  * 获取默认标题

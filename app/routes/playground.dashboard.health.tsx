@@ -1,7 +1,6 @@
 import { MetaFunction } from '@remix-run/node';
-import { PageError } from '~/components/500';
-import { ComingSoon } from '~/components/coming-soon';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { ComingSoon, PageError } from '~/components';
+import { getDefaultTitle } from '~/utils';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {

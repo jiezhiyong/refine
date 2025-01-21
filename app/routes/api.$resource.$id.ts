@@ -1,6 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { dataService } from '~/services/data.server';
-import { requireUser } from '~/services/session.server';
+import { dataService, requireUser } from '~/services';
 import { TAny } from '~/types';
 
 // 处理单个获取 getOne

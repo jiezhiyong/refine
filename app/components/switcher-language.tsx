@@ -3,8 +3,7 @@ import { useRouteLoaderData, useSearchParams } from '@remix-run/react';
 import { Languages } from 'lucide-react';
 import { Button } from '~/components-shadcn/button';
 import { RootLoaderData } from '~/root';
-import { canUseDOM } from '~/utils/can-use-dom';
-import { cn } from '~/utils/cn';
+import { canUseDOM, cn } from '~/utils';
 
 export function LanguageSwitcher() {
   const [searchParams, setSearchParams] = useSearchParams();

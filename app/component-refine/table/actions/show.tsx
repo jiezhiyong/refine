@@ -1,8 +1,8 @@
-import { TAny } from '~/types/any';
+import { Eye } from 'lucide-react';
+import { TAny } from '~/types';
 import type { RowActionProps } from '.';
 import { RowAction } from '.';
 import { useGetShowUrl } from '../../hooks';
-import { Eye } from 'lucide-react';
 
 type ShowActionProps = RowActionProps & {
   row?: TAny;

@@ -1,6 +1,6 @@
 import { ActionFunctionArgs } from '@remix-run/node';
-import { TRole } from '~/constants/roles';
-import { commitSession, requireUser } from '~/services/session.server';
+import { TRole } from '~/constants';
+import { commitSession, requireUser } from '~/services';
 
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== 'POST') {

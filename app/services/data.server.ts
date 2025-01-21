@@ -1,8 +1,7 @@
 import { DataProvider } from '@refinedev/core';
-import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
-import { dataResources } from '~/config/resources';
-import { Resources } from '~/constants/resource';
-import { db } from '~/services/db.server';
+import { dataResources, DEFAULT_PAGE_SIZE } from '~/config';
+import { Resources } from '~/constants';
+import { db } from '~/services';
 import { PrismaFunc } from '~/types';
 import { buildOrderByClause, buildWhereClause, Filter, parseRefineFilters, processDateFields } from '~/utils';
 

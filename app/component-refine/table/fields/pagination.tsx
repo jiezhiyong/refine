@@ -2,9 +2,9 @@ import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRigh
 import { UseTableReturnType as Table } from '~/lib/refinedev-react-table';
 
 import { BaseRecord, useTranslate } from '@refinedev/core';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components-shadcn/select';
 import { Button } from '~/components-shadcn/button';
-import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components-shadcn/select';
+import { DEFAULT_PAGE_SIZE } from '~/config';
 
 interface DataTablePaginationProps<TData extends BaseRecord = BaseRecord> {
   table: Table<TData>;

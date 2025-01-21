@@ -1,4 +1,4 @@
-import { TAny } from '~/types/any';
+import { TAny } from '~/types';
 
 export interface CodeProps {
   data: TAny;

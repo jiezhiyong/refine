@@ -1,8 +1,8 @@
-import { TAny } from '~/types/any';
-import { ConfirmDialog } from '../components/confirm';
-import { useDeleteHelper, useOnBack } from '../hooks';
 import { useTranslate } from '@refinedev/core';
 import React, { PropsWithChildren, createContext, useCallback, useState } from 'react';
+import { TAny } from '~/types';
+import { ConfirmDialog } from '../components/confirm';
+import { useDeleteHelper, useOnBack } from '../hooks';
 
 type DeleteDataType = {
   toogle: boolean;

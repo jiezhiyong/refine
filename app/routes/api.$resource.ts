@@ -1,6 +1,5 @@
 import { LoaderFunctionArgs, type ActionFunctionArgs } from '@remix-run/node';
-import { dataService } from '~/services/data.server';
-import { requireUser } from '~/services/session.server';
+import { dataService, requireUser } from '~/services';
 import { TAny } from '~/types';
 import { getFiltersFromUrl, getJoinFromUrl, getPaginationFromUrl, getSortersFromUrl } from '~/utils';
 

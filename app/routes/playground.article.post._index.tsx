@@ -6,14 +6,14 @@ import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
 import { CreateButton, ExportButton, ImportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
+import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Badge } from '~/components-shadcn/badge';
 import { Checkbox } from '~/components-shadcn/checkbox';
-import { PageError } from '~/components/500';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { dataService } from '~/services/data.server';
+import { dataService } from '~/services';
 import { HandleFunction, POST_STATUS, POST_STATUS_MAP, PostStatus, TAny } from '~/types';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { getDefaultTitle } from '~/utils';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];

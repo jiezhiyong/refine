@@ -1,7 +1,7 @@
-import { PermissionRule } from '~/types/casbin';
+import { TRole } from '~/constants';
+import { PermissionRule } from '~/types';
 import { createEnforcer } from './casbin-enforcer.server';
 import { getUserSession } from './session.server';
-import { TRole } from '~/constants/roles';
 
 export async function checkPermission(subject: string, object: string, action: string): Promise<boolean> {
   const enforcer = await createEnforcer();

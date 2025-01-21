@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
-import { EnumAuthProvider } from '~/constants/auth';
+import { EnumAuthProvider } from '~/constants';
 
 export const TcskOAuth2 = ({ redirectTo }: { redirectTo: string }) => {
   const fetcher = useFetcher();

@@ -1,6 +1,6 @@
-import { apiBase, isServer } from '~/config/base-url';
-import { generateSignature } from './signature';
 import * as https from 'node:https';
+import { apiBase, isServer } from '~/config';
+import { generateSignature } from './signature';
 
 // 类型定义
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';

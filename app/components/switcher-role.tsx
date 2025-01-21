@@ -1,6 +1,7 @@
-import * as React from 'react';
 import { ChevronsUpDown, GalleryVerticalEnd, Plus } from 'lucide-react';
+import * as React from 'react';
 
+import { useRouteLoaderData } from '@remix-run/react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +12,9 @@ import {
   DropdownMenuTrigger,
 } from '~/components-shadcn/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components-shadcn/sidebar';
-import { rolesAll } from '~/constants/roles';
-import { useRouteLoaderData } from '@remix-run/react';
+import { rolesAll } from '~/constants';
 import { RootLoaderData } from '~/root';
-import { webapi } from '~/utils/webapi';
+import { webapi } from '~/utils';
 
 export function RoleSwitcher() {
   const { isMobile } = useSidebar();

@@ -7,13 +7,12 @@ import { useLoaderData } from '@remix-run/react';
 import { z } from 'zod';
 import { CloneButton, DeleteButton, ShowButton } from '~/component-refine';
 import { Combobox, Field, Form, Select } from '~/component-refine/components';
+import { PageError } from '~/components';
 import { Input } from '~/components-shadcn/input';
 import { Textarea } from '~/components-shadcn/textarea';
-import { PageError } from '~/components/500';
-import { dataService } from '~/services/data.server';
-import { HandleFunction } from '~/types/handle';
-import { POST_STATUS, POST_STATUS_LIST } from '~/types/post';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { dataService } from '~/services';
+import { HandleFunction, POST_STATUS, POST_STATUS_LIST } from '~/types';
+import { getDefaultTitle } from '~/utils';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {

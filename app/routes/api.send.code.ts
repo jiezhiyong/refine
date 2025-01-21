@@ -1,6 +1,6 @@
-import { data } from '@remix-run/node';
 import type { ActionFunction } from '@remix-run/node';
-import { sendVerificationEmail } from '~/services/email.server';
+import { data } from '@remix-run/node';
+import { sendVerificationEmail } from '~/services';
 
 export const action: ActionFunction = async ({ request }) => {
   if (request.method !== 'POST') {

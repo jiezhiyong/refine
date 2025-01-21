@@ -1,9 +1,9 @@
-import { CreateButtonProps } from '../types';
-import { Button } from '~/components-shadcn/button';
 import { useCreateButton } from '@refinedev/core';
 import { CirclePlus } from 'lucide-react';
 import type { FC } from 'react';
-import { cn } from '~/utils/cn';
+import { Button } from '~/components-shadcn/button';
+import { cn } from '~/utils';
+import { CreateButtonProps } from '../types';
 
 export const CreateButton: FC<CreateButtonProps> = ({
   resource,

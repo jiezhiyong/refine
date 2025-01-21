@@ -1,7 +1,7 @@
 import { AuditLogProvider, BaseKey, MetaQuery } from '@refinedev/core';
+import { EnumResource } from '~/constants';
+import { TAny } from '~/types';
 import { dataProvider } from './data';
-import { TAny } from '~/types/any';
-import { EnumResource } from '~/constants/resource';
 
 export const auditLogProvider: AuditLogProvider = {
   get: async (params: {

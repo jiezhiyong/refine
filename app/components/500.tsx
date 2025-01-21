@@ -2,7 +2,7 @@ import { useBack } from '@refinedev/core';
 import { ErrorResponse } from '@remix-run/node';
 import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
-import { useMountEffect } from '~/hooks/use-mount-effect';
+import { useMountEffect } from '~/hooks';
 
 export function PageError({ error }: { error?: Error | ErrorResponse | { message: string } | unknown }) {
   const routeError = useRouteError();

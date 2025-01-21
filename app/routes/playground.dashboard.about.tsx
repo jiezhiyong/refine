@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import React from 'react';
 import { DateRange } from 'react-day-picker';
+import { PageError } from '~/components';
 import { Badge } from '~/components-shadcn/badge';
 import { Button } from '~/components-shadcn/button';
 import { Calendar } from '~/components-shadcn/calendar';
@@ -44,13 +45,11 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from '~/components-shadcn/sidebar';
-import { PageError } from '~/components/500';
-import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
-import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
+import { useDebounceSubmit, useUpdateSearchParams } from '~/hooks';
 import { syncServiceLocaleToClient } from '~/providers';
-import { getPreferencesCookie } from '~/services/cookie.server';
+import { getPreferencesCookie } from '~/services';
 import { HandleFunction } from '~/types';
-import { tryParse } from '~/utils/try-parse';
+import { tryParse } from '~/utils';
 
 // 元数据
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Sidebar as RefineSidebar } from '~/component-refine/components/sidebar';
-import { NavUser } from '~/components/nav-user';
-import { RoleSwitcher } from '~/components/switcher-role';
+import { NavUser, RoleSwitcher } from '~/components';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '~/components-shadcn/sidebar';
 import { NavSecondary } from './nav-secondary';
 

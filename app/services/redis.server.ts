@@ -1,6 +1,6 @@
 // import type { RedisOptions } from 'ioredis';
 // import Redis from 'ioredis';
-// import { singleton } from '~/utils/singleton';
+// import { singleton } from '~/utils';
 
 // const redisOptions: RedisOptions = {
 //   maxRetriesPerRequest: null,

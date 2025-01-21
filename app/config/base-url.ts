@@ -1,4 +1,4 @@
-import { canUseDOM } from '~/utils/can-use-dom';
+import { canUseDOM } from '~/utils';
 
 export const isServer = !canUseDOM();
 

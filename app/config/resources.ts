@@ -1,8 +1,8 @@
 // 定义的数据资源、菜单项
 
 import { ResourceProps } from '@refinedev/core';
-import { PieChart, Brain, UsersRound, Bot } from 'lucide-react';
-import { TAny } from '~/types/any';
+import { Bot, Brain, PieChart, UsersRound } from 'lucide-react';
+import { TAny } from '~/types';
 
 // icons - https://lucide.dev/icons/
 export const dataResources: ResourceProps[] = [

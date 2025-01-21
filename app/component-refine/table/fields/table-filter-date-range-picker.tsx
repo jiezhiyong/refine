@@ -8,7 +8,7 @@ import { Button } from '~/components-shadcn/button';
 import { Calendar } from '~/components-shadcn/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
 import { Separator } from '~/components-shadcn/separator';
-import { cn } from '~/utils/cn';
+import { cn } from '~/utils';
 import type { TableFilterProps } from '..';
 
 export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseRecord>({

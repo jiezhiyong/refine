@@ -21,20 +21,20 @@ import { Loader } from 'lucide-react';
 import nProgress from 'nprogress';
 import { useEffect, type PropsWithChildren } from 'react';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
+import { NotFound, PageError } from '~/components';
 import { Toaster } from '~/components-shadcn/sonner';
-import { NotFound } from '~/components/404';
-import { PageError } from '~/components/500';
-import { accessControlProvider } from '~/providers/access-control';
-import { authProvider } from '~/providers/auth';
-import { dataProvider } from '~/providers/data';
-import { getPreferencesCookie } from '~/services/cookie.server';
-import { getUser } from '~/services/session.server';
-import { cn } from '~/utils/cn';
+import {
+  accessControlProvider,
+  auditLogProvider,
+  authProvider,
+  dataProvider,
+  i18nProvider,
+  notificationProvider,
+  syncServiceLocaleToClient,
+} from '~/providers';
+import { getPreferencesCookie, getUser } from '~/services';
+import { cn } from '~/utils';
 import { fallbackLanguage, LocaleLanguage } from './config/i18n';
-// import { liveProvider } from '~/providers/live';
-import { auditLogProvider } from '~/providers/audit-log';
-import { i18nProvider, syncServiceLocaleToClient } from '~/providers/i18n';
-import { notificationProvider } from '~/providers/notification';
 import { TRole } from './constants/roles';
 import { getPermissions } from './services/casbin-permission.server';
 

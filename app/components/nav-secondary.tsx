@@ -1,5 +1,8 @@
 /* eslint-disable import/namespace */
+import * as Sentry from '@sentry/remix';
 import { Activity, Bug } from 'lucide-react';
+import { useRef } from 'react';
+import { useTheme } from 'remix-themes';
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -7,11 +10,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '~/components-shadcn/sidebar';
-import { cn } from '~/utils/cn';
-import { useTheme } from 'remix-themes';
-import * as Sentry from '@sentry/remix';
-import { useRef } from 'react';
-import { useMountEffect } from '~/hooks/use-mount-effect';
+import { useMountEffect } from '~/hooks';
+import { cn } from '~/utils';
 import { ThemeSwitcher } from './switcher-theme';
 
 // 次要菜单

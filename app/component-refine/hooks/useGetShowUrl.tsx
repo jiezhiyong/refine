@@ -8,7 +8,7 @@ import {
   useTranslate,
 } from '@refinedev/core';
 import { useContext } from 'react';
-import { TAny } from '~/types/any';
+import { TAny } from '~/types';
 
 type GetShowUrlReturnType = CanReturnType & {
   url: string;

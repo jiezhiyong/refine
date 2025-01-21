@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { singleton } from '~/utils/singleton';
+import { singleton } from '~/utils';
 
 /**
  * Prisma 客户端

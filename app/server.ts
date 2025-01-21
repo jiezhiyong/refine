@@ -4,7 +4,7 @@
 // import { createServer } from 'http';
 // import express from 'express';
 // import { createRequestHandler } from '@remix-run/express';
-// import { initSocketIO } from '~/services/socket.server';
+// import { initSocketIO } from '~/services';
 
 // let _app: express.Application;
 // let _httpServer: ReturnType<typeof createServer>;

@@ -1,9 +1,9 @@
-import { ListButtonProps } from '../types';
-import { Button } from '~/components-shadcn/button';
 import { useListButton } from '@refinedev/core';
 import { ListIcon } from 'lucide-react';
 import type { FC } from 'react';
-import { cn } from '~/utils/cn';
+import { Button } from '~/components-shadcn/button';
+import { cn } from '~/utils';
+import { ListButtonProps } from '../types';
 
 export const ListButton: FC<ListButtonProps> = ({
   resource: resourceNameFromProps,

@@ -3,7 +3,7 @@
 // import type { UploadHandler } from '@remix-run/node';
 // import { writeAsyncIterableToWritable } from '@remix-run/node';
 // import AWS from 'aws-sdk';
-// import { TAny } from '~/types/any';
+// import { TAny } from '~/types';
 
 // const { STORAGE_ACCESS_KEY, STORAGE_SECRET, STORAGE_REGION, STORAGE_BUCKET } = process.env;
 

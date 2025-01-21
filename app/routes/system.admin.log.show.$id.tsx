@@ -1,15 +1,14 @@
+import { Log } from '@prisma/client';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { Label } from '~/components-shadcn/label';
 import { CalendarIcon, LeafyGreen, MailIcon } from 'lucide-react';
-import { dataService } from '~/services/data.server';
-import { PageError } from '~/components/500';
-import { Log } from '@prisma/client';
-import { H1 } from '~/components-shadcn/typography';
-import { Badge } from '~/components-shadcn/badge';
-import { LOG_STATUS_MAP, LogStatus } from '~/types/log';
-import { TAny } from '~/types/any';
+import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
+import { Badge } from '~/components-shadcn/badge';
+import { Label } from '~/components-shadcn/label';
+import { H1 } from '~/components-shadcn/typography';
+import { dataService } from '~/services';
+import { LOG_STATUS_MAP, LogStatus, TAny } from '~/types';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;

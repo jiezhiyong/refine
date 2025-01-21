@@ -5,7 +5,7 @@ import { Button } from '~/components-shadcn/button';
 import { Input } from '~/components-shadcn/input';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
 import { Separator } from '~/components-shadcn/separator';
-import { cn } from '~/utils/cn';
+import { cn } from '~/utils';
 import type { TableFilterProps } from '..';
 
 export function TableFilterSearchColumn({ column, title, align = 'start' }: TableFilterProps) {

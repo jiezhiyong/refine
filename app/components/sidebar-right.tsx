@@ -1,8 +1,8 @@
+import { useMatches, useSearchParams } from '@remix-run/react';
 import * as React from 'react';
 import { Sidebar } from '~/components-shadcn/sidebar';
-import { useMatches, useSearchParams } from '@remix-run/react';
-import { cn } from '~/utils/cn';
-import { HandleFunction } from '~/types/handle';
+import { HandleFunction } from '~/types';
+import { cn } from '~/utils';
 
 /**
  * 右侧筛选栏

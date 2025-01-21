@@ -14,7 +14,7 @@ import {
 } from '~/components-shadcn/command';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
 import { Separator } from '~/components-shadcn/separator';
-import { cn } from '~/utils/cn';
+import { cn } from '~/utils';
 import type { TableFilterProps } from '..';
 
 export function TableFilterRadio({ column, title, options, align = 'start' }: TableFilterProps) {

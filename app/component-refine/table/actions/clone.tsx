@@ -1,8 +1,8 @@
 import { CopyCheck } from 'lucide-react';
+import { TAny } from '~/types';
 import type { RowActionProps } from '.';
 import { RowAction } from '.';
 import { useGetCloneUrl } from '../../hooks';
-import { TAny } from '~/types/any';
 
 type CloneActionProps = RowActionProps & {
   row?: TAny;

@@ -1,11 +1,11 @@
-import { useDeleteHelper } from '../../hooks';
-import { DeleteContext } from '../../providers';
+import { Trash2 } from 'lucide-react';
 import { useContext } from 'react';
+import { TAny } from '~/types';
+import { cn } from '~/utils';
 import type { RowActionProps } from '.';
 import { RowAction } from '.';
-import { TAny } from '~/types/any';
-import { Trash2 } from 'lucide-react';
-import { cn } from '~/utils/cn';
+import { useDeleteHelper } from '../../hooks';
+import { DeleteContext } from '../../providers';
 
 type DeleteActionProps = RowActionProps & {
   row?: TAny;

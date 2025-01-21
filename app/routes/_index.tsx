@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { requireUserSession } from '~/services/session.server';
+import { requireUserSession } from '~/services';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserSession(request);

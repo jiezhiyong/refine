@@ -1,9 +1,7 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { requireUserSession } from '~/services/session.server';
-import { PageError } from '~/components/500';
-import { Layout } from '~/components/layout';
 import { CanAccess } from '@refinedev/core';
-import { PermissionDenied } from '~/components/403';
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import { Layout, PageError, PermissionDenied } from '~/components';
+import { requireUserSession } from '~/services';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserSession(request);

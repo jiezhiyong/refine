@@ -4,15 +4,13 @@ import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { CalendarIcon, ClockIcon, LeafyGreen, MailIcon } from 'lucide-react';
 import { CloneButton, DeleteButton, EditButton } from '~/component-refine';
+import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Badge } from '~/components-shadcn/badge';
 import { H1, Image, P } from '~/components-shadcn/typography';
-import { PageError } from '~/components/500';
-import { dataService } from '~/services/data.server';
-import { TAny } from '~/types/any';
-import { HandleFunction } from '~/types/handle';
-import { POST_STATUS_MAP, PostStatus } from '~/types/post';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { dataService } from '~/services';
+import { HandleFunction, POST_STATUS_MAP, PostStatus, TAny } from '~/types';
+import { getDefaultTitle } from '~/utils';
 
 // 元数据
 export const meta: MetaFunction = ({ matches }) => {

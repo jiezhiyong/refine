@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '~/utils/cn';
+import { cn } from '~/utils';
 
 interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;

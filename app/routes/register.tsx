@@ -1,7 +1,7 @@
 import { redirect, type ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
 import { z } from 'zod';
-import { RegisterForm } from '~/components/form-register';
-import { EnumAuthProvider } from '~/constants/auth';
+import { RegisterForm } from '~/components';
+import { EnumAuthProvider } from '~/constants';
 import { createUser, getUserByEmail } from '~/models/user.server';
 import { typedFormError } from '~/utils/typed-form-error';
 

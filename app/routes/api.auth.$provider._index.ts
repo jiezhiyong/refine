@@ -1,8 +1,7 @@
 import { type ActionFunctionArgs } from '@remix-run/node';
-import { authenticator } from '~/services/auth.server';
-import { TAny } from '~/types/any';
-import { getSession, commitSession } from '~/services/session.server';
-import { EnumAuthProvider } from '~/constants/auth';
+import { EnumAuthProvider } from '~/constants';
+import { authenticator, commitSession, getSession } from '~/services';
+import { TAny } from '~/types';
 
 export async function loader() {
   return Response.json({ message: 'Method not allowed' }, { status: 405 });

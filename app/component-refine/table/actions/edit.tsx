@@ -1,8 +1,8 @@
 import { Pencil } from 'lucide-react';
+import { TAny } from '~/types';
 import type { RowActionProps } from '.';
 import { RowAction } from '.';
 import { useGetEditUrl } from '../../hooks';
-import { TAny } from '~/types/any';
 
 type EditActionProps = RowActionProps & {
   row?: TAny;

@@ -1,4 +1,4 @@
-// import { cn } from '~/utils/cn';
+// import { cn } from '~/utils';
 
 // const FormItem = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
 //   return <div className={cn('space-y-2', className)} {...props} />;
@@ -21,11 +21,11 @@
 
 // export { FormItem, FormDescription, FormMessage };
 
-import * as React from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
+import * as React from 'react';
 import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext } from 'react-hook-form';
-import { cn } from '~/utils/cn';
+import { cn } from '~/utils';
 import { Label } from './label';
 
 const Form = FormProvider;
@@ -155,4 +155,4 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
 );
 FormMessage.displayName = 'FormMessage';
 
-export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField };
+export { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, useFormField };

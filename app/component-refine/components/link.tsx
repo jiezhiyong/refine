@@ -1,8 +1,8 @@
-import { LayoutResource } from '../types';
 import { Slot } from '@radix-ui/react-slot';
 import { useLink, useRouterContext, useRouterType } from '@refinedev/core';
 import { forwardRef } from 'react';
-import { cn } from '~/utils/cn';
+import { cn } from '~/utils';
+import { LayoutResource } from '../types';
 
 type LinkProps = LayoutResource['link'] & {
   asChild?: boolean;

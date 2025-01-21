@@ -1,9 +1,9 @@
 import { Category } from '@prisma/client';
 import { MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { PageError } from '~/components/500';
-import { dataService } from '~/services/data.server';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { PageError } from '~/components';
+import { dataService } from '~/services';
+import { getDefaultTitle } from '~/utils';
 import { PostForm } from './playground.article.post.edit.$id';
 
 // 元数据

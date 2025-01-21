@@ -1,12 +1,9 @@
-import * as Sentry from '@sentry/remix';
-import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import { User } from '@prisma/client';
-import { PermissionRule } from '~/types/casbin';
-import { canUseDOM } from '~/utils/can-use-dom';
-import { verifySignature } from '~/utils/signature';
-import { TAuthProvider } from '~/constants/auth';
-import { webapi } from '~/utils/webapi';
-import { TRole } from '~/constants/roles';
+import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
+import * as Sentry from '@sentry/remix';
+import { TAuthProvider, TRole } from '~/constants';
+import { PermissionRule } from '~/types';
+import { canUseDOM, verifySignature, webapi } from '~/utils';
 
 // 添加全局类型声明
 declare global {

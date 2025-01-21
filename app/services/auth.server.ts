@@ -2,13 +2,13 @@
  * auth.server.ts
  * https://sergiodxa.github.io/remix-auth/
  */
+import { User } from '@prisma/client';
 import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
-import { OAuth2Strategy } from '~/lib/remix-auth-oauth2';
-import { User } from '@prisma/client';
-import { verifyUserpassLogin } from '~/models/user.server';
-import { EnumAuthProvider } from '~/constants/auth';
 import invariant from 'tiny-invariant';
+import { EnumAuthProvider } from '~/constants';
+import { OAuth2Strategy } from '~/lib/remix-auth-oauth2';
+import { verifyUserpassLogin } from '~/models/user.server';
 
 invariant(process.env.TCSK_CLIENT_ID, 'TCSK_CLIENT_ID must be set.');
 invariant(process.env.TCSK_CLIENT_SECRET, 'TCSK_CLIENT_SECRET must be set.');

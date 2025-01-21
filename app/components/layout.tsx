@@ -1,11 +1,11 @@
-import { Separator } from '~/components-shadcn/separator';
-import { SidebarProvider, SidebarInset, SidebarTrigger } from '~/components-shadcn/sidebar';
-import { SidebarLeft } from '~/components/sidebar-left';
 import { Outlet, useRouteLoaderData } from '@remix-run/react';
+import { Breadcrumbs } from '~/component-refine/components';
+import { SidebarLeft } from '~/components';
+import { Separator } from '~/components-shadcn/separator';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '~/components-shadcn/sidebar';
+import { loader, type RootLoaderData } from '~/root';
 import { NavTools } from './nav-tools';
 import { SidebarRight } from './sidebar-right';
-import { loader, type RootLoaderData } from '~/root';
-import { Breadcrumbs } from '~/component-refine/components';
 
 export function Layout() {
   const { sidebarIsClose } = useRouteLoaderData<typeof loader>('root') as RootLoaderData;

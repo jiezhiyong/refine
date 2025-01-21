@@ -3,11 +3,10 @@
 
 import { type I18nProvider } from '@refinedev/core';
 import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { resourcesLanguages, supportedLanguages, defaultNS, fallbackLanguage, LocaleLanguage } from '~/config/i18n';
 import Cookies from 'js-cookie';
-import { canUseDOM } from '~/utils/can-use-dom';
-import { webapi } from '~/utils/webapi';
+import { initReactI18next } from 'react-i18next';
+import { defaultNS, fallbackLanguage, LocaleLanguage, resourcesLanguages, supportedLanguages } from '~/config';
+import { canUseDOM, webapi } from '~/utils';
 
 // 获取 cookie
 const getCookieLocale = () => {

@@ -1,6 +1,6 @@
 import type { RequestQueryBuilder } from '@nestjsx/crud-request';
 import type { Pagination } from '@refinedev/core';
-import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
+import { DEFAULT_PAGE_SIZE } from '~/config';
 
 export const handlePagination = (query: RequestQueryBuilder, pagination?: Pagination) => {
   const { current = 1, pageSize = DEFAULT_PAGE_SIZE, mode = 'server' } = pagination ?? {};

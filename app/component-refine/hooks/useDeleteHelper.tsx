@@ -12,7 +12,7 @@ import {
 } from '@refinedev/core';
 import { MutateOptions } from '@tanstack/react-query';
 import { useContext } from 'react';
-import { TAny } from '~/types/any';
+import { TAny } from '~/types';
 
 type DeleteHelperReturnType = CanReturnType & {
   isLoading: boolean;

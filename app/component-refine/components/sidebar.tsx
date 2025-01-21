@@ -14,7 +14,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '~/components-shadcn/sidebar';
-import { cn } from '~/utils/cn';
+import { cn } from '~/utils';
 
 export function Sidebar() {
   const { menuItems, selectedKey, defaultOpenKeys } = useMenu();
