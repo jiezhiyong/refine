@@ -64,13 +64,12 @@ export function ErrorBoundary() {
 
 // 编辑表单
 const formSchema = z.object({
-  title: z.string().min(2, {
-    message: 'Title must be at least 2 characters.',
-  }),
+  title: z.string().min(2, { message: 'Title must be at least 2 characters.' }),
   content: z.string().min(2),
   status: z.string(),
   categoryId: z.string(),
 });
+type TFormSchema = z.infer<typeof formSchema>;
 
 export const PostForm = ({
   redirect = 'list',
@@ -83,16 +82,22 @@ export const PostForm = ({
 }) => {
   const { data: post } = postRes || {};
 
-  const { ...form } = useForm<z.infer<typeof formSchema>>({
+  const { ...form } = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: post,
     warnWhenUnsavedChanges: true,
     refineCoreProps: {
       queryOptions: postRes ? { queryFn: () => postRes, initialData: postRes } : undefined,
-      autoSave: { enabled: true },
+      autoSave: { enabled: false },
       redirect,
     },
   });
+
+  // 提交前修改数据
+  // const modifyingDataBeforeSubmission = useCallback((values: TFormSchema) => {
+  //   values.abc = 'abc';
+  //   return values;
+  // }, []);
 
   return (
     <Form {...form}>

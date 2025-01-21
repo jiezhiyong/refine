@@ -23,6 +23,7 @@ export type FormProps<
     formProps?: NativeFormProps;
     isWatchable?: boolean;
     hideCancel?: boolean;
+    modifyingDataBeforeSubmission?: (values: TVariables) => TVariables;
   };
 
 export const Form = <
@@ -34,6 +35,7 @@ export const Form = <
   TResponse extends BaseRecord = TData,
   TResponseError extends HttpError = TError,
 >({
+  modifyingDataBeforeSubmission,
   formProps,
   isWatchable,
   saveButtonProps,
@@ -51,6 +53,8 @@ export const Form = <
   }
 
   const onSubmit = props.handleSubmit((_data: TVariables) => {
+    // const values = props.getValues();
+    // const data = modifyingDataBeforeSubmission ? modifyingDataBeforeSubmission(values) : values;
     props.refineCore.onFinish(props.getValues()).then();
   });
 
