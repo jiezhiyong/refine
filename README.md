@@ -85,10 +85,8 @@ Make sure to deploy the output of `pnpm run build`
 
 - https://refine.dev/docs/guides-concepts/realtime/、https://refine.dev/docs/realtime/live-provider/
 
-- https://refine.dev/docs/core/hooks/utilities/use-modal/
 - https://refine.dev/docs/packages/react-hook-form/use-modal-form/
 - https://refine.dev/docs/packages/react-hook-form/use-steps-form/
-- https://refine.dev/docs/packages/command-palette/#installation
 
 - https://refine.dev/week-of-refine-strapi/
 - https://github.com/refinedev/refine/blob/master/hackathon/refine-hackathon.md

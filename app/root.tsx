@@ -1,6 +1,7 @@
 import { User } from '@prisma/client';
 import { Refine } from '@refinedev/core';
 import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
+import { RefineKbarProvider } from '@refinedev/kbar';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
 import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
@@ -35,16 +36,17 @@ import {
 import { getPreferencesCookie, getUser } from '~/services';
 import { cn } from '~/utils';
 import { fallbackLanguage, LocaleLanguage } from './config/i18n';
+import { dataResources } from './config/resources';
 import { TRole } from './constants/roles';
 import { getPermissions } from './services/casbin-permission.server';
+import { PermissionRule } from './types/casbin';
+import { generateSignature } from './utils/signature';
 
 /** 全局样式、插件样式 */
 import nProgressStyles from 'nprogress/nprogress.css?url';
+import { RefineKbar } from '~/component-refine/components/kbar';
 import baseStyles from '~/styles/base.css?url';
 import tailwindStyles from '~/styles/tailwind.css?url';
-import { dataResources } from './config/resources';
-import { PermissionRule } from './types/casbin';
-import { generateSignature } from './utils/signature';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -135,38 +137,40 @@ function Document({
       </head>
       <body>
         <DevtoolsProvider>
-          <Refine
-            resources={dataResources}
-            routerProvider={routerProvider}
-            dataProvider={dataProvider}
-            authProvider={authProvider}
-            accessControlProvider={accessControlProvider}
-            notificationProvider={notificationProvider}
-            i18nProvider={i18nProvider}
-            auditLogProvider={auditLogProvider}
-            // liveProvider={liveProvider}
-            options={{
-              projectId: 'v08e3x-vauZUB-n1Ntw2',
-              disableTelemetry: true,
-              title: { icon: undefined, text: 'Refine & Remix' },
-              mutationMode: 'pessimistic',
-              syncWithLocation: true,
-              warnWhenUnsavedChanges: true,
-              liveMode: 'auto',
-              reactQuery: {
-                clientConfig: {
-                  defaultOptions: { queries: { networkMode: 'always' }, mutations: { networkMode: 'always' } },
+          <RefineKbarProvider>
+            <Refine
+              resources={dataResources}
+              routerProvider={routerProvider}
+              dataProvider={dataProvider}
+              authProvider={authProvider}
+              accessControlProvider={accessControlProvider}
+              notificationProvider={notificationProvider}
+              i18nProvider={i18nProvider}
+              auditLogProvider={auditLogProvider}
+              // liveProvider={liveProvider}
+              options={{
+                disableTelemetry: true,
+                title: { icon: undefined, text: 'Refine & Remix' },
+                mutationMode: 'pessimistic',
+                syncWithLocation: true,
+                warnWhenUnsavedChanges: true,
+                liveMode: 'auto',
+                reactQuery: {
+                  clientConfig: {
+                    defaultOptions: { queries: { networkMode: 'always' }, mutations: { networkMode: 'always' } },
+                  },
                 },
-              },
-            }}
-            onLiveEvent={(event) => {
-              console.log('@onLiveEvent', event);
-            }}
-          >
-            {children}
-            <UnsavedChangesNotifier />
-            <DevtoolsPanel />
-          </Refine>
+              }}
+              onLiveEvent={(event) => {
+                console.log('@onLiveEvent', event);
+              }}
+            >
+              {children}
+              <UnsavedChangesNotifier />
+              <RefineKbar />
+              <DevtoolsPanel />
+            </Refine>
+          </RefineKbarProvider>
         </DevtoolsProvider>
         <ScrollRestoration />
         {script && <Scripts crossOrigin="anonymous" />}

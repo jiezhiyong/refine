@@ -7,7 +7,9 @@ import { AutoSaveIndicator } from '~/component-refine';
 import { Button } from '~/components-shadcn/button';
 import { Card, CardContent, CardFooter } from '~/components-shadcn/card';
 import { Form as FormUI } from '~/components-shadcn/form';
+import { EnumAction } from '~/constants';
 import { TAny } from '~/types';
+import { cn } from '~/utils';
 import { SaveButton } from '../buttons';
 
 type NativeFormProps = Omit<DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>, 'onSubmit'>;
@@ -27,6 +29,9 @@ export type FormProps<
     hideCancel?: boolean;
     autoSave?: boolean;
     modifyingDataBeforeSubmission?: (values: TAny) => TAny;
+    className?: string;
+    useFormModalClose?: () => void;
+    recordItemId?: string;
   };
 
 export const Form = <
@@ -43,13 +48,16 @@ export const Form = <
   formProps,
   isWatchable,
   saveButtonProps,
+  className,
+  useFormModalClose,
+  recordItemId,
   ...props
 }: FormProps<TQueryFnData, TError, TVariables, TContext, TData, TResponse, TResponseError>) => {
   const watchable = useRef<boolean>(false);
   const { resource: _resource, action } = useParsed();
   const back = useBack();
 
-  const onBack = action !== 'list' || typeof action !== 'undefined' ? back : undefined;
+  const onBack = action !== EnumAction.list || typeof action !== 'undefined' ? back : undefined;
 
   if (isWatchable && !watchable.current) {
     watchable.current = true;
@@ -66,28 +74,33 @@ export const Form = <
   return (
     <FormUI {...props}>
       <form {...formProps} onSubmit={onSubmit}>
-        <Card className="mx-auto border-none px-2 pb-4 pt-8 shadow-none">
-          <CardContent className="space-y-4">{props.children}</CardContent>
+        <Card className={cn('mx-auto space-y-4 border-none p-8 shadow-none', className)}>
+          <CardContent className="space-y-4 p-0">{props.children}</CardContent>
 
-          <CardFooter className="flex justify-end gap-x-4">
+          <CardFooter className="flex gap-x-4 p-0">
             <SaveButton
               type="submit"
+              recordItemId={recordItemId}
               loading={props.refineCore.formLoading}
               disabled={disabled || !props.formState.isDirty}
-            >
-              {autoSave ? <AutoSaveIndicator {...props.refineCore.autoSaveProps} /> : undefined}
-            </SaveButton>
+            />
 
             {!props.hideCancel && (
               <Button
                 icon={<Undo2 />}
                 type="button"
-                onClick={onBack}
+                onClick={useFormModalClose || onBack}
                 disabled={props.refineCore.formLoading}
                 variant="outline"
               >
                 Cancel
               </Button>
+            )}
+
+            {autoSave && (
+              <div className="ml-auto">
+                <AutoSaveIndicator {...props.refineCore.autoSaveProps} />
+              </div>
             )}
           </CardFooter>
         </Card>

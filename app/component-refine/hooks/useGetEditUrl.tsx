@@ -8,6 +8,7 @@ import {
   useTranslate,
 } from '@refinedev/core';
 import { useContext } from 'react';
+import { EnumAction } from '~/constants';
 import { TAny } from '~/types';
 
 type GetEditUrlReturnType = CanReturnType & {
@@ -25,7 +26,7 @@ export const useGetEditUrl = (resource: string, recordItemId: string, meta?: TAn
 
   const { data } = useCan({
     resource: resource,
-    action: 'edit',
+    action: EnumAction.edit,
     params: { id: recordItemId, resource: _resource },
     queryOptions: {
       enabled: accessControlEnabled,

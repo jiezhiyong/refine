@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar'
 import { Badge } from '~/components-shadcn/badge';
 import { Label } from '~/components-shadcn/label';
 import { H1 } from '~/components-shadcn/typography';
+import { EnumResource } from '~/constants';
 import { dataService } from '~/services';
 import { LOG_STATUS_MAP, LogStatus, TAny } from '~/types';
 
@@ -14,7 +15,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
 
   const { data: log } = await dataService.getOne<Log & { user: { name: string; email: string; avatar?: string } }>({
-    resource: 'log',
+    resource: EnumResource.log,
     id: id as string,
     meta: {
       include: {

@@ -1,7 +1,8 @@
-import { Button, ButtonProps } from '~/components-shadcn/button';
 import { useCan, useImport, useImportButton } from '@refinedev/core';
 import { Upload } from 'lucide-react';
 import type { ChangeEvent, FC } from 'react';
+import { Button, ButtonProps } from '~/components-shadcn/button';
+import { EnumAction } from '~/constants';
 
 export const ImportButton: FC<ButtonProps> = (props) => {
   const { inputProps } = useImport({
@@ -10,7 +11,7 @@ export const ImportButton: FC<ButtonProps> = (props) => {
     },
   });
   const { label } = useImportButton();
-  const { data: canAccess } = useCan({ action: 'import' });
+  const { data: canAccess } = useCan({ action: EnumAction.import });
 
   const onClick = () => {
     const el = document.createElement('input');

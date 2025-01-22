@@ -1,4 +1,5 @@
 import { AccessControlProvider } from '@refinedev/core';
+import { EnumAction } from '~/constants';
 import { authProvider } from './auth';
 
 export const accessControlProvider: AccessControlProvider = {
@@ -13,9 +14,9 @@ export const accessControlProvider: AccessControlProvider = {
         };
       }
 
-      if (action === 'delete' || action === 'edit' || action === 'show') {
+      if (action === EnumAction.delete || action === EnumAction.edit || action === EnumAction.show) {
         resource = `${resource}/${params?.id}`;
-      } else if (action === 'field') {
+      } else if (action === EnumAction.field) {
         resource = `${resource}/${params?.field}`;
       }
 

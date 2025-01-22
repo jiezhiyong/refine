@@ -9,6 +9,7 @@ import { DeleteButton, ExportButton, ShowButton, Table, TableFilterProps } from 
 import { PageError } from '~/components';
 import { Badge } from '~/components-shadcn/badge';
 import { Checkbox } from '~/components-shadcn/checkbox';
+import { EnumAction, EnumResource } from '~/constants';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
 import { dataService } from '~/services';
 import { HandleFunction, USER_PROVIDER } from '~/types';
@@ -30,7 +31,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const data = await dataService.getList<User>({
     ...tableParams,
-    resource: 'user',
+    resource: EnumResource.user,
     meta: {
       include: {
         _count: {
@@ -50,7 +51,7 @@ export default function UserIndex() {
 
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
-  const { data: deletePermission } = useCan({ resource: 'user', action: 'delete' });
+  const { data: deletePermission } = useCan({ resource: EnumResource.user, action: EnumAction.delete });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const rows = table.getSelectedRowModel().rows;
@@ -63,7 +64,7 @@ export default function UserIndex() {
       onClick: () => {
         deleteMany(
           {
-            resource: 'user',
+            resource: EnumResource.user,
             ids: rows.map((row) => row.original.id!),
           },
           {
@@ -94,7 +95,7 @@ export default function UserIndex() {
         meta: {
           join: [
             {
-              field: 'post',
+              field: EnumResource.post,
               count: true,
             },
           ],

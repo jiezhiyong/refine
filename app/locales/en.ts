@@ -157,8 +157,8 @@ export default {
   },
   autoSave: {
     success: 'saved',
-    error: 'auto save failure',
-    loading: 'saving...',
-    idle: 'waiting for changes',
+    error: 'auto save failed',
+    loading: 'saving ...',
+    idle: 'waiting for changes ...',
   },
 };

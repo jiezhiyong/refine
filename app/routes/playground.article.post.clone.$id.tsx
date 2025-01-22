@@ -2,6 +2,7 @@ import { Category, Post } from '@prisma/client';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { PageError } from '~/components';
+import { EnumResource } from '~/constants';
 import { dataService } from '~/services';
 import { getDefaultTitle } from '~/utils';
 import { PostForm } from './playground.article.post.edit.$id';
@@ -13,23 +14,23 @@ export const meta: MetaFunction = ({ matches }) => {
 
 // 页面初始化时的`GET`请求 && 表单`GET`请求
 export async function loader({ params }: LoaderFunctionArgs) {
-  const [postRes, categoriesRes] = await Promise.all([
+  const [initialData, categoriesRes] = await Promise.all([
     dataService.getOne<Post>({
-      resource: 'post',
+      resource: EnumResource.post,
       id: params?.id || '',
     }),
     dataService.getList<Category>({
-      resource: 'category',
+      resource: EnumResource.category,
     }),
   ]);
 
-  return { postRes, categoriesRes };
+  return { initialData, categoriesRes };
 }
 
 // UI
 export default function PostClone() {
-  const { postRes, categoriesRes } = useLoaderData<typeof loader>();
-  return <PostForm postRes={postRes} categoriesRes={categoriesRes} />;
+  const { initialData, categoriesRes } = useLoaderData<typeof loader>();
+  return <PostForm initialData={initialData} categoriesRes={categoriesRes} />;
 }
 
 // 错误边界处理

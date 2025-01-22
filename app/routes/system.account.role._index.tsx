@@ -10,6 +10,7 @@ import { Table, TableFilterProps } from '~/component-refine/table';
 import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Checkbox } from '~/components-shadcn/checkbox';
+import { EnumAction, EnumResource } from '~/constants';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
 import { dataService } from '~/services';
 import { HandleFunction } from '~/types';
@@ -31,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const data = await dataService.getList<Role>({
     ...tableParams,
-    resource: 'role',
+    resource: EnumResource.role,
     meta: {
       include: {
         creator: { select: { name: true, avatar: true } },
@@ -47,7 +48,7 @@ export default function RoleIndex() {
 
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
-  const { data: deletePermission } = useCan({ resource: 'role', action: 'delete' });
+  const { data: deletePermission } = useCan({ resource: EnumResource.role, action: EnumAction.delete });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const rows = table.getSelectedRowModel().rows;
@@ -60,7 +61,7 @@ export default function RoleIndex() {
       onClick: () => {
         deleteMany(
           {
-            resource: 'role',
+            resource: EnumResource.role,
             ids: rows.map((row) => row.original.id!),
           },
           {

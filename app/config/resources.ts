@@ -2,6 +2,7 @@
 
 import { ResourceProps } from '@refinedev/core';
 import { Bot, Brain, PieChart, UsersRound } from 'lucide-react';
+import { EnumResource } from '~/constants';
 import { TAny } from '~/types';
 
 // icons - https://lucide.dev/icons/
@@ -29,6 +30,21 @@ export const dataResources: ResourceProps[] = [
     list: '/playground/dashboard/health',
     meta: { parent: 'dashboard' },
   },
+  {
+    name: 'ui',
+    list: '/playground/dashboard/ui',
+    meta: { parent: 'dashboard', label: 'UI' },
+  },
+  {
+    name: 'useModalForm',
+    list: '/playground/dashboard/useModalForm',
+    meta: { parent: 'dashboard' },
+  },
+  {
+    name: 'useStepsForm',
+    list: '/playground/dashboard/useStepsForm',
+    meta: { parent: 'dashboard' },
+  },
 
   // 二级菜单 playground/document
   {
@@ -38,16 +54,16 @@ export const dataResources: ResourceProps[] = [
 
   // 三级菜单 playground/dashboard/Post、Category
   {
-    name: 'post',
-    list: '/playground/article/post',
-    create: '/playground/article/post/create',
-    edit: '/playground/article/post/edit/:id',
-    show: '/playground/article/post/show/:id',
-    clone: '/playground/article/post/clone/:id',
+    name: EnumResource.post,
+    list: `/playground/article/${EnumResource.post}`,
+    create: `/playground/article/${EnumResource.post}/create`,
+    edit: `/playground/article/${EnumResource.post}/edit/:id`,
+    show: `/playground/article/${EnumResource.post}/show/:id`,
+    clone: `/playground/article/${EnumResource.post}/clone/:id`,
     meta: { parent: 'article' },
   },
   {
-    name: 'category',
+    name: EnumResource.category,
     meta: { parent: 'article' },
   },
 
@@ -65,19 +81,19 @@ export const dataResources: ResourceProps[] = [
 
   // 三级菜单 system/account/Role、User
   {
-    name: 'user',
-    list: '/system/account/user',
-    create: '/system/account/user/create',
-    edit: '/system/account/user/edit/:id',
-    show: '/system/account/user/show/:id',
+    name: EnumResource.user,
+    list: `/system/account/${EnumResource.user}`,
+    create: `/system/account/${EnumResource.user}/create`,
+    edit: `/system/account/${EnumResource.user}/edit/:id`,
+    show: `/system/account/${EnumResource.user}/show/:id`,
     meta: { parent: 'account' },
   },
   {
-    name: 'role',
-    list: '/system/account/role',
-    create: '/system/account/role/create',
-    edit: '/system/account/role/edit/:id',
-    show: '/system/account/role/show/:id',
+    name: EnumResource.role,
+    list: `/system/account/${EnumResource.role}`,
+    create: `/system/account/${EnumResource.role}/create`,
+    edit: `/system/account/${EnumResource.role}/edit/:id`,
+    show: `/system/account/${EnumResource.role}/show/:id`,
     meta: { parent: 'account' },
   },
 
@@ -89,9 +105,9 @@ export const dataResources: ResourceProps[] = [
 
   // 三级菜单 system/admin/Log
   {
-    name: 'log',
-    list: '/system/admin/log',
-    show: '/system/admin/log/show/:id',
+    name: EnumResource.log,
+    list: `/system/admin/${EnumResource.log}`,
+    show: `/system/admin/${EnumResource.log}/show/:id`,
     meta: { parent: 'admin' },
   },
 ];

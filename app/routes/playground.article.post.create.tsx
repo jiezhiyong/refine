@@ -2,6 +2,7 @@ import { Category } from '@prisma/client';
 import { MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { PageError } from '~/components';
+import { EnumResource } from '~/constants';
 import { dataService } from '~/services';
 import { getDefaultTitle } from '~/utils';
 import { PostForm } from './playground.article.post.edit.$id';
@@ -15,7 +16,7 @@ export const meta: MetaFunction = ({ matches }) => {
 export async function loader() {
   const [categoriesRes] = await Promise.all([
     dataService.getList<Category>({
-      resource: 'category',
+      resource: EnumResource.category,
     }),
   ]);
 

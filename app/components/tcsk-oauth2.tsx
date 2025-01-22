@@ -7,7 +7,7 @@ export const TcskOAuth2 = ({ redirectTo }: { redirectTo: string }) => {
   const loading = fetcher.state !== 'idle';
 
   const handleLogin = () => {
-    fetcher.submit({ redirectTo }, { method: 'post', action: `/api/auth/${EnumAuthProvider.tcshuke}` });
+    fetcher.submit({ redirectTo }, { method: 'POST', action: `/api/auth/${EnumAuthProvider.tcshuke}` });
   };
 
   return (

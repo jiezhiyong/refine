@@ -157,7 +157,7 @@ export const dataService: DataProvider = {
     });
 
     if (!data) {
-      throw new Error(`${resource} 中没有找到 id 为 ${id} 的数据`);
+      throw new Error(`404 数据实体 \`${resource}\` 中没有找到相关数据`);
     }
 
     return {

@@ -8,6 +8,7 @@ import {
   useTranslate,
 } from '@refinedev/core';
 import { useContext } from 'react';
+import { EnumAction } from '~/constants';
 import { TAny } from '~/types';
 
 type GetShowUrlReturnType = CanReturnType & {
@@ -25,7 +26,7 @@ export const useGetShowUrl = (resource: string, recordItemId: string, meta?: TAn
 
   const { data } = useCan({
     resource: resource,
-    action: 'show',
+    action: EnumAction.show,
     params: { id: recordItemId, resource: _resource },
     queryOptions: {
       enabled: accessControlEnabled,

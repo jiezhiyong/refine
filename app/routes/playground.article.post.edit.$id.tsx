@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Category, Post } from '@prisma/client';
-import { GetOneResponse, RedirectAction } from '@refinedev/core';
+import { GetListResponse, GetOneResponse, RedirectAction, useModalReturnType, useSelect } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
@@ -9,8 +9,10 @@ import { z } from 'zod';
 import { CloneButton, DeleteButton, ShowButton } from '~/component-refine';
 import { Combobox, Field, Form, Select } from '~/component-refine/components';
 import { PageError } from '~/components';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components-shadcn/dialog';
 import { Input } from '~/components-shadcn/input';
 import { Textarea } from '~/components-shadcn/textarea';
+import { EnumAction, EnumResource } from '~/constants';
 import { dataService } from '~/services';
 import { HandleFunction, POST_STATUS_LIST } from '~/types';
 import { getDefaultTitle } from '~/utils';
@@ -29,23 +31,26 @@ export const handle: HandleFunction = {
 
 // 页面初始化时的`GET`请求 && 表单`GET`请求
 export async function loader({ params }: LoaderFunctionArgs) {
-  const [postRes, categoriesRes] = await Promise.all([
+  const [initialData, categoriesRes] = await Promise.all([
     dataService.getOne<Post>({
-      resource: 'post',
+      resource: EnumResource.post,
       id: params?.id || '',
     }),
     dataService.getList<Category>({
-      resource: 'category',
+      resource: EnumResource.category,
     }),
   ]);
 
-  return { postRes, categoriesRes };
+  return {
+    initialData,
+    categoriesRes,
+  };
 }
 
 // UI
 export default function PostEdit() {
-  const { postRes, categoriesRes } = useLoaderData<typeof loader>();
-  return <PostForm postRes={postRes} categoriesRes={categoriesRes} />;
+  const { initialData, categoriesRes } = useLoaderData<typeof loader>();
+  return <PostForm initialData={initialData} categoriesRes={categoriesRes} />;
 }
 
 function UiTools() {
@@ -73,26 +78,37 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export const PostForm = ({
-  redirect = 'list',
-  postRes,
-  categoriesRes: { data: categories },
+  className,
+  redirect = EnumAction.list,
+  initialData,
+  categoriesRes,
+  useFormModalClose,
 }: {
+  className?: string;
   redirect?: RedirectAction;
-  postRes?: GetOneResponse<Post>;
-  categoriesRes: { data: Category[] };
+  initialData?: GetOneResponse<Post>;
+  categoriesRes?: GetListResponse<Category>;
+  useFormModalClose?: () => void;
 }) => {
-  const { data: post } = postRes || {};
+  let categoryOptions = [];
+  if (categoriesRes) {
+    categoryOptions = categoriesRes?.data?.map((category) => ({ label: category.title, value: category.id }));
+  } else {
+    categoryOptions = useSelect({ resource: EnumResource.category }).options;
+  }
+
+  const { data } = initialData || {};
 
   const enableAutoSave = true;
-  const { ...form } = useForm<TFormSchema>({
+  const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
-    defaultValues: post,
+    defaultValues: data,
     warnWhenUnsavedChanges: true,
     refineCoreProps: {
-      queryOptions: postRes
+      queryOptions: initialData
         ? {
-            queryFn: () => postRes,
-            initialData: postRes,
+            queryFn: () => initialData,
+            initialData: initialData,
           }
         : undefined,
       redirect,
@@ -107,19 +123,26 @@ export const PostForm = ({
     },
   });
 
-  // 提交前修改数据，返回新的数据对象而不是修改原对象
+  // 提交前修改数据，注意：返回新的数据对象而不是修改原对象
   const modifyingDataBeforeSubmission = useCallback((values: TFormSchema) => {
-    return { abc: 'abc', ...values };
+    return { ...values };
   }, []);
 
   return (
-    <Form {...form} autoSave={enableAutoSave} modifyingDataBeforeSubmission={modifyingDataBeforeSubmission}>
+    <Form
+      {...form}
+      autoSave={enableAutoSave}
+      modifyingDataBeforeSubmission={modifyingDataBeforeSubmission}
+      className={className}
+      useFormModalClose={useFormModalClose}
+      recordItemId={data?.id}
+    >
       <Field {...form} name="title" label="Title">
         <Input placeholder="Title" />
       </Field>
 
       <Field {...form} name="categoryId" label="Category">
-        <Combobox options={categories.map((category) => ({ label: category.title, value: category.id }))} />
+        <Combobox options={categoryOptions} />
       </Field>
 
       <Field {...form} name="status" label="Status">
@@ -132,3 +155,23 @@ export const PostForm = ({
     </Form>
   );
 };
+
+// TODO:
+// 1. Combobox 无法滚动、
+// 2. AutoSaveIndicator 未正常工作、
+// 3. 表单提交动作是 create
+export function PostFormModal(props: useModalReturnType & { record?: Post }) {
+  const { visible, close, record } = props;
+  return (
+    <Dialog open={visible} onOpenChange={close}>
+      <DialogContent className="max-w-6xl">
+        <DialogHeader className="border-b pb-4">
+          <DialogTitle>Edit Post</DialogTitle>
+          <DialogDescription>This is a Demo for Edit Form on Modal.</DialogDescription>
+        </DialogHeader>
+
+        <PostForm className="p-0" useFormModalClose={close} initialData={record ? { data: record } : undefined} />
+      </DialogContent>
+    </Dialog>
+  );
+}

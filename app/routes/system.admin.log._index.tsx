@@ -10,6 +10,7 @@ import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Badge } from '~/components-shadcn/badge';
 import { Checkbox } from '~/components-shadcn/checkbox';
+import { EnumAction, EnumResource } from '~/constants';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
 import { dataService } from '~/services';
 import { HandleFunction, LOG_STATUS, LOG_STATUS_MAP, LogStatus, TAny } from '~/types';
@@ -31,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const data = await dataService.getList<Post>({
     ...tableParams,
-    resource: 'log',
+    resource: EnumResource.log,
     meta: {
       include: {
         user: { select: { name: true, avatar: true } },
@@ -47,7 +48,7 @@ export default function LogIndex() {
 
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
-  const { data: deletePermission } = useCan({ resource: 'log', action: 'delete' });
+  const { data: deletePermission } = useCan({ resource: EnumResource.log, action: EnumAction.delete });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const rows = table.getSelectedRowModel().rows;
@@ -60,7 +61,7 @@ export default function LogIndex() {
       onClick: () => {
         deleteMany(
           {
-            resource: 'log',
+            resource: EnumResource.log,
             ids: rows.map((row) => row.original.id!),
           },
           {
@@ -91,7 +92,7 @@ export default function LogIndex() {
         meta: {
           join: [
             {
-              field: 'user',
+              field: EnumResource.user,
               select: ['name', 'avatar'],
             },
           ],
