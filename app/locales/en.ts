@@ -119,7 +119,7 @@ export default {
   dashboard: {
     title: 'Dashboard',
   },
-  posts: {
+  post: {
     posts: 'Posts',
     fields: {
       id: 'Id',

@@ -1,5 +1,10 @@
-import { useModal, useNotification } from '@refinedev/core';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { HttpError, useModal, useNotification, useTranslation } from '@refinedev/core';
+import { useModalForm } from '@refinedev/react-hook-form';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { useCallback } from 'react';
+import { FieldValues } from 'react-hook-form';
+import { z } from 'zod';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,8 +27,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components-shadcn/dialog';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components-shadcn/form';
+import { Input } from '~/components-shadcn/input';
 import { H2 } from '~/components-shadcn/typography';
 import { PageError } from '~/components/500';
+import { EnumAction, EnumResource } from '~/constants';
 import { requireUserSession } from '~/services/session.server';
 import { getAllParams } from '~/utils/get-all-params';
 import { getDefaultTitle } from '~/utils/get-default-title';
@@ -46,11 +54,62 @@ export async function action({ request, params }: ActionFunctionArgs) {
   return {};
 }
 
+// useModalForm: https://refine.dev/docs/packages/react-hook-form/use-modal-form/
+const editPostId = '0d97bea4-a06f-4f7e-8771-d4b884a46be7';
+const formSchema = z.object({
+  title: z.string().min(2, { message: 'Title must be at least 2 characters.' }),
+  content: z.string().min(2).optional(),
+});
+type Post = z.infer<typeof formSchema>;
+
 // UI
 export default function DashboardUI() {
   const { open: openNotification, close: closeNotification } = useNotification();
   const { visible: modalVisible, show: showModal, close: closeModal } = useModal();
 
+  // TODO: 未生效
+  // 提交前修改数据，注意：返回新的数据对象而不是修改原对象
+  const modifyingDataBeforeSubmission = useCallback((values: Post) => {
+    return { content: '...', ...values };
+  }, []);
+
+  const useModalFormReturn = useModalForm<Post, HttpError, Post>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { title: '' },
+    modalProps: { defaultVisible: false },
+    syncWithLocation: { key: 'modalEditPost', syncId: true },
+    refineCoreProps: {
+      resource: EnumResource.post,
+      action: EnumAction.edit,
+      id: editPostId,
+
+      // autoSave: { // 注意：autoSave 不会触发表单验证
+      //   enabled: false,
+      //   onFinish: modifyingDataBeforeSubmission,
+      //   debounce: 2000,
+      //   invalidateOnClose: true,
+      //   invalidateOnUnmount: true,
+      // },
+    },
+  });
+
+  const {
+    formState: { errors },
+    refineCore: { onFinish, formLoading, autoSaveProps },
+    modal: { title, visible, close, show },
+    control,
+    handleSubmit,
+    saveButtonProps,
+  } = useModalFormReturn;
+
+  const onSubmit = handleSubmit((_data: FieldValues) => {
+    debugger;
+
+    const values = useModalFormReturn.getValues();
+    onFinish(modifyingDataBeforeSubmission(values));
+  });
+
+  const { translate: t } = useTranslation();
   return (
     <div className="px-8 pb-4 pt-8">
       <H2>Notification</H2>
@@ -104,12 +163,12 @@ export default function DashboardUI() {
         </Button>
       </ul>
 
-      <H2>AlertDialog</H2>
+      <H2>AlertDialog & Modal</H2>
 
       <ul className="mt-4 flex gap-2">
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button>Show</Button>
+            <Button>Show AlertDialog</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -126,34 +185,14 @@ export default function DashboardUI() {
           </AlertDialogContent>
         </AlertDialog>
 
-        <Button onClick={showModal}>useModal</Button>
-        <AlertDialog
+        <Dialog
           open={modalVisible}
           onOpenChange={(open) => {
             open ? showModal() : closeModal();
           }}
         >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                https://refine.dev/docs/core/hooks/utilities/use-modal/#usage
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </ul>
-
-      <H2>Modal</H2>
-
-      <ul className="mt-4 flex gap-2">
-        <Dialog>
           <DialogTrigger asChild>
-            <Button>Show</Button>
+            <Button>Show Modal</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -169,6 +208,42 @@ export default function DashboardUI() {
               </DialogClose>
               <Button>Continue</Button>
             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <Button onClick={showModal}>Show Modal - useModal</Button>
+      </ul>
+
+      <H2>useModalForm</H2>
+      <ul className="mt-4 flex gap-2">
+        <Button onClick={() => show(editPostId)}>{t(title)}</Button>
+
+        <Dialog open={visible} onOpenChange={close}>
+          <DialogContent className="max-w-6xl">
+            <DialogHeader className="border-b pb-4">
+              <DialogTitle>{t(title)}</DialogTitle>
+              <DialogDescription>This is a Demo for Edit Form on Modal.</DialogDescription>
+            </DialogHeader>
+
+            <Form {...useModalFormReturn}>
+              <form onSubmit={onSubmit} className="space-y-8">
+                <FormField
+                  control={control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="" {...field} autoFocus />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" loading={formLoading} {...saveButtonProps}>
+                  Submit
+                </Button>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </ul>

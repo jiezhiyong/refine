@@ -36,11 +36,6 @@ export const dataResources: ResourceProps[] = [
     meta: { parent: 'dashboard', label: 'UI' },
   },
   {
-    name: 'useModalForm',
-    list: '/playground/dashboard/useModalForm',
-    meta: { parent: 'dashboard' },
-  },
-  {
     name: 'useStepsForm',
     list: '/playground/dashboard/useStepsForm',
     meta: { parent: 'dashboard' },

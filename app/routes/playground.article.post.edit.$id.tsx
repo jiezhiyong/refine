@@ -99,7 +99,7 @@ export const PostForm = ({
 
   const { data } = initialData || {};
 
-  const enableAutoSave = true;
+  const enableAutoSave = false; // 注意：autoSave 不会触发表单验证
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: data,
@@ -156,7 +156,7 @@ export const PostForm = ({
   );
 };
 
-// TODO:
+// FIXME:
 // 1. Combobox 无法滚动、
 // 2. AutoSaveIndicator 未正常工作、
 // 3. 表单提交动作是 create

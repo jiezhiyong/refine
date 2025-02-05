@@ -211,7 +211,7 @@ const dataFilter = {
 
 function UiFilter() {
   const [searchParams] = useSearchParams();
-  const dateRange = tryParse(searchParams.get('dateRange')) as DateRange;
+  const dateRange = tryParse(searchParams.get('dateRange')) as unknown as DateRange;
   const updateSearchParams = useUpdateSearchParams();
   const debounceSubmit = useDebounceSubmit();
 

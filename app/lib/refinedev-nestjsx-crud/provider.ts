@@ -24,11 +24,9 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
         total: data.length,
       };
     }
+
     // with pagination
-    return {
-      data: data.data,
-      total: data.total,
-    };
+    return data;
   },
 
   getMany: async ({ resource, ids, meta }) => {
@@ -55,9 +53,7 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
     try {
       const { data } = await httpClient.post(url, variables);
 
-      return {
-        data,
-      };
+      return data;
     } catch (error) {
       const httpError = transformHttpError(error);
 
@@ -71,9 +67,7 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
     try {
       const { data } = await httpClient.patch(url, variables);
 
-      return {
-        data,
-      };
+      return data;
     } catch (error) {
       const httpError = transformHttpError(error);
 
@@ -87,9 +81,7 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
     try {
       const { data } = await httpClient.put(url, { ids, variables });
 
-      return {
-        data,
-      };
+      return data;
     } catch (error) {
       const httpError = transformHttpError(error);
 
@@ -103,9 +95,7 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
     try {
       const { data } = await httpClient.post(url, { variables });
 
-      return {
-        data,
-      };
+      return data;
     } catch (error) {
       const httpError = transformHttpError(error);
 
@@ -122,9 +112,7 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
 
     const { data } = await httpClient.get(`${url}?${query.query()}`);
 
-    return {
-      data,
-    };
+    return data;
   },
 
   deleteOne: async ({ resource, id }) => {
@@ -132,9 +120,7 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
 
     const { data } = await httpClient.delete(url);
 
-    return {
-      data,
-    };
+    return data;
   },
 
   deleteMany: async ({ resource, ids }) => {
@@ -145,9 +131,7 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
         data: { ids },
       });
 
-      return {
-        data,
-      };
+      return data;
     } catch (error) {
       const httpError = transformHttpError(error);
 

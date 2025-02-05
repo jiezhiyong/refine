@@ -46,7 +46,7 @@ const Message = ({ translationKey, defaultMessage }: { translationKey: string; d
       })}
     >
       {translate(translationKey, defaultMessage)}
-      {translationKey === 'autoSave.success' && ` ${dayjs().format('HH:mm:ss')}`}
+      {translationKey === 'autoSave.success' && ` at ${dayjs().format('HH:mm:ss')}`}
     </span>
   );
 };

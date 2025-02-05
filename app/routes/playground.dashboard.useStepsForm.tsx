@@ -12,7 +12,7 @@ export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
 
-// UI
+// UI - https://refine.dev/docs/packages/react-hook-form/use-steps-form/
 const stepTitles = ['Title', 'Status', 'Category and content'];
 
 export default function DashboardUseStepsForm() {
@@ -90,41 +90,43 @@ export default function DashboardUseStepsForm() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div style={{ display: 'flex', gap: 36 }}>
-        {stepTitles.map((title, index) => (
-          <Button
-            key={index}
-            onClick={() => gotoStep(index)}
-            style={{
-              backgroundColor: currentStep === index ? 'lightgray' : 'initial',
-            }}
-          >
-            {index + 1} - {title}
-          </Button>
-        ))}
-      </div>
-      <form autoComplete="off">{renderFormByStep(currentStep)}</form>
-      <div style={{ display: 'flex', gap: 8 }}>
-        {currentStep > 0 && (
-          <Button
-            onClick={() => {
-              gotoStep(currentStep - 1);
-            }}
-          >
-            Previous
-          </Button>
-        )}
-        {currentStep < stepTitles.length - 1 && (
-          <Button
-            onClick={() => {
-              gotoStep(currentStep + 1);
-            }}
-          >
-            Next
-          </Button>
-        )}
-        {currentStep === stepTitles.length - 1 && <Button onClick={handleSubmit(onFinish)}>Save</Button>}
+    <div className="flex flex-1 flex-col items-center justify-center text-center">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', gap: 36 }}>
+          {stepTitles.map((title, index) => (
+            <Button
+              key={index}
+              onClick={() => gotoStep(index)}
+              style={{
+                backgroundColor: currentStep === index ? 'lightgray' : 'initial',
+              }}
+            >
+              {index + 1} - {title}
+            </Button>
+          ))}
+        </div>
+        <form autoComplete="off">{renderFormByStep(currentStep)}</form>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {currentStep > 0 && (
+            <Button
+              onClick={() => {
+                gotoStep(currentStep - 1);
+              }}
+            >
+              Previous
+            </Button>
+          )}
+          {currentStep < stepTitles.length - 1 && (
+            <Button
+              onClick={() => {
+                gotoStep(currentStep + 1);
+              }}
+            >
+              Next
+            </Button>
+          )}
+          {currentStep === stepTitles.length - 1 && <Button onClick={handleSubmit(onFinish)}>Save</Button>}
+        </div>
       </div>
     </div>
   );

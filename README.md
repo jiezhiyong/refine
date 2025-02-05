@@ -72,7 +72,13 @@ Make sure to deploy the output of `pnpm run build`
 - 数据库删除了数据，但 `db` 依然可以查询到数据
 - 重启开发服务 `pnpm dev`
 
-## TODO - Remix
+## TODO
+
+- 单点登录
+- 多因素认证（短信验证码、手机应用验证等）
+- 多租户
+
+## Remix Resources
 
 - https://remix.run/docs/en/main/components/links、https://remix.run/docs/en/main/components/prefetch-page-links
 - https://remix.run/docs/en/main/hooks/use-action-data
@@ -81,33 +87,18 @@ Make sure to deploy the output of `pnpm run build`
 - https://remix.run/resources?category=all
 - https://remix.run/showcase
 
-## TODO - Refine
-
-- https://refine.dev/docs/packages/react-hook-form/use-modal-form/
-- https://refine.dev/docs/packages/react-hook-form/use-steps-form/
+## Refine Resources
 
 - https://refine.dev/docs/guides-concepts/realtime/、https://refine.dev/docs/realtime/live-provider/
 
-- https://refine.dev/blog/how-to-multipart-file-upload-with-react-hook-form/
-
 - https://refine.dev/docs/packages/tanstack-table/introduction/
 - https://refine.dev/docs/packages/react-hook-form/introduction/
-- https://refine.dev/docs/ui-integrations/material-ui/introduction/
-- https://refine.dev/docs/advanced-tutorials/search/list-search/
-- https://refine.dev/docs/advanced-tutorials/search/
-- https://refine.dev/docs/advanced-tutorials/search/table-search/
-- https://refine.dev/docs/advanced-tutorials/upload/base64-upload/
-- https://refine.dev/docs/advanced-tutorials/upload/multipart-upload/
-
 - https://refine.dev/docs/guides-concepts/deployment/
-
 - https://refine.dev/docs/guides-concepts/multitenancy/
-- https://refine.dev/docs/enterprise-edition/
-
 - https://refine.dev/docs/advanced-tutorials/web3/ethereum-signin/
-
-## Examples
-
+- https://refine.dev/docs/advanced-tutorials/
+- https://refine.dev/blog/how-to-multipart-file-upload-with-react-hook-form/
 - https://refine.dev/templates/
 - https://github.com/refinedev/refine/blob/master/hackathon/refine-hackathon.md
 - https://refine.dev/week-of-refine-supabase/
+- https://refine.dev/docs/enterprise-edition/

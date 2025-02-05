@@ -118,7 +118,7 @@ export default {
   dashboard: {
     title: '仪表盘',
   },
-  posts: {
+  post: {
     posts: '文章',
     fields: {
       id: '编号',
