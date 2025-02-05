@@ -15,11 +15,11 @@ export function CloneAction({ row, resource, title, disabled, ...props }: CloneA
 
   return (
     <RowAction
-      {...props}
       icon={<CopyCheck size={16} />}
       disabled={!can || disabled}
       title={title || 'Clone'}
       to={url}
+      {...props}
     />
   );
 }

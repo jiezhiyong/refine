@@ -28,7 +28,6 @@ export function DeleteAction({
 
   return (
     <RowAction
-      {...props}
       icon={<Trash2 size={16} />}
       disabled={!can || disabled}
       title={title || 'Delete'}
@@ -41,6 +40,7 @@ export function DeleteAction({
           onAfterHandle,
         })
       }
+      {...props}
     />
   );
 }

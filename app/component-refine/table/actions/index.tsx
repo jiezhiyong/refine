@@ -27,16 +27,18 @@ export type RowActionProps = PropsWithChildren & {
 };
 
 export const RowAction: FC<RowActionProps> = (props) => {
+  const isLink = Boolean(props.to && !props.disabled && !props.onClick);
+
   return (
     <DropdownMenuItem
       className={props.className}
       disabled={props.disabled}
-      asChild={!(props.disabled || !props.to || (!props.to && !props.children))}
+      asChild={props.asChild || isLink}
       onClick={props.onClick}
     >
       {props.asChild ? (
         props.children
-      ) : props.to && !props.disabled ? (
+      ) : isLink ? (
         <Link href={props.to} title={props.title}>
           {props.icon ? <span className="mr-2">{props.icon}</span> : null}
           {props.title}

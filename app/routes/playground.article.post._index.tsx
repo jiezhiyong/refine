@@ -4,19 +4,22 @@ import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
-import { useCallback, useRef } from 'react';
+import { Paperclip } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import { CreateButton, ExportButton, ImportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
 import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Badge } from '~/components-shadcn/badge';
 import { Checkbox } from '~/components-shadcn/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components-shadcn/dialog';
+import { PdfLayout } from '~/components/pdf';
 import { EnumAction, EnumResource } from '~/constants';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { PostFormModal } from '~/routes/playground.article.post.edit.$id';
 import { dataService } from '~/services';
 import { HandleFunction, POST_STATUS, POST_STATUS_MAP, PostStatus, TAny } from '~/types';
 import { getDefaultTitle } from '~/utils';
 
+// 自定义获取的数据类型声明
 type PostRecord = Post & { user: { name: string; avatar: string } & { category: { title: string } } };
 
 export const meta: MetaFunction = ({ matches }) => {
@@ -49,10 +52,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function PostIndex() {
   const { initialData } = useLoaderData<typeof loader>();
-
-  const recordRef = useRef<PostRecord>();
-  const useModalRes = useModal();
-  const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
   const { data: deletePermission } = useCan({ resource: EnumResource.post, action: EnumAction.delete });
   const { data: filedHitPermission } = useCan({
@@ -60,6 +59,11 @@ export default function PostIndex() {
     action: EnumAction.field,
     params: { field: 'hit' },
   });
+
+  const [record, setRecord] = useState<PostRecord>();
+
+  const useModalReturn = useModal();
+  const friendly = useUserFriendlyName();
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
     const rows = table.getSelectedRowModel().rows;
@@ -87,7 +91,7 @@ export default function PostIndex() {
 
   return (
     <>
-      <PostFormModal {...useModalRes} record={recordRef.current} />
+      {/* <PostFormModal {...useModalReturn} record={record} /> */}
       <Table
         enableSorting
         enableFilters
@@ -253,22 +257,41 @@ export default function PostIndex() {
                 <Table.EditAction />
 
                 <Table.EditAction
-                  useModalForm
                   title="Edit in Modal"
-                  show={() => {
-                    recordRef.current = original;
-                    useModalRes.show();
+                  onClick={() => {
+                    setRecord(original);
+                    useModalReturn.show();
                   }}
                 />
 
                 <Table.CloneAction />
                 <Table.DeleteAction />
+
+                <Table.ShowAction
+                  title="Show PDF"
+                  icon={<Paperclip size={16} />}
+                  onClick={() => {
+                    setRecord(record);
+                    useModalReturn.show();
+                  }}
+                />
               </Table.Actions>
             ),
             []
           )}
         />
       </Table>
+
+      {/* View PDF in Modal */}
+      <Dialog open={useModalReturn.visible} onOpenChange={useModalReturn.close}>
+        <DialogContent className="max-w-6xl">
+          <DialogHeader className="border-b pb-4">
+            <DialogTitle>View PDF</DialogTitle>
+            <DialogDescription>This is a Demo for View PDF on Modal.</DialogDescription>
+          </DialogHeader>
+          <PdfLayout record={record} />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

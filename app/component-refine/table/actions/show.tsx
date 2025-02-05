@@ -15,11 +15,11 @@ export function ShowAction({ row, resource, title, disabled, ...props }: ShowAct
 
   return (
     <RowAction
-      {...props}
       icon={<Eye size={16} />}
       disabled={!can || disabled}
       title={title || 'View Detail'}
       to={url}
+      {...props}
     />
   );
 }
