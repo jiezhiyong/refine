@@ -1,5 +1,5 @@
 import { Outlet, useRouteLoaderData } from '@remix-run/react';
-import { Breadcrumbs } from '~/component-refine/components';
+import { Breadcrumbs } from '~/component-refine';
 import { SidebarLeft } from '~/components';
 import { Separator } from '~/components-shadcn/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '~/components-shadcn/sidebar';

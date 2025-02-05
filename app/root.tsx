@@ -21,7 +21,7 @@ import { Loader } from 'lucide-react';
 import nProgress from 'nprogress';
 import { useEffect, type PropsWithChildren } from 'react';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
-import { RefineKbar } from '~/component-refine/components/kbar';
+import { RefineKbar } from '~/component-refine';
 import { NotFound, PageError } from '~/components';
 import { Toaster } from '~/components-shadcn/sonner';
 import { RefineKbarProvider } from '~/lib/refinedev-kbar';
