@@ -1,4 +1,4 @@
-# CRUD APP Template use Refine & Remix
+# CRUD APP Template, use Refine & Remix
 
 [Refine](https://refine.dev/) 是一个开源的无头 React 框架，供开发人员构建企业内部工具、管理面板、仪表板、B2B 应用程序。
 它消除了 CRUD 操作中的重复性任务，并为关键项目组件（如身份验证、访问控制、路由、网络、状态管理和 i18n）提供行业标准解决方案。
@@ -29,7 +29,7 @@ pnpm i
 pnpm dev
 ```
 
-## prisma cli
+## Prisma cli
 
 ```sh
 npx prisma migrate dev --name init # 创建数据库
@@ -55,7 +55,7 @@ pnpm start
 
 Now you'll need to pick a host to deploy it to.
 
-### DIY
+## DIY
 
 If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
 
@@ -67,10 +67,10 @@ Make sure to deploy the output of `pnpm run build`
 ## Issues
 
 - Cannot find module '.prisma/client/default'
-  重新执行 `npx prisma generate` 并重启开发服务 `pnpm dev`
+- 重新执行 `npx prisma generate` 并重启开发服务 `pnpm dev`
 
 - 数据库删除了数据，但 `db` 依然可以查询到数据
-  重启开发服务 `pnpm dev`
+- 重启开发服务 `pnpm dev`
 
 ## TODO - Remix
 
@@ -88,6 +88,7 @@ Make sure to deploy the output of `pnpm run build`
 - https://refine.dev/docs/packages/react-hook-form/use-modal-form/
 - https://refine.dev/docs/packages/react-hook-form/use-steps-form/
 
+- https://github.com/refinedev/awesome-refine
 - https://refine.dev/week-of-refine-strapi/
 - https://github.com/refinedev/refine/blob/master/hackathon/refine-hackathon.md
 - https://refine.dev/templates/

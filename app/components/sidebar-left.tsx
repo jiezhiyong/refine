@@ -10,6 +10,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <RoleSwitcher />
+        {/* <SidebarSearchForm /> */}
       </SidebarHeader>
       <SidebarContent>
         <RefineSidebar />

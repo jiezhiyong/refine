@@ -1,7 +1,6 @@
 import { User } from '@prisma/client';
 import { Refine } from '@refinedev/core';
 import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
-import { RefineKbarProvider } from '@refinedev/kbar';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
 import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import type { ShouldRevalidateFunctionArgs } from '@remix-run/react';
@@ -22,8 +21,10 @@ import { Loader } from 'lucide-react';
 import nProgress from 'nprogress';
 import { useEffect, type PropsWithChildren } from 'react';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
+import { RefineKbar } from '~/component-refine/components/kbar';
 import { NotFound, PageError } from '~/components';
 import { Toaster } from '~/components-shadcn/sonner';
+import { RefineKbarProvider } from '~/lib/refinedev-kbar';
 import {
   accessControlProvider,
   auditLogProvider,
@@ -44,7 +45,6 @@ import { generateSignature } from './utils/signature';
 
 /** 全局样式、插件样式 */
 import nProgressStyles from 'nprogress/nprogress.css?url';
-import { RefineKbar } from '~/component-refine/components/kbar';
 import baseStyles from '~/styles/base.css?url';
 import tailwindStyles from '~/styles/tailwind.css?url';
 
