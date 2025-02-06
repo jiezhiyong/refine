@@ -86,7 +86,7 @@ export default function LogShow() {
         {log.data && (
           <div>
             <Label>Data</Label>
-            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4">
+            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm">
               {JSON.stringify(data, null, 2)}
             </pre>
           </div>
@@ -95,7 +95,7 @@ export default function LogShow() {
         {log.previousData && (
           <div>
             <Label>Previous Data</Label>
-            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4">
+            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm">
               {JSON.stringify(previousData, null, 2)}
             </pre>
           </div>
@@ -104,7 +104,7 @@ export default function LogShow() {
         {log.meta && (
           <div>
             <Label>Meta Data</Label>
-            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4">
+            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm">
               {JSON.stringify(meta, null, 2)}
             </pre>
           </div>

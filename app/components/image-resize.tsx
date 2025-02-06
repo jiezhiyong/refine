@@ -9,6 +9,9 @@ export interface ImageProps extends React.ComponentPropsWithRef<'img'> {
   alt?: string;
 }
 
+/**
+ * eg: <ImageResize src="dog.jpg" width={600} height={600} />
+ */
 export const ImageResize = forwardRef<HTMLImageElement, ImageProps>(
   ({ children, width, height, fit, src, alt = '', ...other }, forwardedRef) => {
     const query = new URLSearchParams();

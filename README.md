@@ -5,7 +5,7 @@
 
 [Remix](https://remix.run/) 是一个全栈式 Web 框架，可让您专注于用户界面，并通过 Web 标准进行工作，以提供快速、流畅且有弹性的用户体验。
 
-## 配置本地 HTTPS 环境
+## 默认本地使用HTTPS，需要配置本地 HTTPS 环境
 
 ```sh
 brew install mkcert # 安装 mkcert
@@ -14,7 +14,7 @@ mkcert oss.tcshuke.com localhost 127.0.0.1 ::1 # 在项目根目录创建证书
 sudo echo "127.0.0.1 oss.tcshuke.com" >> /etc/hosts # 修改 hosts 文件，添加本地域名映射
 ```
 
-## 配置环境变量（注意：示例中的变量值仅作参考，需要根据实际情况修改）
+## 从环境变量模板文件拷贝，并配置生产环境变量（注意：示例中的变量值仅作参考，需要根据实际情况修改）
 
 ```sh
 cp .env.example .env
@@ -37,7 +37,7 @@ npx prisma generate # 更新 schema.prisma 文件后，重新生成 Prisma Clien
 npx prisma studio # 查看数据库
 ```
 
-## Deployment
+## Deployment - https://refine.dev/docs/guides-concepts/deployment/
 
 First, build your app for production:
 
@@ -55,7 +55,7 @@ pnpm start
 
 Now you'll need to pick a host to deploy it to.
 
-## DIY
+## Deployment - DIY
 
 If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
 
@@ -74,6 +74,12 @@ Make sure to deploy the output of `pnpm run build`
 
 ## TODO: 未实现的功能
 
+- Remix Prefetch
+- Remix use-view-transition-state
+- Sentry日志上报优化
+- Refine Live Provider
+- Redis
+- 消息队列
 - 单点登录
 - 多因素认证（短信验证码、手机应用验证等）
 - 多租户
@@ -81,7 +87,9 @@ Make sure to deploy the output of `pnpm run build`
 ## Remix Resources
 
 - https://remix.run/docs/en/main/components/links、https://remix.run/docs/en/main/components/prefetch-page-links
+- https://remix.run/docs/en/main/components/await
 - https://remix.run/docs/en/main/hooks/use-action-data
+- https://remix.run/docs/en/main/hooks/use-view-transition-state
 
 - https://remix.run/blog
 - https://remix.run/resources?category=all
@@ -90,10 +98,9 @@ Make sure to deploy the output of `pnpm run build`
 ## Refine Resources
 
 - https://refine.dev/docs/guides-concepts/realtime/、https://refine.dev/docs/realtime/live-provider/
-- https://refine.dev/docs/guides-concepts/deployment/
 
-- https://refine.dev/docs/packages/tanstack-table/introduction/
-- https://refine.dev/docs/packages/react-hook-form/introduction/
+- https://refine.dev/docs/packages/tanstack-table/introduction/、https://tanstack.com/table/v8
+- https://refine.dev/docs/packages/react-hook-form/introduction/、https://react-hook-form.com/
 
 - https://refine.dev/docs/guides-concepts/multitenancy/
 - https://refine.dev/docs/advanced-tutorials/web3/ethereum-signin/
