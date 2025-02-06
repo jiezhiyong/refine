@@ -77,6 +77,18 @@ const formSchema = z.object({
 });
 type TFormSchema = z.infer<typeof formSchema>;
 
+// 过滤数据，只保留 formSchema 中定义的字段
+const filterFormData = (data: Partial<Post> | undefined) => {
+  if (!data) return undefined;
+
+  return {
+    title: data.title,
+    content: data.content,
+    status: data.status,
+    categoryId: data.categoryId,
+  };
+};
+
 export const PostForm = ({
   className,
   redirect = EnumAction.list,
@@ -99,12 +111,15 @@ export const PostForm = ({
 
   const { data } = initialData || {};
 
-  const enableAutoSave = false; // 注意：autoSave 不会触发表单验证
+  const enableAutoSave = true; // 注意：autoSave 不会触发表单验证
   const form = useForm<TFormSchema>({
     resolver: zodResolver(formSchema),
-    defaultValues: data,
+    defaultValues: filterFormData(data),
     warnWhenUnsavedChanges: true,
     refineCoreProps: {
+      resource: EnumResource.post,
+      action: data?.id ? EnumAction.edit : EnumAction.create,
+      id: data?.id,
       queryOptions: initialData
         ? {
             queryFn: () => initialData,
@@ -142,7 +157,7 @@ export const PostForm = ({
       </Field>
 
       <Field {...form} name="categoryId" label="Category">
-        <Combobox options={categoryOptions} />
+        <Combobox options={categoryOptions} popoverProps={{ modal: Boolean(useFormModalClose) }} />
       </Field>
 
       <Field {...form} name="status" label="Status">
@@ -156,12 +171,9 @@ export const PostForm = ({
   );
 };
 
-// FIXME:
-// 1. Combobox 无法滚动、
-// 2. AutoSaveIndicator 未正常工作、
-// 3. 表单提交动作是 create
 export function PostFormModal(props: useModalReturnType & { record?: Post }) {
   const { visible, close, record } = props;
+
   return (
     <Dialog open={visible} onOpenChange={close}>
       <DialogContent className="max-w-6xl">
@@ -170,7 +182,11 @@ export function PostFormModal(props: useModalReturnType & { record?: Post }) {
           <DialogDescription>This is a Demo for Edit Form on Modal.</DialogDescription>
         </DialogHeader>
 
-        <PostForm className="p-0" useFormModalClose={close} initialData={record ? { data: record } : undefined} />
+        <PostForm
+          className="p-0"
+          useFormModalClose={close}
+          initialData={record ? { data: { ...record } } : undefined}
+        />
       </DialogContent>
     </Dialog>
   );

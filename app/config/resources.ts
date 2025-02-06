@@ -26,14 +26,14 @@ export const dataResources: ResourceProps[] = [
     meta: { parent: 'dashboard' },
   },
   {
-    name: 'health',
-    list: '/playground/dashboard/health',
-    meta: { parent: 'dashboard' },
-  },
-  {
     name: 'ui',
     list: '/playground/dashboard/ui',
     meta: { parent: 'dashboard', label: 'UI' },
+  },
+  {
+    name: 'health',
+    list: '/playground/dashboard/health',
+    meta: { parent: 'dashboard' },
   },
 
   // 二级菜单 playground/document

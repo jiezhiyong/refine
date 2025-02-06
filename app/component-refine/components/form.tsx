@@ -68,6 +68,8 @@ export const Form = <
     const values = props.getValues();
     const data = modifyingDataBeforeSubmission ? modifyingDataBeforeSubmission(values) : values;
     props.refineCore.onFinish(data);
+
+    useFormModalClose?.();
   });
 
   const { disabled } = saveButtonProps || {};

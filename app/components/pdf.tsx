@@ -17,7 +17,7 @@ export const PdfLayout: React.FC<PdfProps> = ({ record }) => {
           <View>
             <Image src={'/logo.png'} style={{ width: '100px', height: 'auto' }} />
             <View style={styles.inoviceTextNumberContainer}>
-              <Text style={styles.inoviceText}>{`ID: Invoice_#150`}</Text>
+              <Text style={styles.inoviceText}>{`Title: ${record.title}`}</Text>
               <Text style={styles.inoviceId}>{`Date: 2024-01-01 00:00:00`}</Text>
             </View>
           </View>

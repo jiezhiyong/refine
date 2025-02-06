@@ -30,7 +30,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components-shadcn/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components-shadcn/form';
+import { Form } from '~/components-shadcn/form';
 import { Input } from '~/components-shadcn/input';
 import { Tabs, TabsList, TabsTrigger } from '~/components-shadcn/tabs';
 import { Textarea } from '~/components-shadcn/textarea';
@@ -205,13 +205,16 @@ const formSchema = z.object({
 type FormSchema1 = z.infer<typeof formSchema>;
 
 const DemoUseModalForm = () => {
+  const { options } = useSelect<Category, HttpError>({
+    resource: EnumResource.category,
+  });
+
   // 提交前修改数据，注意：返回新的数据对象而不是修改原对象
-  // TODO: 未生效
   const modifyingDataBeforeSubmission = useCallback((values: FormSchema1) => {
-    return { content: '...', ...values };
+    return { ...values, content: '...' };
   }, []);
 
-  const form = useModalForm<FormSchema1, HttpError, FormSchema1>({
+  const form = useModalForm<FormSchema1>({
     resolver: zodResolver(formSchema),
     defaultValues: { title: '' },
     modalProps: { defaultVisible: false },
@@ -235,20 +238,17 @@ const DemoUseModalForm = () => {
     formState: { errors },
     refineCore: { onFinish, formLoading, autoSaveProps },
     modal: { title, visible, close, show },
-    control,
     handleSubmit,
     saveButtonProps,
   } = form;
 
   const onSubmit = handleSubmit((_data: FieldValues) => {
-    debugger;
-
-    const values = form.getValues();
+    const values = form.getValues() as FormSchema1;
     onFinish(modifyingDataBeforeSubmission(values));
   });
 
   const { translate: t } = useTranslation();
-
+  const disabled = formLoading || saveButtonProps.disabled;
   return (
     <ul className="mt-4 flex gap-2">
       <Button onClick={() => show(editPostId)}>{t(title)}</Button>
@@ -262,20 +262,14 @@ const DemoUseModalForm = () => {
 
           <Form {...form}>
             <form onSubmit={onSubmit} className="space-y-8">
-              <FormField
-                control={control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} autoFocus />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" loading={formLoading} {...saveButtonProps}>
+              <Field {...form} name="title" label="Title">
+                <Input placeholder="Title" />
+              </Field>
+              <Field {...form} name="categoryId" label="Category">
+                <Combobox options={options} popoverProps={{ modal: true }} />
+              </Field>
+
+              <Button type="submit" icon={<CheckCheck />} loading={formLoading} disabled={disabled}>
                 Submit
               </Button>
             </form>
@@ -324,6 +318,7 @@ const DemoUseStepsForm = () => {
     refineCore: { onFinish, formLoading, autoSaveProps },
     handleSubmit,
     steps: { currentStep, gotoStep },
+    saveButtonProps,
   } = form;
 
   const { options } = useSelect<Category, HttpError>({
@@ -368,6 +363,7 @@ const DemoUseStepsForm = () => {
     onFinish(modifyingDataBeforeSubmission(values));
   });
 
+  const disabled = formLoading || saveButtonProps.disabled;
   return (
     <div className="mt-4 flex w-[600px] flex-col gap-8">
       <Tabs
@@ -390,22 +386,17 @@ const DemoUseStepsForm = () => {
 
           <div style={{ display: 'flex', gap: 8 }}>
             {currentStep > 0 && (
-              <Button type="button" icon={<Undo2 />} onClick={() => gotoStep(currentStep - 1)} disabled={formLoading}>
+              <Button type="button" icon={<Undo2 />} onClick={() => gotoStep(currentStep - 1)} disabled={disabled}>
                 Previous
               </Button>
             )}
             {currentStep < stepTitles.length - 1 && (
-              <Button
-                type="button"
-                icon={<CheckCheck />}
-                onClick={() => gotoStep(currentStep + 1)}
-                disabled={formLoading}
-              >
+              <Button type="button" icon={<CheckCheck />} onClick={() => gotoStep(currentStep + 1)} disabled={disabled}>
                 Next
               </Button>
             )}
             {currentStep === stepTitles.length - 1 && (
-              <Button type="submit" icon={<CheckCheck />} disabled={formLoading}>
+              <Button type="submit" icon={<CheckCheck />} disabled={disabled}>
                 Save
               </Button>
             )}

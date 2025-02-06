@@ -24,9 +24,10 @@ type ComboboxProps = ComponentPropsWithoutRef<typeof Command> &
     onChange?: (value: string | number) => void;
     value?: string | number | BaseRecord;
     disabled?: boolean;
+    popoverProps?: { modal?: boolean };
   };
 
-export const Combobox = forwardRef<ElementRef<typeof Command>, ComboboxProps>(({ ...props }, ref) => {
+export const Combobox = forwardRef<ElementRef<typeof Command>, ComboboxProps>(({ popoverProps, ...props }, ref) => {
   const [open, setOpen] = useState(false);
 
   const value = () => {
@@ -38,7 +39,7 @@ export const Combobox = forwardRef<ElementRef<typeof Command>, ComboboxProps>(({
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} {...popoverProps}>
       <PopoverTrigger asChild>
         <FormControl>
           <Button

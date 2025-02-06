@@ -5,7 +5,7 @@ import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { Paperclip } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { CreateButton, ExportButton, ImportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
 import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { PdfLayout } from '~/components/pdf';
 import { EnumAction, EnumResource } from '~/constants';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
+import { PostFormModal } from '~/routes/playground.article.post.edit.$id';
 import { dataService } from '~/services';
 import { HandleFunction, POST_STATUS, POST_STATUS_MAP, PostStatus, TAny } from '~/types';
 import { getDefaultTitle } from '~/utils';
@@ -60,9 +61,9 @@ export default function PostIndex() {
     params: { field: 'hit' },
   });
 
-  const [record, setRecord] = useState<PostRecord>();
-
-  const useModalReturn = useModal();
+  const recordRef = useRef<PostRecord>();
+  const useModalReturn1 = useModal();
+  const useModalReturn2 = useModal();
   const friendly = useUserFriendlyName();
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
@@ -91,7 +92,7 @@ export default function PostIndex() {
 
   return (
     <>
-      {/* <PostFormModal {...useModalReturn} record={record} /> */}
+      <PostFormModal {...useModalReturn1} record={recordRef.current} />
       <Table
         enableSorting
         enableFilters
@@ -259,8 +260,8 @@ export default function PostIndex() {
                 <Table.EditAction
                   title="Edit in Modal"
                   onClick={() => {
-                    setRecord(original);
-                    useModalReturn.show();
+                    recordRef.current = original;
+                    useModalReturn1.show();
                   }}
                 />
 
@@ -271,8 +272,8 @@ export default function PostIndex() {
                   title="Show PDF"
                   icon={<Paperclip size={16} />}
                   onClick={() => {
-                    setRecord(record);
-                    useModalReturn.show();
+                    recordRef.current = original;
+                    useModalReturn2.show();
                   }}
                 />
               </Table.Actions>
@@ -283,13 +284,13 @@ export default function PostIndex() {
       </Table>
 
       {/* View PDF in Modal */}
-      <Dialog open={useModalReturn.visible} onOpenChange={useModalReturn.close}>
+      <Dialog open={useModalReturn2.visible} onOpenChange={useModalReturn2.close}>
         <DialogContent className="max-w-6xl">
           <DialogHeader className="border-b pb-4">
             <DialogTitle>View PDF</DialogTitle>
             <DialogDescription>This is a Demo for View PDF on Modal.</DialogDescription>
           </DialogHeader>
-          <PdfLayout record={record} />
+          <PdfLayout record={recordRef.current} />
         </DialogContent>
       </Dialog>
     </>
