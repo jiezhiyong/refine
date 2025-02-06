@@ -1,8 +1,8 @@
-import { SelectContent, SelectItem, SelectTrigger, Select as SelectUI, SelectValue } from '~/components-shadcn/select';
 import type { Content as SelectContentType, SelectProps as SelectCoreProps } from '@radix-ui/react-select';
 import { BaseOption } from '@refinedev/core';
 import React, { forwardRef } from 'react';
 import { FormControl } from '~/components-shadcn/form';
+import { SelectContent, SelectItem, SelectTrigger, Select as SelectUI, SelectValue } from '~/components-shadcn/select';
 
 type SelectProps = SelectCoreProps & {
   placeholder?: string;
@@ -21,7 +21,7 @@ export const Select = forwardRef<React.ElementRef<typeof SelectContentType>, Sel
       value={props.value}
     >
       <FormControl>
-        <SelectTrigger ref={triggerRef} className="sm:w-[400px]">
+        <SelectTrigger ref={triggerRef} className="sm:w-[500px]">
           <SelectValue placeholder={props.placeholder ?? 'Select'} />
         </SelectTrigger>
       </FormControl>

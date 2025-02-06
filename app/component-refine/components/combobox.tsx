@@ -46,7 +46,7 @@ export const Combobox = forwardRef<ElementRef<typeof Command>, ComboboxProps>(({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn('flex w-full justify-between sm:w-[400px]', !value() && 'text-muted-foreground')}
+            className={cn('flex w-full justify-between sm:w-[500px]', !value() && 'text-muted-foreground')}
           >
             {value()
               ? props.options?.find((option) => option.value === value())?.label

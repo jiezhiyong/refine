@@ -77,7 +77,7 @@ export const Form = <
         <Card className={cn('mx-auto space-y-4 border-none p-8 shadow-none', className)}>
           <CardContent className="space-y-4 p-0">{props.children}</CardContent>
 
-          <CardFooter className="flex gap-x-4 p-0">
+          <CardFooter className="flex gap-x-2 p-0">
             <SaveButton
               type="submit"
               recordItemId={recordItemId}

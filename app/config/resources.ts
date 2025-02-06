@@ -35,11 +35,6 @@ export const dataResources: ResourceProps[] = [
     list: '/playground/dashboard/ui',
     meta: { parent: 'dashboard', label: 'UI' },
   },
-  {
-    name: 'useStepsForm',
-    list: '/playground/dashboard/useStepsForm',
-    meta: { parent: 'dashboard' },
-  },
 
   // 二级菜单 playground/document
   {
