@@ -25,6 +25,7 @@ export const ListButton: FC<ListButtonProps> = ({
   const disabledNew = disabled || !canAccess?.can;
   return (
     <LinkComponent
+      prefetch="intent"
       className={cn(disabledNew && 'pointer-events-none')}
       to={to}
       replace={false}

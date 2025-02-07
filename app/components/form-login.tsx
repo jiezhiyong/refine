@@ -1,10 +1,10 @@
-import { useSearchParams, useActionData, Form, Link, useNavigation } from '@remix-run/react';
+import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
 import { Button } from '~/components-shadcn/button';
 import { Card, CardContent } from '~/components-shadcn/card';
 import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
-import { PrivacyPolicy } from './privacy-policy';
 import { ErrorMessage } from './error';
+import { PrivacyPolicy } from './privacy-policy';
 import { TcskOAuth2 } from './tcsk-oauth2';
 
 // 定义错误类型
@@ -54,7 +54,7 @@ export function LoginForm() {
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <Link to="#" className="ml-auto text-sm underline-offset-2 hover:underline">
+                  <Link prefetch="intent" to="#" className="ml-auto text-sm underline-offset-2 hover:underline">
                     Forgot your password?
                   </Link>
                 </div>
@@ -86,7 +86,7 @@ export function LoginForm() {
 
               <div className="text-center text-sm">
                 {`Don't have an account? `}
-                <Link to="/register" replace className="underline underline-offset-4">
+                <Link prefetch="intent" to="/register" replace className="underline underline-offset-4">
                   Sign up
                 </Link>
               </div>

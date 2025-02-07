@@ -17,7 +17,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(({ children, href, 
   const Comp = asChild ? Slot : ActiveLink;
 
   return (
-    <Comp ref={ref} to={href} className={cn('hover:bg-accent', className)} title={title}>
+    <Comp prefetch="intent" ref={ref} to={href} className={cn('hover:bg-accent', className)} title={title}>
       {children}
     </Comp>
   );

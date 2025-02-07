@@ -74,7 +74,7 @@ Make sure to deploy the output of `pnpm run build`
 
 ## TODO: 未实现的功能
 
-- Remix Prefetch
+- 升级 Remix v3 / React Router v7, 暂时无法升级: @refinedev/remix-router 使用的是 Remix 2.x 版本
 - Remix use-view-transition-state
 - Sentry日志上报优化
 - Refine Live Provider

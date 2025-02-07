@@ -6,7 +6,8 @@ p, editor, playground, list
 
 p, editor, dashboard, list
 p, editor, about, list
-p, editor, techstack, list
+p, editor, ui, list
+p, editor, health, list
 
 p, editor, article, list
 p, editor, post, list|create|field|import|export
@@ -32,7 +33,8 @@ p, guest, playground, list
 
 p, guest, dashboard, list
 p, guest, about, list
-p, guest, techstack, list
+p, guest, ui, list
+p, guest, health, list
 
 p, guest, article, list
 p, guest, post, list

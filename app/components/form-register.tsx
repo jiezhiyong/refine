@@ -1,13 +1,13 @@
-import { useSearchParams, useActionData, Form, Link, useNavigation } from '@remix-run/react';
+import { useNotification } from '@refinedev/core';
+import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
 import { GalleryVerticalEnd } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '~/components-shadcn/button';
 import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
-import { PrivacyPolicy } from './privacy-policy';
 import { ErrorMessage } from './error';
+import { PrivacyPolicy } from './privacy-policy';
 import { TcskOAuth2 } from './tcsk-oauth2';
-import { useState } from 'react';
-import { useNotification } from '@refinedev/core';
 
 // 定义错误类型
 interface ActionData {
@@ -81,7 +81,7 @@ export function RegisterForm() {
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
-            <Link to="/" className="flex flex-col items-center gap-2 font-medium">
+            <Link prefetch="intent" to="/" className="flex flex-col items-center gap-2 font-medium">
               <div className="flex h-8 w-8 items-center justify-center rounded-md">
                 <GalleryVerticalEnd className="size-6" />
               </div>
@@ -90,7 +90,7 @@ export function RegisterForm() {
             <h1 className="text-xl font-bold">Welcome to Signup OSS Inc.</h1>
             <div className="text-center text-sm">
               {`Already has an account? `}
-              <Link to="/login" replace className="underline underline-offset-4">
+              <Link prefetch="intent" to="/login" replace className="underline underline-offset-4">
                 Sign in
               </Link>
             </div>
