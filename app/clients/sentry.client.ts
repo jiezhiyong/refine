@@ -17,30 +17,35 @@ export function initSentry() {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     environment: import.meta.env.MODE,
-    release: 'remix-oss@' + import.meta.env.npm_package_version,
+    release: 'oss@' + import.meta.env.npm_package_version,
+
     integrations: [
       Sentry.browserTracingIntegration({ useEffect, useLocation, useMatches }),
       Sentry.browserProfilingIntegration(),
       Sentry.replayIntegration({ maskAllText: isProduction, blockAllMedia: isProduction }),
-      Sentry.captureConsoleIntegration(),
       Sentry.extraErrorDataIntegration(),
       Sentry.httpClientIntegration(),
     ],
+
     sendDefaultPii: true,
     tracesSampleRate: 1.0,
     tracePropagationTargets: ['localhost', /^\/api/, 'https://oss.tcshuke.com.com'],
     profilesSampleRate: 1.0,
     replaysSessionSampleRate: isProduction ? 0.1 : 1.0,
     replaysOnErrorSampleRate: 1.0,
+    normalizeDepth: 4,
 
-    // 出现错误时自动弹窗、引导用户反馈
-    // beforeSend(event) {
-    //   if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
-    //     window._isRenderedReortDialog = true;
-    //     Sentry.showReportDialog({ eventId: event.event_id });
-    //   }
-    //   return event;
-    // },
+    beforeBreadcrumb(breadcrumb) {
+      return breadcrumb;
+    },
+    beforeSend(event) {
+      // 出现错误时自动弹窗、引导用户反馈
+      // if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
+      //   window._isRenderedReortDialog = true;
+      //   Sentry.showReportDialog({ eventId: event.event_id });
+      // }
+      return event;
+    },
   });
 
   isInitialized = true;

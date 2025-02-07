@@ -1,0 +1,1 @@
+body{-webkit-overflow-scrolling:touch}@keyframes image-expand{0%{transform:perspective(800px) rotateY(-15deg)}25%{transform:perspective(800px) rotateY(0)}50%{transform:perspective(800px) rotateY(15deg)}75%{transform:perspective(800px) rotateY(-15deg)}to{transform:perspective(800px) rotateY(0)}}::view-transition-new(image-expand){animation:image-expand .5s ease-in-out}

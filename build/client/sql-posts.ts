@@ -7,9 +7,10 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2023-02-11T07:35:17.656Z',
-    updatedAt: '2023-12-29T21:33:56.604Z',
+    createdAt: '2025-01-11T07:35:17.656Z',
+    updatedAt: '2025-01-18T21:33:56.604Z',
     image: '/dog.jpg',
+    status: 'PUBLISHED',
   },
   {
     title: 'Ut beatae aut quos neque dolor atque eaque corrupti.',
@@ -19,9 +20,10 @@ export const posts = [
     category: {
       id: '13',
     },
-    createdAt: '2024-09-13T11:46:10.239Z',
-    updatedAt: '2024-09-27T13:01:09.971Z',
+    createdAt: '2025-01-13T11:46:10.239Z',
+    updatedAt: '2025-01-18T13:01:09.971Z',
     image: '/dog.jpg',
+    status: 'REJECTED',
   },
   {
     title: 'Aspernatur assumenda mollitia accusamus vel.',
@@ -31,9 +33,10 @@ export const posts = [
     category: {
       id: '12',
     },
-    createdAt: '2024-04-03T11:34:58.187Z',
-    updatedAt: '2023-02-28T11:35:52.857Z',
+    createdAt: '2025-01-03T11:34:58.187Z',
+    updatedAt: '2025-01-18T11:35:52.857Z',
     image: '/dog.jpg',
+    status: 'PUBLISHED',
   },
   {
     title: 'Architecto distinctio eveniet minima suscipit asperiores quis dolore quaerat aut.',
@@ -43,8 +46,8 @@ export const posts = [
     category: {
       id: '5',
     },
-    createdAt: '2023-05-01T10:01:37.084Z',
-    updatedAt: '2024-11-22T07:25:37.671Z',
+    createdAt: '2025-01-01T10:01:37.084Z',
+    updatedAt: '2025-01-18T07:25:37.671Z',
     image: '/dog.jpg',
   },
   {
@@ -55,8 +58,8 @@ export const posts = [
     category: {
       id: '9',
     },
-    createdAt: '2023-03-07T13:07:15.457Z',
-    updatedAt: '2024-05-01T08:52:56.345Z',
+    createdAt: '2025-01-07T13:07:15.457Z',
+    updatedAt: '2025-01-01T08:52:56.345Z',
     image: '/dog.jpg',
   },
   {
@@ -67,8 +70,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2024-11-07T14:30:10.320Z',
-    updatedAt: '2024-02-10T01:16:52.596Z',
+    createdAt: '2025-01-07T14:30:10.320Z',
+    updatedAt: '2025-01-10T01:16:52.596Z',
     image: '/dog.jpg',
   },
   {
@@ -79,8 +82,8 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2023-04-27T01:34:41.155Z',
-    updatedAt: '2024-10-02T13:38:46.007Z',
+    createdAt: '2025-01-18T01:34:41.155Z',
+    updatedAt: '2025-01-02T13:38:46.007Z',
     image: '/dog.jpg',
   },
   {
@@ -91,8 +94,8 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2023-09-03T18:37:37.845Z',
-    updatedAt: '2023-09-03T04:32:01.198Z',
+    createdAt: '2025-01-03T18:37:37.845Z',
+    updatedAt: '2025-01-03T04:32:01.198Z',
     image: '/dog.jpg',
   },
   {
@@ -103,8 +106,8 @@ export const posts = [
     category: {
       id: '9',
     },
-    createdAt: '2023-08-17T21:34:02.435Z',
-    updatedAt: '2023-01-18T19:04:36.344Z',
+    createdAt: '2025-01-17T21:34:02.435Z',
+    updatedAt: '2025-01-18T19:04:36.344Z',
     image: '/dog.jpg',
   },
   {
@@ -115,8 +118,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2023-06-11T13:36:23.224Z',
-    updatedAt: '2024-04-27T00:14:46.460Z',
+    createdAt: '2025-01-11T13:36:23.224Z',
+    updatedAt: '2025-01-18T00:14:46.460Z',
     image: '/dog.jpg',
   },
   {
@@ -127,8 +130,8 @@ export const posts = [
     category: {
       id: '4',
     },
-    createdAt: '2023-07-09T08:40:01.129Z',
-    updatedAt: '2024-01-21T14:32:03.556Z',
+    createdAt: '2025-01-09T08:40:01.129Z',
+    updatedAt: '2025-01-19T14:32:03.556Z',
     image: '/dog.jpg',
   },
   {
@@ -139,8 +142,8 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2023-05-26T00:02:33.687Z',
-    updatedAt: '2023-12-15T11:50:41.788Z',
+    createdAt: '2025-01-18T00:02:33.687Z',
+    updatedAt: '2025-01-15T11:50:41.788Z',
     image: '/dog.jpg',
   },
   {
@@ -151,8 +154,8 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2024-09-03T20:16:34.696Z',
-    updatedAt: '2024-09-18T14:22:26.436Z',
+    createdAt: '2025-01-03T20:16:34.696Z',
+    updatedAt: '2025-01-18T14:22:26.436Z',
     image: '/dog.jpg',
   },
   {
@@ -163,8 +166,8 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2024-04-22T21:52:18.692Z',
-    updatedAt: '2024-11-02T23:44:45.012Z',
+    createdAt: '2025-01-18T21:52:18.692Z',
+    updatedAt: '2025-01-02T23:44:45.012Z',
     image: '/dog.jpg',
   },
   {
@@ -175,8 +178,8 @@ export const posts = [
     category: {
       id: '12',
     },
-    createdAt: '2023-02-11T03:35:18.155Z',
-    updatedAt: '2023-02-16T18:56:09.651Z',
+    createdAt: '2025-01-11T03:35:18.155Z',
+    updatedAt: '2025-01-16T18:56:09.651Z',
     image: '/dog.jpg',
   },
   {
@@ -187,8 +190,8 @@ export const posts = [
     category: {
       id: '6',
     },
-    createdAt: '2023-03-03T09:47:36.420Z',
-    updatedAt: '2023-01-18T16:18:38.284Z',
+    createdAt: '2025-01-03T09:47:36.420Z',
+    updatedAt: '2025-01-18T16:18:38.284Z',
     image: '/dog.jpg',
   },
   {
@@ -199,8 +202,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2023-07-09T11:44:05.262Z',
-    updatedAt: '2024-07-13T03:28:26.850Z',
+    createdAt: '2025-01-09T11:44:05.262Z',
+    updatedAt: '2025-01-13T03:28:26.850Z',
     image: '/dog.jpg',
   },
   {
@@ -211,8 +214,8 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2023-12-31T00:59:37.824Z',
-    updatedAt: '2023-12-04T01:59:34.296Z',
+    createdAt: '2025-01-01T00:59:37.824Z',
+    updatedAt: '2025-01-04T01:59:34.296Z',
     image: '/dog.jpg',
   },
   {
@@ -223,8 +226,8 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2023-10-12T02:11:06.914Z',
-    updatedAt: '2023-12-02T14:25:27.149Z',
+    createdAt: '2025-01-12T02:11:06.914Z',
+    updatedAt: '2025-01-02T14:25:27.149Z',
     image: '/dog.jpg',
   },
   {
@@ -235,8 +238,8 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2024-09-21T18:56:03.996Z',
-    updatedAt: '2024-08-14T08:11:52.279Z',
+    createdAt: '2025-01-18T18:56:03.996Z',
+    updatedAt: '2025-01-14T08:11:52.279Z',
     image: '/dog.jpg',
   },
   {
@@ -247,8 +250,8 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2023-11-08T10:38:58.188Z',
-    updatedAt: '2024-12-07T16:35:57.012Z',
+    createdAt: '2025-01-08T10:38:58.188Z',
+    updatedAt: '2025-01-07T16:35:57.012Z',
     image: '/dog.jpg',
   },
   {
@@ -259,8 +262,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2024-02-24T11:06:43.298Z',
-    updatedAt: '2023-07-10T04:15:38.707Z',
+    createdAt: '2025-01-18T11:06:43.298Z',
+    updatedAt: '2025-01-10T04:15:38.707Z',
     image: '/dog.jpg',
   },
   {
@@ -271,8 +274,8 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2024-12-13T03:57:30.335Z',
-    updatedAt: '2023-05-30T02:13:31.866Z',
+    createdAt: '2025-01-13T03:57:30.335Z',
+    updatedAt: '2025-01-18T02:13:31.866Z',
     image: '/dog.jpg',
   },
   {
@@ -283,8 +286,8 @@ export const posts = [
     category: {
       id: '4',
     },
-    createdAt: '2024-04-19T17:59:07.030Z',
-    updatedAt: '2023-03-28T11:24:21.200Z',
+    createdAt: '2025-01-19T17:59:07.030Z',
+    updatedAt: '2025-01-18T11:24:21.200Z',
     image: '/dog.jpg',
   },
   {
@@ -295,8 +298,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2023-12-10T02:29:35.285Z',
-    updatedAt: '2023-12-17T06:16:42.149Z',
+    createdAt: '2025-01-10T02:29:35.285Z',
+    updatedAt: '2025-01-17T06:16:42.149Z',
     image: '/dog.jpg',
   },
   {
@@ -307,8 +310,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2023-01-07T18:04:58.804Z',
-    updatedAt: '2024-08-28T09:01:01.913Z',
+    createdAt: '2025-01-07T18:04:58.804Z',
+    updatedAt: '2025-01-18T09:01:01.913Z',
     image: '/dog.jpg',
   },
   {
@@ -319,8 +322,8 @@ export const posts = [
     category: {
       id: '4',
     },
-    createdAt: '2024-10-10T04:56:21.763Z',
-    updatedAt: '2024-10-19T17:22:06.886Z',
+    createdAt: '2025-01-10T04:56:21.763Z',
+    updatedAt: '2025-01-19T17:22:06.886Z',
     image: '/dog.jpg',
   },
   {
@@ -331,8 +334,8 @@ export const posts = [
     category: {
       id: '12',
     },
-    createdAt: '2023-05-13T12:02:29.255Z',
-    updatedAt: '2024-11-17T09:39:55.773Z',
+    createdAt: '2025-01-13T12:02:29.255Z',
+    updatedAt: '2025-01-17T09:39:55.773Z',
     image: '/dog.jpg',
   },
   {
@@ -343,8 +346,8 @@ export const posts = [
     category: {
       id: '12',
     },
-    createdAt: '2023-05-22T06:08:27.364Z',
-    updatedAt: '2024-08-25T18:32:16.775Z',
+    createdAt: '2025-01-18T06:08:27.364Z',
+    updatedAt: '2025-01-18T18:32:16.775Z',
     image: '/dog.jpg',
   },
   {
@@ -355,8 +358,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2023-05-22T21:28:10.907Z',
-    updatedAt: '2024-07-23T18:30:48.164Z',
+    createdAt: '2025-01-18T21:28:10.907Z',
+    updatedAt: '2025-01-18T18:30:48.164Z',
     image: '/dog.jpg',
   },
   {
@@ -367,8 +370,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2023-12-09T04:44:01.487Z',
-    updatedAt: '2024-06-06T17:57:42.976Z',
+    createdAt: '2025-01-09T04:44:01.487Z',
+    updatedAt: '2025-01-06T17:57:42.976Z',
     image: '/dog.jpg',
   },
   {
@@ -379,8 +382,8 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2024-06-22T10:13:57.395Z',
-    updatedAt: '2024-04-10T11:11:12.318Z',
+    createdAt: '2025-01-19T10:13:57.395Z',
+    updatedAt: '2025-01-10T11:11:12.318Z',
     image: '/dog.jpg',
   },
   {
@@ -391,8 +394,8 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2023-03-29T13:03:09.431Z',
-    updatedAt: '2023-09-20T11:37:39.105Z',
+    createdAt: '2025-01-01T13:03:09.431Z',
+    updatedAt: '2025-01-18T11:37:39.105Z',
     image: '/dog.jpg',
   },
   {
@@ -403,8 +406,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2024-05-12T03:36:02.934Z',
-    updatedAt: '2023-04-06T18:16:44.759Z',
+    createdAt: '2025-01-12T03:36:02.934Z',
+    updatedAt: '2025-01-06T18:16:44.759Z',
     image: '/dog.jpg',
   },
   {
@@ -415,8 +418,8 @@ export const posts = [
     category: {
       id: '4',
     },
-    createdAt: '2023-07-24T08:32:57.519Z',
-    updatedAt: '2024-11-17T05:14:46.181Z',
+    createdAt: '2025-01-18T08:32:57.519Z',
+    updatedAt: '2025-01-17T05:14:46.181Z',
     image: '/dog.jpg',
   },
   {
@@ -427,8 +430,8 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2023-01-13T01:19:44.506Z',
-    updatedAt: '2024-03-17T11:55:56.455Z',
+    createdAt: '2025-01-13T01:19:44.506Z',
+    updatedAt: '2025-01-17T11:55:56.455Z',
     image: '/dog.jpg',
   },
   {
@@ -439,8 +442,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2023-05-10T17:51:28.601Z',
-    updatedAt: '2024-06-09T03:50:58.577Z',
+    createdAt: '2025-01-10T17:51:28.601Z',
+    updatedAt: '2025-01-09T03:50:58.577Z',
     image: '/dog.jpg',
   },
   {
@@ -451,8 +454,8 @@ export const posts = [
     category: {
       id: '14',
     },
-    createdAt: '2023-06-27T19:05:22.869Z',
-    updatedAt: '2024-10-25T13:45:17.785Z',
+    createdAt: '2025-01-19T19:05:22.869Z',
+    updatedAt: '2025-01-18T13:45:17.785Z',
     image: '/dog.jpg',
   },
   {
@@ -463,8 +466,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2023-09-23T20:29:36.062Z',
-    updatedAt: '2023-10-26T15:54:35.421Z',
+    createdAt: '2025-01-18T20:29:36.062Z',
+    updatedAt: '2025-01-18T15:54:35.421Z',
     image: '/dog.jpg',
   },
   {
@@ -475,8 +478,8 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2024-08-13T12:46:07.215Z',
-    updatedAt: '2024-08-25T14:21:15.278Z',
+    createdAt: '2025-01-13T12:46:07.215Z',
+    updatedAt: '2025-01-18T14:21:15.278Z',
     image: '/dog.jpg',
   },
   {
@@ -487,8 +490,8 @@ export const posts = [
     category: {
       id: '14',
     },
-    createdAt: '2023-06-20T17:35:53.670Z',
-    updatedAt: '2023-04-14T22:10:27.053Z',
+    createdAt: '2025-01-19T17:35:53.670Z',
+    updatedAt: '2025-01-14T22:10:27.053Z',
     image: '/dog.jpg',
   },
   {
@@ -499,8 +502,8 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2024-06-11T07:14:24.934Z',
-    updatedAt: '2024-11-18T11:55:36.287Z',
+    createdAt: '2025-01-11T07:14:24.934Z',
+    updatedAt: '2025-01-18T11:55:36.287Z',
     image: '/dog.jpg',
   },
   {
@@ -511,8 +514,8 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2023-11-18T05:15:40.550Z',
-    updatedAt: '2023-05-15T21:39:22.575Z',
+    createdAt: '2025-01-18T05:15:40.550Z',
+    updatedAt: '2025-01-15T21:39:22.575Z',
     image: '/dog.jpg',
   },
   {
@@ -523,8 +526,8 @@ export const posts = [
     category: {
       id: '14',
     },
-    createdAt: '2023-07-15T18:15:37.011Z',
-    updatedAt: '2023-09-19T05:46:41.786Z',
+    createdAt: '2025-01-15T18:15:37.011Z',
+    updatedAt: '2025-01-19T05:46:41.786Z',
     image: '/dog.jpg',
   },
   {
@@ -535,8 +538,8 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2024-05-22T13:10:07.499Z',
-    updatedAt: '2023-01-06T16:23:03.294Z',
+    createdAt: '2025-01-18T13:10:07.499Z',
+    updatedAt: '2025-01-06T16:23:03.294Z',
     image: '/dog.jpg',
   },
   {
@@ -547,8 +550,8 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2023-02-15T21:40:10.059Z',
-    updatedAt: '2023-11-17T01:12:13.830Z',
+    createdAt: '2025-01-15T21:40:10.059Z',
+    updatedAt: '2025-01-17T01:12:13.830Z',
     image: '/dog.jpg',
   },
   {
@@ -559,8 +562,8 @@ export const posts = [
     category: {
       id: '12',
     },
-    createdAt: '2024-01-13T05:50:07.574Z',
-    updatedAt: '2023-11-07T12:38:49.740Z',
+    createdAt: '2025-01-13T05:50:07.574Z',
+    updatedAt: '2025-01-07T12:38:49.740Z',
     image: '/dog.jpg',
   },
   {
@@ -571,8 +574,8 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2023-01-30T22:51:03.156Z',
-    updatedAt: '2024-04-12T22:33:09.714Z',
+    createdAt: '2025-01-19T22:51:03.156Z',
+    updatedAt: '2025-01-12T22:33:09.714Z',
     image: '/dog.jpg',
   },
   {
@@ -583,8 +586,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2024-04-01T09:37:07.824Z',
-    updatedAt: '2024-10-25T14:06:18.638Z',
+    createdAt: '2025-01-01T09:37:07.824Z',
+    updatedAt: '2025-01-18T14:06:18.638Z',
     image: '/dog.jpg',
   },
   {
@@ -595,8 +598,8 @@ export const posts = [
     category: {
       id: '13',
     },
-    createdAt: '2023-03-26T19:40:28.219Z',
-    updatedAt: '2023-01-21T20:54:07.507Z',
+    createdAt: '2025-01-18T19:40:28.219Z',
+    updatedAt: '2025-01-19T20:54:07.507Z',
     image: '/dog.jpg',
   },
   {
@@ -607,8 +610,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2024-05-18T19:57:15.710Z',
-    updatedAt: '2024-08-08T08:56:25.959Z',
+    createdAt: '2025-01-18T19:57:15.710Z',
+    updatedAt: '2025-01-08T08:56:25.959Z',
     image: '/dog.jpg',
   },
   {
@@ -619,8 +622,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2023-04-24T07:55:23.707Z',
-    updatedAt: '2023-08-25T16:03:09.803Z',
+    createdAt: '2025-01-18T07:55:23.707Z',
+    updatedAt: '2025-01-18T16:03:09.803Z',
     image: '/dog.jpg',
   },
   {
@@ -631,8 +634,8 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2023-10-08T14:01:00.014Z',
-    updatedAt: '2023-01-15T16:02:22.929Z',
+    createdAt: '2025-01-08T14:01:00.014Z',
+    updatedAt: '2025-01-15T16:02:22.929Z',
     image: '/dog.jpg',
   },
   {
@@ -643,8 +646,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2023-10-18T03:01:34.268Z',
-    updatedAt: '2024-04-26T18:24:13.667Z',
+    createdAt: '2025-01-18T03:01:34.268Z',
+    updatedAt: '2025-01-18T18:24:13.667Z',
     image: '/dog.jpg',
   },
   {
@@ -655,8 +658,8 @@ export const posts = [
     category: {
       id: '6',
     },
-    createdAt: '2023-05-22T16:40:31.425Z',
-    updatedAt: '2024-12-03T06:02:19.092Z',
+    createdAt: '2025-01-18T16:40:31.425Z',
+    updatedAt: '2025-01-03T06:02:19.092Z',
     image: '/dog.jpg',
   },
   {
@@ -667,8 +670,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2023-09-19T09:55:01.566Z',
-    updatedAt: '2023-08-27T05:51:57.000Z',
+    createdAt: '2025-01-19T09:55:01.566Z',
+    updatedAt: '2025-01-18T05:51:57.000Z',
     image: '/dog.jpg',
   },
   {
@@ -679,8 +682,8 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2024-09-26T01:21:30.381Z',
-    updatedAt: '2023-12-16T14:42:27.426Z',
+    createdAt: '2025-01-18T01:21:30.381Z',
+    updatedAt: '2025-01-16T14:42:27.426Z',
     image: '/dog.jpg',
   },
   {
@@ -691,8 +694,8 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2024-05-08T00:03:46.309Z',
-    updatedAt: '2024-08-26T09:54:17.534Z',
+    createdAt: '2025-01-08T00:03:46.309Z',
+    updatedAt: '2025-01-18T09:54:17.534Z',
     image: '/dog.jpg',
   },
   {
@@ -703,8 +706,8 @@ export const posts = [
     category: {
       id: '9',
     },
-    createdAt: '2023-02-16T09:36:34.142Z',
-    updatedAt: '2023-09-02T03:57:14.294Z',
+    createdAt: '2025-01-16T09:36:34.142Z',
+    updatedAt: '2025-01-02T03:57:14.294Z',
     image: '/dog.jpg',
   },
   {
@@ -715,8 +718,8 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2023-08-04T09:58:56.473Z',
-    updatedAt: '2023-09-12T00:07:05.587Z',
+    createdAt: '2025-01-04T09:58:56.473Z',
+    updatedAt: '2025-01-12T00:07:05.587Z',
     image: '/dog.jpg',
   },
   {
@@ -727,8 +730,8 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2023-12-26T10:06:16.277Z',
-    updatedAt: '2024-06-06T16:44:47.506Z',
+    createdAt: '2025-01-18T10:06:16.277Z',
+    updatedAt: '2025-01-06T16:44:47.506Z',
     image: '/dog.jpg',
   },
   {
@@ -739,8 +742,8 @@ export const posts = [
     category: {
       id: '5',
     },
-    createdAt: '2024-10-21T21:52:03.565Z',
-    updatedAt: '2024-07-04T17:31:45.221Z',
+    createdAt: '2025-01-18T21:52:03.565Z',
+    updatedAt: '2025-01-04T17:31:45.221Z',
     image: '/dog.jpg',
   },
   {
@@ -751,8 +754,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2023-04-18T22:52:54.577Z',
-    updatedAt: '2024-09-06T14:13:42.983Z',
+    createdAt: '2025-01-18T22:52:54.577Z',
+    updatedAt: '2025-01-06T14:13:42.983Z',
     image: '/dog.jpg',
   },
   {
@@ -763,8 +766,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2023-06-11T06:03:14.870Z',
-    updatedAt: '2023-02-23T04:37:05.264Z',
+    createdAt: '2025-01-11T06:03:14.870Z',
+    updatedAt: '2025-01-18T04:37:05.264Z',
     image: '/dog.jpg',
   },
   {
@@ -775,8 +778,8 @@ export const posts = [
     category: {
       id: '13',
     },
-    createdAt: '2024-03-30T23:27:48.097Z',
-    updatedAt: '2023-04-29T07:26:58.660Z',
+    createdAt: '2025-01-01T23:27:48.097Z',
+    updatedAt: '2025-01-18T07:26:58.660Z',
     image: '/dog.jpg',
   },
   {
@@ -787,8 +790,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2024-08-08T04:15:36.390Z',
-    updatedAt: '2024-10-15T22:16:00.571Z',
+    createdAt: '2025-01-08T04:15:36.390Z',
+    updatedAt: '2025-01-15T22:16:00.571Z',
     image: '/dog.jpg',
   },
   {
@@ -799,8 +802,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2024-10-22T19:38:48.078Z',
-    updatedAt: '2024-03-11T02:05:39.085Z',
+    createdAt: '2025-01-18T19:38:48.078Z',
+    updatedAt: '2025-01-11T02:05:39.085Z',
     image: '/dog.jpg',
   },
   {
@@ -811,8 +814,8 @@ export const posts = [
     category: {
       id: '13',
     },
-    createdAt: '2023-06-26T03:01:12.024Z',
-    updatedAt: '2023-10-29T14:06:24.345Z',
+    createdAt: '2025-01-19T03:01:12.024Z',
+    updatedAt: '2025-01-18T14:06:24.345Z',
     image: '/dog.jpg',
   },
   {
@@ -823,8 +826,8 @@ export const posts = [
     category: {
       id: '5',
     },
-    createdAt: '2023-10-24T00:07:23.868Z',
-    updatedAt: '2023-05-02T13:52:59.819Z',
+    createdAt: '2025-01-18T00:07:23.868Z',
+    updatedAt: '2025-01-02T13:52:59.819Z',
     image: '/dog.jpg',
   },
   {
@@ -835,8 +838,8 @@ export const posts = [
     category: {
       id: '13',
     },
-    createdAt: '2023-07-16T23:37:54.547Z',
-    updatedAt: '2023-07-06T00:11:48.496Z',
+    createdAt: '2025-01-16T23:37:54.547Z',
+    updatedAt: '2025-01-06T00:11:48.496Z',
     image: '/dog.jpg',
   },
   {
@@ -847,8 +850,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2024-03-15T05:34:41.893Z',
-    updatedAt: '2023-09-14T00:12:57.463Z',
+    createdAt: '2025-01-15T05:34:41.893Z',
+    updatedAt: '2025-01-14T00:12:57.463Z',
     image: '/dog.jpg',
   },
   {
@@ -859,8 +862,8 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2024-10-30T17:10:58.364Z',
-    updatedAt: '2023-11-16T01:08:53.404Z',
+    createdAt: '2025-01-01T17:10:58.364Z',
+    updatedAt: '2025-01-16T01:08:53.404Z',
     image: '/dog.jpg',
   },
   {
@@ -871,8 +874,8 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2024-08-21T01:55:20.526Z',
-    updatedAt: '2023-09-10T00:37:32.049Z',
+    createdAt: '2025-01-18T01:55:20.526Z',
+    updatedAt: '2025-01-10T00:37:32.049Z',
     image: '/dog.jpg',
   },
   {
@@ -883,8 +886,8 @@ export const posts = [
     category: {
       id: '11',
     },
-    createdAt: '2024-02-20T16:25:22.665Z',
-    updatedAt: '2023-04-23T11:05:56.384Z',
+    createdAt: '2025-01-01T16:25:22.665Z',
+    updatedAt: '2025-01-18T11:05:56.384Z',
     image: '/dog.jpg',
   },
   {
@@ -895,8 +898,8 @@ export const posts = [
     category: {
       id: '9',
     },
-    createdAt: '2024-11-11T19:51:36.614Z',
-    updatedAt: '2024-05-07T00:13:00.928Z',
+    createdAt: '2025-01-11T19:51:36.614Z',
+    updatedAt: '2025-01-07T00:13:00.928Z',
     image: '/dog.jpg',
   },
   {
@@ -907,8 +910,8 @@ export const posts = [
     category: {
       id: '9',
     },
-    createdAt: '2023-07-12T05:02:53.780Z',
-    updatedAt: '2023-12-28T02:00:03.260Z',
+    createdAt: '2025-01-12T05:02:53.780Z',
+    updatedAt: '2025-01-18T02:00:03.260Z',
     image: '/dog.jpg',
   },
   {
@@ -919,8 +922,8 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2024-04-23T03:16:31.006Z',
-    updatedAt: '2024-03-26T11:07:49.112Z',
+    createdAt: '2025-01-18T03:16:31.006Z',
+    updatedAt: '2025-01-18T11:07:49.112Z',
     image: '/dog.jpg',
   },
   {
@@ -931,8 +934,8 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2023-04-20T19:39:21.495Z',
-    updatedAt: '2024-05-20T23:06:03.922Z',
+    createdAt: '2025-01-01T19:39:21.495Z',
+    updatedAt: '2025-01-18T23:06:03.922Z',
     image: '/dog.jpg',
   },
   {
@@ -943,8 +946,8 @@ export const posts = [
     category: {
       id: '12',
     },
-    createdAt: '2024-06-18T08:18:01.934Z',
-    updatedAt: '2023-11-16T08:42:55.005Z',
+    createdAt: '2025-01-18T08:18:01.934Z',
+    updatedAt: '2025-01-16T08:42:55.005Z',
     image: '/dog.jpg',
   },
   {
@@ -955,8 +958,8 @@ export const posts = [
     category: {
       id: '12',
     },
-    createdAt: '2024-05-01T10:02:37.125Z',
-    updatedAt: '2024-10-21T15:36:03.317Z',
+    createdAt: '2025-01-01T10:02:37.125Z',
+    updatedAt: '2025-01-18T15:36:03.317Z',
     image: '/dog.jpg',
   },
   {
@@ -967,8 +970,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2024-06-05T16:38:38.227Z',
-    updatedAt: '2023-12-30T01:43:41.212Z',
+    createdAt: '2025-01-05T16:38:38.227Z',
+    updatedAt: '2025-01-18T01:43:41.212Z',
     image: '/dog.jpg',
   },
   {
@@ -979,8 +982,8 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2023-06-04T02:29:05.603Z',
-    updatedAt: '2024-08-16T06:51:18.782Z',
+    createdAt: '2025-01-04T02:29:05.603Z',
+    updatedAt: '2025-01-16T06:51:18.782Z',
     image: '/dog.jpg',
   },
   {
@@ -991,8 +994,8 @@ export const posts = [
     category: {
       id: '14',
     },
-    createdAt: '2023-03-25T15:40:05.529Z',
-    updatedAt: '2024-06-24T10:12:50.968Z',
+    createdAt: '2025-01-18T15:40:05.529Z',
+    updatedAt: '2025-01-19T10:12:50.968Z',
     image: '/dog.jpg',
   },
   {
@@ -1003,8 +1006,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2024-03-08T03:56:45.181Z',
-    updatedAt: '2024-03-27T22:30:13.654Z',
+    createdAt: '2025-01-08T03:56:45.181Z',
+    updatedAt: '2025-01-18T22:30:13.654Z',
     image: '/dog.jpg',
   },
   {
@@ -1015,8 +1018,8 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2024-10-07T23:45:03.214Z',
-    updatedAt: '2024-12-06T08:48:49.304Z',
+    createdAt: '2025-01-07T23:45:03.214Z',
+    updatedAt: '2025-01-06T08:48:49.304Z',
     image: '/dog.jpg',
   },
   {
@@ -1027,8 +1030,8 @@ export const posts = [
     category: {
       id: '3',
     },
-    createdAt: '2023-12-26T05:25:09.517Z',
-    updatedAt: '2024-10-09T02:49:27.068Z',
+    createdAt: '2025-01-18T05:25:09.517Z',
+    updatedAt: '2025-01-09T02:49:27.068Z',
     image: '/dog.jpg',
   },
   {
@@ -1039,8 +1042,8 @@ export const posts = [
     category: {
       id: '1',
     },
-    createdAt: '2023-12-21T04:01:04.345Z',
-    updatedAt: '2023-01-17T06:16:39.590Z',
+    createdAt: '2025-01-18T04:01:04.345Z',
+    updatedAt: '2025-01-17T06:16:39.590Z',
     image: '/dog.jpg',
   },
   {
@@ -1051,8 +1054,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2023-03-17T19:27:45.908Z',
-    updatedAt: '2023-06-11T07:12:15.459Z',
+    createdAt: '2025-01-17T19:27:45.908Z',
+    updatedAt: '2025-01-11T07:12:15.459Z',
     image: '/dog.jpg',
   },
   {
@@ -1063,8 +1066,8 @@ export const posts = [
     category: {
       id: '14',
     },
-    createdAt: '2024-04-04T07:05:47.607Z',
-    updatedAt: '2024-11-06T18:52:35.686Z',
+    createdAt: '2025-01-04T07:05:47.607Z',
+    updatedAt: '2025-01-06T18:52:35.686Z',
     image: '/dog.jpg',
   },
   {
@@ -1075,8 +1078,8 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2023-10-20T16:10:53.229Z',
-    updatedAt: '2023-03-15T12:32:26.932Z',
+    createdAt: '2025-01-01T16:10:53.229Z',
+    updatedAt: '2025-01-15T12:32:26.932Z',
     image: '/dog.jpg',
   },
   {
@@ -1087,8 +1090,8 @@ export const posts = [
     category: {
       id: '5',
     },
-    createdAt: '2023-03-28T04:53:43.480Z',
-    updatedAt: '2024-09-20T18:14:17.265Z',
+    createdAt: '2025-01-18T04:53:43.480Z',
+    updatedAt: '2025-01-18T18:14:17.265Z',
     image: '/dog.jpg',
   },
   {
@@ -1099,8 +1102,8 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2024-03-12T10:18:43.509Z',
-    updatedAt: '2023-10-11T13:50:48.589Z',
+    createdAt: '2025-01-12T10:18:43.509Z',
+    updatedAt: '2025-01-11T13:50:48.589Z',
     image: '/dog.jpg',
   },
   {
@@ -1111,8 +1114,8 @@ export const posts = [
     category: {
       id: '8',
     },
-    createdAt: '2024-11-25T02:27:03.957Z',
-    updatedAt: '2024-04-03T08:05:29.112Z',
+    createdAt: '2025-01-18T02:27:03.957Z',
+    updatedAt: '2025-01-03T08:05:29.112Z',
     image: '/dog.jpg',
   },
   {
@@ -1123,8 +1126,8 @@ export const posts = [
     category: {
       id: '7',
     },
-    createdAt: '2023-05-01T17:46:52.991Z',
-    updatedAt: '2023-07-02T09:24:06.032Z',
+    createdAt: '2025-01-01T17:46:52.991Z',
+    updatedAt: '2025-01-02T09:24:06.032Z',
     image: '/dog.jpg',
   },
   {
@@ -1135,8 +1138,8 @@ export const posts = [
     category: {
       id: '9',
     },
-    createdAt: '2023-04-13T07:12:44.161Z',
-    updatedAt: '2023-07-17T12:33:21.340Z',
+    createdAt: '2025-01-13T07:12:44.161Z',
+    updatedAt: '2025-01-17T12:33:21.340Z',
     image: '/dog.jpg',
   },
   {
@@ -1147,8 +1150,8 @@ export const posts = [
     category: {
       id: '5',
     },
-    createdAt: '2023-08-09T21:58:15.015Z',
-    updatedAt: '2024-01-01T15:27:36.285Z',
+    createdAt: '2025-01-09T21:58:15.015Z',
+    updatedAt: '2025-01-01T15:27:36.285Z',
     image: '/dog.jpg',
   },
   {
@@ -1159,8 +1162,8 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2024-09-28T22:33:43.681Z',
-    updatedAt: '2024-11-29T04:24:53.264Z',
+    createdAt: '2025-01-18T22:33:43.681Z',
+    updatedAt: '2025-01-18T04:24:53.264Z',
     image: '/dog.jpg',
   },
   {
@@ -1171,9 +1174,10 @@ export const posts = [
     category: {
       id: '2',
     },
-    createdAt: '2024-12-07T09:56:32.484Z',
-    updatedAt: '2023-09-22T21:29:48.045Z',
+    createdAt: '2025-01-07T09:56:32.484Z',
+    updatedAt: '2025-01-18T21:29:48.045Z',
     image: '/dog.jpg',
+    status: 'REJECTED',
   },
   {
     title: 'Minus enim atque reprehenderit nulla sunt aut et laborum est.',
@@ -1183,9 +1187,10 @@ export const posts = [
     category: {
       id: '10',
     },
-    createdAt: '2024-01-04T00:36:18.257Z',
-    updatedAt: '2023-10-30T14:01:03.549Z',
+    createdAt: '2025-01-04T00:36:18.257Z',
+    updatedAt: '2025-01-18T14:01:03.549Z',
     image: '/dog.jpg',
+    status: 'PUBLISHED',
   },
   {
     title: 'Aut nisi atque.',
@@ -1195,8 +1200,9 @@ export const posts = [
     category: {
       id: '15',
     },
-    createdAt: '2024-07-18T11:29:20.986Z',
-    updatedAt: '2024-02-25T09:58:24.165Z',
+    createdAt: '2025-01-18T11:29:20.986Z',
+    updatedAt: '2025-01-18T09:58:24.165Z',
     image: '/dog.jpg',
+    status: 'PUBLISHED',
   },
 ];

@@ -1,8 +1,0 @@
-import{r as o,j as t}from"./jsx-runtime-BMlD0yL_.js";import{B as a}from"./button-B_xz3V2G.js";import{g as d}from"./get-default-title-CUWlU2_a.js";import{P as l}from"./500-DKi4gis6.js";import"./api.agreement._agreementId_.pdf_-CYRM_IyK.js";import{a as f}from"./components-CuaJT0t0.js";import"./cn-B8mTpEaj.js";import"./menus-BnU23AEJ.js";import"./use-mount-effect-D-pHQY95.js";import"./index-DD1qRzJI.js";(function(){try{var e=typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},s=new e.Error().stack;s&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[s]="4f9e7f52-78f9-49e5-84df-075a3ae69433",e._sentryDebugIdIdentifier="sentry-dbid-4f9e7f52-78f9-49e5-84df-075a3ae69433")}catch{}})();const v=({matches:e})=>[{title:d(e)}];function w(){const{res:e}=f(),[s,i]=o.useState(null),n=()=>{fetch("/api/runtime",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:`
-          query ListMovies {
-            movie {
-              title
-            }
-          }
-        `})}).then(r=>r.json()).then(i)};return t.jsxs("div",{className:"flex flex-1 flex-col items-center justify-center",children:[t.jsxs("h1",{className:"text-6xl text-[#3defe9]",children:["Hi, ",e.name," 👋"]}),t.jsx("div",{className:"my-10 text-3xl text-[#fecc1b]",children:s!=null&&s.data?t.jsx("ul",{id:"movies-list",children:s.data.movies.map(r=>t.jsxs("span",{children:[r.title,"、"]},r.id))}):t.jsx("span",{children:"..."})}),t.jsx(a,{id:"fetch-movies-button",onClick:n,children:"Make a runtime reques"})]})}function D(){return t.jsx(l,{})}export{D as ErrorBoundary,w as default,v as meta};
-//# sourceMappingURL=techstack.msw-CvG4dFFT.js.map

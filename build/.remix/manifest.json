@@ -5,17 +5,71 @@
       "id": "root",
       "file": "root.tsx"
     },
-    "routes/api.agreement.$agreementId[.pdf]": {
-      "file": "routes/api.agreement.$agreementId[.pdf].ts",
-      "id": "routes/api.agreement.$agreementId[.pdf]",
-      "path": "api/agreement/:agreementId.pdf",
-      "parentId": "root"
+    "routes/playground.dashboard.viewTransition": {
+      "file": "routes/playground.dashboard.viewTransition.tsx",
+      "id": "routes/playground.dashboard.viewTransition",
+      "path": "viewTransition",
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/playground.article.post.clone.$id": {
+      "file": "routes/playground.article.post.clone.$id.tsx",
+      "id": "routes/playground.article.post.clone.$id",
+      "path": "clone/:id",
+      "parentId": "routes/playground.article.post"
+    },
+    "routes/playground.article.post.edit.$id": {
+      "file": "routes/playground.article.post.edit.$id.tsx",
+      "id": "routes/playground.article.post.edit.$id",
+      "path": "edit/:id",
+      "parentId": "routes/playground.article.post"
+    },
+    "routes/playground.article.post.show.$id": {
+      "file": "routes/playground.article.post.show.$id.tsx",
+      "id": "routes/playground.article.post.show.$id",
+      "path": "show/:id",
+      "parentId": "routes/playground.article.post"
+    },
+    "routes/playground.article.post._index": {
+      "file": "routes/playground.article.post._index.tsx",
+      "id": "routes/playground.article.post._index",
+      "index": true,
+      "parentId": "routes/playground.article.post"
+    },
+    "routes/playground.article.post.create": {
+      "file": "routes/playground.article.post.create.tsx",
+      "id": "routes/playground.article.post.create",
+      "path": "create",
+      "parentId": "routes/playground.article.post"
     },
     "routes/api.auth.$provider.callback": {
       "file": "routes/api.auth.$provider.callback.ts",
       "id": "routes/api.auth.$provider.callback",
       "path": "api/auth/:provider/callback",
       "parentId": "root"
+    },
+    "routes/playground.dashboard.health": {
+      "file": "routes/playground.dashboard.health.tsx",
+      "id": "routes/playground.dashboard.health",
+      "path": "health",
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/playground.dashboard.about": {
+      "file": "routes/playground.dashboard.about.tsx",
+      "id": "routes/playground.dashboard.about",
+      "path": "about",
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/system.account.role._index": {
+      "file": "routes/system.account.role._index.tsx",
+      "id": "routes/system.account.role._index",
+      "index": true,
+      "parentId": "routes/system.account.role"
+    },
+    "routes/system.account.user._index": {
+      "file": "routes/system.account.user._index.tsx",
+      "id": "routes/system.account.user._index",
+      "index": true,
+      "parentId": "routes/system.account.user"
     },
     "routes/api.auth.$provider._index": {
       "file": "routes/api.auth.$provider._index.ts",
@@ -24,17 +78,65 @@
       "index": true,
       "parentId": "root"
     },
+    "routes/playground.dashboard.demo": {
+      "file": "routes/playground.dashboard.demo.tsx",
+      "id": "routes/playground.dashboard.demo",
+      "path": "demo",
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/system.admin.log.show.$id": {
+      "file": "routes/system.admin.log.show.$id.tsx",
+      "id": "routes/system.admin.log.show.$id",
+      "path": "show/:id",
+      "parentId": "routes/system.admin.log"
+    },
+    "routes/playground.article.post": {
+      "file": "routes/playground.article.post.tsx",
+      "id": "routes/playground.article.post",
+      "path": "playground/article/post",
+      "parentId": "root"
+    },
+    "routes/system.admin.log._index": {
+      "file": "routes/system.admin.log._index.tsx",
+      "id": "routes/system.admin.log._index",
+      "index": true,
+      "parentId": "routes/system.admin.log"
+    },
+    "routes/api.permissions.switch": {
+      "file": "routes/api.permissions.switch.ts",
+      "id": "routes/api.permissions.switch",
+      "path": "api/permissions/switch",
+      "parentId": "root"
+    },
+    "routes/playground.dashboard": {
+      "file": "routes/playground.dashboard.tsx",
+      "id": "routes/playground.dashboard",
+      "path": "playground/dashboard",
+      "parentId": "root"
+    },
     "routes/api.set-preferences": {
       "file": "routes/api.set-preferences.ts",
       "id": "routes/api.set-preferences",
       "path": "api/set-preferences",
       "parentId": "root"
     },
-    "routes/contacts.$contactId": {
-      "file": "routes/contacts.$contactId.tsx",
-      "id": "routes/contacts.$contactId",
-      "path": "contacts/:contactId",
+    "routes/system.account.role": {
+      "file": "routes/system.account.role.tsx",
+      "id": "routes/system.account.role",
+      "path": "system/account/role",
       "parentId": "root"
+    },
+    "routes/system.account.user": {
+      "file": "routes/system.account.user.tsx",
+      "id": "routes/system.account.user",
+      "path": "system/account/user",
+      "parentId": "root"
+    },
+    "routes/api.$resource.bulk": {
+      "file": "routes/api.$resource.bulk.ts",
+      "id": "routes/api.$resource.bulk",
+      "path": "bulk",
+      "parentId": "routes/api.$resource"
     },
     "routes/api.image-resize.$": {
       "file": "routes/api.image-resize.$.ts",
@@ -42,41 +144,17 @@
       "path": "api/image-resize/*",
       "parentId": "root"
     },
-    "routes/infinite-scrolling": {
-      "file": "routes/infinite-scrolling.tsx",
-      "id": "routes/infinite-scrolling",
-      "path": "infinite-scrolling",
+    "routes/api.$resource.$id": {
+      "file": "routes/api.$resource.$id.ts",
+      "id": "routes/api.$resource.$id",
+      "path": ":id",
+      "parentId": "routes/api.$resource"
+    },
+    "routes/system.admin.log": {
+      "file": "routes/system.admin.log.tsx",
+      "id": "routes/system.admin.log",
+      "path": "system/admin/log",
       "parentId": "root"
-    },
-    "routes/issues.$id.update": {
-      "file": "routes/issues.$id.update.tsx",
-      "id": "routes/issues.$id.update",
-      "path": ":id/update",
-      "parentId": "routes/issues"
-    },
-    "routes/api.check-health": {
-      "file": "routes/api.check-health.ts",
-      "id": "routes/api.check-health",
-      "path": "api/check-health",
-      "parentId": "root"
-    },
-    "routes/api.upload-local": {
-      "file": "routes/api.upload-local.tsx",
-      "id": "routes/api.upload-local",
-      "path": "api/upload-local",
-      "parentId": "root"
-    },
-    "routes/api.upload-video": {
-      "file": "routes/api.upload-video.tsx",
-      "id": "routes/api.upload-video",
-      "path": "api/upload-video",
-      "parentId": "root"
-    },
-    "routes/techstack.sentry": {
-      "file": "routes/techstack.sentry.tsx",
-      "id": "routes/techstack.sentry",
-      "path": "sentry",
-      "parentId": "routes/techstack"
     },
     "routes/api.auth.logout": {
       "file": "routes/api.auth.logout.ts",
@@ -84,136 +162,40 @@
       "path": "api/auth/logout",
       "parentId": "root"
     },
-    "routes/api.set-locales": {
-      "file": "routes/api.set-locales.ts",
-      "id": "routes/api.set-locales",
-      "path": "api/set-locales",
+    "routes/password-forgot": {
+      "file": "routes/password-forgot.tsx",
+      "id": "routes/password-forgot",
+      "path": "password-forgot",
       "parentId": "root"
     },
-    "routes/dashboard.image": {
-      "file": "routes/dashboard.image.tsx",
-      "id": "routes/dashboard.image",
-      "path": "dashboard/image",
+    "routes/password-update": {
+      "file": "routes/password-update.tsx",
+      "id": "routes/password-update",
+      "path": "password-update",
       "parentId": "root"
-    },
-    "routes/forgot-password": {
-      "file": "routes/forgot-password.tsx",
-      "id": "routes/forgot-password",
-      "path": "forgot-password",
-      "parentId": "root"
-    },
-    "routes/update-password": {
-      "file": "routes/update-password.tsx",
-      "id": "routes/update-password",
-      "path": "update-password",
-      "parentId": "root"
-    },
-    "routes/techstack.i18n": {
-      "file": "routes/techstack.i18n.tsx",
-      "id": "routes/techstack.i18n",
-      "path": "i18n",
-      "parentId": "routes/techstack"
     },
     "routes/api.$resource": {
-      "file": "routes/api.$resource.tsx",
+      "file": "routes/api.$resource.ts",
       "id": "routes/api.$resource",
       "path": "api/:resource",
       "parentId": "root"
     },
-    "routes/api.set-theme": {
-      "file": "routes/api.set-theme.ts",
-      "id": "routes/api.set-theme",
-      "path": "api/set-theme",
+    "routes/api.send.code": {
+      "file": "routes/api.send.code.ts",
+      "id": "routes/api.send.code",
+      "path": "api/send/code",
       "parentId": "root"
     },
-    "routes/api.upload-s3": {
-      "file": "routes/api.upload-s3.tsx",
-      "id": "routes/api.upload-s3",
-      "path": "api/upload-s3",
+    "routes/api.auth.me": {
+      "file": "routes/api.auth.me.ts",
+      "id": "routes/api.auth.me",
+      "path": "api/auth/me",
       "parentId": "root"
-    },
-    "routes/issues-events": {
-      "file": "routes/issues-events.tsx",
-      "id": "routes/issues-events",
-      "path": "issues-events",
-      "parentId": "root"
-    },
-    "routes/issues._index": {
-      "file": "routes/issues._index.tsx",
-      "id": "routes/issues._index",
-      "index": true,
-      "parentId": "routes/issues"
-    },
-    "routes/post.edit.$id": {
-      "file": "routes/post.edit.$id.tsx",
-      "id": "routes/post.edit.$id",
-      "path": "edit/:id",
-      "parentId": "routes/post"
-    },
-    "routes/post.show.$id": {
-      "file": "routes/post.show.$id.tsx",
-      "id": "routes/post.show.$id",
-      "path": "show/:id",
-      "parentId": "routes/post"
-    },
-    "routes/techstack.msw": {
-      "file": "routes/techstack.msw.tsx",
-      "id": "routes/techstack.msw",
-      "path": "msw",
-      "parentId": "routes/techstack"
-    },
-    "routes/users.$userid": {
-      "file": "routes/users.$userid.tsx",
-      "id": "routes/users.$userid",
-      "path": ":userid",
-      "parentId": "routes/users"
-    },
-    "routes/users._index": {
-      "file": "routes/users._index.tsx",
-      "id": "routes/users._index",
-      "index": true,
-      "parentId": "routes/users"
     },
     "routes/api.publish": {
       "file": "routes/api.publish.ts",
       "id": "routes/api.publish",
       "path": "api/publish",
-      "parentId": "root"
-    },
-    "routes/issues_.$id": {
-      "file": "routes/issues_.$id.tsx",
-      "id": "routes/issues_.$id",
-      "path": "issues/:id",
-      "parentId": "root"
-    },
-    "routes/post._index": {
-      "file": "routes/post._index.tsx",
-      "id": "routes/post._index",
-      "index": true,
-      "parentId": "routes/post"
-    },
-    "routes/post.create": {
-      "file": "routes/post.create.tsx",
-      "id": "routes/post.create",
-      "path": "create",
-      "parentId": "routes/post"
-    },
-    "routes/users.role": {
-      "file": "routes/users.role.tsx",
-      "id": "routes/users.role",
-      "path": "role",
-      "parentId": "routes/users"
-    },
-    "routes/socket-io": {
-      "file": "routes/socket-io.tsx",
-      "id": "routes/socket-io",
-      "path": "socket-io",
-      "parentId": "root"
-    },
-    "routes/techstack": {
-      "file": "routes/techstack.tsx",
-      "id": "routes/techstack",
-      "path": "techstack",
       "parentId": "root"
     },
     "routes/register": {
@@ -228,46 +210,10 @@
       "index": true,
       "parentId": "root"
     },
-    "routes/issues": {
-      "file": "routes/issues.tsx",
-      "id": "routes/issues",
-      "path": "issues",
-      "parentId": "root"
-    },
     "routes/login": {
       "file": "routes/login.tsx",
       "id": "routes/login",
       "path": "login",
-      "parentId": "root"
-    },
-    "routes/queue": {
-      "file": "routes/queue.tsx",
-      "id": "routes/queue",
-      "path": "queue",
-      "parentId": "root"
-    },
-    "routes/redis": {
-      "file": "routes/redis.tsx",
-      "id": "routes/redis",
-      "path": "redis",
-      "parentId": "root"
-    },
-    "routes/users": {
-      "file": "routes/users.tsx",
-      "id": "routes/users",
-      "path": "users",
-      "parentId": "root"
-    },
-    "routes/post": {
-      "file": "routes/post.tsx",
-      "id": "routes/post",
-      "path": "post",
-      "parentId": "root"
-    },
-    "routes/bff": {
-      "file": "routes/bff.tsx",
-      "id": "routes/bff",
-      "path": "bff",
       "parentId": "root"
     },
     "routes/$": {

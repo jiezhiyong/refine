@@ -16,6 +16,7 @@ import {
   useNavigation,
   useRouteError,
 } from '@remix-run/react';
+import * as Sentry from '@sentry/remix';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import { Loader } from 'lucide-react';
 import nProgress from 'nprogress';
@@ -119,7 +120,10 @@ function Document({
   script = true,
   locale,
 }: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale: LocaleLanguage }>) {
-  const { permissions, permissionsSignature } = useLoaderData<typeof loader>();
+  const { permissions, permissionsSignature, user } = useLoaderData<typeof loader>();
+
+  // 设置 Sentry 用户信息
+  Sentry.setUser({ email: user?.email, username: user?.name || '?', id: user?.id });
 
   // 重新登录后因为 window.__PERMISSIONS_DATA__ 设置成功时机不能确保早于客户端内层路由调用 useCan 的时机
   // 所以这里手动设置一下

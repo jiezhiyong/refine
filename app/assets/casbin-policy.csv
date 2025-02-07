@@ -6,7 +6,7 @@ p, editor, playground, list
 
 p, editor, dashboard, list
 p, editor, about, list
-p, editor, ui, list
+p, editor, demo, list
 p, editor, health, list
 
 p, editor, article, list
@@ -33,7 +33,7 @@ p, guest, playground, list
 
 p, guest, dashboard, list
 p, guest, about, list
-p, guest, ui, list
+p, guest, demo, list
 p, guest, health, list
 
 p, guest, article, list

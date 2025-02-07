@@ -1,2 +1,0 @@
-import{j as t}from"./jsx-runtime-BMlD0yL_.js";import{a as n}from"./placeholder-Ce5tSGc1.js";import"./api.agreement._agreementId_.pdf_-CYRM_IyK.js";(function(){try{var e=typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},r=new e.Error().stack;r&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[r]="2b02e443-e345-40f3-ba02-6d155c08ef20",e._sentryDebugIdIdentifier="sentry-dbid-2b02e443-e345-40f3-ba02-6d155c08ef20")}catch{}})();function i(){return t.jsx(n,{})}export{i as default};
-//# sourceMappingURL=users.role-DHz-RITH.js.map

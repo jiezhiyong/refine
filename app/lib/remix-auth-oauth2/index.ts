@@ -5,8 +5,6 @@ import {
   OAuth2Client,
   OAuth2RequestError,
   type OAuth2Tokens,
-  UnexpectedErrorResponseBodyError,
-  UnexpectedResponseError,
   generateCodeVerifier,
   generateState,
 } from 'arctic';
@@ -21,7 +19,7 @@ const debug = createDebug('OAuth2Strategy');
 
 const WELL_KNOWN = '.well-known/openid-configuration';
 
-export { OAuth2RequestError, CodeChallengeMethod, UnexpectedResponseError, UnexpectedErrorResponseBodyError };
+export { CodeChallengeMethod, OAuth2RequestError };
 
 export class OAuth2Strategy<User> extends Strategy<User, OAuth2Strategy.VerifyOptions> {
   override name = 'oauth2';

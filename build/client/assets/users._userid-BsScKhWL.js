@@ -1,2 +1,0 @@
-import{j as d}from"./jsx-runtime-BMlD0yL_.js";import"./api.agreement._agreementId_.pdf_-CYRM_IyK.js";(function(){try{var e=typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},t=new e.Error().stack;t&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[t]="5835add3-e23a-41d7-9002-f7c46c3e55f1",e._sentryDebugIdIdentifier="sentry-dbid-5835add3-e23a-41d7-9002-f7c46c3e55f1")}catch{}})();function f(){return d.jsx(d.Fragment,{children:"UsersDetail"})}export{f as default};
-//# sourceMappingURL=users._userid-BsScKhWL.js.map

@@ -66,17 +66,28 @@ Make sure to deploy the output of `pnpm run build`
 
 ## Issues
 
-- Cannot find module '.prisma/client/default'
-- 重新执行 `npx prisma generate` 并重启开发服务 `pnpm dev`
+- Q: Cannot find module '.prisma/client/default'
+- A: 重新执行 `npx prisma generate` 并重启开发服务 `pnpm dev`
 
-- 数据库删除了数据，但 `db` 依然可以查询到数据
-- 重启开发服务 `pnpm dev`
+- Q: 数据库删除了数据，但 `db` 依然可以查询到数据
+- A: 重启开发服务 `pnpm dev`
 
-## TODO: 未实现的功能
+- Q: Sentry source maps 无法上传到自托管服务器
+- A: 旧版本不支持 Artifact Bundle，需要升级自托管版本到 23.6.1 以上，或使用旧版本方式上传（cli、sentryVitePlugin uploadLegacySourcemaps等）
+
+- https://docs.sentry.io/platforms/javascript/sourcemaps/troubleshooting_js/legacy-uploading-methods/
+- https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/360
+- https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/386
+- https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/289
+- https://docs.sentry.io/platforms/javascript/sourcemaps/troubleshooting_js/artifact-bundles/
+
+## TODO: 问题、未实现的功能
 
 - 升级 Remix v3 / React Router v7, 暂时无法升级: @refinedev/remix-router 使用的是 Remix 2.x 版本
 - Sentry日志上报优化
+- Sentry source maps 文件路径不匹配
 - Refine Live Provider
+- 接入使用 trpc ?
 - Redis
 - 消息队列
 - 单点登录

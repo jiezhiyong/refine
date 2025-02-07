@@ -46,8 +46,6 @@ export const authProvider: {
       const res = await response.json();
 
       if (response.ok && res.id) {
-        Sentry.setUser({ email: res?.email, username: res?.username || '?', id: res?.id });
-
         return {
           success: true,
           redirectTo,
