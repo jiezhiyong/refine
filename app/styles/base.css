@@ -26,7 +26,6 @@ body {
   }
 }
 
-::view-transition-old(image-expand),
 ::view-transition-new(image-expand) {
   animation: image-expand 0.5s ease-in-out;
 }
