@@ -28,6 +28,7 @@ export const ShowButton: FC<ShowButtonProps> = ({
   return (
     <LinkComponent
       prefetch="intent"
+      viewTransition
       className={cn('visited:!text-blue-700', disabledNew && 'pointer-events-none')}
       to={to}
       replace={false}

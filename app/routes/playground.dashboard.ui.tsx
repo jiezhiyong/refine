@@ -3,6 +3,7 @@ import { Category } from '@prisma/client';
 import { HttpError, useModal, useNotification, useSelect, useTranslation } from '@refinedev/core';
 import { useModalForm, useStepsForm } from '@refinedev/react-hook-form';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { Link, useViewTransitionState } from '@remix-run/react';
 import { CheckCheck, Undo2 } from 'lucide-react';
 import { useCallback } from 'react';
 import { FieldValues } from 'react-hook-form';
@@ -64,6 +65,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function DashboardUI() {
   return (
     <div className="px-8 pb-4 pt-8">
+      <H2>useViewTransition</H2>
+      <DemoUseViewTransitionState />
+
       <H2>Notification</H2>
       <DemoNotification />
 
@@ -403,6 +407,29 @@ const DemoUseStepsForm = () => {
           </div>
         </form>
       </Form>
+    </div>
+  );
+};
+
+const DemoUseViewTransitionState = () => {
+  const to = `/playground/dashboard/viewTransition`;
+  const vt = useViewTransitionState(to);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="mt-2 text-sm text-muted-foreground">
+        {vt ? '正在执行视图过渡动画效果...' : '点击图片查看过渡效果'}
+      </span>
+
+      <Link prefetch="intent" viewTransition to={to}>
+        <img
+          className="h-32 rounded-md border border-secondary shadow-md"
+          src="/logo.png"
+          style={{
+            viewTransitionName: vt ? 'image-expand' : '',
+          }}
+        />
+      </Link>
     </div>
   );
 };

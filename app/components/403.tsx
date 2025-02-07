@@ -16,7 +16,7 @@ export function PermissionDenied() {
         </div>
         <p className="mb-8 text-xl text-red-500">Sorry, You don't have permission to access this page.</p>
 
-        <Link prefetch="intent" to="/api/auth/logout">
+        <Link prefetch="intent" viewTransition to="/api/auth/logout">
           <Button>Back To Login</Button>
         </Link>
       </div>

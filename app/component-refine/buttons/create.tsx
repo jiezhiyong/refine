@@ -26,6 +26,7 @@ export const CreateButton: FC<CreateButtonProps> = ({
   return (
     <LinkComponent
       prefetch="intent"
+      viewTransition
       className={cn(disabledNew && 'pointer-events-none')}
       to={to}
       replace={false}

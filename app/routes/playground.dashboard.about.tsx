@@ -100,6 +100,8 @@ export default function DashboardAbout() {
         <br />
         <Badge>日志上报 & 监控告警</Badge>
       </div>
+
+      {/* <PrefetchPageLinks page="/playground/article/post" /> */}
     </div>
   );
 }

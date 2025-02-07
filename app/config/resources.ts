@@ -31,6 +31,11 @@ export const dataResources: ResourceProps[] = [
     meta: { parent: 'dashboard', label: 'UI' },
   },
   {
+    name: 'viewTransition',
+    list: '/playground/dashboard/viewTransition',
+    meta: { parent: 'dashboard', label: 'viewTransition' },
+  },
+  {
     name: 'health',
     list: '/playground/dashboard/health',
     meta: { parent: 'dashboard' },

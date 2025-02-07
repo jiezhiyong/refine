@@ -81,7 +81,7 @@ export function RegisterForm() {
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
-            <Link prefetch="intent" to="/" className="flex flex-col items-center gap-2 font-medium">
+            <Link prefetch="intent" viewTransition to="/" className="flex flex-col items-center gap-2 font-medium">
               <div className="flex h-8 w-8 items-center justify-center rounded-md">
                 <GalleryVerticalEnd className="size-6" />
               </div>
@@ -90,7 +90,7 @@ export function RegisterForm() {
             <h1 className="text-xl font-bold">Welcome to Signup OSS Inc.</h1>
             <div className="text-center text-sm">
               {`Already has an account? `}
-              <Link prefetch="intent" to="/login" replace className="underline underline-offset-4">
+              <Link prefetch="intent" viewTransition to="/login" replace className="underline underline-offset-4">
                 Sign in
               </Link>
             </div>

@@ -16,7 +16,7 @@ export function NotFound() {
         </div>
         <p className="mb-8 text-xl text-red-500">Sorry, You are looking for something that isn't here.</p>
 
-        <Link prefetch="intent" to="/">
+        <Link prefetch="intent" viewTransition to="/">
           <Button>Back To Home</Button>
         </Link>
       </div>

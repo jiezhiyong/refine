@@ -54,7 +54,12 @@ export function LoginForm() {
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <Link prefetch="intent" to="#" className="ml-auto text-sm underline-offset-2 hover:underline">
+                  <Link
+                    prefetch="intent"
+                    viewTransition
+                    to="#"
+                    className="ml-auto text-sm underline-offset-2 hover:underline"
+                  >
                     Forgot your password?
                   </Link>
                 </div>
@@ -86,14 +91,14 @@ export function LoginForm() {
 
               <div className="text-center text-sm">
                 {`Don't have an account? `}
-                <Link prefetch="intent" to="/register" replace className="underline underline-offset-4">
+                <Link prefetch="intent" viewTransition to="/register" replace className="underline underline-offset-4">
                   Sign up
                 </Link>
               </div>
             </div>
           </Form>
           <div className="relative hidden bg-muted md:block">
-            <img src="/logo.gif" alt="" className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.3]" />
+            <img src="/logo.png" alt="" className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.3]" />
           </div>
         </CardContent>
       </Card>
