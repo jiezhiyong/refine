@@ -1,9 +1,8 @@
 # CRUD APP Template, use Refine & Remix
 
-[Refine](https://refine.dev/) 是一个开源的无头 React 框架，供开发人员构建企业内部工具、管理面板、仪表板、B2B 应用程序。
-它消除了 CRUD 操作中的重复性任务，并为关键项目组件（如身份验证、访问控制、路由、网络、状态管理和 i18n）提供行业标准解决方案。
+[Refine](https://refine.dev/) 是一个开源的无头 React 框架，供开发人员构建企业内部工具、管理面板、仪表板、B2B 应用程序。它消除了 CRUD 操作中的重复性任务，并为关键项目组件（如身份验证、访问控制、路由、网络、状态管理和 i18n）提供行业标准解决方案。
 
-[Remix](https://remix.run/) 是一个全栈式 Web 框架，可让您专注于用户界面，并通过 Web 标准进行工作，以提供快速、流畅且有弹性的用户体验。
+[Remix](https://remix.run/) 是一个全栈式 Web 框架，可让您专注于用户界面，并通过 Web 标准进行工作，以提供快速、流畅且有弹性的用户体验。实际上 Remix就是 React route 7。
 
 ## 默认本地使用HTTPS，需要配置本地 HTTPS 环境
 
@@ -87,6 +86,7 @@ Make sure to deploy the output of `pnpm run build`
 - Sentry source maps 文件路径不匹配
 - Refine Live Provider
 - 接入使用 trpc ?
+- 服务状态监控 https://prometheus.io/
 - Redis
 - 消息队列
 - 单点登录
