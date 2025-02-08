@@ -1,3 +1,7 @@
+/** 初始化服务端 Sentry */
+import { initSentry } from './services/sentry.server';
+initSentry();
+
 import type { EntryContext } from '@remix-run/node';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
@@ -5,7 +9,6 @@ import * as Sentry from '@sentry/remix';
 import { isbot } from 'isbot';
 import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
-import { initSentry } from './services/sentry.server';
 import { TAny } from './types/any';
 
 const ABORT_DELAY = 5_000;
@@ -36,9 +39,6 @@ const ABORT_DELAY = 5_000;
 //     console.log('[MSW] Intercepted match:', `(${request.method}) ${request.url}`);
 //   });
 // }
-
-/** 初始化服务端 Sentry */
-initSentry();
 
 /** 处理请求 */
 export default async function handleRequest(
@@ -142,7 +142,7 @@ function handleBrowserRequest(
 
 /** 错误处理 */
 export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }: TAny) => {
-  if (!request.signal.aborted) {
-    console.error('@entry.server.handleError', error);
-  }
+  // if (!request.signal.aborted) {
+  //   console.error('@entry.server.handleError', error);
+  // }
 });

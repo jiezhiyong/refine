@@ -6,51 +6,62 @@ import { axiosInstance, handleFilter, handleJoin, handlePagination, handleSort, 
 
 export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosInstance): Required<DataProvider> => ({
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
-    const url = `${apiUrl}/${resource}`;
+    try {
+      const url = `${apiUrl}/${resource}`;
 
-    let query = RequestQueryBuilder.create();
+      let query = RequestQueryBuilder.create();
 
-    query = handleFilter(query, filters);
-    query = handleJoin(query, meta?.join);
-    query = handlePagination(query, pagination);
-    query = handleSort(query, sorters);
+      query = handleFilter(query, filters);
+      query = handleJoin(query, meta?.join);
+      query = handlePagination(query, pagination);
+      query = handleSort(query, sorters);
 
-    const { data } = await httpClient.get(`${url}?${query.query()}`);
+      const { data } = await httpClient.get(`${url}?${query.query()}`);
 
-    // without pagination
-    if (Array.isArray(data)) {
-      return {
-        data,
-        total: data.length,
-      };
+      // without pagination
+      if (Array.isArray(data)) {
+        return {
+          data,
+          total: data.length,
+        };
+      }
+
+      // with pagination
+      return data;
+    } catch (error) {
+      const httpError = transformHttpError(error);
+
+      throw httpError;
     }
-
-    // with pagination
-    return data;
   },
 
   getMany: async ({ resource, ids, meta }) => {
-    const url = `${apiUrl}/${resource}`;
+    try {
+      const url = `${apiUrl}/${resource}`;
 
-    let query = RequestQueryBuilder.create().setFilter({
-      field: 'id',
-      operator: CondOperator.IN,
-      value: ids,
-    });
+      let query = RequestQueryBuilder.create().setFilter({
+        field: 'id',
+        operator: CondOperator.IN,
+        value: ids,
+      });
 
-    query = handleJoin(query, meta?.join);
+      query = handleJoin(query, meta?.join);
 
-    const { data } = await httpClient.get(`${url}?${query.query()}`);
+      const { data } = await httpClient.get(`${url}?${query.query()}`);
 
-    return {
-      data,
-    };
+      return {
+        data,
+      };
+    } catch (error) {
+      const httpError = transformHttpError(error);
+
+      throw httpError;
+    }
   },
 
   create: async ({ resource, variables }) => {
-    const url = `${apiUrl}/${resource}`;
-
     try {
+      const url = `${apiUrl}/${resource}`;
       const { data } = await httpClient.post(url, variables);
 
       return data;
@@ -62,9 +73,8 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
   },
 
   update: async ({ resource, id, variables }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
-
     try {
+      const url = `${apiUrl}/${resource}/${id}`;
       const { data } = await httpClient.patch(url, variables);
 
       return data;
@@ -76,9 +86,8 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
   },
 
   updateMany: async ({ resource, ids, variables }) => {
-    const url = `${apiUrl}/${resource}/bulk`;
-
     try {
+      const url = `${apiUrl}/${resource}/bulk`;
       const { data } = await httpClient.put(url, { ids, variables });
 
       return data;
@@ -90,9 +99,8 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
   },
 
   createMany: async ({ resource, variables }) => {
-    const url = `${apiUrl}/${resource}/bulk`;
-
     try {
+      const url = `${apiUrl}/${resource}/bulk`;
       const { data } = await httpClient.post(url, { variables });
 
       return data;
@@ -104,29 +112,39 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
   },
 
   getOne: async ({ resource, id, meta }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
+    try {
+      const url = `${apiUrl}/${resource}/${id}`;
 
-    let query = RequestQueryBuilder.create();
+      let query = RequestQueryBuilder.create();
 
-    query = handleJoin(query, meta?.join);
+      query = handleJoin(query, meta?.join);
 
-    const { data } = await httpClient.get(`${url}?${query.query()}`);
+      const { data } = await httpClient.get(`${url}?${query.query()}`);
 
-    return data;
+      return data;
+    } catch (error) {
+      const httpError = transformHttpError(error);
+
+      throw httpError;
+    }
   },
 
   deleteOne: async ({ resource, id }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
+    try {
+      const url = `${apiUrl}/${resource}/${id}`;
+      const { data } = await httpClient.delete(url);
 
-    const { data } = await httpClient.delete(url);
+      return data;
+    } catch (error) {
+      const httpError = transformHttpError(error);
 
-    return data;
+      throw httpError;
+    }
   },
 
   deleteMany: async ({ resource, ids }) => {
-    const url = `${apiUrl}/${resource}/bulk`;
-
     try {
+      const url = `${apiUrl}/${resource}/bulk`;
       const { data } = await httpClient.delete(url, {
         data: { ids },
       });
@@ -144,42 +162,48 @@ export const dataProvider = (apiUrl: string, httpClient: AxiosInstance = axiosIn
   },
 
   custom: async ({ url, method, meta, filters, sorters, payload, query, headers }) => {
-    let requestQueryBuilder = RequestQueryBuilder.create();
+    try {
+      let requestQueryBuilder = RequestQueryBuilder.create();
 
-    requestQueryBuilder = handleFilter(requestQueryBuilder, filters);
+      requestQueryBuilder = handleFilter(requestQueryBuilder, filters);
 
-    requestQueryBuilder = handleJoin(requestQueryBuilder, meta?.join);
+      requestQueryBuilder = handleJoin(requestQueryBuilder, meta?.join);
 
-    requestQueryBuilder = handleSort(requestQueryBuilder, sorters);
+      requestQueryBuilder = handleSort(requestQueryBuilder, sorters);
 
-    let requestUrl = `${url}?${requestQueryBuilder.query()}`;
+      let requestUrl = `${url}?${requestQueryBuilder.query()}`;
 
-    if (query) {
-      requestUrl = `${requestUrl}&${queryString.stringify(query)}`;
+      if (query) {
+        requestUrl = `${requestUrl}&${queryString.stringify(query)}`;
+      }
+
+      let axiosResponse;
+      switch (method) {
+        case 'put':
+        case 'post':
+        case 'patch':
+          axiosResponse = await httpClient[method](url, payload, {
+            headers,
+          });
+          break;
+        case 'delete':
+          axiosResponse = await httpClient.delete(url, {
+            data: payload,
+            headers: headers,
+          });
+          break;
+        default:
+          axiosResponse = await httpClient.get(requestUrl, { headers });
+          break;
+      }
+
+      const { data } = axiosResponse;
+
+      return Promise.resolve({ data });
+    } catch (error) {
+      const httpError = transformHttpError(error);
+
+      throw httpError;
     }
-
-    let axiosResponse;
-    switch (method) {
-      case 'put':
-      case 'post':
-      case 'patch':
-        axiosResponse = await httpClient[method](url, payload, {
-          headers,
-        });
-        break;
-      case 'delete':
-        axiosResponse = await httpClient.delete(url, {
-          data: payload,
-          headers: headers,
-        });
-        break;
-      default:
-        axiosResponse = await httpClient.get(requestUrl, { headers });
-        break;
-    }
-
-    const { data } = axiosResponse;
-
-    return Promise.resolve({ data });
   },
 });

@@ -20,14 +20,19 @@ export function initSentry() {
     release: 'oss@' + import.meta.env.npm_package_version,
 
     integrations: [
+      Sentry.browserSessionIntegration(),
       Sentry.browserTracingIntegration({ useEffect, useLocation, useMatches }),
       Sentry.browserProfilingIntegration(),
+      Sentry.contextLinesIntegration(),
       Sentry.replayIntegration({ maskAllText: isProduction, blockAllMedia: isProduction }),
       Sentry.extraErrorDataIntegration(),
-      Sentry.httpClientIntegration(),
+      Sentry.httpClientIntegration({
+        failedRequestTargets: ['https://oss.tcshuke.com.com'], // 站内请求错误已在服务端捕获
+      }),
+      Sentry.reportingObserverIntegration(),
     ],
 
-    sendDefaultPii: true,
+    sendDefaultPii: false,
     tracesSampleRate: 1.0,
     tracePropagationTargets: ['localhost', /^\/api/, 'https://oss.tcshuke.com.com'],
     profilesSampleRate: 1.0,
