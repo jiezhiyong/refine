@@ -5,20 +5,20 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
 !function() {
   try {
     var e = "undefined" != typeof window ? window : "undefined" != typeof global ? global : "undefined" != typeof globalThis ? globalThis : "undefined" != typeof self ? self : {}, n = new e.Error().stack;
-    n && (e._sentryDebugIds = e._sentryDebugIds || {}, e._sentryDebugIds[n] = "23b8ad4d-0e0f-4cd1-a2ed-16f1c0f996a5", e._sentryDebugIdIdentifier = "sentry-dbid-23b8ad4d-0e0f-4cd1-a2ed-16f1c0f996a5");
+    n && (e._sentryDebugIds = e._sentryDebugIds || {}, e._sentryDebugIds[n] = "6de3d33d-e05a-46dd-9b8a-3271520c1908", e._sentryDebugIdIdentifier = "sentry-dbid-6de3d33d-e05a-46dd-9b8a-3271520c1908");
   } catch (e2) {
   }
 }();
 import { jsx, Fragment, jsxs } from "react/jsx-runtime";
-import { createReadableStreamFromReadable, createCookieSessionStorage, redirect as redirect$1, data as data$1 } from "@remix-run/node";
-import { RemixServer, useNavigate, useSearchParams, useFetcher, Link as Link$1, useRouteError, isRouteErrorResponse, useActionData, useNavigation as useNavigation$1, Form as Form$2, useRouteLoaderData, useMatches as useMatches$1, Outlet, data, useLoaderData, Meta, Links, ScrollRestoration, Scripts, useViewTransitionState } from "@remix-run/react";
+import * as SentryProfiling from "@sentry/profiling-node";
 import * as Sentry from "@sentry/remix";
 import { withSentry, captureRemixErrorBoundaryError } from "@sentry/remix";
+import { createReadableStreamFromReadable, createCookieSessionStorage, redirect as redirect$1, data as data$1 } from "@remix-run/node";
+import { RemixServer, useNavigate, useSearchParams, useFetcher, Link as Link$1, useRouteError, isRouteErrorResponse, useActionData, useNavigation as useNavigation$1, Form as Form$2, useRouteLoaderData, useMatches as useMatches$1, Outlet, data, useLoaderData, Meta, Links, ScrollRestoration, Scripts, useViewTransitionState } from "@remix-run/react";
 import { isbot } from "isbot";
 import { PassThrough } from "node:stream";
 import { renderToPipeableStream } from "react-dom/server";
-import * as SentryProfiling from "@sentry/profiling-node";
-import { useTranslate, useRouterContext, useRouterType, useLink, useBreadcrumb, useRefineContext, useResource, matchResourceFromRoute, useCloneButton, useCreateButton, useParsed, useBack, useDeleteButton, useEditButton, useExportButton, useExport, useCan, useImport, useImportButton, useSaveButton, CanAccess, useShowButton, useGetToPath, useGo, useDelete, useNavigation, useUserFriendlyName, useCanWithoutCache, AccessControlContext, useResourceParams, useMutationMode, useWarnAboutChange, pickNotDeprecated, useMenu, useTable as useTable$1, useNotification, useTranslation, useLogout, Refine, useSelect, useDeleteMany, useModal } from "@refinedev/core";
+import { useTranslate, useRouterContext, useRouterType, useLink, useBreadcrumb, useRefineContext, useResource, matchResourceFromRoute, useCloneButton, useCreateButton, useParsed, useBack, useDeleteButton, useEditButton, useExportButton, useExport, useCan, useImport, useImportButton, useSaveButton, CanAccess, useShowButton, useGetToPath, useGo, useDelete, useNavigation, useUserFriendlyName, useCanWithoutCache, AccessControlContext, useResourceParams, useMutationMode, useWarnAboutChange, pickNotDeprecated, useMenu, useTable as useTable$1, useNotification, useTranslation, useLogout, Refine, useSelect, useDeleteMany, useModal, useUpdate } from "@refinedev/core";
 import { DevtoolsProvider, DevtoolsPanel } from "@refinedev/devtools";
 import routerProvider, { UnsavedChangesNotifier, parseTableParams } from "@refinedev/remix-router";
 import { BicepsFlexed, AudioLines, Baby, PieChart, Brain, UsersRound, Bot, ChevronRight, HomeIcon, Loader2, CopyCheck, CirclePlus, X, Search, XIcon, CheckIcon as CheckIcon$1, Undo2, ChevronDown, ChevronUp, Check, Trash2Icon, Pencil, Download, Upload, CheckCheck, EyeIcon, ArrowLeftToLine, ListIcon, PanelLeft, Circle, Trash2, Eye, ChevronLeft, FilterX, FilterIcon, GalleryVerticalEnd, Fullscreen, Languages, Filter, Sun, Moon, Bug, Activity, ChevronsUpDown, BadgeCheck, CreditCard, Bell, LogOut, Plus, Loader as Loader$1, LeafyGreen, CalendarIcon, ClockIcon, MailIcon, Paperclip, Star, MoreHorizontal, Settings2, FileText, Link as Link$2, Copy, CornerUpRight, CornerUpLeft, LineChart, Trash, ArrowUp, ArrowDown } from "lucide-react";
@@ -107,8 +107,8 @@ function initSentry() {
   });
   isInitialized = true;
 }
-const ABORT_DELAY = 5e3;
 initSentry();
+const ABORT_DELAY = 5e3;
 async function handleRequest(request2, responseStatusCode, responseHeaders, remixContext) {
   return isbot(request2.headers.get("user-agent") || "") ? handleBotRequest(request2, responseStatusCode, responseHeaders, remixContext) : handleBrowserRequest(request2, responseStatusCode, responseHeaders, remixContext);
 }
@@ -179,9 +179,6 @@ function handleBrowserRequest(request2, responseStatusCode, responseHeaders, rem
   });
 }
 const handleError$1 = Sentry.wrapHandleErrorWithSentry((error, { request: request2 }) => {
-  if (!request2.signal.aborted) {
-    console.error("@entry.server.handleError", error);
-  }
 });
 const entryServer = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -1219,17 +1216,17 @@ const LoadingIcon = React__default.forwardRef(({ className, ...props }, ref) => 
   return /* @__PURE__ */ jsx(Loader2, { ref, className: cn("h-4 w-4 animate-spin", className), ...props });
 });
 LoadingIcon.displayName = "LoadingIcon";
-const clsOutline = "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground";
+const clsOutline = "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground";
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 transition-all ring-offset-2",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 transition-all ring-offset-2",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90",
         outline: clsOutline,
         dashed: `${clsOutline} border-dashed`,
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline"
       },
@@ -1379,7 +1376,7 @@ const DialogContent = React.forwardRef(({ className, children, ...props }, ref) 
       ...props,
       children: [
         children,
-        /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground", children: [
+        /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground", children: [
           /* @__PURE__ */ jsx(X, { className: "h-5 w-5" }),
           /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Close" })
         ] })
@@ -1422,7 +1419,7 @@ const CommandInput = React.forwardRef(({ className, ...props }, ref) => /* @__PU
     {
       ref,
       className: cn(
-        "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+        "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
         className
       ),
       ...props
@@ -1460,7 +1457,7 @@ const CommandItem = React.forwardRef(({ className, ...props }, ref) => /* @__PUR
   {
     ref,
     className: cn(
-      "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+      "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden data-[disabled=true]:pointer-events-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
       className
     ),
     ...props
@@ -1562,7 +1559,7 @@ const PopoverContent = React.forwardRef(({ className, align = "center", sideOffs
     align,
     sideOffset,
     className: cn(
-      "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
       className
     ),
     ...props
@@ -1793,7 +1790,7 @@ const Field = (props) => {
     }
   );
 };
-const Card = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("rounded-xl border bg-card text-card-foreground shadow", className), ...props }));
+const Card = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("rounded-xl border bg-card text-card-foreground shadow-sm", className), ...props }));
 Card.displayName = "Card";
 const CardHeader = React.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("flex flex-col space-y-1.5 p-6", className), ...props })
@@ -1977,7 +1974,7 @@ const SelectTrigger = React.forwardRef(({ className, children, ...props }, ref) 
   {
     ref,
     className: cn(
-      "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-hidden focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className
     ),
     ...props,
@@ -2043,7 +2040,7 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
   {
     ref,
     className: cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
       className
     ),
     ...props,
@@ -2297,7 +2294,7 @@ const ShowButton = ({
     {
       prefetch: "intent",
       viewTransition: true,
-      className: cn("visited:!text-blue-700", disabledNew && "pointer-events-none"),
+      className: cn("visited:text-blue-700!", disabledNew && "pointer-events-none"),
       to,
       replace: false,
       onClick: (e) => {
@@ -2983,7 +2980,7 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
     {
       type,
       className: cn(
-        "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
         className
       ),
       ref,
@@ -3037,7 +3034,7 @@ const SheetContent = React.forwardRef(
   ({ side = "right", className, children, ...props }, ref) => /* @__PURE__ */ jsxs(SheetPortal, { children: [
     /* @__PURE__ */ jsx(SheetOverlay, {}),
     /* @__PURE__ */ jsxs(DialogPrimitive.Content, { ref, className: cn(sheetVariants({ side }), className), ...props, children: [
-      /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary", children: [
+      /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary", children: [
         /* @__PURE__ */ jsx(X, { className: "h-4 w-4" }),
         /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Close" })
       ] }),
@@ -3202,7 +3199,7 @@ const SidebarProvider = React.forwardRef(({ defaultOpen = true, open: openProp, 
         "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
         ...style
       },
-      className: cn("group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar", className),
+      className: cn("group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar", className),
       ref,
       ...props,
       children
@@ -3216,7 +3213,7 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
     return /* @__PURE__ */ jsx(
       "div",
       {
-        className: cn("z-10 flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground", className),
+        className: cn("z-10 flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground", className),
         ref,
         ...props,
         children
@@ -3229,7 +3226,7 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
       {
         "data-sidebar": "sidebar",
         "data-mobile": "true",
-        className: "w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden",
+        className: "w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden",
         style: {
           "--sidebar-width": SIDEBAR_WIDTH_MOBILE
         },
@@ -3252,10 +3249,10 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
           "div",
           {
             className: cn(
-              "relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-200 ease-linear",
+              "relative h-svh w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear",
               "group-data-[collapsible=offcanvas]:w-0",
               "group-data-[side=right]:rotate-180",
-              variant === "floating" || variant === "inset" ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]" : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
+              variant === "floating" || variant === "inset" ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]" : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)"
             )
           }
         ),
@@ -3263,10 +3260,10 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
           "div",
           {
             className: cn(
-              "fixed inset-y-0 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex",
+              "fixed inset-y-0 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
               side === "left" ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]" : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
               // Adjust the padding for floating and inset variants.
-              variant === "floating" || variant === "inset" ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]" : "group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l",
+              variant === "floating" || variant === "inset" ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]" : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
               className
             ),
             ...props,
@@ -3274,7 +3271,7 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
               "div",
               {
                 "data-sidebar": "sidebar",
-                className: "flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow",
+                className: "flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm",
                 children
               }
             )
@@ -3324,9 +3321,9 @@ const SidebarRail = React.forwardRef(
         title: "Toggle Sidebar",
         className: cn(
           "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex",
-          "[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize",
+          "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
           "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
-          "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-sidebar",
+          "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar",
           "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
           "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
           className
@@ -3344,7 +3341,7 @@ const SidebarInset = React.forwardRef(({ className, ...props }, ref) => {
       ref,
       className: cn(
         "relative flex min-h-svh flex-1 flex-col bg-background",
-        "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
+        "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(4)))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm",
         className
       ),
       ...props
@@ -3427,7 +3424,7 @@ const SidebarGroupLabel = React.forwardRef(
         ref,
         "data-sidebar": "group-label",
         className: cn(
-          "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+          "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-hidden ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
           "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
           className
         ),
@@ -3446,9 +3443,9 @@ const SidebarGroupAction = React.forwardRef(
         ref,
         "data-sidebar": "group-action",
         className: cn(
-          "absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+          "absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
           // Increases the hit area of the button on mobile.
-          "after:absolute after:-inset-2 after:md:hidden",
+          "after:absolute after:-inset-2 md:after:hidden",
           "group-data-[collapsible=icon]:hidden",
           className
         ),
@@ -3467,7 +3464,7 @@ SidebarMenu.displayName = "SidebarMenu";
 const SidebarMenuItem = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("li", { ref, "data-sidebar": "menu-item", className: cn("group/menu-item relative", className), ...props }));
 SidebarMenuItem.displayName = "SidebarMenuItem";
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -3477,7 +3474,7 @@ const sidebarMenuButtonVariants = cva(
       size: {
         default: "h-8 text-sm",
         sm: "h-7 text-xs",
-        lg: "h-12 text-sm group-data-[collapsible=icon]:!p-0"
+        lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!"
       }
     },
     defaultVariants: {
@@ -3522,9 +3519,9 @@ const SidebarMenuAction = React.forwardRef(({ className, asChild = false, showOn
       ref,
       "data-sidebar": "menu-action",
       className: cn(
-        "absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0",
+        "absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0",
         // Increases the hit area of the button on mobile.
-        "after:absolute after:-inset-2 after:md:hidden",
+        "after:absolute after:-inset-2 md:after:hidden",
         "peer-data-[size=sm]/menu-button:top-1",
         "peer-data-[size=default]/menu-button:top-1.5",
         "peer-data-[size=lg]/menu-button:top-2.5",
@@ -3573,7 +3570,7 @@ const SidebarMenuSkeleton = React.forwardRef(({ className, showIcon = false, ...
         /* @__PURE__ */ jsx(
           Skeleton,
           {
-            className: "h-4 max-w-[--skeleton-width] flex-1",
+            className: "h-4 max-w-(--skeleton-width) flex-1",
             "data-sidebar": "menu-skeleton-text",
             style: {
               "--skeleton-width": width
@@ -3613,7 +3610,7 @@ const SidebarMenuSubButton = React.forwardRef(({ asChild = false, size = "md", i
       "data-size": size,
       "data-active": isActive,
       className: cn(
-        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
+        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-hidden ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
         "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
         size === "sm" && "text-xs",
         size === "md" && "text-sm",
@@ -3661,7 +3658,7 @@ function Sidebar() {
             {
               asChild: true,
               isActive,
-              className: cn(isActive && "!bg-primary !text-primary-foreground"),
+              className: cn(isActive && "bg-primary! text-primary-foreground!"),
               children: /* @__PURE__ */ jsx(Link$1, { prefetch: "intent", viewTransition: true, to: ((_a2 = item.list) == null ? void 0 : _a2.toString()) ?? "/#", children: /* @__PURE__ */ jsx("span", { className: "capitalize", children: (meta2 == null ? void 0 : meta2.label) || item.name }) })
             }
           ) }) }, item.key);
@@ -3683,7 +3680,7 @@ const TableBody = React.forwardRef(
 );
 TableBody.displayName = "TableBody";
 const TableFooter = React.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("tfoot", { ref, className: cn("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className), ...props })
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("tfoot", { ref, className: cn("border-t bg-muted/50 font-medium last:[&>tr]:border-b-0", className), ...props })
 );
 TableFooter.displayName = "TableFooter";
 const TableRow = React.forwardRef(
@@ -3926,7 +3923,7 @@ const DropdownMenuSubTrigger = React.forwardRef(({ className, inset, children, .
   {
     ref,
     className: cn(
-      "flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[state=open]:bg-accent [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+      "flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden focus:bg-accent data-[state=open]:bg-accent [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
       inset && "pl-8",
       className
     ),
@@ -3969,7 +3966,7 @@ const DropdownMenuItem = React.forwardRef(({ className, inset, ...props }, ref) 
   {
     ref,
     className: cn(
-      "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+      "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden transition-colors focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
       inset && "pl-8",
       className
     ),
@@ -3982,7 +3979,7 @@ const DropdownMenuCheckboxItem = React.forwardRef(({ className, children, checke
   {
     ref,
     className: cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-hidden transition-colors focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
       className
     ),
     checked,
@@ -3999,7 +3996,7 @@ const DropdownMenuRadioItem = React.forwardRef(({ className, children, ...props 
   {
     ref,
     className: cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-hidden transition-colors focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
       className
     ),
     ...props,
@@ -4094,7 +4091,7 @@ function DeleteAction({
       icon: /* @__PURE__ */ jsx(Trash2, { size: 16 }),
       disabled: !can || disabled,
       title: title || "Delete",
-      className: cn("!text-destructive", className),
+      className: cn("text-destructive!", className),
       onClick: () => deleteContext == null ? void 0 : deleteContext.updateData({
         row,
         resource,
@@ -4126,13 +4123,13 @@ function ShowAction({ row, resource, title, disabled, ...props }) {
 }
 ShowAction.displayName = "ShowAction";
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+        default: "border-transparent bg-primary text-primary-foreground shadow-sm hover:bg-primary/80",
         secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+        destructive: "border-transparent bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/80",
         outline: "text-foreground"
       }
     },
@@ -4226,7 +4223,7 @@ function TableFilterDateRangePickerFilter({
         {
           title,
           variant: "ghost",
-          className: cn("h-5 px-1 py-2.5", selectedValues.size > 0 && "!text-green-500"),
+          className: cn("h-5 px-1 py-2.5", selectedValues.size > 0 && "text-green-500!"),
           onClick: (e) => {
             if (!selectedValues.size) {
               return;
@@ -4287,7 +4284,7 @@ function TableFilterDropdown({ column, title, options, align = "start" }) {
         {
           title,
           variant: "ghost",
-          className: cn("h-5 border-dashed px-1 py-2.5", selectedValues.size > 0 && "!text-green-500"),
+          className: cn("h-5 border-dashed px-1 py-2.5", selectedValues.size > 0 && "text-green-500!"),
           onClick: (e) => {
             if (!selectedValues.size) {
               return;
@@ -4411,7 +4408,7 @@ function TableFilterSearchColumn({ column, title, align = "start" }) {
               column == null ? void 0 : column.setFilterValue(e.target.value);
             },
             className: cn(
-              "h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm shadow-none outline-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
+              "h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm shadow-none outline-hidden ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
             ),
             placeholder: title
           }
@@ -4442,7 +4439,7 @@ const Checkbox = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__
   {
     ref,
     className: cn(
-      "peer h-4 w-4 shrink-0 rounded-sm border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
+      "peer h-4 w-4 shrink-0 rounded-sm border border-primary shadow-sm focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
       className
     ),
     ...props,
@@ -4491,7 +4488,7 @@ const Pagination = ({ table }) => {
   var _a, _b, _c;
   const t = useTranslate();
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: "sm-gap-y-0 sticky bottom-4 !mt-0 flex flex-col items-center justify-between gap-y-4 bg-background pt-4 sm:flex-row", children: [
+    /* @__PURE__ */ jsxs("div", { className: "sm-gap-y-0 sticky bottom-4 mt-0! flex flex-col items-center justify-between gap-y-4 bg-background pt-4 sm:flex-row", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex-1 text-sm text-muted-foreground", children: [
         table.getFilteredSelectedRowModel().rows.length,
         " of ",
@@ -4581,7 +4578,7 @@ const Pagination = ({ table }) => {
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "fixed bottom-0 !m-0 h-4 w-full bg-background" })
+    /* @__PURE__ */ jsx("div", { className: "fixed bottom-0 m-0! h-4 w-full bg-background" })
   ] });
 };
 Pagination.displayName = "Pagination";
@@ -4596,8 +4593,8 @@ const SortAction = ({
         column == null ? void 0 : column.toggleSorting((column == null ? void 0 : column.getIsSorted()) === "asc");
       },
       children: /* @__PURE__ */ jsxs("div", { className: "inline-flex flex-col", children: [
-        /* @__PURE__ */ jsx(CaretUpIcon, { className: cn("-mb-1.5 h-5 w-5", (column == null ? void 0 : column.getIsSorted()) === "asc" ? "!text-green-500" : "") }),
-        /* @__PURE__ */ jsx(CaretDownIcon, { className: cn("-mt-1.5 h-5 w-5", (column == null ? void 0 : column.getIsSorted()) === "desc" ? "!text-green-500" : "") })
+        /* @__PURE__ */ jsx(CaretUpIcon, { className: cn("-mb-1.5 h-5 w-5", (column == null ? void 0 : column.getIsSorted()) === "asc" ? "text-green-500!" : "") }),
+        /* @__PURE__ */ jsx(CaretDownIcon, { className: cn("-mt-1.5 h-5 w-5", (column == null ? void 0 : column.getIsSorted()) === "desc" ? "text-green-500!" : "") })
       ] })
     }
   );
@@ -4612,7 +4609,7 @@ function TableFilterRadio({ column, title, options, align = "start" }) {
         {
           title,
           variant: "ghost",
-          className: cn("h-5 border-dashed px-1 py-2.5", selectedValue && "!text-green-500"),
+          className: cn("h-5 border-dashed px-1 py-2.5", selectedValue && "text-green-500!"),
           onClick: (e) => {
             if (!selectedValue) {
               return;
@@ -4901,7 +4898,7 @@ function ErrorMessage({ error }) {
   return /* @__PURE__ */ jsx("p", { className: "text-sm text-destructive", children: message });
 }
 function PrivacyPolicy() {
-  return /* @__PURE__ */ jsxs("div", { className: "text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary", children: [
     "By clicking continue, you agree to our ",
     /* @__PURE__ */ jsx(Link$1, { prefetch: "intent", viewTransition: true, to: "#", children: "Privacy Policy" }),
     "."
@@ -4918,7 +4915,7 @@ const TcskOAuth2 = ({ redirectTo }) => {
     {
       type: "button",
       variant: "outline",
-      className: "w-full border-green-500 !text-green-500",
+      className: "w-full border-green-500 text-green-500!",
       onClick: handleLogin,
       loading,
       children: "Continue with TCSK"
@@ -5093,7 +5090,7 @@ function H2({ children, className, ...props }) {
   );
 }
 function P({ children, className, ...props }) {
-  return /* @__PURE__ */ jsx("p", { className: cn("leading-7 [&:not(:first-child)]:mt-6", className), ...props, children });
+  return /* @__PURE__ */ jsx("p", { className: cn("leading-7 not-first:mt-6", className), ...props, children });
 }
 function Image({ src, alt, className, ...props }) {
   return /* @__PURE__ */ jsx(
@@ -5211,7 +5208,7 @@ function SidebarRight({ ...props }) {
     Sidebar$1,
     {
       collapsible: "none",
-      className: cn("sticky top-0 flex h-svh w-0 border-l transition-all", isActive && "w-[--sidebar-width]"),
+      className: cn("sticky top-0 flex h-svh w-0 border-l transition-all", isActive && "w-(--sidebar-width)"),
       ...props,
       children: typeof uiFilter === "function" ? uiFilter(lastMatch, matches) : uiFilter
     }
@@ -5222,7 +5219,7 @@ function Layout() {
   return /* @__PURE__ */ jsxs(SidebarProvider, { open: !sidebarIsClose || sidebarIsClose !== "true", children: [
     /* @__PURE__ */ jsx(SidebarLeft, {}),
     /* @__PURE__ */ jsxs(SidebarInset, { children: [
-      /* @__PURE__ */ jsxs("header", { className: "sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-background transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12", children: [
+      /* @__PURE__ */ jsxs("header", { className: "sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-background transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-4", children: [
           /* @__PURE__ */ jsx(SidebarTrigger, { className: "-ml-1" }),
           /* @__PURE__ */ jsx(Separator, { orientation: "vertical", className: "mr-2 h-4" }),
@@ -5230,7 +5227,7 @@ function Layout() {
         ] }),
         /* @__PURE__ */ jsx("div", { className: "ml-auto px-3", children: /* @__PURE__ */ jsx(NavTools, {}) })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "flex max-w-[calc(100vw-var(--sidebar-width))] flex-1 flex-col gap-4 p-4 pt-0 transition-[max-width] duration-200 ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:max-w-[calc(100vw-var(--sidebar-width-icon))] group-data-[collapsible=offcanvas]/sidebar-wrapper:max-w-[100vw]", children: /* @__PURE__ */ jsx(Outlet, {}) })
+      /* @__PURE__ */ jsx("div", { className: "flex max-w-[calc(100vw-var(--sidebar-width))] flex-1 flex-col gap-4 p-4 pt-0 transition-[max-width] duration-200 ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:max-w-[calc(100vw-var(--sidebar-width-icon))] group-data-[collapsible=offcanvas]/sidebar-wrapper:max-w-[100vw]", children: /* @__PURE__ */ jsx(Outlet, {}) })
     ] }),
     /* @__PURE__ */ jsx(SidebarRight, {})
   ] });
@@ -5324,7 +5321,7 @@ function NavUser() {
     /* @__PURE__ */ jsxs(
       DropdownMenuContent,
       {
-        className: "w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg",
+        className: "w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg",
         side: isMobile ? "bottom" : "right",
         align: "end",
         sideOffset: 4,
@@ -5415,7 +5412,7 @@ function RoleSwitcher() {
     /* @__PURE__ */ jsxs(
       DropdownMenuContent,
       {
-        className: "w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg",
+        className: "w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg",
         align: "start",
         side: isMobile ? "bottom" : "right",
         sideOffset: 4,
@@ -5665,7 +5662,7 @@ axiosInstance.interceptors.response.use(
     var _a, _b, _c;
     const customError = {
       ...error,
-      message: (_b = (_a = error.response) == null ? void 0 : _a.data) == null ? void 0 : _b.message,
+      message: ((_b = (_a = error.response) == null ? void 0 : _a.data) == null ? void 0 : _b.message) || error.message,
       statusCode: (_c = error.response) == null ? void 0 : _c.status
     };
     return Promise.reject(customError);
@@ -5803,37 +5800,47 @@ const transformHttpError = (error) => {
 };
 const dataProvider$1 = (apiUrl, httpClient = axiosInstance) => ({
   getList: async ({ resource, pagination, filters, sorters, meta: meta2 }) => {
-    const url = `${apiUrl}/${resource}`;
-    let query = RequestQueryBuilder.create();
-    query = handleFilter(query, filters);
-    query = handleJoin(query, meta2 == null ? void 0 : meta2.join);
-    query = handlePagination(query, pagination);
-    query = handleSort(query, sorters);
-    const { data: data2 } = await httpClient.get(`${url}?${query.query()}`);
-    if (Array.isArray(data2)) {
-      return {
-        data: data2,
-        total: data2.length
-      };
+    try {
+      const url = `${apiUrl}/${resource}`;
+      let query = RequestQueryBuilder.create();
+      query = handleFilter(query, filters);
+      query = handleJoin(query, meta2 == null ? void 0 : meta2.join);
+      query = handlePagination(query, pagination);
+      query = handleSort(query, sorters);
+      const { data: data2 } = await httpClient.get(`${url}?${query.query()}`);
+      if (Array.isArray(data2)) {
+        return {
+          data: data2,
+          total: data2.length
+        };
+      }
+      return data2;
+    } catch (error) {
+      const httpError = transformHttpError(error);
+      throw httpError;
     }
-    return data2;
   },
   getMany: async ({ resource, ids, meta: meta2 }) => {
-    const url = `${apiUrl}/${resource}`;
-    let query = RequestQueryBuilder.create().setFilter({
-      field: "id",
-      operator: CondOperator.IN,
-      value: ids
-    });
-    query = handleJoin(query, meta2 == null ? void 0 : meta2.join);
-    const { data: data2 } = await httpClient.get(`${url}?${query.query()}`);
-    return {
-      data: data2
-    };
+    try {
+      const url = `${apiUrl}/${resource}`;
+      let query = RequestQueryBuilder.create().setFilter({
+        field: "id",
+        operator: CondOperator.IN,
+        value: ids
+      });
+      query = handleJoin(query, meta2 == null ? void 0 : meta2.join);
+      const { data: data2 } = await httpClient.get(`${url}?${query.query()}`);
+      return {
+        data: data2
+      };
+    } catch (error) {
+      const httpError = transformHttpError(error);
+      throw httpError;
+    }
   },
   create: async ({ resource, variables }) => {
-    const url = `${apiUrl}/${resource}`;
     try {
+      const url = `${apiUrl}/${resource}`;
       const { data: data2 } = await httpClient.post(url, variables);
       return data2;
     } catch (error) {
@@ -5842,8 +5849,8 @@ const dataProvider$1 = (apiUrl, httpClient = axiosInstance) => ({
     }
   },
   update: async ({ resource, id, variables }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
     try {
+      const url = `${apiUrl}/${resource}/${id}`;
       const { data: data2 } = await httpClient.patch(url, variables);
       return data2;
     } catch (error) {
@@ -5852,8 +5859,8 @@ const dataProvider$1 = (apiUrl, httpClient = axiosInstance) => ({
     }
   },
   updateMany: async ({ resource, ids, variables }) => {
-    const url = `${apiUrl}/${resource}/bulk`;
     try {
+      const url = `${apiUrl}/${resource}/bulk`;
       const { data: data2 } = await httpClient.put(url, { ids, variables });
       return data2;
     } catch (error) {
@@ -5862,8 +5869,8 @@ const dataProvider$1 = (apiUrl, httpClient = axiosInstance) => ({
     }
   },
   createMany: async ({ resource, variables }) => {
-    const url = `${apiUrl}/${resource}/bulk`;
     try {
+      const url = `${apiUrl}/${resource}/bulk`;
       const { data: data2 } = await httpClient.post(url, { variables });
       return data2;
     } catch (error) {
@@ -5872,20 +5879,30 @@ const dataProvider$1 = (apiUrl, httpClient = axiosInstance) => ({
     }
   },
   getOne: async ({ resource, id, meta: meta2 }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
-    let query = RequestQueryBuilder.create();
-    query = handleJoin(query, meta2 == null ? void 0 : meta2.join);
-    const { data: data2 } = await httpClient.get(`${url}?${query.query()}`);
-    return data2;
+    try {
+      const url = `${apiUrl}/${resource}/${id}`;
+      let query = RequestQueryBuilder.create();
+      query = handleJoin(query, meta2 == null ? void 0 : meta2.join);
+      const { data: data2 } = await httpClient.get(`${url}?${query.query()}`);
+      return data2;
+    } catch (error) {
+      const httpError = transformHttpError(error);
+      throw httpError;
+    }
   },
   deleteOne: async ({ resource, id }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
-    const { data: data2 } = await httpClient.delete(url);
-    return data2;
+    try {
+      const url = `${apiUrl}/${resource}/${id}`;
+      const { data: data2 } = await httpClient.delete(url);
+      return data2;
+    } catch (error) {
+      const httpError = transformHttpError(error);
+      throw httpError;
+    }
   },
   deleteMany: async ({ resource, ids }) => {
-    const url = `${apiUrl}/${resource}/bulk`;
     try {
+      const url = `${apiUrl}/${resource}/bulk`;
       const { data: data2 } = await httpClient.delete(url, {
         data: { ids }
       });
@@ -5899,35 +5916,40 @@ const dataProvider$1 = (apiUrl, httpClient = axiosInstance) => ({
     return apiUrl;
   },
   custom: async ({ url, method, meta: meta2, filters, sorters, payload, query, headers: headers2 }) => {
-    let requestQueryBuilder = RequestQueryBuilder.create();
-    requestQueryBuilder = handleFilter(requestQueryBuilder, filters);
-    requestQueryBuilder = handleJoin(requestQueryBuilder, meta2 == null ? void 0 : meta2.join);
-    requestQueryBuilder = handleSort(requestQueryBuilder, sorters);
-    let requestUrl = `${url}?${requestQueryBuilder.query()}`;
-    if (query) {
-      requestUrl = `${requestUrl}&${queryString.stringify(query)}`;
+    try {
+      let requestQueryBuilder = RequestQueryBuilder.create();
+      requestQueryBuilder = handleFilter(requestQueryBuilder, filters);
+      requestQueryBuilder = handleJoin(requestQueryBuilder, meta2 == null ? void 0 : meta2.join);
+      requestQueryBuilder = handleSort(requestQueryBuilder, sorters);
+      let requestUrl = `${url}?${requestQueryBuilder.query()}`;
+      if (query) {
+        requestUrl = `${requestUrl}&${queryString.stringify(query)}`;
+      }
+      let axiosResponse;
+      switch (method) {
+        case "put":
+        case "post":
+        case "patch":
+          axiosResponse = await httpClient[method](url, payload, {
+            headers: headers2
+          });
+          break;
+        case "delete":
+          axiosResponse = await httpClient.delete(url, {
+            data: payload,
+            headers: headers2
+          });
+          break;
+        default:
+          axiosResponse = await httpClient.get(requestUrl, { headers: headers2 });
+          break;
+      }
+      const { data: data2 } = axiosResponse;
+      return Promise.resolve({ data: data2 });
+    } catch (error) {
+      const httpError = transformHttpError(error);
+      throw httpError;
     }
-    let axiosResponse;
-    switch (method) {
-      case "put":
-      case "post":
-      case "patch":
-        axiosResponse = await httpClient[method](url, payload, {
-          headers: headers2
-        });
-        break;
-      case "delete":
-        axiosResponse = await httpClient.delete(url, {
-          data: payload,
-          headers: headers2
-        });
-        break;
-      default:
-        axiosResponse = await httpClient.get(requestUrl, { headers: headers2 });
-        break;
-    }
-    const { data: data2 } = axiosResponse;
-    return Promise.resolve({ data: data2 });
   }
 });
 const dataProvider = dataProvider$1(apiBase);
@@ -6848,9 +6870,9 @@ async function sendVerificationEmail(to, code) {
     throw error;
   }
 }
-const nProgressStyles = "/assets/nprogress-CSXic_Zd.css";
+const nProgressStyles = "/assets/nprogress-BgDCIyLK.css";
 const baseStyles = "/assets/base-CNccC1ql.css";
-const tailwindStyles = "/assets/tailwind-DjEzWEDb.css";
+const tailwindStyles = "/assets/tailwind-D77LHlNy.css";
 const meta$e = () => [
   { property: "og:title", content: "This app is the best." },
   { name: "description", content: "Welcome to Remix!" }
@@ -7034,7 +7056,7 @@ const Textarea = React.forwardRef(
       "textarea",
       {
         className: cn(
-          "flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          "flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
           className
         ),
         ref,
@@ -7542,7 +7564,7 @@ function PostIndex() {
     const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly("Row", rows.length > 1 ? "plural" : "singular")}`;
     return {
-      className: "!text-destructive",
+      className: "text-destructive!",
       label,
       disabled: !(deletePermission == null ? void 0 : deletePermission.can),
       onClick: () => {
@@ -8104,7 +8126,7 @@ function RoleIndex() {
     const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly("Row", rows.length > 1 ? "plural" : "singular")}`;
     return {
-      className: "!text-destructive",
+      className: "text-destructive!",
       label,
       disabled: !(deletePermission == null ? void 0 : deletePermission.can),
       onClick: () => {
@@ -8289,7 +8311,7 @@ function UserIndex() {
     const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly("Row", rows.length > 1 ? "plural" : "singular")}`;
     return {
-      className: "!text-destructive",
+      className: "text-destructive!",
       label,
       disabled: !(deletePermission == null ? void 0 : deletePermission.can),
       onClick: () => {
@@ -8423,7 +8445,7 @@ function UserIndex() {
             header: "Actions",
             accessorKey: "id",
             id: "actions",
-            cell: ({ row: { original } }) => /* @__PURE__ */ jsx(DeleteButton, { recordItemId: original.id, size: "icon", variant: "ghost", className: "!text-destructive" })
+            cell: ({ row: { original } }) => /* @__PURE__ */ jsx(DeleteButton, { recordItemId: original.id, size: "icon", variant: "ghost", className: "text-destructive!" })
           }
         )
       ]
@@ -8493,7 +8515,7 @@ const TabsTrigger = React.forwardRef(({ className, ...props }, ref) => /* @__PUR
   {
     ref,
     className: cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
       className
     ),
     ...props
@@ -8505,7 +8527,7 @@ const TabsContent = React.forwardRef(({ className, ...props }, ref) => /* @__PUR
   {
     ref,
     className: cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      "mt-2 ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       className
     ),
     ...props
@@ -8535,7 +8557,9 @@ function DashboardDemo() {
     /* @__PURE__ */ jsx(H2, { children: "useModalForm" }),
     /* @__PURE__ */ jsx(DemoUseModalForm, {}),
     /* @__PURE__ */ jsx(H2, { children: "useStepsForm" }),
-    /* @__PURE__ */ jsx(DemoUseStepsForm, {})
+    /* @__PURE__ */ jsx(DemoUseStepsForm, {}),
+    /* @__PURE__ */ jsx(H2, { children: "sentry" }),
+    /* @__PURE__ */ jsx(DemoSentry, {})
   ] });
 }
 function ErrorBoundary$7() {
@@ -8779,18 +8803,48 @@ const DemoUseStepsForm = () => {
 const DemoUseViewTransitionState = () => {
   const to = `/playground/dashboard/viewTransition`;
   const vt = useViewTransitionState(to);
-  return /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-2", children: [
-    /* @__PURE__ */ jsx("span", { className: "mt-2 text-sm text-muted-foreground", children: vt ? "正在执行视图过渡动画效果..." : "点击图片查看过渡效果" }),
-    /* @__PURE__ */ jsx(Link$1, { prefetch: "intent", viewTransition: true, to, children: /* @__PURE__ */ jsx(
-      "img",
-      {
-        className: "h-32 rounded-md border border-secondary shadow-md",
-        src: "/logo.png",
-        style: {
-          viewTransitionName: vt ? "image-expand" : ""
-        }
+  return /* @__PURE__ */ jsx("div", { className: "flex flex-col gap-2", children: /* @__PURE__ */ jsx(Link$1, { prefetch: "intent", viewTransition: true, to, children: /* @__PURE__ */ jsx(
+    "img",
+    {
+      className: "mt-4 h-32 rounded-md border border-secondary shadow-md",
+      src: "/logo.png",
+      style: {
+        viewTransitionName: vt ? "image-expand" : ""
       }
-    ) })
+    }
+  ) }) });
+};
+const DemoSentry = () => {
+  const { mutate: mutateDelete } = useDelete();
+  const { mutate: mutateUpdate } = useUpdate({ resource: EnumResource.post });
+  return /* @__PURE__ */ jsxs("ul", { className: "mt-4 flex gap-2", children: [
+    /* @__PURE__ */ jsx(
+      Button,
+      {
+        onClick: () => {
+          throw new Error("Sentry Example Frontend Error");
+        },
+        children: "Throw a sample error"
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      Button,
+      {
+        onClick: () => {
+          mutateDelete({ resource: "products", id: "123" });
+        },
+        children: "Delete a sample record"
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      Button,
+      {
+        onClick: () => {
+          mutateUpdate({ id: editPostId, values: { invalidKey: "123" } });
+        },
+        children: "Update a sample record"
+      }
+    )
   ] });
 };
 const route13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -8940,7 +8994,7 @@ function LogIndex() {
     const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly("Row", rows.length > 1 ? "plural" : "singular")}`;
     return {
-      className: "!text-destructive",
+      className: "text-destructive!",
       label,
       disabled: !(deletePermission == null ? void 0 : deletePermission.can),
       onClick: () => {
@@ -9225,70 +9279,62 @@ const route21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
 }, Symbol.toStringTag, { value: "Module" }));
 async function loader$8({ request: request2, params }) {
   const { resource } = params;
-  try {
-    if (!resource) {
-      throw new Error("resource is required");
-    }
-    const url = new URL(request2.url);
-    const ids = url.searchParams.get("ids");
-    if (!ids) {
-      throw new Error("批量获取时 ids 参数是必需的");
-    }
-    const data2 = await dataService.getMany({
-      resource,
-      ids: ids.split(",")
-    });
-    return Response.json(data2);
-  } catch (error) {
-    return Response.json({ message: (error == null ? void 0 : error.message) || "处理请求失败" }, { status: 500 });
+  if (!resource) {
+    throw new Error("resource is required");
   }
+  const url = new URL(request2.url);
+  const ids = url.searchParams.get("ids");
+  if (!ids) {
+    throw new Error("批量获取时 ids 参数是必需的");
+  }
+  const data2 = await dataService.getMany({
+    resource,
+    ids: ids.split(",")
+  });
+  return Response.json(data2);
 }
 async function action$5({ request: request2, params }) {
   await requireUser(request2);
   const { resource } = params;
-  try {
-    if (!resource) {
-      throw new Error("resource is required");
+  if (!resource) {
+    throw new Error("resource is required");
+  }
+  const method = request2.method;
+  const body = await request2.json();
+  switch (method) {
+    case "POST": {
+      const { variables } = body;
+      const data2 = await dataService.createMany({
+        resource,
+        variables
+      });
+      return Response.json(data2);
     }
-    const method = request2.method;
-    const body = await request2.json();
-    switch (method) {
-      case "POST": {
-        const { variables } = body;
-        const data2 = await dataService.createMany({
-          resource,
-          variables
-        });
-        return Response.json(data2);
+    case "PUT": {
+      const { ids, variables } = body;
+      if (!ids) {
+        throw new Error("批量更新时 ids 是必需的");
       }
-      case "PUT": {
-        const { ids, variables } = body;
-        if (!ids) {
-          throw new Error("批量更新时 ids 是必需的");
-        }
-        const data2 = await dataService.updateMany({
-          resource,
-          ids,
-          variables
-        });
-        return Response.json(data2);
-      }
-      case "DELETE": {
-        const { ids } = body;
-        if (!ids) {
-          throw new Error("批量删除时 ids 是必需的");
-        }
-        const data2 = await dataService.deleteMany({
-          resource,
-          ids
-        });
-        return Response.json(data2);
-      }
-      default:
-        throw new Error(`不支持的请求方法: ${method}`);
+      const data2 = await dataService.updateMany({
+        resource,
+        ids,
+        variables
+      });
+      return Response.json(data2);
     }
-  } catch (error) {
-    return Response.json({ message: (error == null ? void 0 : error.message) || "处理请求失败" }, { status: 500 });
+    case "DELETE": {
+      const { ids } = body;
+      if (!ids) {
+        throw new Error("批量删除时 ids 是必需的");
+      }
+      const data2 = await dataService.deleteMany({
+        resource,
+        ids
+      });
+      return Response.json(data2);
+    }
+    default:
+      throw new Error(`不支持的请求方法: ${method}`);
   }
 }
 const route22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -9380,49 +9426,41 @@ const route23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
 }, Symbol.toStringTag, { value: "Module" }));
 async function loader$6({ params }) {
   const { resource, id } = params;
-  try {
-    if (!resource || !id) {
-      throw new Error("resource、id is required");
-    }
-    const data2 = await dataService.getOne({
-      resource,
-      id
-    });
-    return Response.json(data2);
-  } catch (error) {
-    return Response.json({ message: (error == null ? void 0 : error.message) || "处理请求失败" }, { status: 500 });
+  if (!resource || !id) {
+    throw new Error("resource、id is required");
   }
+  const data2 = await dataService.getOne({
+    resource,
+    id
+  });
+  return Response.json(data2);
 }
 async function action$4({ request: request2, params }) {
   await requireUser(request2);
   const { resource, id } = params;
-  try {
-    if (!resource || !id) {
-      throw new Error("resource、id is required");
+  if (!resource || !id) {
+    throw new Error("resource、id is required");
+  }
+  const method = request2.method;
+  switch (method) {
+    case "PATCH": {
+      const variables = await request2.json();
+      const data2 = await dataService.update({
+        resource,
+        id,
+        variables
+      });
+      return Response.json(data2);
     }
-    const method = request2.method;
-    switch (method) {
-      case "PATCH": {
-        const variables = await request2.json();
-        const data2 = await dataService.update({
-          resource,
-          id,
-          variables
-        });
-        return Response.json(data2);
-      }
-      case "DELETE": {
-        const data2 = await dataService.deleteOne({
-          resource,
-          id
-        });
-        return Response.json(data2);
-      }
-      default:
-        return Response.json({ message: `不支持的请求方法: ${method}` }, { status: 405 });
+    case "DELETE": {
+      const data2 = await dataService.deleteOne({
+        resource,
+        id
+      });
+      return Response.json(data2);
     }
-  } catch (error) {
-    return Response.json({ message: (error == null ? void 0 : error.message) || "处理请求失败" }, { status: 500 });
+    default:
+      return Response.json({ message: `不支持的请求方法: ${method}` }, { status: 405 });
   }
 }
 const route24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -9467,47 +9505,39 @@ const route28 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
 }, Symbol.toStringTag, { value: "Module" }));
 async function loader$3({ request: request2, params }) {
   const { resource } = params;
-  try {
-    if (!resource) {
-      throw new Error("resource is required");
-    }
-    const url = new URL(request2.url);
-    const pagination = getPaginationFromUrl(url);
-    const sorters = getSortersFromUrl(url);
-    const filters = getFiltersFromUrl(url);
-    const join2 = getJoinFromUrl(url);
-    const res = await dataService.getList({
-      resource,
-      pagination,
-      sorters,
-      filters,
-      meta: join2 ? { include: join2 } : {}
-    });
-    return Response.json(res);
-  } catch (error) {
-    return Response.json({ message: (error == null ? void 0 : error.message) || "处理请求失败" }, { status: 500 });
+  if (!resource) {
+    throw new Error("resource is required");
   }
+  const url = new URL(request2.url);
+  const pagination = getPaginationFromUrl(url);
+  const sorters = getSortersFromUrl(url);
+  const filters = getFiltersFromUrl(url);
+  const join2 = getJoinFromUrl(url);
+  const res = await dataService.getList({
+    resource,
+    pagination,
+    sorters,
+    filters,
+    meta: join2 ? { include: join2 } : {}
+  });
+  return Response.json(res);
 }
 async function action$3({ request: request2, params }) {
   const { user } = await requireUser(request2);
   const { resource } = params;
   const { method } = request2;
-  try {
-    if (!resource) {
-      throw new Error("resource is required");
-    }
-    if (method !== "POST") {
-      throw new Error(`不支持的请求方法: ${method}`);
-    }
-    const body = await request2.json();
-    const created = await dataService.create({
-      resource,
-      variables: { ...body, userId: user == null ? void 0 : user.id }
-    });
-    return Response.json(created);
-  } catch (error) {
-    return Response.json({ message: (error == null ? void 0 : error.message) || "处理请求失败" }, { status: 500 });
+  if (!resource) {
+    throw new Error("resource is required");
   }
+  if (method !== "POST") {
+    throw new Error(`不支持的请求方法: ${method}`);
+  }
+  const body = await request2.json();
+  const created = await dataService.create({
+    resource,
+    variables: { ...body, userId: user == null ? void 0 : user.id }
+  });
+  return Response.json(created);
 }
 const route29 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -9660,7 +9690,7 @@ const route36 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   __proto__: null,
   default: Index
 }, Symbol.toStringTag, { value: "Module" }));
-const serverManifest = { "entry": { "module": "/assets/entry.client-Dkx4Bcj4.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/components-C3jcH-a4.js", "/assets/performance-DbysSaXs.js", "/assets/node-BqdHjgNQ.js", "/assets/isBrowser-C7qTE48y.js"], "css": [] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/root-D_WOF-WR.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/components-C3jcH-a4.js", "/assets/performance-DbysSaXs.js", "/assets/node-BqdHjgNQ.js", "/assets/isBrowser-C7qTE48y.js", "/assets/index-BuIIpymt.js", "/assets/index-Z0QhHdMI.js", "/assets/button-B_ZE1LZO.js", "/assets/circle-plus-CzdauQ9f.js", "/assets/index-DlBVl6G9.js", "/assets/checkbox-2ymclf8O.js", "/assets/404-BdTjqa87.js", "/assets/500-wHZx-rdF.js", "/assets/index-B6S418k8.js", "/assets/resources-DmfYUWBd.js", "/assets/try-parse-DIatYage.js", "/assets/index-BzZLwaF6.js", "/assets/index-U8YVhvYI.js", "/assets/index-DocNbIak.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js"], "css": [] }, "routes/playground.dashboard.viewTransition": { "id": "routes/playground.dashboard.viewTransition", "parentId": "routes/playground.dashboard", "path": "viewTransition", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.viewTransition-B5ySOVnu.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-wHZx-rdF.js", "/assets/get-default-title-DCbrmljW.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-BuIIpymt.js", "/assets/button-B_ZE1LZO.js", "/assets/resources-DmfYUWBd.js"], "css": [] }, "routes/playground.article.post.clone.$id": { "id": "routes/playground.article.post.clone.$id", "parentId": "routes/playground.article.post", "path": "clone/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.clone._id-BHK-m7Nq.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-DCbrmljW.js", "/assets/playground.article.post.edit._id-C08yVhyo.js", "/assets/components-C3jcH-a4.js", "/assets/index-BuIIpymt.js", "/assets/button-B_ZE1LZO.js", "/assets/resources-DmfYUWBd.js", "/assets/textarea-DI6E-7VR.js", "/assets/index-B6S418k8.js", "/assets/index-DocNbIak.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js", "/assets/label-BpDFSob4.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-DlBVl6G9.js", "/assets/checkbox-2ymclf8O.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js", "/assets/card-Cl-91ziV.js", "/assets/post-CCEhhlTv.js", "/assets/show-sTpe4nC7.js", "/assets/delete-DTZjDWTC.js", "/assets/clone-DNa-0_B5.js"], "css": [] }, "routes/playground.article.post.edit.$id": { "id": "routes/playground.article.post.edit.$id", "parentId": "routes/playground.article.post", "path": "edit/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.edit._id-DGLv3Aw1.js", "imports": ["/assets/playground.article.post.edit._id-C08yVhyo.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/textarea-DI6E-7VR.js", "/assets/button-B_ZE1LZO.js", "/assets/index-B6S418k8.js", "/assets/index-DocNbIak.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js", "/assets/components-C3jcH-a4.js", "/assets/index-BuIIpymt.js", "/assets/label-BpDFSob4.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-DlBVl6G9.js", "/assets/checkbox-2ymclf8O.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js", "/assets/card-Cl-91ziV.js", "/assets/500-wHZx-rdF.js", "/assets/resources-DmfYUWBd.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-DCbrmljW.js", "/assets/show-sTpe4nC7.js", "/assets/delete-DTZjDWTC.js", "/assets/clone-DNa-0_B5.js"], "css": [] }, "routes/playground.article.post.show.$id": { "id": "routes/playground.article.post.show.$id", "parentId": "routes/playground.article.post", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.show._id-DDqvS1jL.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DlBVl6G9.js", "/assets/500-wHZx-rdF.js", "/assets/avatar-DyKa2pc8.js", "/assets/badge-BE6OIzds.js", "/assets/typography-Y3IuYbyu.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-DCbrmljW.js", "/assets/components-C3jcH-a4.js", "/assets/mail-DiQinmTy.js", "/assets/button-B_ZE1LZO.js", "/assets/index-BuIIpymt.js", "/assets/delete-DTZjDWTC.js", "/assets/clone-DNa-0_B5.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-BzZLwaF6.js", "/assets/index-U8YVhvYI.js", "/assets/index-DocNbIak.js", "/assets/index-B6S418k8.js", "/assets/input-FDDqKO9o.js", "/assets/resources-DmfYUWBd.js"], "css": [] }, "routes/playground.article.post._index": { "id": "routes/playground.article.post._index", "parentId": "routes/playground.article.post", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post._index-bT8AMoLy.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DlBVl6G9.js", "/assets/500-wHZx-rdF.js", "/assets/avatar-DyKa2pc8.js", "/assets/badge-BE6OIzds.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-B6S418k8.js", "/assets/index-DocNbIak.js", "/assets/resources-DmfYUWBd.js", "/assets/playground.article.post.edit._id-C08yVhyo.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-DCbrmljW.js", "/assets/components-C3jcH-a4.js", "/assets/button-B_ZE1LZO.js", "/assets/circle-plus-CzdauQ9f.js", "/assets/export-DK9TOWq9.js", "/assets/show-sTpe4nC7.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js", "/assets/input-FDDqKO9o.js", "/assets/textarea-DI6E-7VR.js", "/assets/label-BpDFSob4.js", "/assets/card-Cl-91ziV.js", "/assets/delete-DTZjDWTC.js", "/assets/clone-DNa-0_B5.js"], "css": [] }, "routes/playground.article.post.create": { "id": "routes/playground.article.post.create", "parentId": "routes/playground.article.post", "path": "create", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.create-Zh8IDH4d.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-DCbrmljW.js", "/assets/playground.article.post.edit._id-C08yVhyo.js", "/assets/components-C3jcH-a4.js", "/assets/index-BuIIpymt.js", "/assets/button-B_ZE1LZO.js", "/assets/resources-DmfYUWBd.js", "/assets/textarea-DI6E-7VR.js", "/assets/index-B6S418k8.js", "/assets/index-DocNbIak.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js", "/assets/label-BpDFSob4.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-DlBVl6G9.js", "/assets/checkbox-2ymclf8O.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js", "/assets/card-Cl-91ziV.js", "/assets/post-CCEhhlTv.js", "/assets/show-sTpe4nC7.js", "/assets/delete-DTZjDWTC.js", "/assets/clone-DNa-0_B5.js"], "css": [] }, "routes/api.auth.$provider.callback": { "id": "routes/api.auth.$provider.callback", "parentId": "root", "path": "api/auth/:provider/callback", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider.callback-B7nnFBLb.js", "imports": [], "css": [] }, "routes/playground.dashboard.health": { "id": "routes/playground.dashboard.health", "parentId": "routes/playground.dashboard", "path": "health", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.health-C46g7zF3.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-wHZx-rdF.js", "/assets/index-BuIIpymt.js", "/assets/button-B_ZE1LZO.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-DCbrmljW.js", "/assets/resources-DmfYUWBd.js"], "css": [] }, "routes/playground.dashboard.about": { "id": "routes/playground.dashboard.about", "parentId": "routes/playground.dashboard", "path": "about", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.about-CeiiA5og.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/badge-BE6OIzds.js", "/assets/button-B_ZE1LZO.js", "/assets/checkbox-2ymclf8O.js", "/assets/sidebar-Ce8bVbsh.js", "/assets/label-BpDFSob4.js", "/assets/index-DocNbIak.js", "/assets/components-C3jcH-a4.js", "/assets/try-parse-DIatYage.js", "/assets/gallery-vertical-end-DTyVCeRo.js", "/assets/index-BzZLwaF6.js", "/assets/index-U8YVhvYI.js", "/assets/input-FDDqKO9o.js"], "css": [] }, "routes/system.account.role._index": { "id": "routes/system.account.role._index", "parentId": "routes/system.account.role", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role._index-d43H3ioA.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DlBVl6G9.js", "/assets/500-wHZx-rdF.js", "/assets/avatar-DyKa2pc8.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-B6S418k8.js", "/assets/resources-DmfYUWBd.js", "/assets/get-default-title-DCbrmljW.js", "/assets/components-C3jcH-a4.js", "/assets/show-sTpe4nC7.js", "/assets/export-DK9TOWq9.js", "/assets/button-B_ZE1LZO.js", "/assets/index-DocNbIak.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js"], "css": [] }, "routes/system.account.user._index": { "id": "routes/system.account.user._index", "parentId": "routes/system.account.user", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user._index-Wz4vL2BX.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DlBVl6G9.js", "/assets/500-wHZx-rdF.js", "/assets/badge-BE6OIzds.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-B6S418k8.js", "/assets/resources-DmfYUWBd.js", "/assets/get-default-title-DCbrmljW.js", "/assets/components-C3jcH-a4.js", "/assets/show-sTpe4nC7.js", "/assets/delete-DTZjDWTC.js", "/assets/export-DK9TOWq9.js", "/assets/button-B_ZE1LZO.js", "/assets/index-DocNbIak.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js", "/assets/input-FDDqKO9o.js"], "css": [] }, "routes/api.auth.$provider._index": { "id": "routes/api.auth.$provider._index", "parentId": "root", "path": "api/auth/:provider", "index": true, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider._index-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/playground.dashboard.demo": { "id": "routes/playground.dashboard.demo", "parentId": "routes/playground.dashboard", "path": "demo", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.demo-CpuF94an.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/textarea-DI6E-7VR.js", "/assets/index-BuIIpymt.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B6S418k8.js", "/assets/button-B_ZE1LZO.js", "/assets/input-FDDqKO9o.js", "/assets/index-DocNbIak.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js", "/assets/typography-Y3IuYbyu.js", "/assets/500-wHZx-rdF.js", "/assets/resources-DmfYUWBd.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-DCbrmljW.js", "/assets/components-C3jcH-a4.js", "/assets/label-BpDFSob4.js"], "css": [] }, "routes/system.admin.log.show.$id": { "id": "routes/system.admin.log.show.$id", "parentId": "routes/system.admin.log", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log.show._id-CvNsd5nk.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/avatar-DyKa2pc8.js", "/assets/badge-BE6OIzds.js", "/assets/label-BpDFSob4.js", "/assets/typography-Y3IuYbyu.js", "/assets/log-Bbq4k8lW.js", "/assets/components-C3jcH-a4.js", "/assets/mail-DiQinmTy.js", "/assets/index-BuIIpymt.js", "/assets/button-B_ZE1LZO.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js"], "css": [] }, "routes/playground.article.post": { "id": "routes/playground.article.post", "parentId": "root", "path": "playground/article/post", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post-DXqVrgkF.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/switcher-role-BKoJQbCi.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-B_ZE1LZO.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-BzZLwaF6.js", "/assets/index-U8YVhvYI.js", "/assets/index-DocNbIak.js", "/assets/index-DlBVl6G9.js", "/assets/index-B6S418k8.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js", "/assets/index-Z0QhHdMI.js", "/assets/sidebar-Ce8bVbsh.js", "/assets/isBrowser-C7qTE48y.js", "/assets/node-BqdHjgNQ.js", "/assets/avatar-DyKa2pc8.js", "/assets/gallery-vertical-end-DTyVCeRo.js"], "css": [] }, "routes/system.admin.log._index": { "id": "routes/system.admin.log._index", "parentId": "routes/system.admin.log", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log._index-DZ9RaokK.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DlBVl6G9.js", "/assets/500-wHZx-rdF.js", "/assets/avatar-DyKa2pc8.js", "/assets/badge-BE6OIzds.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-B6S418k8.js", "/assets/resources-DmfYUWBd.js", "/assets/log-Bbq4k8lW.js", "/assets/get-default-title-DCbrmljW.js", "/assets/components-C3jcH-a4.js", "/assets/show-sTpe4nC7.js", "/assets/export-DK9TOWq9.js", "/assets/button-B_ZE1LZO.js", "/assets/index-DocNbIak.js", "/assets/index-U8YVhvYI.js", "/assets/index-BzZLwaF6.js", "/assets/input-FDDqKO9o.js"], "css": [] }, "routes/api.permissions.switch": { "id": "routes/api.permissions.switch", "parentId": "root", "path": "api/permissions/switch", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.permissions.switch-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/playground.dashboard": { "id": "routes/playground.dashboard", "parentId": "root", "path": "playground/dashboard", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard-uN1zWeDK.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/switcher-role-BKoJQbCi.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-B_ZE1LZO.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-BzZLwaF6.js", "/assets/index-U8YVhvYI.js", "/assets/index-DocNbIak.js", "/assets/index-DlBVl6G9.js", "/assets/index-B6S418k8.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js", "/assets/index-Z0QhHdMI.js", "/assets/sidebar-Ce8bVbsh.js", "/assets/isBrowser-C7qTE48y.js", "/assets/node-BqdHjgNQ.js", "/assets/avatar-DyKa2pc8.js", "/assets/gallery-vertical-end-DTyVCeRo.js"], "css": [] }, "routes/api.set-preferences": { "id": "routes/api.set-preferences", "parentId": "root", "path": "api/set-preferences", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.set-preferences-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/system.account.role": { "id": "routes/system.account.role", "parentId": "root", "path": "system/account/role", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role-DfiVgks9.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/switcher-role-BKoJQbCi.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-B_ZE1LZO.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-BzZLwaF6.js", "/assets/index-U8YVhvYI.js", "/assets/index-DocNbIak.js", "/assets/index-DlBVl6G9.js", "/assets/index-B6S418k8.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js", "/assets/index-Z0QhHdMI.js", "/assets/sidebar-Ce8bVbsh.js", "/assets/isBrowser-C7qTE48y.js", "/assets/node-BqdHjgNQ.js", "/assets/avatar-DyKa2pc8.js", "/assets/gallery-vertical-end-DTyVCeRo.js"], "css": [] }, "routes/system.account.user": { "id": "routes/system.account.user", "parentId": "root", "path": "system/account/user", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user-Bcs47grU.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/switcher-role-BKoJQbCi.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-B_ZE1LZO.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-BzZLwaF6.js", "/assets/index-U8YVhvYI.js", "/assets/index-DocNbIak.js", "/assets/index-DlBVl6G9.js", "/assets/index-B6S418k8.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js", "/assets/index-Z0QhHdMI.js", "/assets/sidebar-Ce8bVbsh.js", "/assets/isBrowser-C7qTE48y.js", "/assets/node-BqdHjgNQ.js", "/assets/avatar-DyKa2pc8.js", "/assets/gallery-vertical-end-DTyVCeRo.js"], "css": [] }, "routes/api.$resource.bulk": { "id": "routes/api.$resource.bulk", "parentId": "routes/api.$resource", "path": "bulk", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource.bulk-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.image-resize.$": { "id": "routes/api.image-resize.$", "parentId": "root", "path": "api/image-resize/*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.image-resize._-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.$resource.$id": { "id": "routes/api.$resource.$id", "parentId": "routes/api.$resource", "path": ":id", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource._id-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/system.admin.log": { "id": "routes/system.admin.log", "parentId": "root", "path": "system/admin/log", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log-DXZumu0v.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-BuIIpymt.js", "/assets/switcher-role-BKoJQbCi.js", "/assets/500-wHZx-rdF.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-B_ZE1LZO.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-2ymclf8O.js", "/assets/index-BzZLwaF6.js", "/assets/index-U8YVhvYI.js", "/assets/index-DocNbIak.js", "/assets/index-DlBVl6G9.js", "/assets/index-B6S418k8.js", "/assets/badge-BE6OIzds.js", "/assets/input-FDDqKO9o.js", "/assets/index-Z0QhHdMI.js", "/assets/sidebar-Ce8bVbsh.js", "/assets/isBrowser-C7qTE48y.js", "/assets/node-BqdHjgNQ.js", "/assets/avatar-DyKa2pc8.js", "/assets/gallery-vertical-end-DTyVCeRo.js"], "css": [] }, "routes/api.auth.logout": { "id": "routes/api.auth.logout", "parentId": "root", "path": "api/auth/logout", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.logout-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/password-forgot": { "id": "routes/password-forgot", "parentId": "root", "path": "password-forgot", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-forgot-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/password-update": { "id": "routes/password-update", "parentId": "root", "path": "password-update", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-update-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.$resource": { "id": "routes/api.$resource", "parentId": "root", "path": "api/:resource", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.send.code": { "id": "routes/api.send.code", "parentId": "root", "path": "api/send/code", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.send.code-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.auth.me": { "id": "routes/api.auth.me", "parentId": "root", "path": "api/auth/me", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.me-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.publish": { "id": "routes/api.publish", "parentId": "root", "path": "api/publish", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.publish-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/register": { "id": "routes/register", "parentId": "root", "path": "register", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/register-OtZYYJLb.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/button-B_ZE1LZO.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-BuIIpymt.js", "/assets/input-FDDqKO9o.js", "/assets/label-BpDFSob4.js", "/assets/tcsk-oauth2-BixpjJtx.js", "/assets/components-C3jcH-a4.js", "/assets/gallery-vertical-end-DTyVCeRo.js", "/assets/index-BzZLwaF6.js"], "css": [] }, "routes/_index": { "id": "routes/_index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_index-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/login": { "id": "routes/login", "parentId": "root", "path": "login", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/login-DmBxIZom.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/button-B_ZE1LZO.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/card-Cl-91ziV.js", "/assets/input-FDDqKO9o.js", "/assets/label-BpDFSob4.js", "/assets/tcsk-oauth2-BixpjJtx.js", "/assets/components-C3jcH-a4.js", "/assets/index-BzZLwaF6.js"], "css": [] }, "routes/$": { "id": "routes/$", "parentId": "root", "path": "*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_-CwDTPF-J.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/404-BdTjqa87.js", "/assets/button-B_ZE1LZO.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/components-C3jcH-a4.js"], "css": [] } }, "url": "/assets/manifest-ce562ed2.js", "version": "ce562ed2" };
+const serverManifest = { "entry": { "module": "/assets/entry.client--5Ufq7wi.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/components-C3jcH-a4.js", "/assets/performance-CI12L8JI.js", "/assets/node-DbBVj2et.js", "/assets/isBrowser-DW5snS70.js"], "css": [] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/root-DTvaaABA.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/components-C3jcH-a4.js", "/assets/performance-CI12L8JI.js", "/assets/node-DbBVj2et.js", "/assets/isBrowser-DW5snS70.js", "/assets/index-DwnvTw0e.js", "/assets/index-Bw3le_L0.js", "/assets/button-UAd1uCbk.js", "/assets/circle-plus-H7sEVjBE.js", "/assets/index-CVWMrdoV.js", "/assets/checkbox-C97De5BI.js", "/assets/404-gAqXbJQv.js", "/assets/500-naGbbnIq.js", "/assets/index-BWvXPdnM.js", "/assets/resources-CY0CfhSA.js", "/assets/try-parse-DIatYage.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/playground.dashboard.viewTransition": { "id": "routes/playground.dashboard.viewTransition", "parentId": "routes/playground.dashboard", "path": "viewTransition", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.viewTransition-B5ug3jLb.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/resources-CY0CfhSA.js"], "css": [] }, "routes/playground.article.post.clone.$id": { "id": "routes/playground.article.post.clone.$id", "parentId": "routes/playground.article.post", "path": "clone/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.clone._id-D7fjI6Wj.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/playground.article.post.edit._id-CMDPuh7c.js", "/assets/components-C3jcH-a4.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/resources-CY0CfhSA.js", "/assets/textarea-DuNfuQEU.js", "/assets/index-BWvXPdnM.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/label-BiY3Vphv.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-CVWMrdoV.js", "/assets/checkbox-C97De5BI.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/card-BaeXXXnI.js", "/assets/post-CCEhhlTv.js", "/assets/show-DfjkSx2P.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js"], "css": [] }, "routes/playground.article.post.edit.$id": { "id": "routes/playground.article.post.edit.$id", "parentId": "routes/playground.article.post", "path": "edit/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.edit._id-DPeD4tp5.js", "imports": ["/assets/playground.article.post.edit._id-CMDPuh7c.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/textarea-DuNfuQEU.js", "/assets/button-UAd1uCbk.js", "/assets/index-BWvXPdnM.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/components-C3jcH-a4.js", "/assets/index-DwnvTw0e.js", "/assets/label-BiY3Vphv.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-CVWMrdoV.js", "/assets/checkbox-C97De5BI.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/card-BaeXXXnI.js", "/assets/500-naGbbnIq.js", "/assets/resources-CY0CfhSA.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/show-DfjkSx2P.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js"], "css": [] }, "routes/playground.article.post.show.$id": { "id": "routes/playground.article.post.show.$id", "parentId": "routes/playground.article.post", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.show._id-DxkMOwlD.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/avatar-BQoPuxH1.js", "/assets/badge-BUIl67NG.js", "/assets/typography-mU6oRyfE.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/mail-Bz1IS-OV.js", "/assets/button-UAd1uCbk.js", "/assets/index-DwnvTw0e.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-BWvXPdnM.js", "/assets/input-CjHTLoMm.js", "/assets/resources-CY0CfhSA.js"], "css": [] }, "routes/playground.article.post._index": { "id": "routes/playground.article.post._index", "parentId": "routes/playground.article.post", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post._index-BGcMy4m6.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/avatar-BQoPuxH1.js", "/assets/badge-BUIl67NG.js", "/assets/checkbox-C97De5BI.js", "/assets/index-BWvXPdnM.js", "/assets/index-CFYOCSZM.js", "/assets/resources-CY0CfhSA.js", "/assets/playground.article.post.edit._id-CMDPuh7c.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/button-UAd1uCbk.js", "/assets/circle-plus-H7sEVjBE.js", "/assets/export-dxoCeAoX.js", "/assets/show-DfjkSx2P.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/input-CjHTLoMm.js", "/assets/textarea-DuNfuQEU.js", "/assets/label-BiY3Vphv.js", "/assets/card-BaeXXXnI.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js"], "css": [] }, "routes/playground.article.post.create": { "id": "routes/playground.article.post.create", "parentId": "routes/playground.article.post", "path": "create", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.create-B2-xZj5r.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/playground.article.post.edit._id-CMDPuh7c.js", "/assets/components-C3jcH-a4.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/resources-CY0CfhSA.js", "/assets/textarea-DuNfuQEU.js", "/assets/index-BWvXPdnM.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/label-BiY3Vphv.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-CVWMrdoV.js", "/assets/checkbox-C97De5BI.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/card-BaeXXXnI.js", "/assets/post-CCEhhlTv.js", "/assets/show-DfjkSx2P.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js"], "css": [] }, "routes/api.auth.$provider.callback": { "id": "routes/api.auth.$provider.callback", "parentId": "root", "path": "api/auth/:provider/callback", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider.callback-B7nnFBLb.js", "imports": [], "css": [] }, "routes/playground.dashboard.health": { "id": "routes/playground.dashboard.health", "parentId": "routes/playground.dashboard", "path": "health", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.health-DP2OUGqk.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/resources-CY0CfhSA.js"], "css": [] }, "routes/playground.dashboard.about": { "id": "routes/playground.dashboard.about", "parentId": "routes/playground.dashboard", "path": "about", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.about-XIc2zSjO.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/badge-BUIl67NG.js", "/assets/button-UAd1uCbk.js", "/assets/checkbox-C97De5BI.js", "/assets/sidebar-COMIBK_r.js", "/assets/label-BiY3Vphv.js", "/assets/index-CFYOCSZM.js", "/assets/components-C3jcH-a4.js", "/assets/try-parse-DIatYage.js", "/assets/gallery-vertical-end-YMxz8xVk.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/system.account.role._index": { "id": "routes/system.account.role._index", "parentId": "routes/system.account.role", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role._index-DLKqO0yV.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/avatar-BQoPuxH1.js", "/assets/checkbox-C97De5BI.js", "/assets/index-BWvXPdnM.js", "/assets/resources-CY0CfhSA.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/show-DfjkSx2P.js", "/assets/export-dxoCeAoX.js", "/assets/button-UAd1uCbk.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/system.account.user._index": { "id": "routes/system.account.user._index", "parentId": "routes/system.account.user", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user._index-DTrgypjh.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/badge-BUIl67NG.js", "/assets/checkbox-C97De5BI.js", "/assets/index-BWvXPdnM.js", "/assets/resources-CY0CfhSA.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/show-DfjkSx2P.js", "/assets/delete-aAC3uzQM.js", "/assets/export-dxoCeAoX.js", "/assets/button-UAd1uCbk.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/api.auth.$provider._index": { "id": "routes/api.auth.$provider._index", "parentId": "root", "path": "api/auth/:provider", "index": true, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider._index-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/playground.dashboard.demo": { "id": "routes/playground.dashboard.demo", "parentId": "routes/playground.dashboard", "path": "demo", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.demo-CU9ULbJ2.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/textarea-DuNfuQEU.js", "/assets/index-DwnvTw0e.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-BWvXPdnM.js", "/assets/button-UAd1uCbk.js", "/assets/input-CjHTLoMm.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/typography-mU6oRyfE.js", "/assets/500-naGbbnIq.js", "/assets/resources-CY0CfhSA.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/label-BiY3Vphv.js"], "css": [] }, "routes/system.admin.log.show.$id": { "id": "routes/system.admin.log.show.$id", "parentId": "routes/system.admin.log", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log.show._id-CjCCF7DJ.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/avatar-BQoPuxH1.js", "/assets/badge-BUIl67NG.js", "/assets/label-BiY3Vphv.js", "/assets/typography-mU6oRyfE.js", "/assets/log-Bbq4k8lW.js", "/assets/components-C3jcH-a4.js", "/assets/mail-Bz1IS-OV.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js"], "css": [] }, "routes/playground.article.post": { "id": "routes/playground.article.post", "parentId": "root", "path": "playground/article/post", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post-s5pVrMno.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/system.admin.log._index": { "id": "routes/system.admin.log._index", "parentId": "routes/system.admin.log", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log._index-ByU_EiGk.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/avatar-BQoPuxH1.js", "/assets/badge-BUIl67NG.js", "/assets/checkbox-C97De5BI.js", "/assets/index-BWvXPdnM.js", "/assets/resources-CY0CfhSA.js", "/assets/log-Bbq4k8lW.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/show-DfjkSx2P.js", "/assets/export-dxoCeAoX.js", "/assets/button-UAd1uCbk.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/api.permissions.switch": { "id": "routes/api.permissions.switch", "parentId": "root", "path": "api/permissions/switch", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.permissions.switch-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/playground.dashboard": { "id": "routes/playground.dashboard", "parentId": "root", "path": "playground/dashboard", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard-BiNHmHIC.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/api.set-preferences": { "id": "routes/api.set-preferences", "parentId": "root", "path": "api/set-preferences", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.set-preferences-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/system.account.role": { "id": "routes/system.account.role", "parentId": "root", "path": "system/account/role", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role-Bx0vy4bc.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/system.account.user": { "id": "routes/system.account.user", "parentId": "root", "path": "system/account/user", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user-CtmQgYTn.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/api.$resource.bulk": { "id": "routes/api.$resource.bulk", "parentId": "routes/api.$resource", "path": "bulk", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource.bulk-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.image-resize.$": { "id": "routes/api.image-resize.$", "parentId": "root", "path": "api/image-resize/*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.image-resize._-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.$resource.$id": { "id": "routes/api.$resource.$id", "parentId": "routes/api.$resource", "path": ":id", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource._id-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/system.admin.log": { "id": "routes/system.admin.log", "parentId": "root", "path": "system/admin/log", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log-CaDy1VCG.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/api.auth.logout": { "id": "routes/api.auth.logout", "parentId": "root", "path": "api/auth/logout", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.logout-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/password-forgot": { "id": "routes/password-forgot", "parentId": "root", "path": "password-forgot", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-forgot-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/password-update": { "id": "routes/password-update", "parentId": "root", "path": "password-update", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-update-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.$resource": { "id": "routes/api.$resource", "parentId": "root", "path": "api/:resource", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.send.code": { "id": "routes/api.send.code", "parentId": "root", "path": "api/send/code", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.send.code-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.auth.me": { "id": "routes/api.auth.me", "parentId": "root", "path": "api/auth/me", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.me-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.publish": { "id": "routes/api.publish", "parentId": "root", "path": "api/publish", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.publish-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/register": { "id": "routes/register", "parentId": "root", "path": "register", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/register-BYjcH4GJ.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/button-UAd1uCbk.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DwnvTw0e.js", "/assets/input-CjHTLoMm.js", "/assets/label-BiY3Vphv.js", "/assets/tcsk-oauth2-CmQLNa7B.js", "/assets/components-C3jcH-a4.js", "/assets/gallery-vertical-end-YMxz8xVk.js", "/assets/index-DP_ndGvk.js"], "css": [] }, "routes/_index": { "id": "routes/_index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_index-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/login": { "id": "routes/login", "parentId": "root", "path": "login", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/login-dyQ0X1hG.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/button-UAd1uCbk.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/card-BaeXXXnI.js", "/assets/input-CjHTLoMm.js", "/assets/label-BiY3Vphv.js", "/assets/tcsk-oauth2-CmQLNa7B.js", "/assets/components-C3jcH-a4.js", "/assets/index-DP_ndGvk.js"], "css": [] }, "routes/$": { "id": "routes/$", "parentId": "root", "path": "*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_-h1NTJaxV.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/404-gAqXbJQv.js", "/assets/button-UAd1uCbk.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/components-C3jcH-a4.js"], "css": [] } }, "url": "/assets/manifest-8a47833f.js", "version": "8a47833f" };
 const mode = "production";
 const assetsBuildDirectory = "build/client";
 const basename = "/";
