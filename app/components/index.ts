@@ -2,7 +2,6 @@ export * from './403';
 export * from './404';
 export * from './500';
 export * from './animate-route';
-export * from './code';
 export * from './coming-soon';
 export * from './error';
 export * from './form-login';
