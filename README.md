@@ -85,6 +85,7 @@ Make sure to deploy the output of `pnpm run build`
 - 升级 Remix v3 / React Router v7, 暂时无法升级: @refinedev/remix-router 使用的是 Remix 2.x 版本
 - Sentry source maps 文件路径不匹配
 - Refine Live Provider
+- 请求加签、加密
 - 接入使用 trpc ?
 - 服务状态监控 https://prometheus.io/
 - Redis
