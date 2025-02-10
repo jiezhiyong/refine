@@ -24,20 +24,22 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: 5173,
       strictPort: true,
-      https: {
-        key: fs.readFileSync('./oss.tcshuke.com+3-key.pem'),
-        cert: fs.readFileSync('./oss.tcshuke.com+3.pem'),
-      },
-      proxy: {
-        '/*': {
-          target: 'https://oss.tcshuke.com:5173',
-          secure: false,
-          changeOrigin: true,
-          headers: {
-            'X-Forwarded-Proto': 'https',
+      ...(process.env.NODE_ENV === 'development' && {
+        https: {
+          key: fs.readFileSync('./oss.tcshuke.com+3-key.pem'),
+          cert: fs.readFileSync('./oss.tcshuke.com+3.pem'),
+        },
+        proxy: {
+          '/*': {
+            target: 'https://oss.tcshuke.com:5173',
+            secure: false,
+            changeOrigin: true,
+            headers: {
+              'X-Forwarded-Proto': 'https',
+            },
           },
         },
-      },
+      }),
     },
     plugins: [
       tailwindcss(),
