@@ -51,7 +51,7 @@ export function TableFilterDateRangePickerFilter<T extends BaseRecord = BaseReco
           <Button
             title={title}
             variant="ghost"
-            className={cn('h-5 px-1 py-2.5', selectedValues.size > 0 && '!text-green-500')}
+            className={cn('h-5 px-1 py-2.5', selectedValues.size > 0 && 'text-green-500!')}
             onClick={(e) => {
               if (!selectedValues.size) {
                 return;

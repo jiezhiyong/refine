@@ -55,7 +55,7 @@ export default function LogIndex() {
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
-      className: '!text-destructive',
+      className: 'text-destructive!',
       label,
       disabled: !deletePermission?.can,
       onClick: () => {

@@ -70,7 +70,7 @@ export function Sidebar() {
                                 <SidebarMenuSubButton
                                   asChild
                                   isActive={isActive}
-                                  className={cn(isActive && '!bg-primary !text-primary-foreground')}
+                                  className={cn(isActive && 'bg-primary! text-primary-foreground!')}
                                 >
                                   <Link prefetch="intent" viewTransition to={item.list?.toString() ?? '/#'}>
                                     <span className="capitalize">{meta?.label || item.name}</span>

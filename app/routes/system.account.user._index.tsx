@@ -58,7 +58,7 @@ export default function UserIndex() {
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
-      className: '!text-destructive',
+      className: 'text-destructive!',
       label,
       disabled: !deletePermission?.can,
       onClick: () => {
@@ -184,7 +184,7 @@ export default function UserIndex() {
         accessorKey="id"
         id="actions"
         cell={({ row: { original } }: { row: { original: BaseRecord } }) => (
-          <DeleteButton recordItemId={original.id} size="icon" variant="ghost" className="!text-destructive" />
+          <DeleteButton recordItemId={original.id} size="icon" variant="ghost" className="text-destructive!" />
         )}
       />
     </Table>

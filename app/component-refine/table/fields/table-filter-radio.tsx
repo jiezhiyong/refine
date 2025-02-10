@@ -28,7 +28,7 @@ export function TableFilterRadio({ column, title, options, align = 'start' }: Ta
           <Button
             title={title}
             variant="ghost"
-            className={cn('h-5 border-dashed px-1 py-2.5', selectedValue && '!text-green-500')}
+            className={cn('h-5 border-dashed px-1 py-2.5', selectedValue && 'text-green-500!')}
             onClick={(e) => {
               if (!selectedValue) {
                 return;

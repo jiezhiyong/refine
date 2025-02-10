@@ -29,7 +29,7 @@ export const ShowButton: FC<ShowButtonProps> = ({
     <LinkComponent
       prefetch="intent"
       viewTransition
-      className={cn('visited:!text-blue-700', disabledNew && 'pointer-events-none')}
+      className={cn('visited:text-blue-700!', disabledNew && 'pointer-events-none')}
       to={to}
       replace={false}
       onClick={(e: React.PointerEvent<HTMLButtonElement>) => {

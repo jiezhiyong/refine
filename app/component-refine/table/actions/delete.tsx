@@ -31,7 +31,7 @@ export function DeleteAction({
       icon={<Trash2 size={16} />}
       disabled={!can || disabled}
       title={title || 'Delete'}
-      className={cn('!text-destructive', className)}
+      className={cn('text-destructive!', className)}
       onClick={() =>
         deleteContext?.updateData({
           row,

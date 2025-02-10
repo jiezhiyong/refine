@@ -29,7 +29,7 @@ export function TableFilterDropdown({ column, title, options, align = 'start' }:
           <Button
             title={title}
             variant="ghost"
-            className={cn('h-5 border-dashed px-1 py-2.5', selectedValues.size > 0 && '!text-green-500')}
+            className={cn('h-5 border-dashed px-1 py-2.5', selectedValues.size > 0 && 'text-green-500!')}
             onClick={(e) => {
               if (!selectedValues.size) {
                 return;

@@ -15,7 +15,7 @@ export const Pagination = <TData extends BaseRecord = BaseRecord>({ table }: Dat
 
   return (
     <>
-      <div className="sm-gap-y-0 sticky bottom-4 !mt-0 flex flex-col items-center justify-between gap-y-4 bg-background pt-4 sm:flex-row">
+      <div className="sm-gap-y-0 sticky bottom-4 mt-0! flex flex-col items-center justify-between gap-y-4 bg-background pt-4 sm:flex-row">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
           selected.
@@ -85,7 +85,7 @@ export const Pagination = <TData extends BaseRecord = BaseRecord>({ table }: Dat
           </div>
         </div>
       </div>
-      <div className="fixed bottom-0 !m-0 h-4 w-full bg-background" />
+      <div className="fixed bottom-0 m-0! h-4 w-full bg-background" />
     </>
   );
 };

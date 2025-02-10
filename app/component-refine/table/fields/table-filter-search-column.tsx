@@ -53,7 +53,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
                 column?.setFilterValue(e.target.value);
               }}
               className={cn(
-                'h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm shadow-none outline-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
+                'h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm shadow-none outline-hidden ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
               )}
               placeholder={title}
             />
