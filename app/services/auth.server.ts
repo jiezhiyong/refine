@@ -6,6 +6,7 @@ import { User } from '@prisma/client';
 import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
 import invariant from 'tiny-invariant';
+
 import { EnumAuthProvider } from '~/constants';
 import { OAuth2Strategy } from '~/lib/remix-auth-oauth2';
 import { verifyUserpassLogin } from '~/models/user.server';

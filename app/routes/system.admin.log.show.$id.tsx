@@ -2,6 +2,7 @@ import { Log } from '@prisma/client';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { CalendarIcon, LeafyGreen, MailIcon } from 'lucide-react';
+
 import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Badge } from '~/components-shadcn/badge';
@@ -41,7 +42,7 @@ export default function LogShow() {
   const meta = JSON.parse(log.meta || '{}');
 
   return (
-    <article className="px-8 pb-4 pt-8">
+    <article className="px-8 pt-8 pb-4">
       <header className="mb-8">
         <H1 className="relative mb-4 inline-flex gap-3 text-4xl font-bold">
           <span className="capitalize">
@@ -54,7 +55,7 @@ export default function LogShow() {
           </div>
         </H1>
 
-        <div className="mb-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+        <div className="text-muted-foreground mb-8 flex flex-wrap items-center gap-4 text-sm">
           <div className="flex items-center">
             <LeafyGreen className="mr-2 h-4 w-4" />
             <span>
@@ -74,7 +75,7 @@ export default function LogShow() {
           </Avatar>
           <div>
             <p className="font-medium">{log.user?.name}</p>
-            <p className="flex items-center text-sm text-muted-foreground">
+            <p className="text-muted-foreground flex items-center text-sm">
               <MailIcon className="mr-2 h-4 w-4" />
               {log.user?.email}
             </p>
@@ -86,7 +87,7 @@ export default function LogShow() {
         {log.data && (
           <div>
             <Label>Data</Label>
-            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm">
+            <pre className="bg-muted mt-1 overflow-x-auto rounded-lg p-4 text-sm whitespace-pre">
               {JSON.stringify(data, null, 2)}
             </pre>
           </div>
@@ -95,7 +96,7 @@ export default function LogShow() {
         {log.previousData && (
           <div>
             <Label>Previous Data</Label>
-            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm">
+            <pre className="bg-muted mt-1 overflow-x-auto rounded-lg p-4 text-sm whitespace-pre">
               {JSON.stringify(previousData, null, 2)}
             </pre>
           </div>
@@ -104,7 +105,7 @@ export default function LogShow() {
         {log.meta && (
           <div>
             <Label>Meta Data</Label>
-            <pre className="mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm">
+            <pre className="bg-muted mt-1 overflow-x-auto rounded-lg p-4 text-sm whitespace-pre">
               {JSON.stringify(meta, null, 2)}
             </pre>
           </div>

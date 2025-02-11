@@ -1,29 +1,11 @@
 # 依赖和构建
 node_modules
 build
-public/build
 coverage
-.cache
-
-# 配置文件
-*.config.js
-*.config.ts
-!.eslintrc.cjs
-!commitlint.config.js
-!postcss.config.js
-!tailwind.config.ts
-!vite.config.ts
 
 # 样式文件
 *.css
-*.scss
-*.less
 
 # 系统文件
 .DS_Store
 .env*
-!.env.example
-
-# 其他
-.next
-dist

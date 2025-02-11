@@ -1,9 +1,13 @@
 import * as nodeCrypto from 'crypto';
+
 import invariant from 'tiny-invariant';
+
+import { TAny } from '~/types';
+
 import { canUseDOM } from './can-use-dom';
 
-const SECRET = canUseDOM() ? import.meta.env.VITE_SIGN_SECRET : process.env.VITE_SIGN_SECRET;
-invariant(SECRET, 'SECRET must be set.');
+const SECRET = canUseDOM() ? import.meta.env.VITE_SECRET : process.env.VITE_SECRET;
+invariant(SECRET, 'VITE_SECRET must be set.');
 
 // 签名有效期（毫秒）
 const SIGNATURE_EXPIRATION = 5 * 60 * 1000; // 5分钟
@@ -22,7 +26,7 @@ function ab2hex(buffer: ArrayBuffer): string {
 }
 
 // 浏览器端使用 Web Crypto API
-async function generateSignatureInBrowser(payload: any): Promise<string> {
+async function generateSignatureInBrowser(payload: TAny): Promise<string> {
   // 检查是否在安全上下文中
   if (!window.isSecureContext) {
     throw new Error('Web Crypto API 需要安全上下文 (HTTPS 或 localhost)');
@@ -51,18 +55,18 @@ async function generateSignatureInBrowser(payload: any): Promise<string> {
 }
 
 // 服务端使用 Node.js crypto
-function generateSignatureInNode(payload: any): string {
+function generateSignatureInNode(payload: TAny): string {
   return nodeCrypto.createHmac('sha256', SECRET).update(JSON.stringify(payload)).digest('hex');
 }
 
 // 带时间戳的载荷类型
-interface TimestampedPayload<T = any> {
+interface TimestampedPayload<T = TAny> {
   data: T;
   timestamp?: number;
 }
 
 // 根据运行环境选择合适的签名方法
-export async function generateSignature(payload: any, timestamp?: number): Promise<string> {
+export async function generateSignature(payload: TAny, timestamp?: number): Promise<string> {
   if (!payload) {
     return '';
   }

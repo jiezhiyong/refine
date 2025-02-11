@@ -1,6 +1,8 @@
 import * as https from 'node:https';
+
 import { apiBase, isServer } from '~/config';
-import { generateSignature } from './signature';
+import { TAny } from '~/types';
+import { generateSignature } from '~/utils/signature';
 
 // 类型定义
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -27,9 +29,9 @@ if (isServer) {
         },
       };
 
-      const req = https.request(requestOptions, (res: any) => {
+      const req = https.request(requestOptions, (res: TAny) => {
         let data = '';
-        res.on('data', (chunk: any) => {
+        res.on('data', (chunk: TAny) => {
           data += chunk;
         });
         res.on('end', () => {
@@ -62,7 +64,7 @@ if (isServer) {
 }
 
 // 数据转换
-const convertToFormData = (data: Record<string, any>): FormData | URLSearchParams => {
+const convertToFormData = (data: Record<string, TAny>): FormData | URLSearchParams => {
   if (isServer) {
     const params = new URLSearchParams();
     Object.entries(data).forEach(([key, value]) => {
@@ -86,7 +88,7 @@ const convertToFormData = (data: Record<string, any>): FormData | URLSearchParam
 const request = async (
   method: HttpMethod,
   path: string,
-  data?: Record<string, any>,
+  data?: Record<string, TAny>,
   options: RequestOptions = {}
 ): Promise<Response> => {
   const url = `${apiBase}${path}`;
@@ -119,11 +121,11 @@ export const webapi = {
     return request('GET', path, undefined, options);
   },
 
-  post: (path: string, data?: Record<string, any>, options?: RequestOptions) => {
+  post: (path: string, data?: Record<string, TAny>, options?: RequestOptions) => {
     return request('POST', path, data, options);
   },
 
-  put: (path: string, data?: Record<string, any>, options?: RequestOptions) => {
+  put: (path: string, data?: Record<string, TAny>, options?: RequestOptions) => {
     return request('PUT', path, data, options);
   },
 

@@ -1,6 +1,7 @@
 import { Table } from '@tanstack/react-table';
-import { DataTableViewOptions } from './table-view-options-dropdown';
 import { cloneElement, ReactNode, useCallback } from 'react';
+
+import { DataTableViewOptions } from './table-view-options-dropdown';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -8,15 +9,12 @@ interface DataTableToolbarProps<TData> {
 }
 
 export function DataTableToolbar<TData>({ table, toolbar }: DataTableToolbarProps<TData>) {
-  const appendProps = useCallback(
-    (child: ReactNode, index?: number) => {
-      if (!child || typeof child !== 'object' || !('props' in child)) {
-        return child;
-      }
-      return cloneElement(child as React.ReactElement, { key: index, variant: child.props?.variant || 'outline' });
-    },
-    [table, toolbar]
-  );
+  const appendProps = useCallback((child: ReactNode, index?: number) => {
+    if (!child || typeof child !== 'object' || !('props' in child)) {
+      return child;
+    }
+    return cloneElement(child as React.ReactElement, { key: index, variant: child.props?.variant || 'outline' });
+  }, []);
 
   return (
     <div className="flex items-center justify-between">

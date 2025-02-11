@@ -1,8 +1,9 @@
 import { User } from '@prisma/client';
 import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import * as Sentry from '@sentry/remix';
+
 import { TAuthProvider, TRole } from '~/constants';
-import { PermissionRule } from '~/types';
+import { PermissionRule, TAny } from '~/types';
 import { canUseDOM, verifySignature, webapi } from '~/utils';
 
 // 添加全局类型声明
@@ -32,7 +33,7 @@ export const authProvider: {
   logout: () => Promise<AuthActionResponse>;
   check: () => Promise<CheckResponse>;
   getIdentity: () => Promise<User | null>;
-  getPermissions: (params?: Record<string, any>) => Promise<PermissionRule[]>;
+  getPermissions: (params?: Record<string, TAny>) => Promise<PermissionRule[]>;
   setPermissions: (permissions: PermissionRule[]) => Promise<void>;
   onError: Required<Pick<AuthProvider, 'onError'>>['onError'];
 } = {

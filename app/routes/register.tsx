@@ -1,5 +1,6 @@
-import { redirect, type ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
+import { type ActionFunctionArgs, type MetaFunction, redirect } from '@remix-run/node';
 import { z } from 'zod';
+
 import { RegisterForm } from '~/components';
 import { EnumAuthProvider } from '~/constants';
 import { createUser, getUserByEmail } from '~/models/user.server';
@@ -41,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // UI
 export default function Register() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
+    <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="w-full max-w-sm">
         <RegisterForm />
       </div>

@@ -1,5 +1,6 @@
 import { useNavigate } from '@remix-run/react';
 import { HomeIcon } from 'lucide-react';
+
 import { createAction, Priority, useRegisterActions } from '~/lib/refinedev-kbar';
 
 export const useBackToHomeKbarActions = () => {

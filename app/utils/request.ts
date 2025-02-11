@@ -1,4 +1,5 @@
 import { CrudFilters, CrudSorting, Pagination } from '@refinedev/core';
+
 import { DEFAULT_PAGE_SIZE } from '~/config';
 import { TAny } from '~/types';
 
@@ -129,7 +130,7 @@ export const isISODateString = (value: string): boolean => {
 };
 
 // 处理日期值，支持数组和单个值
-export const processDateValue = (value: any, operator?: FilterOperator): any => {
+export const processDateValue = (value: TAny, operator?: FilterOperator): TAny => {
   if (Array.isArray(value)) {
     const dates = value.map((v) => {
       if (typeof v === 'string' && isISODateString(v)) {
@@ -167,7 +168,7 @@ export const processDateValue = (value: any, operator?: FilterOperator): any => 
 };
 
 // 处理查询条件中的日期字段
-export const processDateFields = (obj: Record<string, any>): Record<string, any> => {
+export const processDateFields = (obj: Record<string, TAny>): Record<string, TAny> => {
   if (!obj) return obj;
 
   return Object.entries(obj).reduce(
@@ -194,7 +195,7 @@ export const processDateFields = (obj: Record<string, any>): Record<string, any>
 
       return acc;
     },
-    {} as Record<string, any>
+    {} as Record<string, TAny>
   );
 };
 
@@ -217,7 +218,7 @@ export function buildWhereClause(filters: Filter[] = []): Record<string, TAny> {
         return { ...acc, [filter.field]: { gte: filter.value } };
       case 'lte':
         return { ...acc, [filter.field]: { lte: filter.value } };
-      case 'in':
+      case 'in': {
         // 如果值已经是数组，直接使用；否则尝试将其转换为数组
         const values = Array.isArray(filter.value) ? filter.value : filter.value.toString().split(',');
 
@@ -230,6 +231,7 @@ export function buildWhereClause(filters: Filter[] = []): Record<string, TAny> {
                 return isNaN(num) ? v : num;
               });
         return { ...acc, [filter.field]: { in: parsedValues } };
+      }
       default:
         return acc;
     }

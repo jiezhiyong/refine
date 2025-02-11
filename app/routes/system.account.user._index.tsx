@@ -5,6 +5,7 @@ import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
+
 import { DeleteButton, ExportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
 import { PageError } from '~/components';
 import { Badge } from '~/components-shadcn/badge';
@@ -12,7 +13,7 @@ import { Checkbox } from '~/components-shadcn/checkbox';
 import { EnumAction, EnumResource } from '~/constants';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
 import { dataService } from '~/services';
-import { HandleFunction, USER_PROVIDER } from '~/types';
+import { HandleFunction, TAny, USER_PROVIDER } from '~/types';
 import { getDefaultTitle } from '~/utils';
 
 export const meta: MetaFunction = ({ matches }) => {
@@ -127,13 +128,13 @@ export default function UserIndex() {
         }}
         filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
         cell={useCallback(
-          ({ row: { index, original }, table }: { row: { index: number; original: BaseRecord }; table: any }) => {
+          ({ row: { index, original }, table }: { row: { index: number; original: BaseRecord }; table: TAny }) => {
             const pageIndex = table.getState().pagination.pageIndex;
             const pageSize = table.getState().pagination.pageSize;
 
             return (
               <ShowButton recordItemId={original.id} asChild>
-                <span className="inline-block min-w-8 text-muted-foreground">
+                <span className="text-muted-foreground inline-block min-w-8">
                   {pageIndex * pageSize + index + 1}.&nbsp;
                 </span>
 

@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Category, Post } from '@prisma/client';
-import { GetListResponse, GetOneResponse, RedirectAction, useModalReturnType, useSelect } from '@refinedev/core';
+import { Post } from '@prisma/client';
+import { GetOneResponse, RedirectAction, useModalReturnType, useSelect } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { useCallback } from 'react';
 import { z } from 'zod';
+
 import { CloneButton, DeleteButton, ShowButton } from '~/component-refine';
 import { Combobox, Field, Form, Select } from '~/component-refine/components';
 import { PageError } from '~/components';
@@ -31,26 +32,22 @@ export const handle: HandleFunction = {
 
 // 页面初始化时的`GET`请求 && 表单`GET`请求
 export async function loader({ params }: LoaderFunctionArgs) {
-  const [initialData, categoriesRes] = await Promise.all([
+  const [initialData] = await Promise.all([
     dataService.getOne<Post>({
       resource: EnumResource.post,
       id: params?.id || '',
-    }),
-    dataService.getList<Category>({
-      resource: EnumResource.category,
     }),
   ]);
 
   return {
     initialData,
-    categoriesRes,
   };
 }
 
 // UI
 export default function PostEdit() {
-  const { initialData, categoriesRes } = useLoaderData<typeof loader>();
-  return <PostForm initialData={initialData} categoriesRes={categoriesRes} />;
+  const { initialData } = useLoaderData<typeof loader>();
+  return <PostForm initialData={initialData} />;
 }
 
 function UiTools() {
@@ -93,21 +90,14 @@ export const PostForm = ({
   className,
   redirect = EnumAction.list,
   initialData,
-  categoriesRes,
-  useFormModalClose,
+  formModalClose,
 }: {
   className?: string;
   redirect?: RedirectAction;
   initialData?: GetOneResponse<Post>;
-  categoriesRes?: GetListResponse<Category>;
-  useFormModalClose?: () => void;
+  formModalClose?: () => void;
 }) => {
-  let categoryOptions = [];
-  if (categoriesRes) {
-    categoryOptions = categoriesRes?.data?.map((category) => ({ label: category.title, value: category.id }));
-  } else {
-    categoryOptions = useSelect({ resource: EnumResource.category }).options;
-  }
+  const categoryOptions = useSelect({ resource: EnumResource.category }).options;
 
   const { data } = initialData || {};
 
@@ -149,7 +139,7 @@ export const PostForm = ({
       autoSave={enableAutoSave}
       modifyingDataBeforeSubmission={modifyingDataBeforeSubmission}
       className={className}
-      useFormModalClose={useFormModalClose}
+      formModalClose={formModalClose}
       recordItemId={data?.id}
     >
       <Field {...form} name="title" label="Title">
@@ -157,7 +147,7 @@ export const PostForm = ({
       </Field>
 
       <Field {...form} name="categoryId" label="Category">
-        <Combobox options={categoryOptions} popoverProps={{ modal: Boolean(useFormModalClose) }} />
+        <Combobox options={categoryOptions} popoverProps={{ modal: Boolean(formModalClose) }} />
       </Field>
 
       <Field {...form} name="status" label="Status">
@@ -182,11 +172,7 @@ export function PostFormModal(props: useModalReturnType & { record?: Post }) {
           <DialogDescription>This is a Demo for Edit Form on Modal.</DialogDescription>
         </DialogHeader>
 
-        <PostForm
-          className="p-0"
-          useFormModalClose={close}
-          initialData={record ? { data: { ...record } } : undefined}
-        />
+        <PostForm className="p-0" formModalClose={close} initialData={record ? { data: { ...record } } : undefined} />
       </DialogContent>
     </Dialog>
   );

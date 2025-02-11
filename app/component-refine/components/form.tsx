@@ -1,8 +1,9 @@
-import { useBack, useParsed, type BaseRecord, type HttpError } from '@refinedev/core';
+import { type BaseRecord, type HttpError, useBack, useParsed } from '@refinedev/core';
 import type { UseFormReturnType } from '@refinedev/react-hook-form';
 import { Undo2 } from 'lucide-react';
-import { useRef, type DetailedHTMLProps, type FormHTMLAttributes, type PropsWithChildren } from 'react';
+import { type DetailedHTMLProps, type FormHTMLAttributes, type PropsWithChildren, useRef } from 'react';
 import { type FieldValues } from 'react-hook-form';
+
 import { AutoSaveIndicator } from '~/component-refine';
 import { Button } from '~/components-shadcn/button';
 import { Card, CardContent, CardFooter } from '~/components-shadcn/card';
@@ -10,6 +11,7 @@ import { Form as FormUI } from '~/components-shadcn/form';
 import { EnumAction } from '~/constants';
 import { TAny } from '~/types';
 import { cn } from '~/utils';
+
 import { SaveButton } from '../buttons';
 
 type NativeFormProps = Omit<DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>, 'onSubmit'>;
@@ -30,7 +32,7 @@ export type FormProps<
     autoSave?: boolean;
     modifyingDataBeforeSubmission?: (values: TAny) => TAny;
     className?: string;
-    useFormModalClose?: () => void;
+    formModalClose?: () => void;
     recordItemId?: string;
   };
 
@@ -49,7 +51,7 @@ export const Form = <
   isWatchable,
   saveButtonProps,
   className,
-  useFormModalClose,
+  formModalClose,
   recordItemId,
   ...props
 }: FormProps<TQueryFnData, TError, TVariables, TContext, TData, TResponse, TResponseError>) => {
@@ -69,7 +71,7 @@ export const Form = <
     const data = modifyingDataBeforeSubmission ? modifyingDataBeforeSubmission(values) : values;
     props.refineCore.onFinish(data);
 
-    useFormModalClose?.();
+    formModalClose?.();
   });
 
   const { disabled } = saveButtonProps || {};
@@ -91,7 +93,7 @@ export const Form = <
               <Button
                 icon={<Undo2 />}
                 type="button"
-                onClick={useFormModalClose || onBack}
+                onClick={formModalClose || onBack}
                 disabled={props.refineCore.formLoading}
                 variant="outline"
               >

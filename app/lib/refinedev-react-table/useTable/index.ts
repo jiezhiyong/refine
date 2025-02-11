@@ -1,28 +1,25 @@
-import { useEffect, useRef } from 'react';
-import isEqual from 'lodash/isEqual';
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   type BaseRecord,
-  ConditionalFilter,
   type CrudFilter,
-  CrudOperators,
   type CrudSorting,
   type HttpError,
-  LogicalFilter,
   useTable as useTableCore,
   type useTableProps as useTablePropsCore,
   type useTableReturnType as useTableReturnTypeCore,
 } from '@refinedev/core';
 import {
-  useReactTable,
-  type TableOptions,
-  type Table,
   getCoreRowModel,
-  ColumnFilter,
-  getSortedRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
+  type Table,
+  type TableOptions,
+  useReactTable,
 } from '@tanstack/react-table';
+import isEqual from 'lodash/isEqual';
+import { useEffect } from 'react';
 
-import { useIsFirstRender, columnFiltersToCrudFilters, getRemovedFilters, crudFiltersToColumnFilters } from '../utils';
+import { columnFiltersToCrudFilters, crudFiltersToColumnFilters, getRemovedFilters, useIsFirstRender } from '../utils';
 
 export type UseTableReturnType<
   TData extends BaseRecord = BaseRecord,

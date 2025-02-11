@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/remix';
 import { Activity, Bug } from 'lucide-react';
 import { useRef } from 'react';
 import { useTheme } from 'remix-themes';
+
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -12,6 +13,7 @@ import {
 } from '~/components-shadcn/sidebar';
 import { useMountEffect } from '~/hooks';
 import { cn } from '~/utils';
+
 import { ThemeSwitcher } from './switcher-theme';
 
 // 次要菜单

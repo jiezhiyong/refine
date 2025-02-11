@@ -2,6 +2,7 @@
 
 import { ResourceProps } from '@refinedev/core';
 import { Bot, Brain, PieChart, UsersRound } from 'lucide-react';
+
 import { EnumResource } from '~/constants';
 import { TAny } from '~/types';
 

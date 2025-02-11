@@ -1,4 +1,5 @@
 import { Theme } from 'remix-themes';
+
 import { LocaleLanguage } from '~/config';
 
 export interface CookiePreferences {

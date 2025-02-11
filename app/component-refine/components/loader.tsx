@@ -1,7 +1,8 @@
 import React, { forwardRef } from 'react';
+
 import { cn } from '~/utils';
 
-const Loader = forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement> & { className?: string }>(
+export const Loader = forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement> & { className?: string }>(
   ({ className, ...props }, ref) => {
     return (
       <svg
@@ -84,5 +85,3 @@ const Loader = forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement> & { class
 );
 
 Loader.displayName = 'Loader';
-
-export default Loader;

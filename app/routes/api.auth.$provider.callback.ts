@@ -1,4 +1,5 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
+
 import { EnumAuthProvider } from '~/constants';
 import { createUser, getUserByEmail } from '~/models/user.server';
 import { authenticator, commitSession, getSession } from '~/services';

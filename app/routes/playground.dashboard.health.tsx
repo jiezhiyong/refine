@@ -1,4 +1,5 @@
 import { MetaFunction } from '@remix-run/node';
+
 import { ComingSoon, PageError } from '~/components';
 import { getDefaultTitle } from '~/utils';
 

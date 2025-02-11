@@ -1,20 +1,17 @@
-import type { CrudFilters, CrudFilter } from "@refinedev/core";
-import type { RequestQueryBuilder, SCondition } from "@nestjsx/crud-request";
-import { mapOperator } from "./mapOperator";
+import type { RequestQueryBuilder, SCondition } from '@nestjsx/crud-request';
+import type { CrudFilter, CrudFilters } from '@refinedev/core';
+
+import { mapOperator } from './mapOperator';
 
 export const generateSearchFilter = (filters: CrudFilters): SCondition => {
   return createSearchQuery({
-    operator: "and",
+    operator: 'and',
     value: filters,
   });
 };
 
 export const createSearchQuery = (filter: CrudFilter): SCondition => {
-  if (
-    filter.operator !== "and" &&
-    filter.operator !== "or" &&
-    "field" in filter
-  ) {
+  if (filter.operator !== 'and' && filter.operator !== 'or' && 'field' in filter) {
     // query
     return {
       [filter.field]: {
@@ -26,16 +23,11 @@ export const createSearchQuery = (filter: CrudFilter): SCondition => {
   const { operator } = filter;
 
   return {
-    [mapOperator(operator)]: filter.value.map((filter) =>
-      createSearchQuery(filter),
-    ),
+    [mapOperator(operator)]: filter.value.map((filter) => createSearchQuery(filter)),
   };
 };
 
-export const handleFilter = (
-  query: RequestQueryBuilder,
-  filters?: CrudFilters,
-) => {
+export const handleFilter = (query: RequestQueryBuilder, filters?: CrudFilters) => {
   if (Array.isArray(filters) && filters.length > 0) {
     query.search(generateSearchFilter(filters));
   }

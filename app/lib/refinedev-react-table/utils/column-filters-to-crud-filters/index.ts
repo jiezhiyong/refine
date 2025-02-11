@@ -1,24 +1,14 @@
-import type {
-  ConditionalFilter,
-  CrudFilter,
-  CrudOperators,
-  LogicalFilter,
-} from "@refinedev/core";
-import type {
-  ColumnDef,
-  ColumnFilter,
-  ColumnFiltersState,
-} from "@tanstack/react-table";
+import type { ConditionalFilter, CrudFilter, CrudOperators, LogicalFilter } from '@refinedev/core';
+import type { ColumnDef, ColumnFilter, ColumnFiltersState } from '@tanstack/react-table';
+
+import { TAny } from '~/types';
 
 type Params = {
   columnFilters?: ColumnFiltersState;
-  columns: ColumnDef<any, any>[];
+  columns: ColumnDef<TAny, TAny>[];
 };
 
-export const columnFiltersToCrudFilters = ({
-  columns,
-  columnFilters,
-}: Params): CrudFilter[] => {
+export const columnFiltersToCrudFilters = ({ columns, columnFilters }: Params): CrudFilter[] => {
   return (
     columnFilters?.map((filter) => {
       const operator =
@@ -29,7 +19,7 @@ export const columnFiltersToCrudFilters = ({
           }
         )?.filterOperator;
 
-      const isConditional = operator === "and" || operator === "or";
+      const isConditional = operator === 'and' || operator === 'or';
 
       if (isConditional && Array.isArray(filter.value)) {
         const filterKey =
@@ -41,15 +31,15 @@ export const columnFiltersToCrudFilters = ({
 
         return {
           key: filterKey,
-          operator: operator as ConditionalFilter["operator"],
+          operator: operator as ConditionalFilter['operator'],
           value: filter.value,
         };
       }
-      const defaultOperator = Array.isArray(filter.value) ? "in" : "eq";
+      const defaultOperator = Array.isArray(filter.value) ? 'in' : 'eq';
 
       return {
         field: filter.id,
-        operator: (operator as LogicalFilter["operator"]) ?? defaultOperator,
+        operator: (operator as LogicalFilter['operator']) ?? defaultOperator,
         value: filter.value,
       };
     }) ?? []

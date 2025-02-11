@@ -6,16 +6,19 @@ import {
   ColumnDef,
   ColumnDefTemplate,
   ColumnMeta,
-  TableOptionsResolved,
   flexRender,
+  TableOptionsResolved,
 } from '@tanstack/react-table';
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
+
 import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as TableUi } from '~/components-shadcn/table';
 import { DEFAULT_PAGE_SIZE } from '~/config';
-import { UseTableProps, UseTableReturnType, useTable } from '~/lib/refinedev-react-table';
+import { useTable, UseTableProps, UseTableReturnType } from '~/lib/refinedev-react-table';
 import { TAny } from '~/types';
-import Loader from '../components/loader';
+
+import { Loader } from '../components/loader';
 import { DeleteProvider } from '../providers';
+
 import { RowAction, RowActions } from './actions';
 import { CloneAction } from './actions/clone';
 import { DeleteAction } from './actions/delete';
@@ -140,7 +143,7 @@ export function Table<
     <DeleteProvider>
       <div className="mt-1 space-y-4">
         <DataTableToolbar table={table} toolbar={toolbar} />
-        <div className="rounded-md border border-border">
+        <div className="border-border rounded-md border">
           <TableUi>
             {showHeader && (
               <TableHeader>
@@ -174,9 +177,9 @@ export function Table<
             <TableBody>
               {table.refineCore.tableQuery.isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-nowrap text-center">
+                  <TableCell colSpan={columns.length} className="h-24 text-center text-nowrap">
                     <div className="flex flex-row items-center justify-center">
-                      <Loader className="h-4 text-primary" />
+                      <Loader className="text-primary h-4" />
                     </div>
                   </TableCell>
                 </TableRow>

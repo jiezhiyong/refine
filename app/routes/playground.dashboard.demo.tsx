@@ -8,7 +8,9 @@ import { CheckCheck, Undo2 } from 'lucide-react';
 import { useCallback } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { z } from 'zod';
+
 import { Combobox, Field, Select } from '~/component-refine/components';
+import { PageError } from '~/components/500';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,7 +38,6 @@ import { Input } from '~/components-shadcn/input';
 import { Tabs, TabsList, TabsTrigger } from '~/components-shadcn/tabs';
 import { Textarea } from '~/components-shadcn/textarea';
 import { H2 } from '~/components-shadcn/typography';
-import { PageError } from '~/components/500';
 import { EnumAction, EnumResource } from '~/constants';
 import { requireUserSession } from '~/services/session.server';
 import { POST_STATUS, POST_STATUS_LIST } from '~/types';
@@ -64,7 +65,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 // UI
 export default function DashboardDemo() {
   return (
-    <div className="px-8 pb-4 pt-8">
+    <div className="px-8 pt-8 pb-4">
       <H2>useViewTransition</H2>
       <DemoUseViewTransitionState />
 
@@ -173,7 +174,11 @@ const DemoModal = () => {
       <Dialog
         open={modalVisible}
         onOpenChange={(open) => {
-          open ? showModal() : closeModal();
+          if (open) {
+            showModal();
+          } else {
+            closeModal();
+          }
         }}
       >
         <DialogTrigger asChild>
@@ -422,7 +427,8 @@ const DemoUseViewTransitionState = () => {
     <div className="flex flex-col gap-2">
       <Link prefetch="intent" viewTransition to={to}>
         <img
-          className="mt-4 h-32 rounded-md border border-secondary shadow-md"
+          alt=""
+          className="border-secondary mt-4 h-32 rounded-md border shadow-md"
           src="/logo.png"
           style={{
             viewTransitionName: vt ? 'image-expand' : '',

@@ -1,5 +1,8 @@
 import type { HttpError, ValidationErrors } from '@refinedev/core';
+
+import { TAny } from '~/types';
 import { tryParse } from '~/utils';
+
 import { transformPrismaError } from './transformPrismaError';
 
 /**
@@ -19,7 +22,7 @@ import { transformPrismaError } from './transformPrismaError';
  *  })
  *);
  */
-export const transformHttpError = (error: any): HttpError => {
+export const transformHttpError = (error: TAny): HttpError => {
   const { status, data, original } = tryParse(error?.message);
 
   const tryTransformPrismaError = transformPrismaError(!status ? String(original) : '');

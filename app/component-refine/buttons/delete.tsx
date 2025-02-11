@@ -1,9 +1,11 @@
-import { DeleteButtonProps } from '../types';
-import { Button } from '~/components-shadcn/button';
 import { useBack, useDeleteButton } from '@refinedev/core';
 import { Trash2Icon } from 'lucide-react';
 import { type FC } from 'react';
+
+import { Button } from '~/components-shadcn/button';
+
 import { ConfirmDialog } from '../components';
+import { DeleteButtonProps } from '../types';
 
 export const DeleteButton: FC<DeleteButtonProps> = ({
   resource,

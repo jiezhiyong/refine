@@ -3,6 +3,7 @@ import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { CalendarIcon, ClockIcon, LeafyGreen, MailIcon } from 'lucide-react';
+
 import { CloneButton, DeleteButton, EditButton } from '~/component-refine';
 import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
@@ -49,7 +50,7 @@ export default function PostShow() {
   const { data } = initialData;
 
   return (
-    <article className="px-8 pb-4 pt-8">
+    <article className="px-8 pt-8 pb-4">
       <header className="mb-8">
         <H1 className="relative mb-4 inline-flex gap-3 text-4xl font-bold">
           <span>{data.title}</span>
@@ -60,7 +61,7 @@ export default function PostShow() {
           </div>
         </H1>
 
-        <div className="mb-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+        <div className="text-muted-foreground mb-8 flex flex-wrap items-center gap-4 text-sm">
           <div className="flex items-center">
             <LeafyGreen className="mr-2 h-4 w-4" />
             <span>Category: {data.category?.title}</span>
@@ -82,7 +83,7 @@ export default function PostShow() {
           </Avatar>
           <div>
             <p className="font-medium">{data.user?.name}</p>
-            <p className="flex items-center text-sm text-muted-foreground">
+            <p className="text-muted-foreground flex items-center text-sm">
               <MailIcon className="mr-2 h-4 w-4" />
               {data.user?.email}
             </p>

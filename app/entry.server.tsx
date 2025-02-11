@@ -1,15 +1,17 @@
-/** 初始化服务端 Sentry */
-import { initSentry } from './services/sentry.server';
-initSentry();
+import { PassThrough } from 'node:stream';
 
 import type { EntryContext } from '@remix-run/node';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
 import * as Sentry from '@sentry/remix';
 import { isbot } from 'isbot';
-import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
-import { TAny } from './types/any';
+
+import { initSentry } from '~/services/sentry.server';
+import { TAny } from '~/types';
+
+/** 初始化服务端 Sentry */
+initSentry();
 
 const ABORT_DELAY = 5_000;
 
@@ -141,8 +143,8 @@ function handleBrowserRequest(
 }
 
 /** 错误处理 */
-export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }: TAny) => {
-  // if (!request.signal.aborted) {
-  //   console.error('@entry.server.handleError', error);
-  // }
+export const handleError = Sentry.wrapHandleErrorWithSentry((_error, { request }: TAny) => {
+  if (!request.signal.aborted) {
+    // console.error('@entry.server.handleError', error);
+  }
 });

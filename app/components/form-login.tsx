@@ -1,8 +1,10 @@
 import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
+
 import { Button } from '~/components-shadcn/button';
 import { Card, CardContent } from '~/components-shadcn/card';
 import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
+
 import { ErrorMessage } from './error';
 import { PrivacyPolicy } from './privacy-policy';
 import { TcskOAuth2 } from './tcsk-oauth2';
@@ -33,7 +35,7 @@ export function LoginForm() {
             <div className="flex flex-col gap-6">
               <div className="flex flex-col">
                 <h1 className="flex items-center text-2xl font-bold">Welcome back</h1>
-                <p className="text-balance text-muted-foreground">Login to your OSS Inc. account</p>
+                <p className="text-muted-foreground text-balance">Login to your OSS Inc. account</p>
               </div>
 
               <div className="grid gap-2">
@@ -83,8 +85,8 @@ export function LoginForm() {
                 <ErrorMessage error={errors?.default?.[0]} />
               </div>
 
-              <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                <span className="relative z-10 bg-background px-2 text-muted-foreground">or</span>
+              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                <span className="bg-background text-muted-foreground relative z-10 px-2">or</span>
               </div>
 
               <TcskOAuth2 redirectTo={redirectTo} />
@@ -97,7 +99,7 @@ export function LoginForm() {
               </div>
             </div>
           </Form>
-          <div className="relative hidden bg-muted md:block">
+          <div className="bg-muted relative hidden md:block">
             <img src="/logo.png" alt="" className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.3]" />
           </div>
         </CardContent>

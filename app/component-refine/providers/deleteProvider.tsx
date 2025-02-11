@@ -1,6 +1,8 @@
 import { useTranslate } from '@refinedev/core';
-import React, { PropsWithChildren, createContext, useCallback, useState } from 'react';
+import React, { createContext, PropsWithChildren, useCallback, useState } from 'react';
+
 import { TAny } from '~/types';
+
 import { ConfirmDialog } from '../components/confirm';
 import { useDeleteHelper, useOnBack } from '../hooks';
 
@@ -49,7 +51,7 @@ export function DeleteActionModal(props: DeleteContextType) {
     }
 
     return undefined;
-  }, [can, props]);
+  }, [can, props, back, mutate]);
 
   return (
     <ConfirmDialog

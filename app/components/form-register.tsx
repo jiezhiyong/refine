@@ -1,10 +1,10 @@
-import { useNotification } from '@refinedev/core';
 import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
 import { GalleryVerticalEnd } from 'lucide-react';
-import { useState } from 'react';
+
 import { Button } from '~/components-shadcn/button';
 import { Input } from '~/components-shadcn/input';
 import { Label } from '~/components-shadcn/label';
+
 import { ErrorMessage } from './error';
 import { PrivacyPolicy } from './privacy-policy';
 import { TcskOAuth2 } from './tcsk-oauth2';
@@ -21,58 +21,58 @@ interface ActionData {
 
 // 注册表单
 export function RegisterForm() {
-  const { open } = useNotification();
   const { errors } = useActionData<ActionData>() || {};
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/';
   const navigation = useNavigation();
-  const [isSending, setIsSending] = useState(false);
-  const [countdown, setCountdown] = useState(0);
+  // const { open } = useNotification();
+  // const [isSending, setIsSending] = useState(false);
+  // const [countdown, setCountdown] = useState(0);
 
-  async function sendVerificationCode(email: string) {
-    setIsSending(true);
-    try {
-      const response = await fetch('/api/send-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
+  // async function sendVerificationCode(email: string) {
+  //   setIsSending(true);
+  //   try {
+  //     const response = await fetch('/api/send-code', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ email }),
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || '发送验证码失败');
-      }
+  //     if (!response.ok) {
+  //       throw new Error(data.error || '发送验证码失败');
+  //     }
 
-      open?.({
-        key: 'register-email-sent',
-        message: '验证码已发送',
-        description: '请查看您的邮箱',
-        type: 'success',
-      });
+  //     open?.({
+  //       key: 'register-email-sent',
+  //       message: '验证码已发送',
+  //       description: '请查看您的邮箱',
+  //       type: 'success',
+  //     });
 
-      // 开始倒计时
-      setCountdown(60);
-      const timer = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } catch (error) {
-      open?.({
-        key: 'register-email-sent',
-        message: 'Error',
-        description: error instanceof Error ? error.message : '发送验证码失败',
-        type: 'error',
-      });
-    } finally {
-      setIsSending(false);
-    }
-  }
+  //     // 开始倒计时
+  //     setCountdown(60);
+  //     const timer = setInterval(() => {
+  //       setCountdown((prev) => {
+  //         if (prev <= 1) {
+  //           clearInterval(timer);
+  //           return 0;
+  //         }
+  //         return prev - 1;
+  //       });
+  //     }, 1000);
+  //   } catch (error) {
+  //     open?.({
+  //       key: 'register-email-sent',
+  //       message: 'Error',
+  //       description: error instanceof Error ? error.message : '发送验证码失败',
+  //       type: 'error',
+  //     });
+  //   } finally {
+  //     setIsSending(false);
+  //   }
+  // }
 
   return (
     <div className="flex flex-col gap-6">
@@ -151,8 +151,8 @@ export function RegisterForm() {
             </div>
           </div>
 
-          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">or</span>
+          <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+            <span className="bg-background text-muted-foreground relative z-10 px-2">or</span>
           </div>
 
           <TcskOAuth2 redirectTo={redirectTo} />

@@ -12,5 +12,5 @@ export function ErrorMessage({ error }: { error?: Error | string }) {
   } else if (error instanceof Error) {
     message = error.message;
   }
-  return <p className="text-sm text-destructive">{message}</p>;
+  return <p className="text-destructive text-sm">{message}</p>;
 }

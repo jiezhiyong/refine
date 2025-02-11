@@ -1,4 +1,5 @@
 import { ActionFunction } from '@remix-run/node';
+
 import { getPreferencesNextCookie } from '~/services';
 import { getRequestData } from '~/utils';
 

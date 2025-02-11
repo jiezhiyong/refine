@@ -1,7 +1,7 @@
 import { useTranslation } from '@refinedev/core';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Form, UIMatch, useSearchParams } from '@remix-run/react';
-import i18next from 'i18next';
+import { t } from 'i18next';
 import {
   ArrowDown,
   ArrowUp,
@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import React from 'react';
 import { DateRange } from 'react-day-picker';
+
 import { PageError } from '~/components';
 import { Badge } from '~/components-shadcn/badge';
 import { Button } from '~/components-shadcn/button';
@@ -71,7 +72,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // 注意：如果要使用 SSR 进行翻译，需要手动同步服务端与客户端的 locale
   await syncServiceLocaleToClient((await getPreferencesCookie(request)).locale);
 
-  return { title: i18next.t('title'), description: i18next.t('description') };
+  return { title: t('title'), description: t('description') };
 }
 
 // UI
@@ -82,7 +83,7 @@ export default function DashboardAbout() {
       <h1 className="text-6xl text-[#3defe9]">{t('title', '')}</h1>
       <p className="my-10 text-3xl text-[#fecc1b]">{t('description', '')}</p>
 
-      <div className="space-x-2 space-y-2 *:py-1 *:text-sm">
+      <div className="space-y-2 space-x-2 *:py-1 *:text-sm">
         <Badge>前后端一体化架构</Badge>
         <Badge>SSR 服务端渲染</Badge>
         <Badge>路由并行加载</Badge>
@@ -144,7 +145,7 @@ function UiTools() {
   const starred = Boolean(searchParams.get('starred'));
   return (
     <div className="flex items-center gap-1 text-sm">
-      <div className="ml-2 hidden font-medium text-muted-foreground md:inline-block">Edit Oct 08</div>
+      <div className="text-muted-foreground ml-2 hidden font-medium md:inline-block">Edit Oct 08</div>
 
       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => updateSearchParams({ starred: !starred })}>
         <Star className={starred ? 'fill-yellow-400' : ''} />
@@ -152,7 +153,7 @@ function UiTools() {
 
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-7 w-7 data-[state=open]:bg-accent">
+          <Button variant="ghost" size="icon" className="data-[state=open]:bg-accent h-7 w-7">
             <MoreHorizontal />
           </Button>
         </PopoverTrigger>
@@ -235,7 +236,7 @@ function UiFilter() {
 
         <SidebarGroup>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />
+            <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" />
             <Label htmlFor="desc" className="sr-only">
               Search
             </Label>
@@ -257,7 +258,7 @@ function UiFilter() {
               <Collapsible defaultOpen={index === 0} className="group/collapsible">
                 <SidebarGroupLabel
                   asChild
-                  className="group/label w-full text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  className="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full text-sm"
                 >
                   <CollapsibleTrigger>
                     {group.title}

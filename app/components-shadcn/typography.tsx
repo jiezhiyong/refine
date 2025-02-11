@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { cn } from '~/utils';
 
 interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
@@ -68,7 +69,7 @@ export function List({ children, className, ...props }: TypographyProps) {
 export function InlineCode({ children, className, ...props }: TypographyProps) {
   return (
     <code
-      className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', className)}
+      className={cn('bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', className)}
       {...props}
     >
       {children}
@@ -78,7 +79,7 @@ export function InlineCode({ children, className, ...props }: TypographyProps) {
 
 export function Lead({ children, className, ...props }: TypographyProps) {
   return (
-    <p className={cn('text-xl text-muted-foreground', className)} {...props}>
+    <p className={cn('text-muted-foreground text-xl', className)} {...props}>
       {children}
     </p>
   );
@@ -94,7 +95,7 @@ export function Large({ children, className, ...props }: TypographyProps) {
 
 export function Small({ children, className, ...props }: TypographyProps) {
   return (
-    <small className={cn('text-sm font-medium leading-none', className)} {...props}>
+    <small className={cn('text-sm leading-none font-medium', className)} {...props}>
       {children}
     </small>
   );
@@ -102,12 +103,13 @@ export function Small({ children, className, ...props }: TypographyProps) {
 
 export function Muted({ children, className, ...props }: TypographyProps) {
   return (
-    <p className={cn('text-sm text-muted-foreground', className)} {...props}>
+    <p className={cn('text-muted-foreground text-sm', className)} {...props}>
       {children}
     </p>
   );
 }
 
+// eslint-disable-next-line react/prop-types
 export function Image({ src, alt, className, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) {
   return (
     <img

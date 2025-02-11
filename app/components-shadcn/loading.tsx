@@ -1,5 +1,6 @@
 import { Loader2, LucideProps } from 'lucide-react';
 import React from 'react';
+
 import { cn } from '~/utils';
 
 export const LoadingIcon = React.forwardRef<SVGSVGElement, LucideProps>(({ className, ...props }, ref) => {

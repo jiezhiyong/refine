@@ -1,4 +1,6 @@
-import type { ConfirmDialogProps } from '../types';
+import { CheckIcon, XIcon } from 'lucide-react';
+import { FC, isValidElement, useMemo } from 'react';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,8 +13,8 @@ import {
   AlertDialogTrigger,
 } from '~/components-shadcn/alert-dialog';
 import { LoadingIcon } from '~/components-shadcn/loading';
-import { CheckIcon, XIcon } from 'lucide-react';
-import { FC, isValidElement, useMemo } from 'react';
+
+import type { ConfirmDialogProps } from '../types';
 
 export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   children,

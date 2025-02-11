@@ -1,5 +1,6 @@
 import { useMatches, useSearchParams } from '@remix-run/react';
 import { Filter, FilterX, Search } from 'lucide-react';
+
 import { BackButton } from '~/component-refine/buttons/back';
 import { Badge } from '~/components-shadcn/badge';
 import { Button } from '~/components-shadcn/button';
@@ -7,6 +8,7 @@ import { Separator } from '~/components-shadcn/separator';
 import { useKBar } from '~/lib/refinedev-kbar';
 import { HandleFunction } from '~/types';
 import { cn } from '~/utils';
+
 import { FullscreenSwitcher } from './switcher-fullscreen';
 import { LanguageSwitcher } from './switcher-language';
 

@@ -1,12 +1,13 @@
 import { AutoSaveIndicatorElements, BaseRecord, HttpError, useTranslate, UseUpdateReturnType } from '@refinedev/core';
 import dayjs from 'dayjs';
 import React from 'react';
+
 import { cn } from '~/utils';
 
 export type AutoSaveIndicatorProps<
   TData extends BaseRecord = BaseRecord,
   TError extends HttpError = HttpError,
-  TVariables = {},
+  TVariables = object,
 > = {
   data?: UseUpdateReturnType<TData, TError, TVariables>['data'];
   error?: UseUpdateReturnType<TData, TError, TVariables>['error'];
@@ -40,7 +41,7 @@ const Message = ({ translationKey, defaultMessage }: { translationKey: string; d
 
   return (
     <span
-      className={cn('text-sm text-muted-foreground', {
+      className={cn('text-muted-foreground text-sm', {
         'text-destructive': translationKey === 'autoSave.error',
         'text-green-500': translationKey === 'autoSave.success',
       })}

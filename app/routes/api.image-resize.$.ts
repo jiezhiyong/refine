@@ -12,14 +12,16 @@
  * Further improvements could be done by implementing ETags, but that is out of scope for this demo.
  */
 
-import type { LoaderFunction } from '@remix-run/node';
-import type { Params } from '@remix-run/react';
 import type { ReadStream } from 'fs';
 import { createReadStream, statSync } from 'fs';
 import path from 'path';
+import { PassThrough } from 'stream';
+
+import type { LoaderFunction } from '@remix-run/node';
+import type { Params } from '@remix-run/react';
 import type { FitEnum } from 'sharp';
 import sharp from 'sharp';
-import { PassThrough } from 'stream';
+
 import { TAny } from '~/types';
 
 const ASSETS_ROOT = 'assets';

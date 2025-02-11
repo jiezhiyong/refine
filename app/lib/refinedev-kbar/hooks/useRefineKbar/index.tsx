@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
+  type IResourceItem,
   useCanWithoutCache,
   useDelete,
   useGetToPath,
@@ -8,11 +10,11 @@ import {
   useRouterType,
   useTranslate,
   useUserFriendlyName,
-  type IResourceItem,
 } from '@refinedev/core';
-import { createAction, KBarContext, useRegisterActions, VisualState, type Action } from 'kbar';
+import { type Action, createAction, KBarContext, useRegisterActions, VisualState } from 'kbar';
 import { CirclePlus, EyeIcon, ListIcon, Pencil, Trash2Icon } from 'lucide-react';
 import { useContext, useEffect, useState } from 'react';
+
 import { capitalize } from '../../definitions/capitalize';
 
 enum RefineKbarActionType {
@@ -30,7 +32,7 @@ export const useRefineKbar = (): void => {
   const getToPath = useGetToPath();
   const go = useGo();
   const { mutate } = useDelete();
-  const { push, list: goToList, create: goToCreate, show: goToShow, edit: goToEdit } = useNavigation();
+  const { push, list: _goToList, create: _goToCreate, show: _goToShow, edit: _goToEdit } = useNavigation();
   const getUserFriendlyName = useUserFriendlyName();
 
   const kbarContext = useContext(KBarContext);
@@ -88,7 +90,6 @@ export const useRefineKbar = (): void => {
       show,
       canDelete: deprecatedCanDelete,
       edit,
-      route,
     } = resource;
 
     const label = resource?.meta?.label ?? resource?.options?.label ?? deprecatedLabel;

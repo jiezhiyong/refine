@@ -1,7 +1,9 @@
 import type { Password, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+
 import { EnumRole, EnumRoleId, TAuthProvider } from '~/constants';
 import { db } from '~/services';
+import { TAny } from '~/types';
 
 /** 根据 ID 获取用户 */
 export async function getUserById(id: User['id']) {
@@ -104,7 +106,7 @@ export async function verifyUserpassLogin(email: User['email'], password: Passwo
 }
 
 // 提取角色
-const withRoles = (_userWithRoles: (User & { roles: { role: { title: string } & Record<string, any> }[] }) | null) => {
+const withRoles = (_userWithRoles: (User & { roles: { role: { title: string } & Record<string, TAny> }[] }) | null) => {
   if (!_userWithRoles) {
     return null;
   }

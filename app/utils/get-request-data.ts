@@ -1,7 +1,9 @@
+import { TAny } from '~/types';
+
 // 根据 Content-Type 选择正确的解析方法
 export const getRequestData = async (request: Request) => {
   const contentType = request.headers.get('content-type');
-  let data: Record<string, any>;
+  let data: Record<string, TAny>;
 
   if (contentType?.includes('application/json')) {
     data = await request.json();

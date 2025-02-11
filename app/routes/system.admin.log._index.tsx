@@ -5,6 +5,7 @@ import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
+
 import { ExportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
 import { PageError } from '~/components';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
@@ -128,7 +129,7 @@ export default function LogIndex() {
 
           return (
             <ShowButton recordItemId={original.id} asChild>
-              <span className="inline-block min-w-8 text-muted-foreground">
+              <span className="text-muted-foreground inline-block min-w-8">
                 {pageIndex * pageSize + index + 1}.&nbsp;
               </span>
               <span className="py-3 capitalize underline-offset-2 hover:text-green-600 hover:underline">

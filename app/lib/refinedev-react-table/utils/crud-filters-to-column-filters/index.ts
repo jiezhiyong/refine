@@ -1,24 +1,20 @@
-import type { CrudFilter, LogicalFilter } from "@refinedev/core";
-import type { ColumnDef, ColumnFilter } from "@tanstack/react-table";
+import type { CrudFilter, LogicalFilter } from '@refinedev/core';
+import type { ColumnDef, ColumnFilter } from '@tanstack/react-table';
+
+import { TAny } from '~/types';
 
 type Params = {
-  columns: ColumnDef<any, any>[];
+  columns: ColumnDef<TAny, TAny>[];
   crudFilters: CrudFilter[];
 };
 
-export const crudFiltersToColumnFilters = ({
-  columns,
-  crudFilters,
-}: Params): ColumnFilter[] => {
+export const crudFiltersToColumnFilters = ({ columns, crudFilters }: Params): ColumnFilter[] => {
   return crudFilters
     .map((filter) => {
-      if (filter.operator === "and" || filter.operator === "or") {
+      if (filter.operator === 'and' || filter.operator === 'or') {
         if (filter.key) {
           const filterId: string =
-            columns.find(
-              (col) =>
-                (col.meta as { filterKey?: string })?.filterKey === filter.key,
-            )?.id ?? filter.key;
+            columns.find((col) => (col.meta as { filterKey?: string })?.filterKey === filter.key)?.id ?? filter.key;
 
           return {
             id: filterId,

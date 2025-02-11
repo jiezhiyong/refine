@@ -5,8 +5,8 @@ import {
   RefineCrudShowProps,
 } from '@refinedev/ui-types';
 
-import { PageHeaderProps } from './page-header';
 import { CreateButtonProps } from './buttons';
+import { PageHeaderProps } from './page-header';
 
 export type CreateProps = RefineCrudCreateProps<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>,

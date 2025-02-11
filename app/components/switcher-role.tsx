@@ -1,7 +1,7 @@
+import { useRouteLoaderData } from '@remix-run/react';
 import { ChevronsUpDown, GalleryVerticalEnd, Plus } from 'lucide-react';
 import * as React from 'react';
 
-import { useRouteLoaderData } from '@remix-run/react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,7 +51,7 @@ export function RoleSwitcher() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg">
                 <GalleryVerticalEnd className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -67,7 +67,7 @@ export function RoleSwitcher() {
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">roles</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-muted-foreground text-xs">roles</DropdownMenuLabel>
             {userRoles.map((role, index) => (
               <DropdownMenuItem
                 key={role.value}
@@ -84,10 +84,10 @@ export function RoleSwitcher() {
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2">
-              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+              <div className="bg-background flex size-6 items-center justify-center rounded-md border">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">Apply Role</div>
+              <div className="text-muted-foreground font-medium">Apply Role</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

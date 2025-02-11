@@ -3,6 +3,7 @@ import { Link } from '@remix-run/react';
 import { ChevronRight, LucideProps } from 'lucide-react';
 import { TreeMenuItem } from 'node_modules/@refinedev/core/dist/hooks/menu/useMenu';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
+
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components-shadcn/collapsible';
 import {
   SidebarGroup,

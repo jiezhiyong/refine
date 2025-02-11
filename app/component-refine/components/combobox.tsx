@@ -1,7 +1,8 @@
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import { BaseOption, BaseRecord, UseSelectReturnType } from '@refinedev/core';
-import { ComponentPropsWithoutRef, forwardRef, useState, type ElementRef } from 'react';
+import { ComponentPropsWithoutRef, type ElementRef, forwardRef, useState } from 'react';
+
 import { Button } from '~/components-shadcn/button';
 import {
   Command,

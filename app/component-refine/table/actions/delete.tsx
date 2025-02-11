@@ -1,11 +1,14 @@
 import { Trash2 } from 'lucide-react';
 import { useContext } from 'react';
+
 import { TAny } from '~/types';
 import { cn } from '~/utils';
-import type { RowActionProps } from '.';
-import { RowAction } from '.';
+
 import { useDeleteHelper } from '../../hooks';
 import { DeleteContext } from '../../providers';
+
+import type { RowActionProps } from '.';
+import { RowAction } from '.';
 
 type DeleteActionProps = RowActionProps & {
   row?: TAny;
@@ -23,7 +26,7 @@ export function DeleteAction({
   className,
   ...props
 }: DeleteActionProps) {
-  const { can, reason } = useDeleteHelper(resource!, row.id);
+  const { can } = useDeleteHelper(resource!, row.id);
   const deleteContext = useContext(DeleteContext);
 
   return (

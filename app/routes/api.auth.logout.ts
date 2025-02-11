@@ -1,5 +1,6 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
+
 import { destroySession, getSession } from '~/services';
 import { getAllParams } from '~/utils';
 

@@ -1,4 +1,7 @@
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { BaseRecord, HttpError, useTranslate } from '@refinedev/core';
+import { FC, forwardRef, PropsWithChildren } from 'react';
+
 import { Button } from '~/components-shadcn/button';
 import { Checkbox } from '~/components-shadcn/checkbox';
 import {
@@ -9,11 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components-shadcn/dropdown-menu';
-
-import { BaseRecord, HttpError, useTranslate } from '@refinedev/core';
 import { UseTableReturnType } from '~/lib/refinedev-react-table';
-
-import { FC, forwardRef, PropsWithChildren } from 'react';
 import { cn } from '~/utils';
 
 type CheckAllProps = React.ComponentPropsWithoutRef<typeof Checkbox> &

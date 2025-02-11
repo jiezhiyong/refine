@@ -27,7 +27,7 @@ export class StateStore {
   codeVerifier: string | undefined;
 
   constructor(params = new URLSearchParams()) {
-    for (let [state, verifier] of params) {
+    for (const [state, verifier] of params) {
       if (state === 'state') continue;
       this.states.add(state);
       this.codeVerifiers.set(state, verifier);
@@ -69,7 +69,7 @@ export class StateStore {
     if (!this.state) return '';
     if (!this.codeVerifier) return '';
 
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
 
     params.set('state', this.state);
     params.set(this.state, this.codeVerifier);
@@ -78,7 +78,7 @@ export class StateStore {
   }
 
   toSetCookie(cookieName = 'oauth2', options: Omit<SetCookieInit, 'value'> = {}) {
-    let id = crypto.randomUUID();
+    const id = crypto.randomUUID();
     return new SetCookie({
       value: this.toString(),
       httpOnly: true, // Prevents JavaScript from accessing the cookie
@@ -95,13 +95,13 @@ export class StateStore {
    * cookie with the given name.
    */
   static fromRequest(request: Request, cookieName = 'oauth2') {
-    let cookie = new Cookie(request.headers.get('cookie') ?? '');
+    const cookie = new Cookie(request.headers.get('cookie') ?? '');
 
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
 
-    for (let name of cookie.names()) {
+    for (const name of cookie.names()) {
       if (name.startsWith(cookieName)) {
-        for (let [key, value] of new URLSearchParams(cookie.get(name))) {
+        for (const [key, value] of new URLSearchParams(cookie.get(name))) {
           params.append(key, value);
         }
       }

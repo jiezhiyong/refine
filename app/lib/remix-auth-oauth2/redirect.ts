@@ -7,7 +7,7 @@ export function redirect(url: string, init: ResponseInit | number = 302) {
     responseInit.status = 302;
   }
 
-  let headers = new Headers(responseInit.headers);
+  const headers = new Headers(responseInit.headers);
   headers.set('Location', url);
 
   return new Response(null, { ...responseInit, headers });

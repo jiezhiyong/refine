@@ -1,4 +1,5 @@
 import { DataProvider } from '@refinedev/core';
+
 import { dataResources, DEFAULT_PAGE_SIZE } from '~/config';
 import { Resources } from '~/constants';
 import { db } from '~/services';

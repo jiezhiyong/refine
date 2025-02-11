@@ -3,7 +3,9 @@ import type { VariantProps } from 'class-variance-authority';
 import { cva } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
 import * as React from 'react';
+
 import { cn } from '~/utils';
+
 import { LoadingIcon } from './loading';
 
 const clsOutline = 'border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground';

@@ -1,8 +1,11 @@
 import { CopyCheck } from 'lucide-react';
+
 import { TAny } from '~/types';
+
+import { useGetCloneUrl } from '../../hooks';
+
 import type { RowActionProps } from '.';
 import { RowAction } from '.';
-import { useGetCloneUrl } from '../../hooks';
 
 type CloneActionProps = RowActionProps & {
   row?: TAny;
@@ -11,7 +14,7 @@ type CloneActionProps = RowActionProps & {
 };
 
 export function CloneAction({ row, resource, title, disabled, ...props }: CloneActionProps) {
-  const { can, reason, url } = useGetCloneUrl(resource!, row.id);
+  const { can, url } = useGetCloneUrl(resource!, row.id);
 
   return (
     <RowAction

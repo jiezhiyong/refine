@@ -1,5 +1,6 @@
 import { useMatches, useSearchParams } from '@remix-run/react';
 import * as React from 'react';
+
 import { Sidebar } from '~/components-shadcn/sidebar';
 import { HandleFunction } from '~/types';
 import { cn } from '~/utils';

@@ -1,14 +1,16 @@
 import { AuditLogProvider, BaseKey, MetaQuery } from '@refinedev/core';
+
 import { EnumResource } from '~/constants';
 import { TAny } from '~/types';
+
 import { dataProvider } from './data';
 
 export const auditLogProvider: AuditLogProvider = {
   get: async (params: {
     resource: string;
     action?: string;
-    meta?: Record<number | string, any>;
-    author?: Record<number | string, any>;
+    meta?: Record<number | string, TAny>;
+    author?: Record<number | string, TAny>;
     metaData?: MetaQuery;
   }) => {
     const { resource, action, meta, author, metaData } = params;
@@ -59,9 +61,9 @@ export const auditLogProvider: AuditLogProvider = {
     resource: string;
     action: string;
     data?: TAny;
-    author?: Record<number | string, any>;
+    author?: Record<number | string, TAny>;
     previousData?: TAny;
-    meta?: Record<number | string, any>;
+    meta?: Record<number | string, TAny>;
   }) => {
     const { resource, action, data, previousData, meta } = params;
 

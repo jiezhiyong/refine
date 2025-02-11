@@ -1,6 +1,7 @@
-import { newEnforcer } from 'casbin';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
+
+import { newEnforcer } from 'casbin';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const MODEL_PATH = join(__dirname, '../assets/casbin-model.conf');

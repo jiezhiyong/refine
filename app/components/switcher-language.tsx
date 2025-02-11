@@ -1,6 +1,7 @@
 import { useTranslation } from '@refinedev/core';
 import { useRouteLoaderData, useSearchParams } from '@remix-run/react';
 import { Languages } from 'lucide-react';
+
 import { Button } from '~/components-shadcn/button';
 import { RootLoaderData } from '~/root';
 import { canUseDOM, cn } from '~/utils';

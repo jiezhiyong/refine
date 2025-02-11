@@ -1,11 +1,13 @@
 import { useTranslate } from '@refinedev/core';
 import { FilterIcon, FilterX, Search } from 'lucide-react';
+
 import { Badge } from '~/components-shadcn/badge';
 import { Button } from '~/components-shadcn/button';
 import { Input } from '~/components-shadcn/input';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
 import { Separator } from '~/components-shadcn/separator';
 import { cn } from '~/utils';
+
 import type { TableFilterProps } from '..';
 
 export function TableFilterSearchColumn({ column, title, align = 'start' }: TableFilterProps) {
@@ -35,7 +37,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
           {selectedValue && (
             <>
               <Separator orientation="vertical" className="mr-1 h-4" />
-              <Badge variant="secondary" className="cursor-pointer text-nowrap text-xs text-muted-foreground">
+              <Badge variant="secondary" className="text-muted-foreground cursor-pointer text-xs text-nowrap">
                 {selectedValue}
               </Badge>
             </>
@@ -45,7 +47,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
 
       <PopoverContent className="w-[200px] overflow-hidden p-0 ring-0" align={align}>
         <div className="relative">
-          <div className="flex flex-row items-center bg-popover px-3 text-popover-foreground">
+          <div className="bg-popover text-popover-foreground flex flex-row items-center px-3">
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
             <Input
               defaultValue={selectedValue ?? ''}
@@ -53,7 +55,7 @@ export function TableFilterSearchColumn({ column, title, align = 'start' }: Tabl
                 column?.setFilterValue(e.target.value);
               }}
               className={cn(
-                'h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm shadow-none outline-hidden ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
+                'placeholder:text-muted-foreground h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm ring-0 shadow-none outline-hidden focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
               )}
               placeholder={title}
             />

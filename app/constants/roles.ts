@@ -1,4 +1,4 @@
-import { BicepsFlexed, AudioLines, Baby } from 'lucide-react';
+import { AudioLines, Baby, BicepsFlexed } from 'lucide-react';
 
 export enum EnumRole {
   administrator = 'administrator',

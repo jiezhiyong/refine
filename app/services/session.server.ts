@@ -1,14 +1,15 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
+
 import { getUserById } from '~/models/user.server';
 import { SessionUser } from '~/types';
 
-invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set.');
+invariant(process.env.VITE_SECRET, 'VITE_SECRET must be set.');
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
     name: '__session',
-    secrets: [process.env.SESSION_SECRET ?? ''],
+    secrets: [process.env.VITE_SECRET ?? ''],
     path: '/',
     sameSite: 'lax',
     httpOnly: true,

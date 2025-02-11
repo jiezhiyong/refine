@@ -1,4 +1,3 @@
-import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -16,7 +15,7 @@ test('renders loader data', async () => {
       path: '/',
       Component: MyComponent,
       loader() {
-        return json({ message: 'hello' });
+        return { message: 'hello' };
       },
     },
   ]);

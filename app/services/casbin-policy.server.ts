@@ -1,7 +1,8 @@
-import { createEnforcer } from './casbin-enforcer.server';
 import fs from 'fs/promises';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
+
+import { createEnforcer } from './casbin-enforcer.server';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const POLICY_PATH = join(__dirname, '../assets/casbin-policy.csv');

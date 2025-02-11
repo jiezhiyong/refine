@@ -1,7 +1,8 @@
+import * as fs from 'fs';
+
 import { vitePlugin as remix } from '@remix-run/dev';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
-import * as fs from 'fs';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import { envOnlyMacros } from 'vite-env-only';

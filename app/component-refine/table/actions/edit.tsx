@@ -1,8 +1,11 @@
 import { Pencil } from 'lucide-react';
+
 import { TAny } from '~/types';
+
+import { useGetEditUrl } from '../../hooks';
+
 import type { RowActionProps } from '.';
 import { RowAction } from '.';
-import { useGetEditUrl } from '../../hooks';
 
 type EditActionProps = RowActionProps & {
   row?: TAny;
@@ -11,7 +14,7 @@ type EditActionProps = RowActionProps & {
 };
 
 export function EditAction({ row, resource, title, disabled, ...props }: EditActionProps) {
-  const { can, reason, url } = useGetEditUrl(resource!, row.id);
+  const { can, url } = useGetEditUrl(resource!, row.id);
 
   return (
     <RowAction icon={<Pencil size={16} />} disabled={!can || disabled} title={title || 'Edit'} to={url} {...props} />

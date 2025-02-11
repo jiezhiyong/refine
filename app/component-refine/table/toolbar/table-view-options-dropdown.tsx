@@ -1,6 +1,9 @@
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { useTranslate } from '@refinedev/core';
 import { Table } from '@tanstack/react-table';
+import { FC, useMemo } from 'react';
+
 import { Button } from '~/components-shadcn/button';
 import {
   DropdownMenu,
@@ -9,8 +12,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from '~/components-shadcn/dropdown-menu';
-import { FC, useMemo } from 'react';
-import { useTranslate } from '@refinedev/core';
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;

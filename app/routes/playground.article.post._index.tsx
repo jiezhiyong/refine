@@ -6,13 +6,14 @@ import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { Paperclip } from 'lucide-react';
 import { useCallback, useRef } from 'react';
+
 import { CreateButton, ExportButton, ImportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
 import { PageError } from '~/components';
+import { PdfLayout } from '~/components/pdf';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
 import { Badge } from '~/components-shadcn/badge';
 import { Checkbox } from '~/components-shadcn/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components-shadcn/dialog';
-import { PdfLayout } from '~/components/pdf';
 import { EnumAction, EnumResource } from '~/constants';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
 import { PostFormModal } from '~/routes/playground.article.post.edit.$id';
@@ -97,7 +98,7 @@ export default function PostIndex() {
         enableSorting
         enableFilters
         enableHiding
-        toolbar={[<CreateButton />]}
+        toolbar={[<CreateButton key="create" />]}
         initialState={{
           columnVisibility: {
             updatedAt: false,
@@ -153,7 +154,7 @@ export default function PostIndex() {
             const pageSize = table.getState().pagination.pageSize;
             return (
               <ShowButton recordItemId={original.id} asChild>
-                <span className="inline-block min-w-8 text-muted-foreground">
+                <span className="text-muted-foreground inline-block min-w-8">
                   {pageIndex * pageSize + index + 1}.&nbsp;
                 </span>
                 <span className="py-3 underline-offset-2 hover:text-green-600 hover:underline">{original.title}</span>
@@ -278,7 +279,7 @@ export default function PostIndex() {
                 />
               </Table.Actions>
             ),
-            []
+            [useModalReturn1, useModalReturn2]
           )}
         />
       </Table>

@@ -1,8 +1,11 @@
 import { Eye } from 'lucide-react';
+
 import { TAny } from '~/types';
+
+import { useGetShowUrl } from '../../hooks';
+
 import type { RowActionProps } from '.';
 import { RowAction } from '.';
-import { useGetShowUrl } from '../../hooks';
 
 type ShowActionProps = RowActionProps & {
   row?: TAny;
@@ -11,7 +14,7 @@ type ShowActionProps = RowActionProps & {
 };
 
 export function ShowAction({ row, resource, title, disabled, ...props }: ShowActionProps) {
-  const { can, reason, url } = useGetShowUrl(resource!, row.id);
+  const { can, url } = useGetShowUrl(resource!, row.id);
 
   return (
     <RowAction

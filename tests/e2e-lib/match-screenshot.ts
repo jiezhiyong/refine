@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+
 import test, { expect, type Page, type PageScreenshotOptions, type TestInfo } from '@playwright/test';
 
 /**

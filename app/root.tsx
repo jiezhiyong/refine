@@ -20,11 +20,16 @@ import * as Sentry from '@sentry/remix';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
 import { Loader } from 'lucide-react';
 import nProgress from 'nprogress';
-import { useEffect, type PropsWithChildren } from 'react';
+import nProgressStyles from 'nprogress/nprogress.css?url';
+import { type PropsWithChildren, useEffect } from 'react';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
+
 import { RefineKbar } from '~/component-refine';
 import { NotFound, PageError } from '~/components';
 import { Toaster } from '~/components-shadcn/sonner';
+import { fallbackLanguage, LocaleLanguage } from '~/config/i18n';
+import { dataResources } from '~/config/resources';
+import { TRole } from '~/constants/roles';
 import { RefineKbarProvider } from '~/lib/refinedev-kbar';
 import {
   accessControlProvider,
@@ -36,18 +41,14 @@ import {
   syncServiceLocaleToClient,
 } from '~/providers';
 import { getPreferencesCookie, getUser } from '~/services';
-import { cn } from '~/utils';
-import { fallbackLanguage, LocaleLanguage } from './config/i18n';
-import { dataResources } from './config/resources';
-import { TRole } from './constants/roles';
-import { getPermissions } from './services/casbin-permission.server';
-import { PermissionRule } from './types/casbin';
-import { generateSignature } from './utils/signature';
-
-/** 全局样式、插件样式 */
-import nProgressStyles from 'nprogress/nprogress.css?url';
+import { getPermissions } from '~/services/casbin-permission.server';
 import baseStyles from '~/styles/base.css?url';
 import tailwindStyles from '~/styles/tailwind.css?url';
+import { PermissionRule } from '~/types/casbin';
+import { cn } from '~/utils';
+import { generateSignature } from '~/utils/signature';
+
+/** 全局样式、插件样式 */
 
 /** 元数据 */
 export const meta: MetaFunction = () => [
@@ -107,7 +108,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 /** 水和回退处理 */
 export function HydrateFallback() {
   return (
-    <h1 className="fixed inset-0 z-10 flex items-center justify-center bg-background">
+    <h1 className="bg-background fixed inset-0 z-10 flex items-center justify-center">
       <Loader className="animate-spin" />
     </h1>
   );

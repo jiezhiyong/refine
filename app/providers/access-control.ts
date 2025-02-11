@@ -1,5 +1,7 @@
 import { AccessControlProvider } from '@refinedev/core';
+
 import { EnumAction } from '~/constants';
+
 import { authProvider } from './auth';
 
 export const accessControlProvider: AccessControlProvider = {

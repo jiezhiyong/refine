@@ -1,10 +1,5 @@
-import type {
-  RequestQueryBuilder,
-  QuerySort,
-  QuerySortArr,
-  QuerySortOperator,
-} from "@nestjsx/crud-request";
-import type { CrudSorting } from "@refinedev/core";
+import type { QuerySort, QuerySortArr, QuerySortOperator, RequestQueryBuilder } from '@nestjsx/crud-request';
+import type { CrudSorting } from '@refinedev/core';
 
 export type SortBy = QuerySort | QuerySortArr | Array<QuerySort | QuerySortArr>;
 
@@ -25,10 +20,7 @@ export const generateSort = (sort?: CrudSorting): SortBy | undefined => {
   return;
 };
 
-export const handleSort = (
-  query: RequestQueryBuilder,
-  sorters?: CrudSorting,
-) => {
+export const handleSort = (query: RequestQueryBuilder, sorters?: CrudSorting) => {
   const sortBy = generateSort(sorters);
   if (sortBy) {
     query.sortBy(sortBy);

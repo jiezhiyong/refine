@@ -1,4 +1,5 @@
 import { MetaFunction } from '@remix-run/node';
+
 import { PageError } from '~/components/500';
 import { getDefaultTitle } from '~/utils/get-default-title';
 
@@ -12,9 +13,10 @@ export default function DashboardViewTransition() {
   return (
     <div className="flex flex-1 items-center justify-center">
       <img
+        alt=""
         width={400}
         height={400}
-        className="rounded-lg border border-secondary shadow-lg"
+        className="border-secondary rounded-lg border shadow-lg"
         src="/logo.png"
         style={{
           viewTransitionName: 'image-expand',

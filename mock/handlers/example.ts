@@ -1,10 +1,10 @@
-import { http, graphql, HttpResponse } from 'msw';
+import { graphql, http, HttpResponse } from 'msw';
 
 export const handlersExample = [
   // Normal
   http.get('https://api.example.com/user', async ({ request }) => {
-    // const data = await request.formData();
-    // const email = data.get('email');
+    const data = await request.formData();
+    const email = data.get('email');
 
     return HttpResponse.json({
       name: 'John Maverick',

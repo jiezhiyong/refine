@@ -1,4 +1,5 @@
 import { Document, Image, Page, PDFViewer, StyleSheet, Text, View } from '@react-pdf/renderer';
+
 import { TAny } from '~/types';
 
 type PdfProps = {
@@ -9,7 +10,7 @@ type PdfProps = {
  * PDF Layout 示例
  * 实际使用时请根据需要修改，在业务路由中使用
  */
-export const PdfLayout: React.FC<PdfProps> = ({ record }) => {
+export const PdfLayout = ({ record }: PdfProps) => {
   return (
     <PDFViewer style={styles.viewer}>
       <Document>

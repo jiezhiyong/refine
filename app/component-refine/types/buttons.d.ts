@@ -1,4 +1,3 @@
-import type { ButtonProps } from '~/components-shadcn/button';
 import { CanAccess } from '@refinedev/core';
 import {
   RefineButtonResourceProps,
@@ -14,6 +13,9 @@ import {
   RefineShowButtonProps,
 } from '@refinedev/ui-types';
 import { ComponentProps } from 'react';
+
+import type { ButtonProps } from '~/components-shadcn/button';
+
 import type { ConfirmDialogProps } from './confirm-dialog';
 
 type CustomButtonProps<T> = ButtonProps & T;

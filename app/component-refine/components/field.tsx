@@ -1,5 +1,7 @@
-import { ReactElement, cloneElement } from 'react';
+/* eslint-disable react/prop-types */
+import { cloneElement, ReactElement } from 'react';
 import { ControllerRenderProps, FieldPath, FieldValues, UseControllerProps } from 'react-hook-form';
+
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components-shadcn/form';
 import { TAny } from '~/types';
 import { cn } from '~/utils';
@@ -16,6 +18,7 @@ export type FieldProps<
     field: ControllerRenderProps<TFieldValues, TName>;
   }>;
 };
+
 export const Field = (props: FieldProps) => {
   return (
     <FormField
@@ -24,7 +27,7 @@ export const Field = (props: FieldProps) => {
       render={({ field }: { field: TAny }) => {
         return (
           <FormItem
-            className={cn(props.className, props.isCheckbox ? 'flex flex-row items-center space-x-3 space-y-0' : '')}
+            className={cn(props.className, props.isCheckbox ? 'flex flex-row items-center space-y-0 space-x-3' : '')}
           >
             {!props.isCheckbox && <FormLabel>{props.label}</FormLabel>}
             <FormControl>
