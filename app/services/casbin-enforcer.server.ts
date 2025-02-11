@@ -1,12 +1,20 @@
-import { join } from 'path';
-import { fileURLToPath } from 'url';
-
 import { newEnforcer } from 'casbin';
+import { PrismaAdapter } from 'casbin-prisma-adapter';
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const MODEL_PATH = join(__dirname, '../assets/casbin-model.conf');
-const POLICY_PATH = join(__dirname, '../assets/casbin-policy.csv');
+import { db } from '~/services/db.server';
+
+import { MODEL } from './casbin-rules.server';
+
+// 保存 enforcer 实例
+let enforcer: Awaited<ReturnType<typeof newEnforcer>> | null = null;
 
 export async function createEnforcer() {
-  return newEnforcer(MODEL_PATH, POLICY_PATH);
+  if (enforcer) {
+    return enforcer;
+  }
+
+  const adapter = await PrismaAdapter.newAdapter(db);
+  enforcer = await newEnforcer(MODEL, adapter);
+
+  return enforcer;
 }

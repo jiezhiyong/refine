@@ -1,92 +1,81 @@
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-;
-!function() {
-  try {
-    var e = "undefined" != typeof window ? window : "undefined" != typeof global ? global : "undefined" != typeof globalThis ? globalThis : "undefined" != typeof self ? self : {}, n = new e.Error().stack;
-    n && (e._sentryDebugIds = e._sentryDebugIds || {}, e._sentryDebugIds[n] = "6de3d33d-e05a-46dd-9b8a-3271520c1908", e._sentryDebugIdIdentifier = "sentry-dbid-6de3d33d-e05a-46dd-9b8a-3271520c1908");
-  } catch (e2) {
-  }
-}();
-import { ObjectParser } from "@edgefirst-dev/data/parser";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Cookie, SetCookie } from "@mjackson/headers";
-import { CondOperator, RequestQueryBuilder } from "@nestjsx/crud-request";
-import { PrismaClient } from "@prisma/client";
-import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
-import * as AvatarPrimitive from "@radix-ui/react-avatar";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { jsx, Fragment, jsxs } from "react/jsx-runtime";
+import { PassThrough } from "node:stream";
+import { createReadableStreamFromReadable, createCookieSessionStorage, redirect as redirect$1, data as data$1 } from "@remix-run/node";
+import { RemixServer, useNavigate, useSearchParams, useFetcher, Link as Link$1, useRouteError, isRouteErrorResponse, useActionData, useNavigation as useNavigation$1, Form as Form$2, useRouteLoaderData, useMatches as useMatches$1, Outlet, data, useLoaderData, Meta, Links, ScrollRestoration, Scripts, useViewTransitionState } from "@remix-run/react";
+import * as Sentry from "@sentry/remix";
+import { withSentry, captureRemixErrorBoundaryError } from "@sentry/remix";
+import { isbot } from "isbot";
+import { renderToPipeableStream } from "react-dom/server";
+import * as SentryProfiling from "@sentry/profiling-node";
+import { useTranslate, useRouterContext, useRouterType, useLink, useBreadcrumb, useRefineContext, useResource, matchResourceFromRoute, useCloneButton, useCreateButton, useParsed, useBack, useDeleteButton, useEditButton, useExportButton, useExport, useCan, useImport, useImportButton, useSaveButton, CanAccess, useShowButton, useGetToPath, useGo, useDelete, useNavigation, useUserFriendlyName, useCanWithoutCache, AccessControlContext, useResourceParams, useMutationMode, useWarnAboutChange, pickNotDeprecated, useMenu, useTable as useTable$1, useTranslation, useLogout, Refine, useSelect, useDeleteMany, useModal, useNotification, useUpdate } from "@refinedev/core";
+import { DevtoolsProvider, DevtoolsPanel } from "@refinedev/devtools";
+import routerProvider, { UnsavedChangesNotifier, parseTableParams } from "@refinedev/remix-router";
+import { BicepsFlexed, AudioLines, Baby, PieChart, Brain, UsersRound, Bot, ChevronRight, HomeIcon, Loader2, CopyCheck, CirclePlus, X, Search, XIcon, CheckIcon as CheckIcon$1, Undo2, ChevronDown, ChevronUp, Check, Trash2Icon, Pencil, Download, Upload, CheckCheck, EyeIcon, ArrowLeftToLine, ListIcon, PanelLeft, Circle, Trash2, Eye, ChevronLeft, FilterX, FilterIcon, GalleryVerticalEnd, Fullscreen, Languages, Filter, Sun, Moon, Bug, Activity, ChevronsUpDown, BadgeCheck, CreditCard, Bell, LogOut, Plus, Loader as Loader$1, LeafyGreen, CalendarIcon, ClockIcon, MailIcon, Paperclip, Star, MoreHorizontal, Settings2, FileText, Link as Link$2, Copy, CornerUpRight, CornerUpLeft, LineChart, Trash, ArrowUp, ArrowDown } from "lucide-react";
+import nProgress from "nprogress";
+import * as React from "react";
+import React__default, { forwardRef, Fragment as Fragment$1, useState, useMemo, isValidElement, cloneElement, useRef, useContext, useEffect, createContext, useCallback, memo } from "react";
+import { Theme, useTheme, ThemeProvider, PreventFlashOnWrongTheme } from "remix-themes";
+import { useMatches, KBarResults, KBarPortal, KBarPositioner, KBarAnimator, KBarSearch, KBarContext, VisualState, useRegisterActions, createAction, KBarProvider, Priority, useKBar } from "kbar";
+import { useReactTable, getCoreRowModel, getSortedRowModel, getFilteredRowModel, flexRender } from "@tanstack/react-table";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+import * as nodeCrypto from "crypto";
+import invariant from "tiny-invariant";
+import isEqual from "lodash/isEqual.js";
+import { CaretSortIcon, CheckIcon, DotsHorizontalIcon, DotsVerticalIcon, DoubleArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, DoubleArrowRightIcon, CaretUpIcon, CaretDownIcon, MixerHorizontalIcon } from "@radix-ui/react-icons";
+import { Slot } from "@radix-ui/react-slot";
+import { cva } from "class-variance-authority";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { DropdownMenuTrigger as DropdownMenuTrigger$1 } from "@radix-ui/react-dropdown-menu";
-import { CaretDownIcon, CaretSortIcon, CaretUpIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon, DotsVerticalIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon, MixerHorizontalIcon } from "@radix-ui/react-icons";
-import * as LabelPrimitive from "@radix-ui/react-label";
+import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import * as SelectPrimitive from "@radix-ui/react-select";
+import { Command as Command$1 } from "cmdk";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { PopoverTrigger as PopoverTrigger$1 } from "@radix-ui/react-popover";
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
-import * as SelectPrimitive from "@radix-ui/react-select";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
-import { Slot } from "@radix-ui/react-slot";
-import * as TabsPrimitive from "@radix-ui/react-tabs";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { Document as Document$1, Image as Image$1, PDFViewer, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
-import { AccessControlContext, CanAccess, Refine, matchResourceFromRoute, pickNotDeprecated, useBack, useBreadcrumb, useCan, useCanWithoutCache, useCloneButton, useCreateButton, useDelete, useDeleteButton, useDeleteMany, useEditButton, useExport, useExportButton, useGetToPath, useGo, useImport, useImportButton, useLink, useLogout, useMenu, useModal, useMutationMode, useNavigation, useNotification, useParsed, useRefineContext, useResource, useResourceParams, useRouterContext, useRouterType, useSaveButton, useSelect, useShowButton, useTable as useTable$1, useTranslate, useTranslation, useUpdate, useUserFriendlyName, useWarnAboutChange } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import { useForm, useModalForm, useStepsForm } from "@refinedev/react-hook-form";
-import routerProvider, { UnsavedChangesNotifier, parseTableParams } from "@refinedev/remix-router";
-import { createCookieSessionStorage, createReadableStreamFromReadable, data as data$1, redirect as redirect$1 } from "@remix-run/node";
-import { Form as Form$2, Link as Link$1, Links, Meta, Outlet, RemixServer, Scripts, ScrollRestoration, data, isRouteErrorResponse, useActionData, useFetcher, useLoaderData, useMatches as useMatches$1, useNavigate, useNavigation as useNavigation$1, useRouteError, useRouteLoaderData, useSearchParams, useViewTransitionState } from "@remix-run/react";
-import * as SentryProfiling from "@sentry/profiling-node";
-import * as Sentry from "@sentry/remix";
-import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
-import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { useDebounceFn } from "ahooks";
-import { CodeChallengeMethod, OAuth2Client, OAuth2RequestError, generateCodeVerifier, generateState } from "arctic";
-import axios from "axios";
-import bcrypt from "bcryptjs";
-import { newEnforcer } from "casbin";
-import { cva } from "class-variance-authority";
-import { clsx } from "clsx";
-import { Command as Command$1 } from "cmdk";
-import * as nodeCrypto from "crypto";
 import { format } from "date-fns";
-import dayjs from "dayjs";
-import createDebug from "debug";
-import { createReadStream, statSync } from "fs";
-import i18next from "i18next";
-import { isbot } from "isbot";
-import Cookies from "js-cookie";
-import { KBarAnimator, KBarContext, KBarPortal, KBarPositioner, KBarProvider, KBarResults, KBarSearch, Priority, VisualState, createAction, useKBar, useMatches, useRegisterActions } from "kbar";
-import isEqual from "lodash/isEqual.js";
-import { Activity, ArrowDown, ArrowLeftToLine, ArrowUp, AudioLines, Baby, BadgeCheck, Bell, BicepsFlexed, Bot, Brain, Bug, CalendarIcon, Check, CheckCheck, CheckIcon as CheckIcon$1, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ChevronsUpDown, Circle, CirclePlus, ClockIcon, Copy, CopyCheck, CornerUpLeft, CornerUpRight, CreditCard, Download, Eye, EyeIcon, FileText, Filter, FilterIcon, FilterX, Fullscreen, GalleryVerticalEnd, HomeIcon, Languages, LeafyGreen, LineChart, Link as Link$2, ListIcon, Loader as Loader$1, Loader2, LogOut, MailIcon, Moon, MoreHorizontal, PanelLeft, Paperclip, Pencil, PieChart, Plus, Search, Settings2, Star, Sun, Trash, Trash2, Trash2Icon, Undo2, Upload, UsersRound, X, XIcon } from "lucide-react";
-import * as https from "node:https";
-import { PassThrough } from "node:stream";
-import nodemailer from "nodemailer";
-import nProgress from "nprogress";
-import path, { join } from "path";
-import queryString from "query-string";
-import * as React from "react";
-import React__default, { Fragment as Fragment$1, cloneElement, createContext, forwardRef, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
-import { renderToPipeableStream } from "react-dom/server";
-import { Controller, FormProvider, useFormContext } from "react-hook-form";
+import { Toaster as Toaster$1, toast } from "sonner";
+import * as https from "node:https";
+import { CondOperator, RequestQueryBuilder } from "@nestjsx/crud-request";
+import queryString from "query-string";
+import axios from "axios";
+import i18next, { use, changeLanguage, t } from "i18next";
+import Cookies from "js-cookie";
 import { initReactI18next } from "react-i18next";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
+import { newModelFromString, newEnforcer } from "casbin";
+import { PrismaAdapter } from "casbin-prisma-adapter";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, useModalForm, useStepsForm } from "@refinedev/react-hook-form";
+import { z } from "zod";
+import { useFormContext, FormProvider, Controller } from "react-hook-form";
+import * as LabelPrimitive from "@radix-ui/react-label";
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+import dayjs from "dayjs";
+import * as AvatarPrimitive from "@radix-ui/react-avatar";
+import { StyleSheet, PDFViewer, Document as Document$1, Page, View, Image as Image$1, Text } from "@react-pdf/renderer";
 import { Authenticator } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
+import { ObjectParser } from "@edgefirst-dev/data/parser";
+import { OAuth2Client, OAuth2RequestError, generateState, generateCodeVerifier, CodeChallengeMethod } from "arctic";
+import createDebug from "debug";
 import { Strategy } from "remix-auth/strategy";
-import { PreventFlashOnWrongTheme, Theme, ThemeProvider, useTheme } from "remix-themes";
-import sharp from "sharp";
-import { Toaster as Toaster$1, toast } from "sonner";
+import { SetCookie, Cookie } from "@mjackson/headers";
+import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { useDebounceFn } from "ahooks";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
+import { statSync, createReadStream } from "fs";
+import path from "path";
 import { PassThrough as PassThrough$1 } from "stream";
-import { twMerge } from "tailwind-merge";
-import invariant from "tiny-invariant";
-import { fileURLToPath } from "url";
-import { z } from "zod";
-var _global = typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : {};
-_global.SENTRY_RELEASE = { id: "oss@0.0.2" };
+import sharp from "sharp";
 let isInitialized = false;
 function initSentry() {
   if (isInitialized) {
@@ -178,13 +167,15 @@ function handleBrowserRequest(request2, responseStatusCode, responseHeaders, rem
     setTimeout(abort, ABORT_DELAY);
   });
 }
-const handleError$1 = Sentry.wrapHandleErrorWithSentry((error, { request: request2 }) => {
+const handleError$1 = Sentry.wrapHandleErrorWithSentry((_error, { request: request2 }) => {
+  if (!request2.signal.aborted) ;
 });
 const entryServer = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: handleRequest,
   handleError: handleError$1
 }, Symbol.toStringTag, { value: "Module" }));
+const nProgressStyles = "/assets/nprogress-BgDCIyLK.css";
 function canUseDOM() {
   return typeof document !== "undefined";
 }
@@ -856,13 +847,14 @@ function buildWhereClause(filters = []) {
         return { ...acc, [filter.field]: { gte: filter.value } };
       case "lte":
         return { ...acc, [filter.field]: { lte: filter.value } };
-      case "in":
+      case "in": {
         const values = Array.isArray(filter.value) ? filter.value : filter.value.toString().split(",");
         const parsedValues = filter.field === "id" ? values : values.map((v) => {
           const num = Number(v);
           return isNaN(num) ? v : num;
         });
         return { ...acc, [filter.field]: { in: parsedValues } };
+      }
       default:
         return acc;
     }
@@ -890,8 +882,8 @@ function parseRefineFilters(filters) {
     return filter;
   });
 }
-const SECRET = canUseDOM() ? "super-duper-s3cr3t" : process.env.VITE_SECRET;
-invariant(SECRET, "SECRET must be set.");
+const SECRET = canUseDOM() ? "super-duper-s3cret" : process.env.VITE_SECRET;
+invariant(SECRET, "VITE_SECRET must be set.");
 const SIGNATURE_EXPIRATION = 5 * 60 * 1e3;
 function str2ab(str) {
   const encoder = new TextEncoder();
@@ -1103,7 +1095,7 @@ const Message = ({ translationKey, defaultMessage }) => {
   return /* @__PURE__ */ jsxs(
     "span",
     {
-      className: cn("text-sm text-muted-foreground", {
+      className: cn("text-muted-foreground text-sm", {
         "text-destructive": translationKey === "autoSave.error",
         "text-green-500": translationKey === "autoSave.success"
       }),
@@ -1122,7 +1114,7 @@ const BreadcrumbList = React.forwardRef(
     {
       ref,
       className: cn(
-        "flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5",
+        "text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5",
         className
       ),
       ...props
@@ -1136,7 +1128,7 @@ const BreadcrumbItem = React.forwardRef(
 BreadcrumbItem.displayName = "BreadcrumbItem";
 const BreadcrumbLink = React.forwardRef(({ asChild, className, ...props }, ref) => {
   const Comp = asChild ? Slot : "a";
-  return /* @__PURE__ */ jsx(Comp, { ref, className: cn("transition-colors hover:text-foreground", className), ...props });
+  return /* @__PURE__ */ jsx(Comp, { ref, className: cn("hover:text-foreground transition-colors", className), ...props });
 });
 BreadcrumbLink.displayName = "BreadcrumbLink";
 const BreadcrumbPage = React.forwardRef(
@@ -1147,7 +1139,7 @@ const BreadcrumbPage = React.forwardRef(
       role: "link",
       "aria-disabled": "true",
       "aria-current": "page",
-      className: cn("font-normal text-foreground", className),
+      className: cn("text-foreground font-normal", className),
       ...props
     }
   )
@@ -1356,7 +1348,7 @@ const DialogOverlay = React.forwardRef(({ className, ...props }, ref) => /* @__P
   {
     ref,
     className: cn(
-      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80",
       className
     ),
     ...props
@@ -1370,13 +1362,13 @@ const DialogContent = React.forwardRef(({ className, children, ...props }, ref) 
     {
       ref,
       className: cn(
-        "fixed left-[50%] top-[50%] z-50 grid max-h-[85vh] w-full max-w-xl translate-x-[-50%] translate-y-[-50%] gap-4 overflow-y-scroll border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+        "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid max-h-[85vh] w-full max-w-xl translate-x-[-50%] translate-y-[-50%] gap-4 overflow-y-scroll border p-6 shadow-lg duration-200 sm:rounded-lg",
         className
       ),
       ...props,
       children: [
         children,
-        /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground", children: [
+        /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none", children: [
           /* @__PURE__ */ jsx(X, { className: "h-5 w-5" }),
           /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Close" })
         ] })
@@ -1393,45 +1385,48 @@ const DialogTitle = React.forwardRef(({ className, ...props }, ref) => /* @__PUR
   DialogPrimitive.Title,
   {
     ref,
-    className: cn("text-lg font-semibold leading-none tracking-tight", className),
+    className: cn("text-lg leading-none font-semibold tracking-tight", className),
     ...props
   }
 ));
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
-const DialogDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Description, { ref, className: cn("text-sm text-muted-foreground", className), ...props }));
+const DialogDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Description, { ref, className: cn("text-muted-foreground text-sm", className), ...props }));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 const Command = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   Command$1,
   {
     ref,
     className: cn(
-      "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
+      "bg-popover text-popover-foreground flex h-full w-full flex-col overflow-hidden rounded-md",
       className
     ),
     ...props
   }
 ));
 Command.displayName = Command$1.displayName;
-const CommandInput = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxs("div", { className: "flex items-center border-b px-3", "cmdk-input-wrapper": "", children: [
-  /* @__PURE__ */ jsx(Search, { className: "mr-2 h-4 w-4 shrink-0 opacity-50" }),
-  /* @__PURE__ */ jsx(
-    Command$1.Input,
-    {
-      ref,
-      className: cn(
-        "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
-        className
-      ),
-      ...props
-    }
-  )
-] }));
+const CommandInput = React.forwardRef(({ className, ...props }, ref) => (
+  // eslint-disable-next-line react/no-unknown-property
+  /* @__PURE__ */ jsxs("div", { className: "flex items-center border-b px-3", "cmdk-input-wrapper": "", children: [
+    /* @__PURE__ */ jsx(Search, { className: "mr-2 h-4 w-4 shrink-0 opacity-50" }),
+    /* @__PURE__ */ jsx(
+      Command$1.Input,
+      {
+        ref,
+        className: cn(
+          "placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        ),
+        ...props
+      }
+    )
+  ] })
+));
 CommandInput.displayName = Command$1.Input.displayName;
 const CommandList = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   Command$1.List,
   {
     ref,
-    className: cn("max-h-[300px] overflow-y-auto overflow-x-hidden", className),
+    className: cn("max-h-[300px] overflow-x-hidden overflow-y-auto", className),
     ...props
   }
 ));
@@ -1443,21 +1438,21 @@ const CommandGroup = React.forwardRef(({ className, ...props }, ref) => /* @__PU
   {
     ref,
     className: cn(
-      "overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
+      "text-foreground [&_[cmdk-group-heading]]:text-muted-foreground overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
       className
     ),
     ...props
   }
 ));
 CommandGroup.displayName = Command$1.Group.displayName;
-const CommandSeparator = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(Command$1.Separator, { ref, className: cn("-mx-1 h-px bg-border", className), ...props }));
+const CommandSeparator = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(Command$1.Separator, { ref, className: cn("bg-border -mx-1 h-px", className), ...props }));
 CommandSeparator.displayName = Command$1.Separator.displayName;
 const CommandItem = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   Command$1.Item,
   {
     ref,
     className: cn(
-      "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden data-[disabled=true]:pointer-events-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+      "data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
       className
     ),
     ...props
@@ -1526,7 +1521,7 @@ FormControl.displayName = "FormControl";
 const FormDescription = React.forwardRef(
   ({ className, ...props }, ref) => {
     const { formDescriptionId } = useFormField();
-    return /* @__PURE__ */ jsx("p", { ref, id: formDescriptionId, className: cn("text-[0.8rem] text-muted-foreground", className), ...props });
+    return /* @__PURE__ */ jsx("p", { ref, id: formDescriptionId, className: cn("text-muted-foreground text-[0.8rem]", className), ...props });
   }
 );
 FormDescription.displayName = "FormDescription";
@@ -1542,7 +1537,7 @@ const FormMessage = React.forwardRef(
       {
         ref,
         id: formMessageId,
-        className: cn("text-[0.8rem] font-medium text-destructive", className),
+        className: cn("text-destructive text-[0.8rem] font-medium", className),
         ...props,
         children: body
       }
@@ -1559,7 +1554,7 @@ const PopoverContent = React.forwardRef(({ className, align = "center", sideOffs
     align,
     sideOffset,
     className: cn(
-      "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 rounded-md border p-4 shadow-md outline-hidden",
       className
     ),
     ...props
@@ -1578,13 +1573,13 @@ const ScrollBar = React.forwardRef(({ className, orientation = "vertical", ...pr
     ref,
     orientation,
     className: cn(
-      "flex touch-none select-none transition-colors",
+      "flex touch-none transition-colors select-none",
       orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent p-[1px]",
       orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent p-[1px]",
       className
     ),
     ...props,
-    children: /* @__PURE__ */ jsx(ScrollAreaPrimitive.ScrollAreaThumb, { className: "relative flex-1 rounded-full bg-border" })
+    children: /* @__PURE__ */ jsx(ScrollAreaPrimitive.ScrollAreaThumb, { className: "bg-border relative flex-1 rounded-full" })
   }
 ));
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
@@ -1649,7 +1644,7 @@ const AlertDialogOverlay = React.forwardRef(({ className, ...props }, ref) => /*
   AlertDialogPrimitive.Overlay,
   {
     className: cn(
-      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80",
       className
     ),
     ...props,
@@ -1664,7 +1659,7 @@ const AlertDialogContent = React.forwardRef(({ className, ...props }, ref) => /*
     {
       ref,
       className: cn(
-        "fixed left-[50%] top-[5%] z-50 grid w-full max-w-lg translate-x-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] dark:border-white/20 dark:bg-slate-950 sm:rounded-lg",
+        "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[5%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] gap-4 border p-6 shadow-lg duration-200 sm:rounded-lg dark:border-white/20 dark:bg-slate-950",
         className
       ),
       ...props
@@ -1678,7 +1673,7 @@ const AlertDialogFooter = ({ className, ...props }) => /* @__PURE__ */ jsx("div"
 AlertDialogFooter.displayName = "AlertDialogFooter";
 const AlertDialogTitle = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(AlertDialogPrimitive.Title, { ref, className: cn("text-lg font-semibold", className), ...props }));
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
-const AlertDialogDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(AlertDialogPrimitive.Description, { ref, className: cn("text-sm text-muted-foreground", className), ...props }));
+const AlertDialogDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(AlertDialogPrimitive.Description, { ref, className: cn("text-muted-foreground text-sm", className), ...props }));
 AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName;
 const AlertDialogAction = React.forwardRef(({ className, variant = "default", size = "default", ...props }, ref) => /* @__PURE__ */ jsx(
   AlertDialogPrimitive.Action,
@@ -1773,7 +1768,7 @@ const Field = (props) => {
         return /* @__PURE__ */ jsxs(
           FormItem,
           {
-            className: cn(props.className, props.isCheckbox ? "flex flex-row items-center space-x-3 space-y-0" : ""),
+            className: cn(props.className, props.isCheckbox ? "flex flex-row items-center space-y-0 space-x-3" : ""),
             children: [
               !props.isCheckbox && /* @__PURE__ */ jsx(FormLabel, { children: props.label }),
               /* @__PURE__ */ jsx(FormControl, { children: cloneElement(props.children, {
@@ -1790,18 +1785,18 @@ const Field = (props) => {
     }
   );
 };
-const Card = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("rounded-xl border bg-card text-card-foreground shadow-sm", className), ...props }));
+const Card = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("bg-card text-card-foreground rounded-xl border shadow-sm", className), ...props }));
 Card.displayName = "Card";
 const CardHeader = React.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("flex flex-col space-y-1.5 p-6", className), ...props })
 );
 CardHeader.displayName = "CardHeader";
 const CardTitle = React.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("font-semibold leading-none tracking-tight", className), ...props })
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("leading-none font-semibold tracking-tight", className), ...props })
 );
 CardTitle.displayName = "CardTitle";
 const CardDescription = React.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("text-sm text-muted-foreground", className), ...props })
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("text-muted-foreground text-sm", className), ...props })
 );
 CardDescription.displayName = "CardDescription";
 const CardContent = React.forwardRef(
@@ -1819,7 +1814,7 @@ const Form = ({
   isWatchable,
   saveButtonProps,
   className,
-  useFormModalClose,
+  formModalClose,
   recordItemId,
   ...props
 }) => {
@@ -1835,7 +1830,7 @@ const Form = ({
     const values = props.getValues();
     const data2 = modifyingDataBeforeSubmission ? modifyingDataBeforeSubmission(values) : values;
     props.refineCore.onFinish(data2);
-    useFormModalClose == null ? void 0 : useFormModalClose();
+    formModalClose == null ? void 0 : formModalClose();
   });
   const { disabled } = saveButtonProps || {};
   return /* @__PURE__ */ jsx(Form$1, { ...props, children: /* @__PURE__ */ jsx("form", { ...formProps, onSubmit, children: /* @__PURE__ */ jsxs(Card, { className: cn("mx-auto space-y-4 border-none p-8 shadow-none", className), children: [
@@ -1855,7 +1850,7 @@ const Form = ({
         {
           icon: /* @__PURE__ */ jsx(Undo2, {}),
           type: "button",
-          onClick: useFormModalClose || onBack,
+          onClick: formModalClose || onBack,
           disabled: props.refineCore.formLoading,
           variant: "outline",
           children: "Cancel"
@@ -1974,7 +1969,7 @@ const SelectTrigger = React.forwardRef(({ className, children, ...props }, ref) 
   {
     ref,
     className: cn(
-      "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-hidden focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "border-input ring-offset-background placeholder:text-muted-foreground focus:ring-ring flex h-9 w-full items-center justify-between rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs focus:ring-1 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className
     ),
     ...props,
@@ -2010,7 +2005,7 @@ const SelectContent = React.forwardRef(({ className, children, position = "poppe
   {
     ref,
     className: cn(
-      "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border shadow-md",
       position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
       className
     ),
@@ -2040,7 +2035,7 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
   {
     ref,
     className: cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+      "focus:bg-accent focus:text-accent-foreground relative flex w-full cursor-default items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50",
       className
     ),
     ...props,
@@ -2051,7 +2046,7 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
   }
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
-const SelectSeparator = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(SelectPrimitive.Separator, { ref, className: cn("-mx-1 my-1 h-px bg-muted", className), ...props }));
+const SelectSeparator = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(SelectPrimitive.Separator, { ref, className: cn("bg-muted -mx-1 my-1 h-px", className), ...props }));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 const Select = forwardRef(({ ...props }, ref) => {
   var _a, _b, _c;
@@ -2469,18 +2464,15 @@ const CommandBar = () => {
     /* @__PURE__ */ jsx(RenderResults, {})
   ] }) }) });
 };
-const capitalize = (str) => str.replace(
-  /\w\S*/g,
-  (txt) => txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
-);
+const capitalize = (str) => str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase());
 const useRefineKbar = () => {
-  const t = useTranslate();
+  const t2 = useTranslate();
   const { resource: resourceFromParams, resources, id: idFromParams, action: actionFromParams } = useResource();
   const routerType = useRouterType();
   const getToPath = useGetToPath();
   const go = useGo();
   const { mutate } = useDelete();
-  const { push, list: goToList, create: goToCreate, show: goToShow, edit: goToEdit } = useNavigation();
+  const { push, list: _goToList, create: _goToCreate, show: _goToShow, edit: _goToEdit } = useNavigation();
   const getUserFriendlyName = useUserFriendlyName();
   const kbarContext = useContext(KBarContext);
   const { can } = useCanWithoutCache();
@@ -2527,13 +2519,12 @@ const useRefineKbar = () => {
       icon: deprecatedIcon,
       show,
       canDelete: deprecatedCanDelete,
-      edit,
-      route
+      edit
     } = resource;
     const label = ((_a = resource == null ? void 0 : resource.meta) == null ? void 0 : _a.label) ?? ((_b = resource == null ? void 0 : resource.options) == null ? void 0 : _b.label) ?? deprecatedLabel;
     const icon = ((_c = resource == null ? void 0 : resource.meta) == null ? void 0 : _c.icon) ?? ((_d = resource == null ? void 0 : resource.options) == null ? void 0 : _d.icon) ?? deprecatedIcon;
     const canDelete = ((_e = resource == null ? void 0 : resource.meta) == null ? void 0 : _e.canDelete) ?? ((_f = resource == null ? void 0 : resource.options) == null ? void 0 : _f.canDelete) ?? deprecatedCanDelete;
-    const section = label ?? t(`${resource.name}.${resource.name}`, getUserFriendlyName(resource.name, "plural"));
+    const section = label ?? t2(`${resource.name}.${resource.name}`, getUserFriendlyName(resource.name, "plural"));
     const tempActions = [];
     if (list && (resourceFromParams !== void 0 && (resourceFromParams == null ? void 0 : resourceFromParams.name) !== name || actionFromParams !== void 0 && (resourceFromParams == null ? void 0 : resourceFromParams.name) === name)) {
       const { can: canList } = await (can == null ? void 0 : can({
@@ -2544,7 +2535,7 @@ const useRefineKbar = () => {
       if (canList) {
         tempActions.push(
           createAction({
-            name: t("actions.list", capitalize(
+            name: t2("actions.list", capitalize(
               "list"
               /* List */
             )),
@@ -2577,7 +2568,7 @@ const useRefineKbar = () => {
       if (canAccessCreate) {
         tempActions.push(
           createAction({
-            name: t("actions.create", capitalize(
+            name: t2("actions.create", capitalize(
               "create"
               /* Create */
             )),
@@ -2612,7 +2603,7 @@ const useRefineKbar = () => {
         if (canAccessShow) {
           tempActions.push(
             createAction({
-              name: t("actions.show", capitalize(
+              name: t2("actions.show", capitalize(
                 "show"
                 /* Show */
               )),
@@ -2648,7 +2639,7 @@ const useRefineKbar = () => {
         if (canAccessEdit) {
           tempActions.push(
             createAction({
-              name: t("actions.edit", capitalize(
+              name: t2("actions.edit", capitalize(
                 "edit"
                 /* Edit */
               )),
@@ -2685,7 +2676,7 @@ const useRefineKbar = () => {
           tempActions.push(
             {
               id: "delete",
-              name: t("actions.delete", capitalize(
+              name: t2("actions.delete", capitalize(
                 "delete"
                 /* Delete */
               )),
@@ -2693,11 +2684,11 @@ const useRefineKbar = () => {
               icon: icon || /* @__PURE__ */ jsx(Trash2Icon, { size: 16 })
             },
             createAction({
-              name: t("buttons.delete", capitalize(
+              name: t2("buttons.delete", capitalize(
                 "delete"
                 /* Delete */
               )),
-              section: t("buttons.confirm", "Are you sure?"),
+              section: t2("buttons.confirm", "Are you sure?"),
               parent: "delete",
               perform: () => {
                 mutate(
@@ -2725,7 +2716,7 @@ const useRefineKbar = () => {
               }
             }),
             createAction({
-              name: t("buttons.cancel", "Cancel"),
+              name: t2("buttons.cancel", "Cancel"),
               parent: "delete",
               perform: () => null
             })
@@ -2931,7 +2922,7 @@ function DeleteActionModal(props) {
       });
     }
     return void 0;
-  }, [can, props]);
+  }, [can, props, back, mutate]);
   return /* @__PURE__ */ jsx(
     ConfirmDialog,
     {
@@ -2980,7 +2971,7 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
     {
       type,
       className: cn(
-        "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "border-input file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-1 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
         className
       ),
       ref,
@@ -2995,7 +2986,7 @@ const Separator = React.forwardRef(({ className, orientation = "horizontal", dec
     ref,
     decorative,
     orientation,
-    className: cn("shrink-0 bg-border", orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]", className),
+    className: cn("bg-border shrink-0", orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]", className),
     ...props
   }
 ));
@@ -3006,7 +2997,7 @@ const SheetOverlay = React.forwardRef(({ className, ...props }, ref) => /* @__PU
   DialogPrimitive.Overlay,
   {
     className: cn(
-      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80",
       className
     ),
     ...props,
@@ -3034,7 +3025,7 @@ const SheetContent = React.forwardRef(
   ({ side = "right", className, children, ...props }, ref) => /* @__PURE__ */ jsxs(SheetPortal, { children: [
     /* @__PURE__ */ jsx(SheetOverlay, {}),
     /* @__PURE__ */ jsxs(DialogPrimitive.Content, { ref, className: cn(sheetVariants({ side }), className), ...props, children: [
-      /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary", children: [
+      /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none", children: [
         /* @__PURE__ */ jsx(X, { className: "h-4 w-4" }),
         /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Close" })
       ] }),
@@ -3043,12 +3034,12 @@ const SheetContent = React.forwardRef(
   ] })
 );
 SheetContent.displayName = DialogPrimitive.Content.displayName;
-const SheetTitle = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Title, { ref, className: cn("text-lg font-semibold text-foreground", className), ...props }));
+const SheetTitle = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Title, { ref, className: cn("text-foreground text-lg font-semibold", className), ...props }));
 SheetTitle.displayName = DialogPrimitive.Title.displayName;
-const SheetDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Description, { ref, className: cn("text-sm text-muted-foreground", className), ...props }));
+const SheetDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Description, { ref, className: cn("text-muted-foreground text-sm", className), ...props }));
 SheetDescription.displayName = DialogPrimitive.Description.displayName;
 function Skeleton({ className, ...props }) {
-  return /* @__PURE__ */ jsx("div", { className: cn("animate-pulse rounded-md bg-primary/10", className), ...props });
+  return /* @__PURE__ */ jsx("div", { className: cn("bg-primary/10 animate-pulse rounded-md", className), ...props });
 }
 const TooltipProvider = TooltipPrimitive.Provider;
 const Tooltip = TooltipPrimitive.Root;
@@ -3059,7 +3050,7 @@ const TooltipContent = React.forwardRef(({ className, sideOffset = 4, ...props }
     ref,
     sideOffset,
     className: cn(
-      "z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      "bg-primary text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 overflow-hidden rounded-md px-3 py-1.5 text-xs",
       className
     ),
     ...props
@@ -3199,7 +3190,7 @@ const SidebarProvider = React.forwardRef(({ defaultOpen = true, open: openProp, 
         "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
         ...style
       },
-      className: cn("group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar", className),
+      className: cn("group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full", className),
       ref,
       ...props,
       children
@@ -3213,7 +3204,7 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
     return /* @__PURE__ */ jsx(
       "div",
       {
-        className: cn("z-10 flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground", className),
+        className: cn("bg-sidebar text-sidebar-foreground z-10 flex h-full w-(--sidebar-width) flex-col", className),
         ref,
         ...props,
         children
@@ -3226,7 +3217,7 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
       {
         "data-sidebar": "sidebar",
         "data-mobile": "true",
-        className: "w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden",
+        className: "bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden",
         style: {
           "--sidebar-width": SIDEBAR_WIDTH_MOBILE
         },
@@ -3239,7 +3230,7 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
     "div",
     {
       ref,
-      className: "group peer z-10 hidden text-sidebar-foreground md:block",
+      className: "group peer text-sidebar-foreground z-10 hidden md:block",
       "data-state": state,
       "data-collapsible": state === "collapsed" ? collapsible : "",
       "data-variant": variant,
@@ -3271,7 +3262,7 @@ const Sidebar$1 = React.forwardRef(({ side = "left", variant = "sidebar", collap
               "div",
               {
                 "data-sidebar": "sidebar",
-                className: "flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm",
+                className: "bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm",
                 children
               }
             )
@@ -3320,10 +3311,10 @@ const SidebarRail = React.forwardRef(
         onClick: toggleSidebar,
         title: "Toggle Sidebar",
         className: cn(
-          "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex",
+          "hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex",
           "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
           "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
-          "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar",
+          "hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full",
           "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
           "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
           className
@@ -3340,8 +3331,8 @@ const SidebarInset = React.forwardRef(({ className, ...props }, ref) => {
     {
       ref,
       className: cn(
-        "relative flex min-h-svh flex-1 flex-col bg-background",
-        "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(4)))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm",
+        "bg-background relative flex min-h-svh flex-1 flex-col",
+        "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(4)))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
         className
       ),
       ...props
@@ -3357,7 +3348,7 @@ const SidebarInput = React.forwardRef(
         ref,
         "data-sidebar": "input",
         className: cn(
-          "h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+          "bg-background focus-visible:ring-sidebar-ring h-8 w-full shadow-none focus-visible:ring-2",
           className
         ),
         ...props
@@ -3381,7 +3372,7 @@ const SidebarSeparator = React.forwardRef(
       {
         ref,
         "data-sidebar": "separator",
-        className: cn("mx-2 w-auto bg-sidebar-border", className),
+        className: cn("bg-sidebar-border mx-2 w-auto", className),
         ...props
       }
     );
@@ -3424,7 +3415,7 @@ const SidebarGroupLabel = React.forwardRef(
         ref,
         "data-sidebar": "group-label",
         className: cn(
-          "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-hidden ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+          "text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
           "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
           className
         ),
@@ -3443,7 +3434,7 @@ const SidebarGroupAction = React.forwardRef(
         ref,
         "data-sidebar": "group-action",
         className: cn(
-          "absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+          "text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
           // Increases the hit area of the button on mobile.
           "after:absolute after:-inset-2 md:after:hidden",
           "group-data-[collapsible=icon]:hidden",
@@ -3519,14 +3510,14 @@ const SidebarMenuAction = React.forwardRef(({ className, asChild = false, showOn
       ref,
       "data-sidebar": "menu-action",
       className: cn(
-        "absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0",
+        "text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground peer-hover/menu-button:text-sidebar-accent-foreground absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
         // Increases the hit area of the button on mobile.
         "after:absolute after:-inset-2 md:after:hidden",
         "peer-data-[size=sm]/menu-button:top-1",
         "peer-data-[size=default]/menu-button:top-1.5",
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
-        showOnHover && "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
+        showOnHover && "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
         className
       ),
       ...props
@@ -3541,7 +3532,7 @@ const SidebarMenuBadge = React.forwardRef(
       ref,
       "data-sidebar": "menu-badge",
       className: cn(
-        "pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums text-sidebar-foreground",
+        "text-sidebar-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums select-none",
         "peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground",
         "peer-data-[size=sm]/menu-button:top-1",
         "peer-data-[size=default]/menu-button:top-1.5",
@@ -3589,7 +3580,7 @@ const SidebarMenuSub = React.forwardRef(
       ref,
       "data-sidebar": "menu-sub",
       className: cn(
-        "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5",
+        "border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
         "group-data-[collapsible=icon]:hidden",
         className
       ),
@@ -3610,7 +3601,7 @@ const SidebarMenuSubButton = React.forwardRef(({ asChild = false, size = "md", i
       "data-size": size,
       "data-active": isActive,
       className: cn(
-        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-hidden ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
+        "text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>svg]:text-sidebar-accent-foreground flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
         "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
         size === "sm" && "text-xs",
         size === "md" && "text-sm",
@@ -3680,7 +3671,7 @@ const TableBody = React.forwardRef(
 );
 TableBody.displayName = "TableBody";
 const TableFooter = React.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("tfoot", { ref, className: cn("border-t bg-muted/50 font-medium last:[&>tr]:border-b-0", className), ...props })
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("tfoot", { ref, className: cn("bg-muted/50 border-t font-medium last:[&>tr]:border-b-0", className), ...props })
 );
 TableFooter.displayName = "TableFooter";
 const TableRow = React.forwardRef(
@@ -3688,7 +3679,7 @@ const TableRow = React.forwardRef(
     "tr",
     {
       ref,
-      className: cn("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className),
+      className: cn("hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors", className),
       ...props
     }
   )
@@ -3700,7 +3691,7 @@ const TableHead = React.forwardRef(
     {
       ref,
       className: cn(
-        "h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "text-muted-foreground h-10 px-2 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
         className
       ),
       ...props
@@ -3720,7 +3711,7 @@ const TableCell = React.forwardRef(
 );
 TableCell.displayName = "TableCell";
 const TableCaption = React.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("caption", { ref, className: cn("mt-4 text-sm text-muted-foreground", className), ...props })
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("caption", { ref, className: cn("text-muted-foreground mt-4 text-sm", className), ...props })
 );
 TableCaption.displayName = "TableCaption";
 const useIsFirstRender = () => {
@@ -3730,10 +3721,7 @@ const useIsFirstRender = () => {
   }, []);
   return firstRender.current;
 };
-const columnFiltersToCrudFilters = ({
-  columns,
-  columnFilters
-}) => {
+const columnFiltersToCrudFilters = ({ columns, columnFilters }) => {
   return (columnFilters == null ? void 0 : columnFilters.map((filter) => {
     var _a, _b, _c, _d;
     const operator = filter.operator ?? ((_b = (_a = columns.find((col) => col.id === filter.id)) == null ? void 0 : _a.meta) == null ? void 0 : _b.filterOperator);
@@ -3754,10 +3742,7 @@ const columnFiltersToCrudFilters = ({
     };
   })) ?? [];
 };
-const getRemovedFilters = ({
-  nextFilters,
-  coreFilters
-}) => {
+const getRemovedFilters = ({ nextFilters, coreFilters }) => {
   const removedFilters = coreFilters.filter(
     (filter) => !nextFilters.some((nextFilter) => {
       const isFilterConditional = filter.operator === "and" || filter.operator === "or";
@@ -3783,20 +3768,15 @@ const getRemovedFilters = ({
     };
   });
 };
-const crudFiltersToColumnFilters = ({
-  columns,
-  crudFilters
-}) => {
+const crudFiltersToColumnFilters = ({ columns, crudFilters }) => {
   return crudFilters.map((filter) => {
     var _a;
     if (filter.operator === "and" || filter.operator === "or") {
       if (filter.key) {
-        const filterId = ((_a = columns.find(
-          (col) => {
-            var _a2;
-            return ((_a2 = col.meta) == null ? void 0 : _a2.filterKey) === filter.key;
-          }
-        )) == null ? void 0 : _a.id) ?? filter.key;
+        const filterId = ((_a = columns.find((col) => {
+          var _a2;
+          return ((_a2 = col.meta) == null ? void 0 : _a2.filterKey) === filter.key;
+        })) == null ? void 0 : _a.id) ?? filter.key;
         return {
           id: filterId,
           operator: filter.operator,
@@ -3923,7 +3903,7 @@ const DropdownMenuSubTrigger = React.forwardRef(({ className, inset, children, .
   {
     ref,
     className: cn(
-      "flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden focus:bg-accent data-[state=open]:bg-accent [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+      "focus:bg-accent data-[state=open]:bg-accent flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
       inset && "pl-8",
       className
     ),
@@ -3940,7 +3920,7 @@ const DropdownMenuSubContent = React.forwardRef(({ className, ...props }, ref) =
   {
     ref,
     className: cn(
-      "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-lg",
       className
     ),
     ...props
@@ -3953,7 +3933,7 @@ const DropdownMenuContent = React.forwardRef(({ className, sideOffset = 4, ...pr
     ref,
     sideOffset,
     className: cn(
-      "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
+      "bg-popover text-popover-foreground z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-md",
       "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
       className
     ),
@@ -3966,7 +3946,7 @@ const DropdownMenuItem = React.forwardRef(({ className, inset, ...props }, ref) 
   {
     ref,
     className: cn(
-      "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden transition-colors focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+      "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden transition-colors select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
       inset && "pl-8",
       className
     ),
@@ -3979,7 +3959,7 @@ const DropdownMenuCheckboxItem = React.forwardRef(({ className, children, checke
   {
     ref,
     className: cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-hidden transition-colors focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+      "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden transition-colors select-none data-disabled:pointer-events-none data-disabled:opacity-50",
       className
     ),
     checked,
@@ -3996,7 +3976,7 @@ const DropdownMenuRadioItem = React.forwardRef(({ className, children, ...props 
   {
     ref,
     className: cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-hidden transition-colors focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+      "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden transition-colors select-none data-disabled:pointer-events-none data-disabled:opacity-50",
       className
     ),
     ...props,
@@ -4016,7 +3996,7 @@ const DropdownMenuLabel = React.forwardRef(({ className, inset, ...props }, ref)
   }
 ));
 DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
-const DropdownMenuSeparator = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Separator, { ref, className: cn("-mx-1 my-1 h-px bg-muted", className), ...props }));
+const DropdownMenuSeparator = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Separator, { ref, className: cn("bg-muted -mx-1 my-1 h-px", className), ...props }));
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 const DropdownMenuShortcut = ({ className, ...props }) => {
   return /* @__PURE__ */ jsx("span", { className: cn("ml-auto text-xs tracking-widest opacity-60", className), ...props });
@@ -4061,7 +4041,7 @@ const RowActions = memo(function RowActions2({ row, resource, children }) {
   ] });
 });
 function CloneAction({ row, resource, title, disabled, ...props }) {
-  const { can, reason, url } = useGetCloneUrl(resource, row.id);
+  const { can, url } = useGetCloneUrl(resource, row.id);
   return /* @__PURE__ */ jsx(
     RowAction,
     {
@@ -4083,7 +4063,7 @@ function DeleteAction({
   className,
   ...props
 }) {
-  const { can, reason } = useDeleteHelper(resource, row.id);
+  const { can } = useDeleteHelper(resource, row.id);
   const deleteContext = useContext(DeleteContext);
   return /* @__PURE__ */ jsx(
     RowAction,
@@ -4104,12 +4084,12 @@ function DeleteAction({
 }
 DeleteAction.displayName = "DeleteAction";
 function EditAction({ row, resource, title, disabled, ...props }) {
-  const { can, reason, url } = useGetEditUrl(resource, row.id);
+  const { can, url } = useGetEditUrl(resource, row.id);
   return /* @__PURE__ */ jsx(RowAction, { icon: /* @__PURE__ */ jsx(Pencil, { size: 16 }), disabled: !can || disabled, title: title || "Edit", to: url, ...props });
 }
 EditAction.displayName = "EditAction";
 function ShowAction({ row, resource, title, disabled, ...props }) {
-  const { can, reason, url } = useGetShowUrl(resource, row.id);
+  const { can, url } = useGetShowUrl(resource, row.id);
   return /* @__PURE__ */ jsx(
     RowAction,
     {
@@ -4193,7 +4173,7 @@ function TableFilterDateRangePickerFilter({
   numberOfMonths = 2,
   align = "start"
 }) {
-  const t = useTranslate();
+  const t2 = useTranslate();
   const [date, setDate] = useState(() => {
     const values = column == null ? void 0 : column.getFilterValue();
     if ((values == null ? void 0 : values.length) >= 1) {
@@ -4237,7 +4217,7 @@ function TableFilterDateRangePickerFilter({
       ),
       (date == null ? void 0 : date.from) ? /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx(Separator, { orientation: "vertical", className: "mr-1 h-4" }),
-        /* @__PURE__ */ jsx(Badge, { variant: "secondary", className: "cursor-pointer text-nowrap text-xs text-muted-foreground", children: date.to ? /* @__PURE__ */ jsx(Fragment, { children: [format(date.from, "LLL dd, y"), format(date.to, "LLL dd, y")].join(" - ") }) : format(date.from, "LLL dd, y") })
+        /* @__PURE__ */ jsx(Badge, { variant: "secondary", className: "text-muted-foreground cursor-pointer text-xs text-nowrap", children: date.to ? /* @__PURE__ */ jsx(Fragment, { children: [format(date.from, "LLL dd, y"), format(date.to, "LLL dd, y")].join(" - ") }) : format(date.from, "LLL dd, y") })
       ] }) : null
     ] }) }),
     /* @__PURE__ */ jsxs(PopoverContent, { className: "w-auto p-0", align, children: [
@@ -4265,7 +4245,7 @@ function TableFilterDateRangePickerFilter({
             },
             children: [
               /* @__PURE__ */ jsx(FilterX, { size: 16 }),
-              t("Clear filters")
+              t2("Clear filters")
             ]
           }
         ) })
@@ -4274,7 +4254,7 @@ function TableFilterDateRangePickerFilter({
   ] });
 }
 function TableFilterDropdown({ column, title, options, align = "start" }) {
-  const t = useTranslate();
+  const t2 = useTranslate();
   const facets = column == null ? void 0 : column.getFacetedUniqueValues();
   const selectedValues = new Set(column == null ? void 0 : column.getFilterValue());
   return /* @__PURE__ */ jsxs(Popover, { children: [
@@ -4297,16 +4277,16 @@ function TableFilterDropdown({ column, title, options, align = "start" }) {
       ),
       (selectedValues == null ? void 0 : selectedValues.size) > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx(Separator, { orientation: "vertical", className: "mr-1 h-4" }),
-        /* @__PURE__ */ jsx(Badge, { variant: "secondary", className: "cursor-pointer text-nowrap text-xs text-muted-foreground lg:hidden", children: selectedValues.size }),
-        /* @__PURE__ */ jsx("div", { className: "hidden space-x-1 lg:flex", children: selectedValues.size > 2 ? /* @__PURE__ */ jsxs(Badge, { variant: "secondary", className: "cursor-pointer text-nowrap text-xs text-muted-foreground", children: [
+        /* @__PURE__ */ jsx(Badge, { variant: "secondary", className: "text-muted-foreground cursor-pointer text-xs text-nowrap lg:hidden", children: selectedValues.size }),
+        /* @__PURE__ */ jsx("div", { className: "hidden space-x-1 lg:flex", children: selectedValues.size > 2 ? /* @__PURE__ */ jsxs(Badge, { variant: "secondary", className: "text-muted-foreground cursor-pointer text-xs text-nowrap", children: [
           selectedValues.size,
           " ",
-          t("selected")
+          t2("selected")
         ] }) : options == null ? void 0 : options.filter((option) => selectedValues.has(option.value)).map((option) => /* @__PURE__ */ jsx(
           Badge,
           {
             variant: "secondary",
-            className: "cursor-pointer text-xs text-muted-foreground",
+            className: "text-muted-foreground cursor-pointer text-xs",
             children: option.label
           },
           option.value
@@ -4317,7 +4297,7 @@ function TableFilterDropdown({ column, title, options, align = "start" }) {
       /* @__PURE__ */ jsx(CommandInput, { placeholder: title }),
       /* @__PURE__ */ jsxs(CommandList, { children: [
         /* @__PURE__ */ jsxs(CommandEmpty, { children: [
-          t("No results found"),
+          t2("No results found"),
           "."
         ] }),
         /* @__PURE__ */ jsx(CommandGroup, { children: options == null ? void 0 : options.map((option) => {
@@ -4339,13 +4319,13 @@ function TableFilterDropdown({ column, title, options, align = "start" }) {
                   "div",
                   {
                     className: cn(
-                      "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                      "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                       isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible"
                     ),
                     children: /* @__PURE__ */ jsx(CheckIcon, { className: cn("h-4 w-4") })
                   }
                 ),
-                option.icon && /* @__PURE__ */ jsx(option.icon, { className: "mr-2 h-4 w-4 text-muted-foreground" }),
+                option.icon && /* @__PURE__ */ jsx(option.icon, { className: "text-muted-foreground mr-2 h-4 w-4" }),
                 /* @__PURE__ */ jsx("span", { children: option.label }),
                 (facets == null ? void 0 : facets.get(option.value)) && /* @__PURE__ */ jsx("span", { className: "ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs", children: facets.get(option.value) })
               ]
@@ -4362,7 +4342,7 @@ function TableFilterDropdown({ column, title, options, align = "start" }) {
               className: "justify-center text-center",
               children: [
                 /* @__PURE__ */ jsx(FilterX, { size: 16 }),
-                t("Clear filters")
+                t2("Clear filters")
               ]
             }
           ) })
@@ -4373,7 +4353,7 @@ function TableFilterDropdown({ column, title, options, align = "start" }) {
 }
 function TableFilterSearchColumn({ column, title, align = "start" }) {
   const selectedValue = column == null ? void 0 : column.getFilterValue();
-  const t = useTranslate();
+  const t2 = useTranslate();
   return /* @__PURE__ */ jsxs(Popover, { children: [
     /* @__PURE__ */ jsx(PopoverTrigger, { asChild: true, children: /* @__PURE__ */ jsxs("div", { className: "inline-flex flex-row items-center gap-x-0.5", children: [
       /* @__PURE__ */ jsx(
@@ -4394,11 +4374,11 @@ function TableFilterSearchColumn({ column, title, align = "start" }) {
       ),
       selectedValue && /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx(Separator, { orientation: "vertical", className: "mr-1 h-4" }),
-        /* @__PURE__ */ jsx(Badge, { variant: "secondary", className: "cursor-pointer text-nowrap text-xs text-muted-foreground", children: selectedValue })
+        /* @__PURE__ */ jsx(Badge, { variant: "secondary", className: "text-muted-foreground cursor-pointer text-xs text-nowrap", children: selectedValue })
       ] })
     ] }) }),
     /* @__PURE__ */ jsx(PopoverContent, { className: "w-[200px] overflow-hidden p-0 ring-0", align, children: /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex flex-row items-center bg-popover px-3 text-popover-foreground", children: [
+      /* @__PURE__ */ jsxs("div", { className: "bg-popover text-popover-foreground flex flex-row items-center px-3", children: [
         /* @__PURE__ */ jsx(Search, { className: "mr-2 h-4 w-4 shrink-0 opacity-50" }),
         /* @__PURE__ */ jsx(
           Input,
@@ -4408,7 +4388,7 @@ function TableFilterSearchColumn({ column, title, align = "start" }) {
               column == null ? void 0 : column.setFilterValue(e.target.value);
             },
             className: cn(
-              "h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm shadow-none outline-hidden ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
+              "placeholder:text-muted-foreground h-10 rounded-md border-0 bg-transparent py-3 pl-0 text-sm ring-0 shadow-none outline-hidden focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
             ),
             placeholder: title
           }
@@ -4426,7 +4406,7 @@ function TableFilterSearchColumn({ column, title, align = "start" }) {
             },
             children: [
               /* @__PURE__ */ jsx(FilterX, { size: 16 }),
-              t("Clear filters")
+              t2("Clear filters")
             ]
           }
         ) })
@@ -4439,7 +4419,7 @@ const Checkbox = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__
   {
     ref,
     className: cn(
-      "peer h-4 w-4 shrink-0 rounded-sm border border-primary shadow-sm focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
+      "peer border-primary focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground h-4 w-4 shrink-0 rounded-sm border shadow-sm focus-visible:ring-1 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
       className
     ),
     ...props,
@@ -4449,7 +4429,7 @@ const Checkbox = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 const CheckAll = forwardRef(
   ({ table, children, options }, ref) => {
-    const t = useTranslate();
+    const t2 = useTranslate();
     const isSomeSelected = table.getIsSomeRowsSelected();
     const isAllSelected = table.getIsAllPageRowsSelected();
     return /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -4460,13 +4440,13 @@ const CheckAll = forwardRef(
           checked: isSomeSelected ? "indeterminate" : isAllSelected,
           onCheckedChange: (value) => table.toggleAllPageRowsSelected(!!value),
           className: "ml-2",
-          "aria-label": t("Select all")
+          "aria-label": t2("Select all")
         }
       ),
       children || Array.isArray(options) && options.length && /* @__PURE__ */ jsxs(DropdownMenu, { children: [
         /* @__PURE__ */ jsx(DropdownMenuTrigger, { asChild: true, children: /* @__PURE__ */ jsx(Button, { disabled: !(isSomeSelected || isAllSelected), size: "icon", variant: "ghost", children: /* @__PURE__ */ jsx(DotsVerticalIcon, { className: cn("h-4 w-4", (isSomeSelected || isAllSelected) && "text-green-500") }) }) }),
         /* @__PURE__ */ jsxs(DropdownMenuContent, { align: "start", children: [
-          /* @__PURE__ */ jsx(DropdownMenuLabel, { children: t("Bulk Actions") }),
+          /* @__PURE__ */ jsx(DropdownMenuLabel, { children: t2("Bulk Actions") }),
           /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
           !children && Array.isArray(options) && (options == null ? void 0 : options.length) > 0 ? options.map((option, key) => /* @__PURE__ */ jsx(
             DropdownMenuItem,
@@ -4486,10 +4466,10 @@ const CheckAll = forwardRef(
 CheckAll.displayName = "CheckAll";
 const Pagination = ({ table }) => {
   var _a, _b, _c;
-  const t = useTranslate();
+  const t2 = useTranslate();
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: "sm-gap-y-0 sticky bottom-4 mt-0! flex flex-col items-center justify-between gap-y-4 bg-background pt-4 sm:flex-row", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex-1 text-sm text-muted-foreground", children: [
+    /* @__PURE__ */ jsxs("div", { className: "sm-gap-y-0 bg-background sticky bottom-4 mt-0! flex flex-col items-center justify-between gap-y-4 pt-4 sm:flex-row", children: [
+      /* @__PURE__ */ jsxs("div", { className: "text-muted-foreground flex-1 text-sm", children: [
         table.getFilteredSelectedRowModel().rows.length,
         " of ",
         table.getFilteredRowModel().rows.length,
@@ -4544,7 +4524,7 @@ const Pagination = ({ table }) => {
               onClick: () => table.previousPage(),
               disabled: !table.getCanPreviousPage(),
               children: [
-                /* @__PURE__ */ jsx("span", { className: "sr-only", children: t("Go to previous page") }),
+                /* @__PURE__ */ jsx("span", { className: "sr-only", children: t2("Go to previous page") }),
                 /* @__PURE__ */ jsx(ChevronLeftIcon, { className: "h-4 w-4" })
               ]
             }
@@ -4557,7 +4537,7 @@ const Pagination = ({ table }) => {
               onClick: () => table.nextPage(),
               disabled: !table.getCanNextPage(),
               children: [
-                /* @__PURE__ */ jsx("span", { className: "sr-only", children: t("Go to next page") }),
+                /* @__PURE__ */ jsx("span", { className: "sr-only", children: t2("Go to next page") }),
                 /* @__PURE__ */ jsx(ChevronRightIcon, { className: "h-4 w-4" })
               ]
             }
@@ -4570,7 +4550,7 @@ const Pagination = ({ table }) => {
               onClick: () => table.setPageIndex(table.getPageCount() - 1),
               disabled: !table.getCanNextPage(),
               children: [
-                /* @__PURE__ */ jsx("span", { className: "sr-only", children: t("Go to last page") }),
+                /* @__PURE__ */ jsx("span", { className: "sr-only", children: t2("Go to last page") }),
                 /* @__PURE__ */ jsx(DoubleArrowRightIcon, { className: "h-4 w-4" })
               ]
             }
@@ -4578,7 +4558,7 @@ const Pagination = ({ table }) => {
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "fixed bottom-0 m-0! h-4 w-full bg-background" })
+    /* @__PURE__ */ jsx("div", { className: "bg-background fixed bottom-0 m-0! h-4 w-full" })
   ] });
 };
 Pagination.displayName = "Pagination";
@@ -4600,7 +4580,7 @@ const SortAction = ({
   );
 };
 function TableFilterRadio({ column, title, options, align = "start" }) {
-  const t = useTranslate();
+  const t2 = useTranslate();
   const selectedValue = column == null ? void 0 : column.getFilterValue();
   return /* @__PURE__ */ jsxs(Popover, { children: [
     /* @__PURE__ */ jsx(PopoverTrigger, { asChild: true, children: /* @__PURE__ */ jsxs("div", { className: "inline-flex flex-row items-center gap-x-0.5", children: [
@@ -4626,7 +4606,7 @@ function TableFilterRadio({ column, title, options, align = "start" }) {
           Badge,
           {
             variant: "secondary",
-            className: "cursor-pointer text-nowrap text-xs capitalize text-muted-foreground",
+            className: "text-muted-foreground cursor-pointer text-xs text-nowrap capitalize",
             children: selectedValue
           }
         )
@@ -4636,7 +4616,7 @@ function TableFilterRadio({ column, title, options, align = "start" }) {
       /* @__PURE__ */ jsx(CommandInput, { placeholder: title }),
       /* @__PURE__ */ jsxs(CommandList, { children: [
         /* @__PURE__ */ jsxs(CommandEmpty, { children: [
-          t("No results found"),
+          t2("No results found"),
           "."
         ] }),
         /* @__PURE__ */ jsx(CommandGroup, { children: options == null ? void 0 : options.map((option) => {
@@ -4652,13 +4632,13 @@ function TableFilterRadio({ column, title, options, align = "start" }) {
                   "div",
                   {
                     className: cn(
-                      "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                      "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                       isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible"
                     ),
                     children: /* @__PURE__ */ jsx(CheckIcon, { className: cn("h-4 w-4") })
                   }
                 ),
-                option.icon && /* @__PURE__ */ jsx(option.icon, { className: "mr-2 h-4 w-4 text-muted-foreground" }),
+                option.icon && /* @__PURE__ */ jsx(option.icon, { className: "text-muted-foreground mr-2 h-4 w-4" }),
                 /* @__PURE__ */ jsx("span", { children: option.label })
               ]
             },
@@ -4674,7 +4654,7 @@ function TableFilterRadio({ column, title, options, align = "start" }) {
               className: "justify-center text-center",
               children: [
                 /* @__PURE__ */ jsx(FilterX, { size: 16 }),
-                t("Clear filters")
+                t2("Clear filters")
               ]
             }
           ) })
@@ -4686,17 +4666,17 @@ function TableFilterRadio({ column, title, options, align = "start" }) {
 const DataTableViewOptions = ({
   table
 }) => {
-  const t = useTranslate();
+  const t2 = useTranslate();
   const columns = useMemo(() => {
     return table.getAllColumns().filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide());
   }, [table]);
   return /* @__PURE__ */ jsxs(DropdownMenu, { children: [
     /* @__PURE__ */ jsx(DropdownMenuTrigger$1, { asChild: true, children: /* @__PURE__ */ jsxs(Button, { variant: "dashed", className: "ml-auto hidden h-8 lg:flex", children: [
       /* @__PURE__ */ jsx(MixerHorizontalIcon, { className: "mr-2 h-4 w-4" }),
-      t("Columns")
+      t2("Columns")
     ] }) }),
     /* @__PURE__ */ jsxs(DropdownMenuContent, { align: "end", className: "w-[150px]", children: [
-      /* @__PURE__ */ jsx(DropdownMenuLabel, { children: t("Toggle columns") }),
+      /* @__PURE__ */ jsx(DropdownMenuLabel, { children: t2("Toggle columns") }),
       /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
       columns.map((column) => {
         var _a, _b;
@@ -4707,7 +4687,7 @@ const DataTableViewOptions = ({
             checked: column.getIsVisible(),
             onCheckedChange: (value) => column.toggleVisibility(value),
             onSelect: (event) => event.preventDefault(),
-            children: ((_b = (_a = column == null ? void 0 : column.columnDef) == null ? void 0 : _a.header) == null ? void 0 : _b.toString()) || t(column.id)
+            children: ((_b = (_a = column == null ? void 0 : column.columnDef) == null ? void 0 : _a.header) == null ? void 0 : _b.toString()) || t2(column.id)
           },
           column.id
         );
@@ -4717,16 +4697,13 @@ const DataTableViewOptions = ({
 };
 DataTableViewOptions.displayName = "DataTableViewOptions";
 function DataTableToolbar({ table, toolbar }) {
-  const appendProps = useCallback(
-    (child, index) => {
-      var _a;
-      if (!child || typeof child !== "object" || !("props" in child)) {
-        return child;
-      }
-      return cloneElement(child, { key: index, variant: ((_a = child.props) == null ? void 0 : _a.variant) || "outline" });
-    },
-    [table, toolbar]
-  );
+  const appendProps = useCallback((child, index) => {
+    var _a;
+    if (!child || typeof child !== "object" || !("props" in child)) {
+      return child;
+    }
+    return cloneElement(child, { key: index, variant: ((_a = child.props) == null ? void 0 : _a.variant) || "outline" });
+  }, []);
   return /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
     /* @__PURE__ */ jsx("div", { className: "flex flex-1 items-center space-x-2", children: Array.isArray(toolbar) ? toolbar.map((child, index) => appendProps(child, index)) : appendProps(toolbar) }),
     /* @__PURE__ */ jsx(DataTableViewOptions, { table })
@@ -4734,7 +4711,7 @@ function DataTableToolbar({ table, toolbar }) {
 }
 function Table({ children, showHeader = true, columns = [], refineCoreProps, toolbar, ...props }) {
   var _a;
-  const t = useTranslate();
+  const t2 = useTranslate();
   const mapColumn = useCallback(
     ({
       id,
@@ -4785,7 +4762,7 @@ function Table({ children, showHeader = true, columns = [], refineCoreProps, too
   );
   return /* @__PURE__ */ jsx(DeleteProvider, { children: /* @__PURE__ */ jsxs("div", { className: "mt-1 space-y-4", children: [
     /* @__PURE__ */ jsx(DataTableToolbar, { table, toolbar }),
-    /* @__PURE__ */ jsx("div", { className: "rounded-md border border-border", children: /* @__PURE__ */ jsxs(Table$1, { children: [
+    /* @__PURE__ */ jsx("div", { className: "border-border rounded-md border", children: /* @__PURE__ */ jsxs(Table$1, { children: [
       showHeader && /* @__PURE__ */ jsx(TableHeader, { children: table.getHeaderGroups().map((headerGroup) => /* @__PURE__ */ jsx(TableRow, { children: headerGroup.headers.map((header) => {
         const columnDef = header.column.columnDef;
         return /* @__PURE__ */ jsx(TableHead, { children: /* @__PURE__ */ jsxs("div", { className: "inline-flex flex-row items-center gap-x-2.5", children: [
@@ -4797,8 +4774,8 @@ function Table({ children, showHeader = true, columns = [], refineCoreProps, too
           })
         ] }) }, header.id);
       }) }, headerGroup.id)) }),
-      /* @__PURE__ */ jsx(TableBody, { children: table.refineCore.tableQuery.isLoading ? /* @__PURE__ */ jsx(TableRow, { children: /* @__PURE__ */ jsx(TableCell, { colSpan: columns.length, className: "h-24 text-nowrap text-center", children: /* @__PURE__ */ jsx("div", { className: "flex flex-row items-center justify-center", children: /* @__PURE__ */ jsx(Loader, { className: "h-4 text-primary" }) }) }) }) : ((_a = table.getRowModel().rows) == null ? void 0 : _a.length) ? table.getRowModel().rows.map((row) => /* @__PURE__ */ jsx(TableRow, { "data-state": row.getIsSelected() && "selected", children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx(TableCell, { className: "text-nowrap", children: flexRender(cell.column.columnDef.cell, cell.getContext()) }, cell.id)) }, row.id)) : /* @__PURE__ */ jsx(TableRow, { children: /* @__PURE__ */ jsxs(TableCell, { colSpan: columns.length, className: "h-24 text-center", children: [
-        t("No results"),
+      /* @__PURE__ */ jsx(TableBody, { children: table.refineCore.tableQuery.isLoading ? /* @__PURE__ */ jsx(TableRow, { children: /* @__PURE__ */ jsx(TableCell, { colSpan: columns.length, className: "h-24 text-center text-nowrap", children: /* @__PURE__ */ jsx("div", { className: "flex flex-row items-center justify-center", children: /* @__PURE__ */ jsx(Loader, { className: "text-primary h-4" }) }) }) }) : ((_a = table.getRowModel().rows) == null ? void 0 : _a.length) ? table.getRowModel().rows.map((row) => /* @__PURE__ */ jsx(TableRow, { "data-state": row.getIsSelected() && "selected", children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx(TableCell, { className: "text-nowrap", children: flexRender(cell.column.columnDef.cell, cell.getContext()) }, cell.id)) }, row.id)) : /* @__PURE__ */ jsx(TableRow, { children: /* @__PURE__ */ jsxs(TableCell, { colSpan: columns.length, className: "h-24 text-center", children: [
+        t2("No results"),
         "."
       ] }) }) })
     ] }) }),
@@ -4824,11 +4801,11 @@ Table.Filter = {
 };
 Table.displayName = "Table";
 function PermissionDenied() {
-  return /* @__PURE__ */ jsx("div", { className: "relative h-screen font-['sans-serif']", children: /* @__PURE__ */ jsxs("div", { className: "absolute left-1/2 top-1/2 w-full max-w-[520px] -translate-x-1/2 -translate-y-1/2 text-center leading-[1.4]", children: [
-    /* @__PURE__ */ jsxs("div", { className: "relative z-[-1] mx-auto mb-5 mt-0 h-[200px]", children: [
-      /* @__PURE__ */ jsx("h1", { className: "text-forceground absolute left-1/2 top-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase", children: "Oops!" }),
-      /* @__PURE__ */ jsxs("h2", { className: "text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] font-normal capitalize", children: [
-        /* @__PURE__ */ jsx("span", { className: "absolute -bottom-1 -left-1 -right-1 -top-1 z-10 bg-background blur-xl" }),
+  return /* @__PURE__ */ jsx("div", { className: "relative h-screen font-['sans-serif']", children: /* @__PURE__ */ jsxs("div", { className: "absolute top-1/2 left-1/2 w-full max-w-[520px] -translate-x-1/2 -translate-y-1/2 text-center leading-[1.4]", children: [
+    /* @__PURE__ */ jsxs("div", { className: "relative z-[-1] mx-auto mt-0 mb-5 h-[200px]", children: [
+      /* @__PURE__ */ jsx("h1", { className: "text-forceground absolute top-1/2 left-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase", children: "Oops!" }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-forceground bg-background absolute inset-x-0 bottom-0 m-auto inline-block px-[5px] pt-5 text-[28px] font-normal capitalize", children: [
+        /* @__PURE__ */ jsx("span", { className: "bg-background absolute -top-1 -right-1 -bottom-1 -left-1 z-10 blur-xl" }),
         "403 - Permission Denied"
       ] })
     ] }),
@@ -4837,11 +4814,11 @@ function PermissionDenied() {
   ] }) });
 }
 function NotFound() {
-  return /* @__PURE__ */ jsx("div", { className: "relative h-screen font-['sans-serif']", children: /* @__PURE__ */ jsxs("div", { className: "absolute left-1/2 top-1/2 w-full max-w-[520px] -translate-x-1/2 -translate-y-1/2 text-center leading-[1.4]", children: [
-    /* @__PURE__ */ jsxs("div", { className: "relative z-[-1] mx-auto mb-5 mt-0 h-[200px]", children: [
-      /* @__PURE__ */ jsx("h1", { className: "text-forceground absolute left-1/2 top-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase", children: "Oops!" }),
-      /* @__PURE__ */ jsxs("h2", { className: "text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] font-normal capitalize", children: [
-        /* @__PURE__ */ jsx("span", { className: "absolute -bottom-1 -left-1 -right-1 -top-1 z-10 bg-background blur-xl" }),
+  return /* @__PURE__ */ jsx("div", { className: "relative h-screen font-['sans-serif']", children: /* @__PURE__ */ jsxs("div", { className: "absolute top-1/2 left-1/2 w-full max-w-[520px] -translate-x-1/2 -translate-y-1/2 text-center leading-[1.4]", children: [
+    /* @__PURE__ */ jsxs("div", { className: "relative z-[-1] mx-auto mt-0 mb-5 h-[200px]", children: [
+      /* @__PURE__ */ jsx("h1", { className: "text-forceground absolute top-1/2 left-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase", children: "Oops!" }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-forceground bg-background absolute inset-x-0 bottom-0 m-auto inline-block px-[5px] pt-5 text-[28px] font-normal capitalize", children: [
+        /* @__PURE__ */ jsx("span", { className: "bg-background absolute -top-1 -right-1 -bottom-1 -left-1 z-10 blur-xl" }),
         "404 - The Page can't be found"
       ] })
     ] }),
@@ -4858,11 +4835,11 @@ function PageError({ error }) {
   useMountEffect(() => {
     console.error("@PageError", error);
   });
-  return /* @__PURE__ */ jsx("div", { className: "relative h-screen flex-1 font-['sans-serif']", children: /* @__PURE__ */ jsxs("div", { className: "absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 px-10 text-center leading-[1.4]", children: [
-    /* @__PURE__ */ jsxs("div", { className: "relative z-[-1] mx-auto mb-5 mt-0 h-[200px]", children: [
-      /* @__PURE__ */ jsx("h1", { className: "text-forceground absolute left-1/2 top-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase", children: "Oops!" }),
-      /* @__PURE__ */ jsxs("h2", { className: "text-forceground absolute inset-x-0 bottom-0 m-auto inline-block max-w-[520px] bg-background px-[5px] pt-5 text-[28px] font-normal capitalize", children: [
-        /* @__PURE__ */ jsx("span", { className: "absolute -bottom-1 -left-1 -right-1 -top-1 z-10 bg-background blur-xl" }),
+  return /* @__PURE__ */ jsx("div", { className: "relative h-screen flex-1 font-['sans-serif']", children: /* @__PURE__ */ jsxs("div", { className: "absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 px-10 text-center leading-[1.4]", children: [
+    /* @__PURE__ */ jsxs("div", { className: "relative z-[-1] mx-auto mt-0 mb-5 h-[200px]", children: [
+      /* @__PURE__ */ jsx("h1", { className: "text-forceground absolute top-1/2 left-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase", children: "Oops!" }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-forceground bg-background absolute inset-x-0 bottom-0 m-auto inline-block max-w-[520px] px-[5px] pt-5 text-[28px] font-normal capitalize", children: [
+        /* @__PURE__ */ jsx("span", { className: "bg-background absolute -top-1 -right-1 -bottom-1 -left-1 z-10 blur-xl" }),
         isRouteErrorResponse(error) ? `${error.status} ${error.statusText}` : "Something went wrong"
       ] })
     ] }),
@@ -4873,11 +4850,11 @@ function PageError({ error }) {
 }
 function ComingSoon() {
   const back = useBack();
-  return /* @__PURE__ */ jsx("div", { className: "relative h-full font-['sans-serif']", children: /* @__PURE__ */ jsxs("div", { className: "absolute left-1/2 top-1/2 w-full max-w-[520px] -translate-x-1/2 -translate-y-1/2 text-center leading-[1.4]", children: [
-    /* @__PURE__ */ jsxs("div", { className: "relative z-[-1] mx-auto mb-5 mt-0 h-[200px]", children: [
-      /* @__PURE__ */ jsx("h1", { className: "text-forceground absolute left-1/2 top-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase", children: "Oops!" }),
-      /* @__PURE__ */ jsxs("h2", { className: "text-forceground absolute inset-x-0 bottom-0 m-auto inline-block bg-background px-[5px] pt-5 text-[28px] font-normal capitalize", children: [
-        /* @__PURE__ */ jsx("span", { className: "absolute -bottom-1 -left-1 -right-1 -top-1 z-10 bg-background blur-xl" }),
+  return /* @__PURE__ */ jsx("div", { className: "relative h-full font-['sans-serif']", children: /* @__PURE__ */ jsxs("div", { className: "absolute top-1/2 left-1/2 w-full max-w-[520px] -translate-x-1/2 -translate-y-1/2 text-center leading-[1.4]", children: [
+    /* @__PURE__ */ jsxs("div", { className: "relative z-[-1] mx-auto mt-0 mb-5 h-[200px]", children: [
+      /* @__PURE__ */ jsx("h1", { className: "text-forceground absolute top-1/2 left-1/2 m-0 -translate-x-1/2 -translate-y-1/2 text-[236px] font-extralight uppercase", children: "Oops!" }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-forceground bg-background absolute inset-x-0 bottom-0 m-auto inline-block px-[5px] pt-5 text-[28px] font-normal capitalize", children: [
+        /* @__PURE__ */ jsx("span", { className: "bg-background absolute -top-1 -right-1 -bottom-1 -left-1 z-10 blur-xl" }),
         "Coming Soon ..."
       ] })
     ] }),
@@ -4895,10 +4872,10 @@ function ErrorMessage({ error }) {
   } else if (error instanceof Error) {
     message = error.message;
   }
-  return /* @__PURE__ */ jsx("p", { className: "text-sm text-destructive", children: message });
+  return /* @__PURE__ */ jsx("p", { className: "text-destructive text-sm", children: message });
 }
 function PrivacyPolicy() {
-  return /* @__PURE__ */ jsxs("div", { className: "text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "text-muted-foreground [&_a]:hover:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4", children: [
     "By clicking continue, you agree to our ",
     /* @__PURE__ */ jsx(Link$1, { prefetch: "intent", viewTransition: true, to: "#", children: "Privacy Policy" }),
     "."
@@ -4935,7 +4912,7 @@ function LoginForm() {
         /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-6", children: [
           /* @__PURE__ */ jsxs("div", { className: "flex flex-col", children: [
             /* @__PURE__ */ jsx("h1", { className: "flex items-center text-2xl font-bold", children: "Welcome back" }),
-            /* @__PURE__ */ jsx("p", { className: "text-balance text-muted-foreground", children: "Login to your OSS Inc. account" })
+            /* @__PURE__ */ jsx("p", { className: "text-muted-foreground text-balance", children: "Login to your OSS Inc. account" })
           ] }),
           /* @__PURE__ */ jsxs("div", { className: "grid gap-2", children: [
             /* @__PURE__ */ jsx(Label, { htmlFor: "email", children: "Email" }),
@@ -4987,7 +4964,7 @@ function LoginForm() {
             /* @__PURE__ */ jsx(Button, { type: "submit", className: "w-full", disabled: navigation.state === "submitting", children: "Login" }),
             /* @__PURE__ */ jsx(ErrorMessage, { error: (_c = errors == null ? void 0 : errors.default) == null ? void 0 : _c[0] })
           ] }),
-          /* @__PURE__ */ jsx("div", { className: "relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border", children: /* @__PURE__ */ jsx("span", { className: "relative z-10 bg-background px-2 text-muted-foreground", children: "or" }) }),
+          /* @__PURE__ */ jsx("div", { className: "after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t", children: /* @__PURE__ */ jsx("span", { className: "bg-background text-muted-foreground relative z-10 px-2", children: "or" }) }),
           /* @__PURE__ */ jsx(TcskOAuth2, { redirectTo }),
           /* @__PURE__ */ jsxs("div", { className: "text-center text-sm", children: [
             `Don't have an account? `,
@@ -4995,20 +4972,17 @@ function LoginForm() {
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "relative hidden bg-muted md:block", children: /* @__PURE__ */ jsx("img", { src: "/logo.png", alt: "", className: "absolute inset-0 h-full w-full object-cover dark:brightness-[0.3]" }) })
+      /* @__PURE__ */ jsx("div", { className: "bg-muted relative hidden md:block", children: /* @__PURE__ */ jsx("img", { src: "/logo.png", alt: "", className: "absolute inset-0 h-full w-full object-cover dark:brightness-[0.3]" }) })
     ] }) }),
     /* @__PURE__ */ jsx(PrivacyPolicy, {})
   ] });
 }
 function RegisterForm() {
   var _a, _b, _c, _d;
-  useNotification();
   const { errors } = useActionData() || {};
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/";
   const navigation = useNavigation$1();
-  useState(false);
-  useState(0);
   return /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-6", children: [
     /* @__PURE__ */ jsxs(Form$2, { method: "post", children: [
       /* @__PURE__ */ jsx("input", { type: "hidden", name: "redirectTo", value: redirectTo }),
@@ -5069,7 +5043,7 @@ function RegisterForm() {
             /* @__PURE__ */ jsx(ErrorMessage, { error: (_d = errors == null ? void 0 : errors.default) == null ? void 0 : _d[0] })
           ] })
         ] }),
-        /* @__PURE__ */ jsx("div", { className: "relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border", children: /* @__PURE__ */ jsx("span", { className: "relative z-10 bg-background px-2 text-muted-foreground", children: "or" }) }),
+        /* @__PURE__ */ jsx("div", { className: "after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t", children: /* @__PURE__ */ jsx("span", { className: "bg-background text-muted-foreground relative z-10 px-2", children: "or" }) }),
         /* @__PURE__ */ jsx(TcskOAuth2, { redirectTo })
       ] })
     ] }),
@@ -5219,7 +5193,7 @@ function Layout() {
   return /* @__PURE__ */ jsxs(SidebarProvider, { open: !sidebarIsClose || sidebarIsClose !== "true", children: [
     /* @__PURE__ */ jsx(SidebarLeft, {}),
     /* @__PURE__ */ jsxs(SidebarInset, { children: [
-      /* @__PURE__ */ jsxs("header", { className: "sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-background transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12", children: [
+      /* @__PURE__ */ jsxs("header", { className: "bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-4", children: [
           /* @__PURE__ */ jsx(SidebarTrigger, { className: "-ml-1" }),
           /* @__PURE__ */ jsx(Separator, { orientation: "vertical", className: "mr-2 h-4" }),
@@ -5242,9 +5216,9 @@ function ThemeSwitcher({
     document.documentElement.classList.remove(theme || Theme.LIGHT);
     document.documentElement.classList.add(themeNext);
   };
-  return /* @__PURE__ */ jsxs("div", { className: "w-full cursor-pointer select-none px-0 py-2", onClick: toggleTheme, children: [
-    /* @__PURE__ */ jsx(Sun, { size: 16, className: "absolute rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" }),
-    /* @__PURE__ */ jsx(Moon, { size: 16, className: "absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" }),
+  return /* @__PURE__ */ jsxs("div", { className: "w-full cursor-pointer px-0 py-2 select-none", onClick: toggleTheme, children: [
+    /* @__PURE__ */ jsx(Sun, { size: 16, className: "absolute scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" }),
+    /* @__PURE__ */ jsx(Moon, { size: 16, className: "absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" }),
     /* @__PURE__ */ jsx("span", { children: " " })
   ] });
 }
@@ -5286,7 +5260,7 @@ const AvatarFallback = React.forwardRef(({ className, ...props }, ref) => /* @__
   AvatarPrimitive.Fallback,
   {
     ref,
-    className: cn("flex h-full w-full items-center justify-center rounded-full bg-muted", className),
+    className: cn("bg-muted flex h-full w-full items-center justify-center rounded-full", className),
     ...props
   }
 ));
@@ -5400,7 +5374,7 @@ function RoleSwitcher() {
         size: "lg",
         className: "data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground",
         children: [
-          /* @__PURE__ */ jsx("div", { className: "flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground", children: /* @__PURE__ */ jsx(GalleryVerticalEnd, { className: "size-4" }) }),
+          /* @__PURE__ */ jsx("div", { className: "bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg", children: /* @__PURE__ */ jsx(GalleryVerticalEnd, { className: "size-4" }) }),
           /* @__PURE__ */ jsxs("div", { className: "grid flex-1 text-left text-sm leading-tight", children: [
             /* @__PURE__ */ jsx("span", { className: "truncate font-semibold", children: "OSS Inc." }),
             /* @__PURE__ */ jsx("span", { className: "truncate text-xs", children: (activeRole == null ? void 0 : activeRole.label) || "unknown" })
@@ -5417,7 +5391,7 @@ function RoleSwitcher() {
         side: isMobile ? "bottom" : "right",
         sideOffset: 4,
         children: [
-          /* @__PURE__ */ jsx(DropdownMenuLabel, { className: "text-xs text-muted-foreground", children: "roles" }),
+          /* @__PURE__ */ jsx(DropdownMenuLabel, { className: "text-muted-foreground text-xs", children: "roles" }),
           userRoles.map((role2, index) => /* @__PURE__ */ jsxs(
             DropdownMenuItem,
             {
@@ -5437,8 +5411,8 @@ function RoleSwitcher() {
           )),
           /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
           /* @__PURE__ */ jsxs(DropdownMenuItem, { className: "gap-2 p-2", children: [
-            /* @__PURE__ */ jsx("div", { className: "flex size-6 items-center justify-center rounded-md border bg-background", children: /* @__PURE__ */ jsx(Plus, { className: "size-4" }) }),
-            /* @__PURE__ */ jsx("div", { className: "font-medium text-muted-foreground", children: "Apply Role" })
+            /* @__PURE__ */ jsx("div", { className: "bg-background flex size-6 items-center justify-center rounded-md border", children: /* @__PURE__ */ jsx(Plus, { className: "size-4" }) }),
+            /* @__PURE__ */ jsx("div", { className: "text-muted-foreground font-medium", children: "Apply Role" })
           ] })
         ]
       }
@@ -5490,11 +5464,10 @@ const authProvider = {
         }
       };
     } catch (error) {
-      console.error("@authProvider.login", error);
       return {
         success: false,
         error: {
-          message: "登录失败，请检查用户名和密码",
+          message: error.message || "登录失败，请检查用户名和密码",
           name: "Invalid credentials"
         }
       };
@@ -5731,9 +5704,7 @@ const createSearchQuery = (filter) => {
   }
   const { operator } = filter;
   return {
-    [mapOperator(operator)]: filter.value.map(
-      (filter2) => createSearchQuery(filter2)
-    )
+    [mapOperator(operator)]: filter.value.map((filter2) => createSearchQuery(filter2))
   };
 };
 const handleFilter = (query, filters) => {
@@ -5742,9 +5713,9 @@ const handleFilter = (query, filters) => {
   }
   return query;
 };
-const handleJoin = (query, join2) => {
-  if (join2) {
-    query.setJoin(join2);
+const handleJoin = (query, join) => {
+  if (join) {
+    query.setJoin(join);
   }
   return query;
 };
@@ -6033,7 +6004,7 @@ const getCookieLocale = () => {
 };
 const initialLocale = canUseDOM() ? getCookieLocale() || fallbackLanguage : fallbackLanguage;
 if (!i18next.isInitialized) {
-  i18next.use(initReactI18next).init({
+  use(initReactI18next).init({
     resources: resourcesLanguages,
     supportedLngs: supportedLanguages,
     lng: initialLocale,
@@ -6041,13 +6012,13 @@ if (!i18next.isInitialized) {
     react: { useSuspense: false }
   });
 } else if (i18next.language !== initialLocale) {
-  i18next.changeLanguage(initialLocale);
+  changeLanguage(initialLocale);
 }
 async function syncServiceLocaleToClient(locale) {
   var _a;
   if (i18next.isInitialized && locale !== ((_a = i18next) == null ? void 0 : _a.language)) {
     try {
-      await i18next.changeLanguage(locale);
+      await changeLanguage(locale);
     } catch (error) {
       console.error("@syncServiceLocaleToClient", error);
     }
@@ -6055,10 +6026,10 @@ async function syncServiceLocaleToClient(locale) {
 }
 const i18nProvider = {
   translate: (key, defaultMessage) => {
-    return i18next.t(key, defaultMessage || key);
+    return t(key, defaultMessage || key);
   },
   changeLocale: async (locale) => {
-    await i18next.changeLanguage(locale);
+    await changeLanguage(locale);
     const res = await webapi.post(`/set-preferences`, {
       locale
     });
@@ -6094,7 +6065,7 @@ function redirect(url, init = 302) {
   } else if (typeof responseInit.status === "undefined") {
     responseInit.status = 302;
   }
-  let headers2 = new Headers(responseInit.headers);
+  const headers2 = new Headers(responseInit.headers);
   headers2.set("Location", url);
   return new Response(null, { ...responseInit, headers: headers2 });
 }
@@ -6104,7 +6075,7 @@ class StateStore {
     __publicField(this, "codeVerifiers", /* @__PURE__ */ new Map());
     __publicField(this, "state");
     __publicField(this, "codeVerifier");
-    for (let [state, verifier] of params) {
+    for (const [state, verifier] of params) {
       if (state === "state") continue;
       this.states.add(state);
       this.codeVerifiers.set(state, verifier);
@@ -6140,13 +6111,13 @@ class StateStore {
   toString() {
     if (!this.state) return "";
     if (!this.codeVerifier) return "";
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.set("state", this.state);
     params.set(this.state, this.codeVerifier);
     return params.toString();
   }
   toSetCookie(cookieName = "oauth2", options = {}) {
-    let id = crypto.randomUUID();
+    const id = crypto.randomUUID();
     return new SetCookie({
       value: this.toString(),
       httpOnly: true,
@@ -6166,11 +6137,11 @@ class StateStore {
    * cookie with the given name.
    */
   static fromRequest(request2, cookieName = "oauth2") {
-    let cookie = new Cookie(request2.headers.get("cookie") ?? "");
-    let params = new URLSearchParams();
-    for (let name of cookie.names()) {
+    const cookie = new Cookie(request2.headers.get("cookie") ?? "");
+    const params = new URLSearchParams();
+    for (const name of cookie.names()) {
       if (name.startsWith(cookieName)) {
-        for (let [key, value] of new URLSearchParams(cookie.get(name))) {
+        for (const [key, value] of new URLSearchParams(cookie.get(name))) {
           params.append(key, value);
         }
       }
@@ -6202,22 +6173,22 @@ class OAuth2Strategy extends Strategy {
   }
   async authenticate(request2) {
     debug("Request URL", request2.url);
-    let url = new URL(request2.url);
-    let stateUrl = url.searchParams.get("state");
-    let error = url.searchParams.get("error");
+    const url = new URL(request2.url);
+    const stateUrl = url.searchParams.get("state");
+    const error = url.searchParams.get("error");
     if (error) {
-      let description = url.searchParams.get("error_description");
-      let uri = url.searchParams.get("error_uri");
+      const description = url.searchParams.get("error_description");
+      const uri = url.searchParams.get("error_uri");
       throw new OAuth2RequestError(error, description, uri, stateUrl);
     }
     if (!stateUrl) {
       debug("No state found in the URL, redirecting to authorization endpoint");
-      let { state, codeVerifier: codeVerifier2, url: url2 } = this.createAuthorizationURL();
+      const { state, codeVerifier: codeVerifier2, url: url2 } = this.createAuthorizationURL();
       debug("State", state);
       debug("Code verifier", codeVerifier2);
       url2.search = this.authorizationParams(url2.searchParams, request2).toString();
       debug("Authorization URL", url2.toString());
-      let store2 = StateStore.fromRequest(request2, this.cookieName);
+      const store2 = StateStore.fromRequest(request2, this.cookieName);
       store2.set(state, codeVerifier2);
       throw redirect(url2.toString(), {
         headers: {
@@ -6225,30 +6196,30 @@ class OAuth2Strategy extends Strategy {
         }
       });
     }
-    let code = url.searchParams.get("code");
+    const code = url.searchParams.get("code");
     if (!code) throw new ReferenceError("Missing code in the URL");
-    let store = StateStore.fromRequest(request2, this.cookieName);
+    const store = StateStore.fromRequest(request2, this.cookieName);
     if (!store.has()) {
       throw new ReferenceError("Missing state on cookie.");
     }
     if (!store.has(stateUrl)) {
       throw new RangeError("State in URL doesn't match state in cookie.");
     }
-    let codeVerifier = store.get(stateUrl);
+    const codeVerifier = store.get(stateUrl);
     if (!codeVerifier) {
       throw new ReferenceError("Missing code verifier on cookie.");
     }
     debug("Validating authorization code");
-    let tokens = await this.validateAuthorizationCode(code, codeVerifier);
+    const tokens = await this.validateAuthorizationCode(code, codeVerifier);
     debug("Verifying the user profile");
-    let user = await this.verify({ request: request2, tokens });
+    const user = await this.verify({ request: request2, tokens });
     debug("User authenticated");
     return user;
   }
   createAuthorizationURL() {
-    let state = generateState();
-    let codeVerifier = generateCodeVerifier();
-    let url = this.client.createAuthorizationURLWithPKCE(
+    const state = generateState();
+    const codeVerifier = generateCodeVerifier();
+    const url = this.client.createAuthorizationURLWithPKCE(
       this.options.authorizationEndpoint.toString(),
       state,
       this.options.codeChallengeMethod ?? CodeChallengeMethod.S256,
@@ -6269,7 +6240,7 @@ class OAuth2Strategy extends Strategy {
    * strategies can override this function in order to populate these
    * parameters as required by the provider.
    */
-  authorizationParams(params, request2) {
+  authorizationParams(params, _request) {
     return new URLSearchParams(params);
   }
   /**
@@ -6303,7 +6274,7 @@ class OAuth2Strategy extends Strategy {
    * ```
    */
   revokeToken(token) {
-    let endpoint = this.options.tokenRevocationEndpoint;
+    const endpoint = this.options.tokenRevocationEndpoint;
     if (!endpoint) throw new Error("Token revocation endpoint is not set.");
     return this.client.revokeToken(endpoint.toString(), token);
   }
@@ -6334,16 +6305,16 @@ class OAuth2Strategy extends Strategy {
    * );
    */
   static async discover(uri, options, verify) {
-    let url = new URL(uri);
+    const url = new URL(uri);
     if (!url.pathname.includes("well-known")) {
       url.pathname = url.pathname.endsWith("/") ? `${url.pathname}${WELL_KNOWN}` : `${url.pathname}/${WELL_KNOWN}`;
     }
-    let response = await fetch(url, {
+    const response = await fetch(url, {
       headers: { Accept: "application/json" }
     });
     if (!response.ok) throw new Error(`Failed to discover issuer at ${url}`);
-    let parser = new ObjectParser(await response.json());
-    return new this(
+    const parser = new ObjectParser(await response.json());
+    return new OAuth2Strategy(
       {
         authorizationEndpoint: new URL(parser.string("authorization_endpoint")),
         tokenEndpoint: new URL(parser.string("token_endpoint")),
@@ -6483,6 +6454,7 @@ const tcskStrategy = new OAuth2Strategy(
 const strategyForm = new FormStrategy(async ({ form }) => {
   const email = form.get("email");
   const password = form.get("password");
+  console.log(email, password);
   const user = await verifyUserpassLogin(email, password);
   if (!user) {
     throw new Error("Invalid email or password.");
@@ -6491,11 +6463,32 @@ const strategyForm = new FormStrategy(async ({ form }) => {
 });
 authenticator.use(strategyForm, EnumAuthProvider.userpass);
 authenticator.use(tcskStrategy, EnumAuthProvider.tcshuke);
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const MODEL_PATH = join(__dirname, "../assets/casbin-model.conf");
-const POLICY_PATH = join(__dirname, "../assets/casbin-policy.csv");
+const db = singleton("prisma", () => new PrismaClient());
+const MODEL_CONF = `
+[request_definition]
+r = sub, obj, act
+
+[policy_definition]
+p = sub, obj, act, eft
+
+[role_definition]
+g = _, _
+
+[policy_effect]
+e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
+
+[matchers]
+m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)
+`;
+const MODEL = newModelFromString(MODEL_CONF);
+let enforcer = null;
 async function createEnforcer() {
-  return newEnforcer(MODEL_PATH, POLICY_PATH);
+  if (enforcer) {
+    return enforcer;
+  }
+  const adapter = await PrismaAdapter.newAdapter(db);
+  enforcer = await newEnforcer(MODEL, adapter);
+  return enforcer;
 }
 invariant(process.env.VITE_SECRET, "VITE_SECRET must be set.");
 const sessionStorage = createCookieSessionStorage({
@@ -6562,8 +6555,8 @@ async function getPermissions({
   userRole
 }) {
   let rules = [];
-  const enforcer = await createEnforcer();
-  const policies = await enforcer.getPolicy();
+  const enforcer2 = await createEnforcer();
+  const policies = await enforcer2.getPolicy();
   const rulesAll = policies.map(([subject, object, action2, effect]) => ({
     subject,
     object,
@@ -6836,41 +6829,6 @@ const dataService = {
     throw new Error("Custom method not implemented");
   }
 };
-const db = singleton("prisma", () => new PrismaClient());
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  }
-});
-async function sendVerificationEmail(to, code) {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to,
-    subject: "验证码 - 您的注册验证码",
-    html: `
-      <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #333; text-align: center;">您的验证码</h2>
-        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 5px; text-align: center; margin: 20px 0;">
-          <h1 style="color: #4F46E5; font-size: 32px; letter-spacing: 5px;">${code}</h1>
-        </div>
-        <p style="color: #666; text-align: center;">此验证码将在5分钟后过期</p>
-        <p style="color: #999; font-size: 12px; text-align: center; margin-top: 20px;">
-          如果您没有请求此验证码，请忽略此邮件
-        </p>
-      </div>
-    `
-  };
-  try {
-    await transporter.sendMail(mailOptions);
-    return true;
-  } catch (error) {
-    console.error("发送邮件失败:", error);
-    throw error;
-  }
-}
-const nProgressStyles = "/assets/nprogress-BgDCIyLK.css";
 const baseStyles = "/assets/base-CNccC1ql.css";
 const tailwindStyles = "/assets/tailwind-D77LHlNy.css";
 const meta$e = () => [
@@ -6886,7 +6844,7 @@ const headers = () => ({
   "Document-Policy": "js-profiling"
 });
 const handle$7 = { i18n: ["translation"] };
-async function loader$q({ request: request2 }) {
+async function loader$p({ request: request2 }) {
   const [user, permissions, { locale, sidebarIsClose, theme }] = await Promise.all([
     getUser(request2),
     getPermissions({ request: request2 }),
@@ -6905,7 +6863,7 @@ async function loader$q({ request: request2 }) {
   });
 }
 function HydrateFallback() {
-  return /* @__PURE__ */ jsx("h1", { className: "fixed inset-0 z-10 flex items-center justify-center bg-background", children: /* @__PURE__ */ jsx(Loader$1, { className: "animate-spin" }) });
+  return /* @__PURE__ */ jsx("h1", { className: "bg-background fixed inset-0 z-10 flex items-center justify-center", children: /* @__PURE__ */ jsx(Loader$1, { className: "animate-spin" }) });
 }
 function Document({
   children,
@@ -6940,7 +6898,6 @@ function Document({
           auditLogProvider,
           options: {
             disableTelemetry: true,
-            title: { icon: void 0, text: "Refine & Remix" },
             mutationMode: "pessimistic",
             syncWithLocation: true,
             warnWhenUnsavedChanges: true,
@@ -7020,7 +6977,7 @@ const route0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   handle: handle$7,
   headers,
   links,
-  loader: loader$q,
+  loader: loader$p,
   meta: meta$e,
   shouldRevalidate
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7031,9 +6988,10 @@ function DashboardViewTransition() {
   return /* @__PURE__ */ jsx("div", { className: "flex flex-1 items-center justify-center", children: /* @__PURE__ */ jsx(
     "img",
     {
+      alt: "",
       width: 400,
       height: 400,
-      className: "rounded-lg border border-secondary shadow-lg",
+      className: "border-secondary rounded-lg border shadow-lg",
       src: "/logo.png",
       style: {
         viewTransitionName: "image-expand"
@@ -7056,7 +7014,7 @@ const Textarea = React.forwardRef(
       "textarea",
       {
         className: cn(
-          "flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          "border-input placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[60px] w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs focus-visible:ring-1 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
           className
         ),
         ref,
@@ -7105,24 +7063,20 @@ const handle$6 = {
     return /* @__PURE__ */ jsx(UiTools$6, {});
   }
 };
-async function loader$p({ params }) {
-  const [initialData, categoriesRes] = await Promise.all([
+async function loader$o({ params }) {
+  const [initialData] = await Promise.all([
     dataService.getOne({
       resource: EnumResource.post,
       id: (params == null ? void 0 : params.id) || ""
-    }),
-    dataService.getList({
-      resource: EnumResource.category
     })
   ]);
   return {
-    initialData,
-    categoriesRes
+    initialData
   };
 }
 function PostEdit() {
-  const { initialData, categoriesRes } = useLoaderData();
-  return /* @__PURE__ */ jsx(PostForm, { initialData, categoriesRes });
+  const { initialData } = useLoaderData();
+  return /* @__PURE__ */ jsx(PostForm, { initialData });
 }
 function UiTools$6() {
   return /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-sm", children: [
@@ -7153,16 +7107,9 @@ const PostForm = ({
   className,
   redirect: redirect2 = EnumAction.list,
   initialData,
-  categoriesRes,
-  useFormModalClose
+  formModalClose
 }) => {
-  var _a;
-  let categoryOptions = [];
-  if (categoriesRes) {
-    categoryOptions = (_a = categoriesRes == null ? void 0 : categoriesRes.data) == null ? void 0 : _a.map((category) => ({ label: category.title, value: category.id }));
-  } else {
-    categoryOptions = useSelect({ resource: EnumResource.category }).options;
-  }
+  const categoryOptions = useSelect({ resource: EnumResource.category }).options;
   const { data: data2 } = initialData || {};
   const enableAutoSave = true;
   const form = useForm({
@@ -7198,11 +7145,11 @@ const PostForm = ({
       autoSave: enableAutoSave,
       modifyingDataBeforeSubmission,
       className,
-      useFormModalClose,
+      formModalClose,
       recordItemId: data2 == null ? void 0 : data2.id,
       children: [
         /* @__PURE__ */ jsx(Field, { ...form, name: "title", label: "Title", children: /* @__PURE__ */ jsx(Input, { placeholder: "Title" }) }),
-        /* @__PURE__ */ jsx(Field, { ...form, name: "categoryId", label: "Category", children: /* @__PURE__ */ jsx(Combobox, { options: categoryOptions, popoverProps: { modal: Boolean(useFormModalClose) } }) }),
+        /* @__PURE__ */ jsx(Field, { ...form, name: "categoryId", label: "Category", children: /* @__PURE__ */ jsx(Combobox, { options: categoryOptions, popoverProps: { modal: Boolean(formModalClose) } }) }),
         /* @__PURE__ */ jsx(Field, { ...form, name: "status", label: "Status", children: /* @__PURE__ */ jsx(Select, { options: POST_STATUS_LIST.map((status) => ({ label: status, value: status })) }) }),
         /* @__PURE__ */ jsx(Field, { ...form, name: "content", label: "Content", children: /* @__PURE__ */ jsx(Textarea, { placeholder: "Content", rows: 10 }) })
       ]
@@ -7216,14 +7163,7 @@ function PostFormModal(props) {
       /* @__PURE__ */ jsx(DialogTitle, { children: "Edit Post" }),
       /* @__PURE__ */ jsx(DialogDescription, { children: "This is a Demo for Edit Form on Modal." })
     ] }),
-    /* @__PURE__ */ jsx(
-      PostForm,
-      {
-        className: "p-0",
-        useFormModalClose: close,
-        initialData: record ? { data: { ...record } } : void 0
-      }
-    )
+    /* @__PURE__ */ jsx(PostForm, { className: "p-0", formModalClose: close, initialData: record ? { data: { ...record } } : void 0 })
   ] }) });
 }
 const route3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -7233,27 +7173,24 @@ const route3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   PostFormModal,
   default: PostEdit,
   handle: handle$6,
-  loader: loader$p,
+  loader: loader$o,
   meta: meta$c
 }, Symbol.toStringTag, { value: "Module" }));
 const meta$b = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
-async function loader$o({ params }) {
-  const [initialData, categoriesRes] = await Promise.all([
+async function loader$n({ params }) {
+  const [initialData] = await Promise.all([
     dataService.getOne({
       resource: EnumResource.post,
       id: (params == null ? void 0 : params.id) || ""
-    }),
-    dataService.getList({
-      resource: EnumResource.category
     })
   ]);
-  return { initialData, categoriesRes };
+  return { initialData };
 }
 function PostClone() {
-  const { initialData, categoriesRes } = useLoaderData();
-  return /* @__PURE__ */ jsx(PostForm, { initialData, categoriesRes });
+  const { initialData } = useLoaderData();
+  return /* @__PURE__ */ jsx(PostForm, { initialData });
 }
 function ErrorBoundary$f() {
   return /* @__PURE__ */ jsx(PageError, {});
@@ -7262,7 +7199,7 @@ const route2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   __proto__: null,
   ErrorBoundary: ErrorBoundary$f,
   default: PostClone,
-  loader: loader$o,
+  loader: loader$n,
   meta: meta$b
 }, Symbol.toStringTag, { value: "Module" }));
 const meta$a = ({ matches }) => {
@@ -7273,7 +7210,7 @@ const handle$5 = {
     return /* @__PURE__ */ jsx(UiTools$5, {});
   }
 };
-async function loader$n({ params }) {
+async function loader$m({ params }) {
   const [initialData] = await Promise.all([
     dataService.getOne({
       resource: EnumResource.post,
@@ -7292,13 +7229,13 @@ function PostShow() {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
   const { initialData } = useLoaderData();
   const { data: data2 } = initialData;
-  return /* @__PURE__ */ jsxs("article", { className: "px-8 pb-4 pt-8", children: [
+  return /* @__PURE__ */ jsxs("article", { className: "px-8 pt-8 pb-4", children: [
     /* @__PURE__ */ jsxs("header", { className: "mb-8", children: [
       /* @__PURE__ */ jsxs(H1, { className: "relative mb-4 inline-flex gap-3 text-4xl font-bold", children: [
         /* @__PURE__ */ jsx("span", { children: data2.title }),
         /* @__PURE__ */ jsx("div", { className: "inline-flex shrink-0 items-start pt-3.5", children: /* @__PURE__ */ jsx(Badge, { className: "tracking-wide", variant: (_a = POST_STATUS_MAP[data2.status]) == null ? void 0 : _a.badge, children: ((_c = (_b = data2.status) == null ? void 0 : _b.charAt(0)) == null ? void 0 : _c.toUpperCase()) + ((_e = (_d = data2.status) == null ? void 0 : _d.slice(1)) == null ? void 0 : _e.toLowerCase()) }) })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: "mb-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground", children: [
+      /* @__PURE__ */ jsxs("div", { className: "text-muted-foreground mb-8 flex flex-wrap items-center gap-4 text-sm", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center", children: [
           /* @__PURE__ */ jsx(LeafyGreen, { className: "mr-2 h-4 w-4" }),
           /* @__PURE__ */ jsxs("span", { children: [
@@ -7328,7 +7265,7 @@ function PostShow() {
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("p", { className: "font-medium", children: (_k = data2.user) == null ? void 0 : _k.name }),
-          /* @__PURE__ */ jsxs("p", { className: "flex items-center text-sm text-muted-foreground", children: [
+          /* @__PURE__ */ jsxs("p", { className: "text-muted-foreground flex items-center text-sm", children: [
             /* @__PURE__ */ jsx(MailIcon, { className: "mr-2 h-4 w-4" }),
             (_l = data2.user) == null ? void 0 : _l.email
           ] })
@@ -7354,7 +7291,7 @@ const route4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   ErrorBoundary: ErrorBoundary$e,
   default: PostShow,
   handle: handle$5,
-  loader: loader$n,
+  loader: loader$m,
   meta: meta$a
 }, Symbol.toStringTag, { value: "Module" }));
 const PdfLayout = ({ record }) => {
@@ -7532,7 +7469,7 @@ const handle$4 = {
     return /* @__PURE__ */ jsx(UiTools$4, {});
   }
 };
-async function loader$m({ request: request2 }) {
+async function loader$l({ request: request2 }) {
   const url = new URL(request2.url);
   const tableParams = parseTableParams(url.search);
   const data2 = await dataService.getList({
@@ -7590,7 +7527,7 @@ function PostIndex() {
         enableSorting: true,
         enableFilters: true,
         enableHiding: true,
-        toolbar: [/* @__PURE__ */ jsx(CreateButton, {})],
+        toolbar: [/* @__PURE__ */ jsx(CreateButton, {}, "create")],
         initialState: {
           columnVisibility: {
             updatedAt: false
@@ -7650,7 +7587,7 @@ function PostIndex() {
                 const pageIndex = table.getState().pagination.pageIndex;
                 const pageSize = table.getState().pagination.pageSize;
                 return /* @__PURE__ */ jsxs(ShowButton, { recordItemId: original.id, asChild: true, children: [
-                  /* @__PURE__ */ jsxs("span", { className: "inline-block min-w-8 text-muted-foreground", children: [
+                  /* @__PURE__ */ jsxs("span", { className: "text-muted-foreground inline-block min-w-8", children: [
                     pageIndex * pageSize + index + 1,
                     ". "
                   ] }),
@@ -7794,7 +7731,7 @@ function PostIndex() {
                     }
                   )
                 ] }),
-                []
+                [useModalReturn1, useModalReturn2]
               )
             }
           )
@@ -7824,23 +7761,14 @@ const route5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   ErrorBoundary: ErrorBoundary$d,
   default: PostIndex,
   handle: handle$4,
-  loader: loader$m,
+  loader: loader$l,
   meta: meta$9
 }, Symbol.toStringTag, { value: "Module" }));
 const meta$8 = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
-async function loader$l() {
-  const [categoriesRes] = await Promise.all([
-    dataService.getList({
-      resource: EnumResource.category
-    })
-  ]);
-  return { categoriesRes };
-}
 function PostCreate() {
-  const { categoriesRes } = useLoaderData();
-  return /* @__PURE__ */ jsx(PostForm, { categoriesRes });
+  return /* @__PURE__ */ jsx(PostForm, {});
 }
 function ErrorBoundary$c() {
   return /* @__PURE__ */ jsx(PageError, {});
@@ -7849,7 +7777,6 @@ const route6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   __proto__: null,
   ErrorBoundary: ErrorBoundary$c,
   default: PostCreate,
-  loader: loader$l,
   meta: meta$8
 }, Symbol.toStringTag, { value: "Module" }));
 const loader$k = async ({ request: request2, params }) => {
@@ -7916,14 +7843,14 @@ const handle$3 = {
 };
 async function loader$j({ request: request2 }) {
   await syncServiceLocaleToClient((await getPreferencesCookie(request2)).locale);
-  return { title: i18next.t("title"), description: i18next.t("description") };
+  return { title: t("title"), description: t("description") };
 }
 function DashboardAbout() {
-  const { translate: t } = useTranslation();
+  const { translate: t2 } = useTranslation();
   return /* @__PURE__ */ jsxs("div", { className: "flex flex-1 flex-col items-center justify-center text-center", children: [
-    /* @__PURE__ */ jsx("h1", { className: "text-6xl text-[#3defe9]", children: t("title", "") }),
-    /* @__PURE__ */ jsx("p", { className: "my-10 text-3xl text-[#fecc1b]", children: t("description", "") }),
-    /* @__PURE__ */ jsxs("div", { className: "space-x-2 space-y-2 *:py-1 *:text-sm", children: [
+    /* @__PURE__ */ jsx("h1", { className: "text-6xl text-[#3defe9]", children: t2("title", "") }),
+    /* @__PURE__ */ jsx("p", { className: "my-10 text-3xl text-[#fecc1b]", children: t2("description", "") }),
+    /* @__PURE__ */ jsxs("div", { className: "space-y-2 space-x-2 *:py-1 *:text-sm", children: [
       /* @__PURE__ */ jsx(Badge, { children: "前后端一体化架构" }),
       /* @__PURE__ */ jsx(Badge, { children: "SSR 服务端渲染" }),
       /* @__PURE__ */ jsx(Badge, { children: "路由并行加载" }),
@@ -7975,10 +7902,10 @@ function UiTools$3() {
   const updateSearchParams = useUpdateSearchParams();
   const starred = Boolean(searchParams.get("starred"));
   return /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-sm", children: [
-    /* @__PURE__ */ jsx("div", { className: "ml-2 hidden font-medium text-muted-foreground md:inline-block", children: "Edit Oct 08" }),
+    /* @__PURE__ */ jsx("div", { className: "text-muted-foreground ml-2 hidden font-medium md:inline-block", children: "Edit Oct 08" }),
     /* @__PURE__ */ jsx(Button, { variant: "ghost", size: "icon", className: "h-7 w-7", onClick: () => updateSearchParams({ starred: !starred }), children: /* @__PURE__ */ jsx(Star, { className: starred ? "fill-yellow-400" : "" }) }),
     /* @__PURE__ */ jsxs(Popover, { open: isOpen, onOpenChange: setIsOpen, children: [
-      /* @__PURE__ */ jsx(PopoverTrigger, { asChild: true, children: /* @__PURE__ */ jsx(Button, { variant: "ghost", size: "icon", className: "h-7 w-7 data-[state=open]:bg-accent", children: /* @__PURE__ */ jsx(MoreHorizontal, {}) }) }),
+      /* @__PURE__ */ jsx(PopoverTrigger, { asChild: true, children: /* @__PURE__ */ jsx(Button, { variant: "ghost", size: "icon", className: "data-[state=open]:bg-accent h-7 w-7", children: /* @__PURE__ */ jsx(MoreHorizontal, {}) }) }),
       /* @__PURE__ */ jsx(PopoverContent, { className: "w-56 overflow-hidden rounded-lg p-0", align: "end", children: /* @__PURE__ */ jsx(Sidebar$1, { collapsible: "none", className: "bg-transparent", children: /* @__PURE__ */ jsx(SidebarContent, { children: dataTools.map((group, index) => /* @__PURE__ */ jsx(SidebarGroup, { className: "border-b last:border-none", children: /* @__PURE__ */ jsx(SidebarGroupContent, { className: "gap-0", children: /* @__PURE__ */ jsx(SidebarMenu, { children: group.map((item, index2) => {
         const isActive = Boolean(searchParams.get(item.label));
         return /* @__PURE__ */ jsx(SidebarMenuItem, { children: /* @__PURE__ */ jsxs(
@@ -8038,7 +7965,7 @@ function UiFilter() {
       ) }),
       /* @__PURE__ */ jsx(SidebarSeparator, { className: "mx-0" }),
       /* @__PURE__ */ jsx(SidebarGroup, { children: /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ jsx(Search, { className: "pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" }),
+        /* @__PURE__ */ jsx(Search, { className: "pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" }),
         /* @__PURE__ */ jsx(Label, { htmlFor: "desc", className: "sr-only", children: "Search" }),
         /* @__PURE__ */ jsx(
           SidebarInput,
@@ -8059,7 +7986,7 @@ function UiFilter() {
             SidebarGroupLabel,
             {
               asChild: true,
-              className: "group/label w-full text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              className: "group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full text-sm",
               children: /* @__PURE__ */ jsxs(CollapsibleTrigger, { children: [
                 group.title,
                 /* @__PURE__ */ jsx(ChevronRight, { className: "ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" })
@@ -8202,7 +8129,7 @@ function RoleIndex() {
               const pageIndex = table.getState().pagination.pageIndex;
               const pageSize = table.getState().pagination.pageSize;
               return /* @__PURE__ */ jsxs(ShowButton, { recordItemId: original.id, asChild: true, children: [
-                /* @__PURE__ */ jsxs("span", { className: "inline-block min-w-8 text-muted-foreground", children: [
+                /* @__PURE__ */ jsxs("span", { className: "text-muted-foreground inline-block min-w-8", children: [
                   pageIndex * pageSize + index + 1,
                   ". "
                 ] }),
@@ -8389,7 +8316,7 @@ function UserIndex() {
                 const pageIndex = table.getState().pagination.pageIndex;
                 const pageSize = table.getState().pagination.pageSize;
                 return /* @__PURE__ */ jsxs(ShowButton, { recordItemId: original.id, asChild: true, children: [
-                  /* @__PURE__ */ jsxs("span", { className: "inline-block min-w-8 text-muted-foreground", children: [
+                  /* @__PURE__ */ jsxs("span", { className: "text-muted-foreground inline-block min-w-8", children: [
                     pageIndex * pageSize + index + 1,
                     ". "
                   ] }),
@@ -8469,7 +8396,7 @@ const route11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
 async function loader$g() {
   return Response.json({ message: "Method not allowed" }, { status: 405 });
 }
-const action$9 = async ({ request: request2, params }) => {
+const action$8 = async ({ request: request2, params }) => {
   try {
     const { provider } = params;
     if (!provider || ![EnumAuthProvider.userpass, EnumAuthProvider.tcshuke].includes(provider)) {
@@ -8494,7 +8421,7 @@ const action$9 = async ({ request: request2, params }) => {
 };
 const route12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  action: action$9,
+  action: action$8,
   loader: loader$g
 }, Symbol.toStringTag, { value: "Module" }));
 const Tabs = TabsPrimitive.Root;
@@ -8503,7 +8430,7 @@ const TabsList = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__
   {
     ref,
     className: cn(
-      "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
+      "bg-muted text-muted-foreground inline-flex h-9 items-center justify-center rounded-lg p-1",
       className
     ),
     ...props
@@ -8515,7 +8442,7 @@ const TabsTrigger = React.forwardRef(({ className, ...props }, ref) => /* @__PUR
   {
     ref,
     className: cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+      "ring-offset-background focus-visible:ring-ring data-[state=active]:bg-background data-[state=active]:text-foreground inline-flex items-center justify-center rounded-md px-3 py-1 text-sm font-medium whitespace-nowrap transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm",
       className
     ),
     ...props
@@ -8527,7 +8454,7 @@ const TabsContent = React.forwardRef(({ className, ...props }, ref) => /* @__PUR
   {
     ref,
     className: cn(
-      "mt-2 ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      "ring-offset-background focus-visible:ring-ring mt-2 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden",
       className
     ),
     ...props
@@ -8542,12 +8469,12 @@ async function loader$f({ request: request2, params }) {
   await getAllParams(request2, params);
   return {};
 }
-async function action$8({ request: request2, params }) {
+async function action$7({ request: request2, params }) {
   await getAllParams(request2, params);
   return {};
 }
 function DashboardDemo() {
-  return /* @__PURE__ */ jsxs("div", { className: "px-8 pb-4 pt-8", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "px-8 pt-8 pb-4", children: [
     /* @__PURE__ */ jsx(H2, { children: "useViewTransition" }),
     /* @__PURE__ */ jsx(DemoUseViewTransitionState, {}),
     /* @__PURE__ */ jsx(H2, { children: "Notification" }),
@@ -8642,7 +8569,11 @@ const DemoModal = () => {
       {
         open: modalVisible,
         onOpenChange: (open) => {
-          open ? showModal() : closeModal();
+          if (open) {
+            showModal();
+          } else {
+            closeModal();
+          }
         },
         children: [
           /* @__PURE__ */ jsx(DialogTrigger, { asChild: true, children: /* @__PURE__ */ jsx(Button, { children: "Show Modal" }) }),
@@ -8703,13 +8634,13 @@ const DemoUseModalForm = () => {
     const values = form.getValues();
     onFinish(modifyingDataBeforeSubmission(values));
   });
-  const { translate: t } = useTranslation();
+  const { translate: t2 } = useTranslation();
   const disabled = formLoading || saveButtonProps.disabled;
   return /* @__PURE__ */ jsxs("ul", { className: "mt-4 flex gap-2", children: [
-    /* @__PURE__ */ jsx(Button, { onClick: () => show(editPostId), children: t(title) }),
+    /* @__PURE__ */ jsx(Button, { onClick: () => show(editPostId), children: t2(title) }),
     /* @__PURE__ */ jsx(Dialog, { open: visible, onOpenChange: close, children: /* @__PURE__ */ jsxs(DialogContent, { className: "max-w-6xl", children: [
       /* @__PURE__ */ jsxs(DialogHeader, { className: "border-b pb-4", children: [
-        /* @__PURE__ */ jsx(DialogTitle, { children: t(title) }),
+        /* @__PURE__ */ jsx(DialogTitle, { children: t2(title) }),
         /* @__PURE__ */ jsx(DialogDescription, { children: "This is a Demo for Edit Form on Modal." })
       ] }),
       /* @__PURE__ */ jsx(Form$1, { ...form, children: /* @__PURE__ */ jsxs("form", { onSubmit, className: "space-y-8", children: [
@@ -8806,7 +8737,8 @@ const DemoUseViewTransitionState = () => {
   return /* @__PURE__ */ jsx("div", { className: "flex flex-col gap-2", children: /* @__PURE__ */ jsx(Link$1, { prefetch: "intent", viewTransition: true, to, children: /* @__PURE__ */ jsx(
     "img",
     {
-      className: "mt-4 h-32 rounded-md border border-secondary shadow-md",
+      alt: "",
+      className: "border-secondary mt-4 h-32 rounded-md border shadow-md",
       src: "/logo.png",
       style: {
         viewTransitionName: vt ? "image-expand" : ""
@@ -8850,7 +8782,7 @@ const DemoSentry = () => {
 const route13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   ErrorBoundary: ErrorBoundary$7,
-  action: action$8,
+  action: action$7,
   default: DashboardDemo,
   loader: loader$f,
   meta: meta$3
@@ -8879,7 +8811,7 @@ function LogShow() {
   const data2 = JSON.parse(log.data || "{}");
   const previousData = JSON.parse(log.previousData || "{}");
   const meta2 = JSON.parse(log.meta || "{}");
-  return /* @__PURE__ */ jsxs("article", { className: "px-8 pb-4 pt-8", children: [
+  return /* @__PURE__ */ jsxs("article", { className: "px-8 pt-8 pb-4", children: [
     /* @__PURE__ */ jsxs("header", { className: "mb-8", children: [
       /* @__PURE__ */ jsxs(H1, { className: "relative mb-4 inline-flex gap-3 text-4xl font-bold", children: [
         /* @__PURE__ */ jsxs("span", { className: "capitalize", children: [
@@ -8890,7 +8822,7 @@ function LogShow() {
         ] }),
         /* @__PURE__ */ jsx("div", { className: "inline-flex shrink-0 items-start pt-3.5", children: /* @__PURE__ */ jsx(Badge, { className: "tracking-wide", variant: (_a = LOG_STATUS_MAP[log.action]) == null ? void 0 : _a.badge, children: log.action }) })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: "mb-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground", children: [
+      /* @__PURE__ */ jsxs("div", { className: "text-muted-foreground mb-8 flex flex-wrap items-center gap-4 text-sm", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center", children: [
           /* @__PURE__ */ jsx(LeafyGreen, { className: "mr-2 h-4 w-4" }),
           /* @__PURE__ */ jsxs("span", { children: [
@@ -8915,7 +8847,7 @@ function LogShow() {
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("p", { className: "font-medium", children: (_f = log.user) == null ? void 0 : _f.name }),
-          /* @__PURE__ */ jsxs("p", { className: "flex items-center text-sm text-muted-foreground", children: [
+          /* @__PURE__ */ jsxs("p", { className: "text-muted-foreground flex items-center text-sm", children: [
             /* @__PURE__ */ jsx(MailIcon, { className: "mr-2 h-4 w-4" }),
             (_g = log.user) == null ? void 0 : _g.email
           ] })
@@ -8925,15 +8857,15 @@ function LogShow() {
     /* @__PURE__ */ jsxs("div", { className: "space-y-6", children: [
       log.data && /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx(Label, { children: "Data" }),
-        /* @__PURE__ */ jsx("pre", { className: "mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm", children: JSON.stringify(data2, null, 2) })
+        /* @__PURE__ */ jsx("pre", { className: "bg-muted mt-1 overflow-x-auto rounded-lg p-4 text-sm whitespace-pre", children: JSON.stringify(data2, null, 2) })
       ] }),
       log.previousData && /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx(Label, { children: "Previous Data" }),
-        /* @__PURE__ */ jsx("pre", { className: "mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm", children: JSON.stringify(previousData, null, 2) })
+        /* @__PURE__ */ jsx("pre", { className: "bg-muted mt-1 overflow-x-auto rounded-lg p-4 text-sm whitespace-pre", children: JSON.stringify(previousData, null, 2) })
       ] }),
       log.meta && /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx(Label, { children: "Meta Data" }),
-        /* @__PURE__ */ jsx("pre", { className: "mt-1 overflow-x-auto whitespace-pre rounded-lg bg-muted p-4 text-sm", children: JSON.stringify(meta2, null, 2) })
+        /* @__PURE__ */ jsx("pre", { className: "bg-muted mt-1 overflow-x-auto rounded-lg p-4 text-sm whitespace-pre", children: JSON.stringify(meta2, null, 2) })
       ] })
     ] })
   ] });
@@ -9070,7 +9002,7 @@ function LogIndex() {
               const pageIndex = table.getState().pagination.pageIndex;
               const pageSize = table.getState().pagination.pageSize;
               return /* @__PURE__ */ jsxs(ShowButton, { recordItemId: original.id, asChild: true, children: [
-                /* @__PURE__ */ jsxs("span", { className: "inline-block min-w-8 text-muted-foreground", children: [
+                /* @__PURE__ */ jsxs("span", { className: "text-muted-foreground inline-block min-w-8", children: [
                   pageIndex * pageSize + index + 1,
                   ". "
                 ] }),
@@ -9179,7 +9111,7 @@ const route16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   loader: loader$c,
   meta: meta$2
 }, Symbol.toStringTag, { value: "Module" }));
-async function action$7({ request: request2 }) {
+async function action$6({ request: request2 }) {
   var _a;
   if (request2.method !== "POST") {
     return Response.json({ error: "Method not allowed" }, { status: 405 });
@@ -9212,7 +9144,7 @@ async function action$7({ request: request2 }) {
 }
 const route17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  action: action$7
+  action: action$6
 }, Symbol.toStringTag, { value: "Module" }));
 async function loader$b({ request: request2 }) {
   await requireUserSession(request2);
@@ -9230,7 +9162,7 @@ const route18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   default: Dashboard,
   loader: loader$b
 }, Symbol.toStringTag, { value: "Module" }));
-const action$6 = async ({ request: request2 }) => {
+const action$5 = async ({ request: request2 }) => {
   try {
     const data2 = await getRequestData(request2);
     const headers2 = new Headers();
@@ -9243,7 +9175,7 @@ const action$6 = async ({ request: request2 }) => {
 };
 const route19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  action: action$6
+  action: action$5
 }, Symbol.toStringTag, { value: "Module" }));
 async function loader$a({ request: request2 }) {
   await requireUserSession(request2);
@@ -9293,7 +9225,7 @@ async function loader$8({ request: request2, params }) {
   });
   return Response.json(data2);
 }
-async function action$5({ request: request2, params }) {
+async function action$4({ request: request2, params }) {
   await requireUser(request2);
   const { resource } = params;
   if (!resource) {
@@ -9339,7 +9271,7 @@ async function action$5({ request: request2, params }) {
 }
 const route22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  action: action$5,
+  action: action$4,
   loader: loader$8
 }, Symbol.toStringTag, { value: "Module" }));
 const ASSETS_ROOT = "assets";
@@ -9435,7 +9367,7 @@ async function loader$6({ params }) {
   });
   return Response.json(data2);
 }
-async function action$4({ request: request2, params }) {
+async function action$3({ request: request2, params }) {
   await requireUser(request2);
   const { resource, id } = params;
   if (!resource || !id) {
@@ -9465,7 +9397,7 @@ async function action$4({ request: request2, params }) {
 }
 const route24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  action: action$4,
+  action: action$3,
   loader: loader$6
 }, Symbol.toStringTag, { value: "Module" }));
 async function loader$5({ request: request2 }) {
@@ -9512,17 +9444,17 @@ async function loader$3({ request: request2, params }) {
   const pagination = getPaginationFromUrl(url);
   const sorters = getSortersFromUrl(url);
   const filters = getFiltersFromUrl(url);
-  const join2 = getJoinFromUrl(url);
+  const join = getJoinFromUrl(url);
   const res = await dataService.getList({
     resource,
     pagination,
     sorters,
     filters,
-    meta: join2 ? { include: join2 } : {}
+    meta: join ? { include: join } : {}
   });
   return Response.json(res);
 }
-async function action$3({ request: request2, params }) {
+async function action$2({ request: request2, params }) {
   const { user } = await requireUser(request2);
   const { resource } = params;
   const { method } = request2;
@@ -9541,35 +9473,11 @@ async function action$3({ request: request2, params }) {
 }
 const route29 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  action: action$3,
+  action: action$2,
   loader: loader$3
 }, Symbol.toStringTag, { value: "Module" }));
-const action$2 = async ({ request: request2 }) => {
-  if (request2.method !== "POST") {
-    return data$1({ error: "Method not allowed" }, { status: 405 });
-  }
-  try {
-    const { email } = await request2.json();
-    if (!email) {
-      return Response.json({ error: "请提供邮箱地址" }, { status: 400 });
-    }
-    const verificationCode = Math.floor(1e5 + Math.random() * 9e5).toString();
-    await sendVerificationEmail(email, verificationCode);
-    const response = Response.json({ success: true }, { status: 200 });
-    response.cookies.set("verification-code", verificationCode, {
-      httpOnly: true,
-      maxAge: 300
-      // 5分钟有效期
-    });
-    return response;
-  } catch (error) {
-    console.error("发送验证码失败:", error);
-    return Response.json({ error: "发送验证码失败" }, { status: 500 });
-  }
-};
 const route30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  action: action$2
+  __proto__: null
 }, Symbol.toStringTag, { value: "Module" }));
 const loader$2 = async ({ request: request2 }) => {
   const user = await getUser(request2);
@@ -9615,7 +9523,7 @@ async function action$1({ request: request2 }) {
   }
 }
 function Register() {
-  return /* @__PURE__ */ jsx("div", { className: "flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10", children: /* @__PURE__ */ jsx("div", { className: "w-full max-w-sm", children: /* @__PURE__ */ jsx(RegisterForm, {}) }) });
+  return /* @__PURE__ */ jsx("div", { className: "bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10", children: /* @__PURE__ */ jsx("div", { className: "w-full max-w-sm", children: /* @__PURE__ */ jsx(RegisterForm, {}) }) });
 }
 const route33 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -9674,7 +9582,7 @@ async function action({ request: request2 }) {
   }
 }
 function Login() {
-  return /* @__PURE__ */ jsx("div", { className: "flex min-h-svh flex-col items-center justify-center bg-background p-6 md:p-10", children: /* @__PURE__ */ jsx("div", { className: "w-full max-w-sm md:max-w-3xl", children: /* @__PURE__ */ jsx(LoginForm, {}) }) });
+  return /* @__PURE__ */ jsx("div", { className: "bg-background flex min-h-svh flex-col items-center justify-center p-6 md:p-10", children: /* @__PURE__ */ jsx("div", { className: "w-full max-w-sm md:max-w-3xl", children: /* @__PURE__ */ jsx(LoginForm, {}) }) });
 }
 const route35 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -9690,7 +9598,7 @@ const route36 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   __proto__: null,
   default: Index
 }, Symbol.toStringTag, { value: "Module" }));
-const serverManifest = { "entry": { "module": "/assets/entry.client--5Ufq7wi.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/components-C3jcH-a4.js", "/assets/performance-CI12L8JI.js", "/assets/node-DbBVj2et.js", "/assets/isBrowser-DW5snS70.js"], "css": [] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/root-DTvaaABA.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/components-C3jcH-a4.js", "/assets/performance-CI12L8JI.js", "/assets/node-DbBVj2et.js", "/assets/isBrowser-DW5snS70.js", "/assets/index-DwnvTw0e.js", "/assets/index-Bw3le_L0.js", "/assets/button-UAd1uCbk.js", "/assets/circle-plus-H7sEVjBE.js", "/assets/index-CVWMrdoV.js", "/assets/checkbox-C97De5BI.js", "/assets/404-gAqXbJQv.js", "/assets/500-naGbbnIq.js", "/assets/index-BWvXPdnM.js", "/assets/resources-CY0CfhSA.js", "/assets/try-parse-DIatYage.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/playground.dashboard.viewTransition": { "id": "routes/playground.dashboard.viewTransition", "parentId": "routes/playground.dashboard", "path": "viewTransition", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.viewTransition-B5ug3jLb.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/resources-CY0CfhSA.js"], "css": [] }, "routes/playground.article.post.clone.$id": { "id": "routes/playground.article.post.clone.$id", "parentId": "routes/playground.article.post", "path": "clone/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.clone._id-D7fjI6Wj.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/playground.article.post.edit._id-CMDPuh7c.js", "/assets/components-C3jcH-a4.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/resources-CY0CfhSA.js", "/assets/textarea-DuNfuQEU.js", "/assets/index-BWvXPdnM.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/label-BiY3Vphv.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-CVWMrdoV.js", "/assets/checkbox-C97De5BI.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/card-BaeXXXnI.js", "/assets/post-CCEhhlTv.js", "/assets/show-DfjkSx2P.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js"], "css": [] }, "routes/playground.article.post.edit.$id": { "id": "routes/playground.article.post.edit.$id", "parentId": "routes/playground.article.post", "path": "edit/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.edit._id-DPeD4tp5.js", "imports": ["/assets/playground.article.post.edit._id-CMDPuh7c.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-B4K3Jj8V.js", "/assets/textarea-DuNfuQEU.js", "/assets/button-UAd1uCbk.js", "/assets/index-BWvXPdnM.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/components-C3jcH-a4.js", "/assets/index-DwnvTw0e.js", "/assets/label-BiY3Vphv.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-CVWMrdoV.js", "/assets/checkbox-C97De5BI.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/card-BaeXXXnI.js", "/assets/500-naGbbnIq.js", "/assets/resources-CY0CfhSA.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/show-DfjkSx2P.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js"], "css": [] }, "routes/playground.article.post.show.$id": { "id": "routes/playground.article.post.show.$id", "parentId": "routes/playground.article.post", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.show._id-DxkMOwlD.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/avatar-BQoPuxH1.js", "/assets/badge-BUIl67NG.js", "/assets/typography-mU6oRyfE.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/mail-Bz1IS-OV.js", "/assets/button-UAd1uCbk.js", "/assets/index-DwnvTw0e.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-BWvXPdnM.js", "/assets/input-CjHTLoMm.js", "/assets/resources-CY0CfhSA.js"], "css": [] }, "routes/playground.article.post._index": { "id": "routes/playground.article.post._index", "parentId": "routes/playground.article.post", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post._index-BGcMy4m6.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/avatar-BQoPuxH1.js", "/assets/badge-BUIl67NG.js", "/assets/checkbox-C97De5BI.js", "/assets/index-BWvXPdnM.js", "/assets/index-CFYOCSZM.js", "/assets/resources-CY0CfhSA.js", "/assets/playground.article.post.edit._id-CMDPuh7c.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/button-UAd1uCbk.js", "/assets/circle-plus-H7sEVjBE.js", "/assets/export-dxoCeAoX.js", "/assets/show-DfjkSx2P.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/input-CjHTLoMm.js", "/assets/textarea-DuNfuQEU.js", "/assets/label-BiY3Vphv.js", "/assets/card-BaeXXXnI.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js"], "css": [] }, "routes/playground.article.post.create": { "id": "routes/playground.article.post.create", "parentId": "routes/playground.article.post", "path": "create", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.create-B2-xZj5r.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/playground.article.post.edit._id-CMDPuh7c.js", "/assets/components-C3jcH-a4.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/resources-CY0CfhSA.js", "/assets/textarea-DuNfuQEU.js", "/assets/index-BWvXPdnM.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/label-BiY3Vphv.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/index-CVWMrdoV.js", "/assets/checkbox-C97De5BI.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/card-BaeXXXnI.js", "/assets/post-CCEhhlTv.js", "/assets/show-DfjkSx2P.js", "/assets/delete-aAC3uzQM.js", "/assets/clone-DGU-dQgw.js"], "css": [] }, "routes/api.auth.$provider.callback": { "id": "routes/api.auth.$provider.callback", "parentId": "root", "path": "api/auth/:provider/callback", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider.callback-B7nnFBLb.js", "imports": [], "css": [] }, "routes/playground.dashboard.health": { "id": "routes/playground.dashboard.health", "parentId": "routes/playground.dashboard", "path": "health", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.health-DP2OUGqk.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/resources-CY0CfhSA.js"], "css": [] }, "routes/playground.dashboard.about": { "id": "routes/playground.dashboard.about", "parentId": "routes/playground.dashboard", "path": "about", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.about-XIc2zSjO.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/badge-BUIl67NG.js", "/assets/button-UAd1uCbk.js", "/assets/checkbox-C97De5BI.js", "/assets/sidebar-COMIBK_r.js", "/assets/label-BiY3Vphv.js", "/assets/index-CFYOCSZM.js", "/assets/components-C3jcH-a4.js", "/assets/try-parse-DIatYage.js", "/assets/gallery-vertical-end-YMxz8xVk.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/system.account.role._index": { "id": "routes/system.account.role._index", "parentId": "routes/system.account.role", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role._index-DLKqO0yV.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/avatar-BQoPuxH1.js", "/assets/checkbox-C97De5BI.js", "/assets/index-BWvXPdnM.js", "/assets/resources-CY0CfhSA.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/show-DfjkSx2P.js", "/assets/export-dxoCeAoX.js", "/assets/button-UAd1uCbk.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/system.account.user._index": { "id": "routes/system.account.user._index", "parentId": "routes/system.account.user", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user._index-DTrgypjh.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/badge-BUIl67NG.js", "/assets/checkbox-C97De5BI.js", "/assets/index-BWvXPdnM.js", "/assets/resources-CY0CfhSA.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/show-DfjkSx2P.js", "/assets/delete-aAC3uzQM.js", "/assets/export-dxoCeAoX.js", "/assets/button-UAd1uCbk.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/api.auth.$provider._index": { "id": "routes/api.auth.$provider._index", "parentId": "root", "path": "api/auth/:provider", "index": true, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider._index-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/playground.dashboard.demo": { "id": "routes/playground.dashboard.demo", "parentId": "routes/playground.dashboard", "path": "demo", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.demo-CU9ULbJ2.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/textarea-DuNfuQEU.js", "/assets/index-DwnvTw0e.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-BWvXPdnM.js", "/assets/button-UAd1uCbk.js", "/assets/input-CjHTLoMm.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/typography-mU6oRyfE.js", "/assets/500-naGbbnIq.js", "/assets/resources-CY0CfhSA.js", "/assets/post-CCEhhlTv.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/label-BiY3Vphv.js"], "css": [] }, "routes/system.admin.log.show.$id": { "id": "routes/system.admin.log.show.$id", "parentId": "routes/system.admin.log", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log.show._id-CjCCF7DJ.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/avatar-BQoPuxH1.js", "/assets/badge-BUIl67NG.js", "/assets/label-BiY3Vphv.js", "/assets/typography-mU6oRyfE.js", "/assets/log-Bbq4k8lW.js", "/assets/components-C3jcH-a4.js", "/assets/mail-Bz1IS-OV.js", "/assets/index-DwnvTw0e.js", "/assets/button-UAd1uCbk.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js"], "css": [] }, "routes/playground.article.post": { "id": "routes/playground.article.post", "parentId": "root", "path": "playground/article/post", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post-s5pVrMno.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/system.admin.log._index": { "id": "routes/system.admin.log._index", "parentId": "routes/system.admin.log", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log._index-ByU_EiGk.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/dayjs.min-DoqX9pzC.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-CVWMrdoV.js", "/assets/500-naGbbnIq.js", "/assets/avatar-BQoPuxH1.js", "/assets/badge-BUIl67NG.js", "/assets/checkbox-C97De5BI.js", "/assets/index-BWvXPdnM.js", "/assets/resources-CY0CfhSA.js", "/assets/log-Bbq4k8lW.js", "/assets/get-default-title-CAvEf6Vo.js", "/assets/components-C3jcH-a4.js", "/assets/show-DfjkSx2P.js", "/assets/export-dxoCeAoX.js", "/assets/button-UAd1uCbk.js", "/assets/index-CFYOCSZM.js", "/assets/index-U8YVhvYI.js", "/assets/index-DP_ndGvk.js", "/assets/input-CjHTLoMm.js"], "css": [] }, "routes/api.permissions.switch": { "id": "routes/api.permissions.switch", "parentId": "root", "path": "api/permissions/switch", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.permissions.switch-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/playground.dashboard": { "id": "routes/playground.dashboard", "parentId": "root", "path": "playground/dashboard", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard-BiNHmHIC.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/api.set-preferences": { "id": "routes/api.set-preferences", "parentId": "root", "path": "api/set-preferences", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.set-preferences-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/system.account.role": { "id": "routes/system.account.role", "parentId": "root", "path": "system/account/role", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role-Bx0vy4bc.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/system.account.user": { "id": "routes/system.account.user", "parentId": "root", "path": "system/account/user", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user-CtmQgYTn.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/api.$resource.bulk": { "id": "routes/api.$resource.bulk", "parentId": "routes/api.$resource", "path": "bulk", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource.bulk-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.image-resize.$": { "id": "routes/api.image-resize.$", "parentId": "root", "path": "api/image-resize/*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.image-resize._-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.$resource.$id": { "id": "routes/api.$resource.$id", "parentId": "routes/api.$resource", "path": ":id", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource._id-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/system.admin.log": { "id": "routes/system.admin.log", "parentId": "root", "path": "system/admin/log", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log-CaDy1VCG.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/index-DwnvTw0e.js", "/assets/switcher-role-D6CHh1PH.js", "/assets/500-naGbbnIq.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/button-UAd1uCbk.js", "/assets/components-C3jcH-a4.js", "/assets/checkbox-C97De5BI.js", "/assets/index-DP_ndGvk.js", "/assets/index-U8YVhvYI.js", "/assets/index-CFYOCSZM.js", "/assets/index-CVWMrdoV.js", "/assets/index-BWvXPdnM.js", "/assets/badge-BUIl67NG.js", "/assets/input-CjHTLoMm.js", "/assets/index-Bw3le_L0.js", "/assets/sidebar-COMIBK_r.js", "/assets/isBrowser-DW5snS70.js", "/assets/node-DbBVj2et.js", "/assets/avatar-BQoPuxH1.js", "/assets/gallery-vertical-end-YMxz8xVk.js"], "css": [] }, "routes/api.auth.logout": { "id": "routes/api.auth.logout", "parentId": "root", "path": "api/auth/logout", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.logout-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/password-forgot": { "id": "routes/password-forgot", "parentId": "root", "path": "password-forgot", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-forgot-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/password-update": { "id": "routes/password-update", "parentId": "root", "path": "password-update", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-update-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.$resource": { "id": "routes/api.$resource", "parentId": "root", "path": "api/:resource", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.send.code": { "id": "routes/api.send.code", "parentId": "root", "path": "api/send/code", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.send.code-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.auth.me": { "id": "routes/api.auth.me", "parentId": "root", "path": "api/auth/me", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.me-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/api.publish": { "id": "routes/api.publish", "parentId": "root", "path": "api/publish", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.publish-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/register": { "id": "routes/register", "parentId": "root", "path": "register", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/register-BYjcH4GJ.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/button-UAd1uCbk.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/index-DwnvTw0e.js", "/assets/input-CjHTLoMm.js", "/assets/label-BiY3Vphv.js", "/assets/tcsk-oauth2-CmQLNa7B.js", "/assets/components-C3jcH-a4.js", "/assets/gallery-vertical-end-YMxz8xVk.js", "/assets/index-DP_ndGvk.js"], "css": [] }, "routes/_index": { "id": "routes/_index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_index-COYRjR3G.js", "imports": ["/assets/api.auth._provider.callback-B7nnFBLb.js"], "css": [] }, "routes/login": { "id": "routes/login", "parentId": "root", "path": "login", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/login-dyQ0X1hG.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/button-UAd1uCbk.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/card-BaeXXXnI.js", "/assets/input-CjHTLoMm.js", "/assets/label-BiY3Vphv.js", "/assets/tcsk-oauth2-CmQLNa7B.js", "/assets/components-C3jcH-a4.js", "/assets/index-DP_ndGvk.js"], "css": [] }, "routes/$": { "id": "routes/$", "parentId": "root", "path": "*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_-h1NTJaxV.js", "imports": ["/assets/index-B4K3Jj8V.js", "/assets/404-gAqXbJQv.js", "/assets/button-UAd1uCbk.js", "/assets/api.auth._provider.callback-B7nnFBLb.js", "/assets/components-C3jcH-a4.js"], "css": [] } }, "url": "/assets/manifest-8a47833f.js", "version": "8a47833f" };
+const serverManifest = { "entry": { "module": "/assets/entry.client-CSK6bqbO.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/components-L3uqpAeb.js", "/assets/performance-BzrtDdss.js", "/assets/node-B7-pBh_n.js", "/assets/isBrowser-C0tq15AE.js"], "css": [] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/root-U7kt5HLF.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/components-L3uqpAeb.js", "/assets/performance-BzrtDdss.js", "/assets/node-B7-pBh_n.js", "/assets/isBrowser-C0tq15AE.js", "/assets/500-BA71UXe4.js", "/assets/index-sCku0w_M.js", "/assets/button-nJ3DiPmc.js", "/assets/circle-plus-Bp428-Mi.js", "/assets/index-D-Dx7sSn.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/404-7SK4sLAH.js", "/assets/index-B-b7VvUk.js", "/assets/try-parse-oHcphYqD.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-qkmBenYE.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/playground.dashboard.viewTransition": { "id": "routes/playground.dashboard.viewTransition", "parentId": "routes/playground.dashboard", "path": "viewTransition", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.viewTransition-Bfp2ZQCm.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/get-default-title-B-i1CURY.js", "/assets/button-nJ3DiPmc.js"], "css": [] }, "routes/playground.article.post.clone.$id": { "id": "routes/playground.article.post.clone.$id", "parentId": "routes/playground.article.post", "path": "clone/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.clone._id-DJFeQ5TD.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/get-default-title-B-i1CURY.js", "/assets/playground.article.post.edit._id-BwrLiCaa.js", "/assets/components-L3uqpAeb.js", "/assets/button-nJ3DiPmc.js", "/assets/textarea-CB_cDla-.js", "/assets/index-B-b7VvUk.js", "/assets/index-qkmBenYE.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/label-DMeu1U8J.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-D-Dx7sSn.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/card-9CeW0Jrm.js", "/assets/post-Tv3N1-wS.js", "/assets/show-B8zOOzE2.js", "/assets/delete-BnALbmmK.js", "/assets/clone-Rbl7Rj0-.js"], "css": [] }, "routes/playground.article.post.edit.$id": { "id": "routes/playground.article.post.edit.$id", "parentId": "routes/playground.article.post", "path": "edit/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.edit._id-AT73K-Z4.js", "imports": ["/assets/playground.article.post.edit._id-BwrLiCaa.js", "/assets/index-jG6TLAuK.js", "/assets/textarea-CB_cDla-.js", "/assets/button-nJ3DiPmc.js", "/assets/index-B-b7VvUk.js", "/assets/index-qkmBenYE.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/components-L3uqpAeb.js", "/assets/500-BA71UXe4.js", "/assets/label-DMeu1U8J.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-D-Dx7sSn.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/card-9CeW0Jrm.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-B-i1CURY.js", "/assets/show-B8zOOzE2.js", "/assets/delete-BnALbmmK.js", "/assets/clone-Rbl7Rj0-.js"], "css": [] }, "routes/playground.article.post.show.$id": { "id": "routes/playground.article.post.show.$id", "parentId": "routes/playground.article.post", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.show._id-BXuWarqz.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-D-Dx7sSn.js", "/assets/500-BA71UXe4.js", "/assets/avatar-7s-Yg_xM.js", "/assets/badge-DIbh675r.js", "/assets/typography-NCQmnr0j.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/mail-DQnRLKzy.js", "/assets/button-nJ3DiPmc.js", "/assets/delete-BnALbmmK.js", "/assets/clone-Rbl7Rj0-.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-qkmBenYE.js", "/assets/index-B-b7VvUk.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/playground.article.post._index": { "id": "routes/playground.article.post._index", "parentId": "routes/playground.article.post", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post._index-punw8UC5.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-D-Dx7sSn.js", "/assets/index-qkmBenYE.js", "/assets/avatar-7s-Yg_xM.js", "/assets/badge-DIbh675r.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-B-b7VvUk.js", "/assets/button-nJ3DiPmc.js", "/assets/playground.article.post.edit._id-BwrLiCaa.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/circle-plus-Bp428-Mi.js", "/assets/export-DalnBiuQ.js", "/assets/show-B8zOOzE2.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/input-BlF4CSdU.js", "/assets/textarea-CB_cDla-.js", "/assets/label-DMeu1U8J.js", "/assets/card-9CeW0Jrm.js", "/assets/delete-BnALbmmK.js", "/assets/clone-Rbl7Rj0-.js"], "css": [] }, "routes/playground.article.post.create": { "id": "routes/playground.article.post.create", "parentId": "routes/playground.article.post", "path": "create", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.create-DPsa38hV.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/get-default-title-B-i1CURY.js", "/assets/playground.article.post.edit._id-BwrLiCaa.js", "/assets/button-nJ3DiPmc.js", "/assets/textarea-CB_cDla-.js", "/assets/index-B-b7VvUk.js", "/assets/index-qkmBenYE.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/components-L3uqpAeb.js", "/assets/label-DMeu1U8J.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-D-Dx7sSn.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/card-9CeW0Jrm.js", "/assets/post-Tv3N1-wS.js", "/assets/show-B8zOOzE2.js", "/assets/delete-BnALbmmK.js", "/assets/clone-Rbl7Rj0-.js"], "css": [] }, "routes/api.auth.$provider.callback": { "id": "routes/api.auth.$provider.callback", "parentId": "root", "path": "api/auth/:provider/callback", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider.callback-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard.health": { "id": "routes/playground.dashboard.health", "parentId": "routes/playground.dashboard", "path": "health", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.health-DHC8p-q-.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/button-nJ3DiPmc.js", "/assets/get-default-title-B-i1CURY.js"], "css": [] }, "routes/playground.dashboard.about": { "id": "routes/playground.dashboard.about", "parentId": "routes/playground.dashboard", "path": "about", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.about-BIDSY4Oq.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/badge-DIbh675r.js", "/assets/button-nJ3DiPmc.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/sidebar-Bmaciprh.js", "/assets/label-DMeu1U8J.js", "/assets/index-qkmBenYE.js", "/assets/components-L3uqpAeb.js", "/assets/try-parse-oHcphYqD.js", "/assets/gallery-vertical-end-BA4ENofB.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/system.account.role._index": { "id": "routes/system.account.role._index", "parentId": "routes/system.account.role", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role._index-x_hKVZ87.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-D-Dx7sSn.js", "/assets/avatar-7s-Yg_xM.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-B-b7VvUk.js", "/assets/button-nJ3DiPmc.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/show-B8zOOzE2.js", "/assets/export-DalnBiuQ.js", "/assets/index-qkmBenYE.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/system.account.user._index": { "id": "routes/system.account.user._index", "parentId": "routes/system.account.user", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user._index-BQfqJBrb.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-D-Dx7sSn.js", "/assets/badge-DIbh675r.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-B-b7VvUk.js", "/assets/button-nJ3DiPmc.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/show-B8zOOzE2.js", "/assets/delete-BnALbmmK.js", "/assets/export-DalnBiuQ.js", "/assets/index-qkmBenYE.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/api.auth.$provider._index": { "id": "routes/api.auth.$provider._index", "parentId": "root", "path": "api/auth/:provider", "index": true, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider._index-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard.demo": { "id": "routes/playground.dashboard.demo", "parentId": "routes/playground.dashboard", "path": "demo", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.demo-DzA2OwWw.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/textarea-CB_cDla-.js", "/assets/500-BA71UXe4.js", "/assets/index-B-b7VvUk.js", "/assets/button-nJ3DiPmc.js", "/assets/input-BlF4CSdU.js", "/assets/index-qkmBenYE.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/typography-NCQmnr0j.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/label-DMeu1U8J.js"], "css": [] }, "routes/system.admin.log.show.$id": { "id": "routes/system.admin.log.show.$id", "parentId": "routes/system.admin.log", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log.show._id-t132UQfp.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/avatar-7s-Yg_xM.js", "/assets/badge-DIbh675r.js", "/assets/label-DMeu1U8J.js", "/assets/typography-NCQmnr0j.js", "/assets/log-CzRNw-rf.js", "/assets/components-L3uqpAeb.js", "/assets/mail-DQnRLKzy.js", "/assets/button-nJ3DiPmc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js"], "css": [] }, "routes/playground.article.post": { "id": "routes/playground.article.post", "parentId": "root", "path": "playground/article/post", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post-BVDfD6Bh.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/switcher-role-DLaqZWIK.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-qkmBenYE.js", "/assets/index-D-Dx7sSn.js", "/assets/index-B-b7VvUk.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-sCku0w_M.js", "/assets/sidebar-Bmaciprh.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/system.admin.log._index": { "id": "routes/system.admin.log._index", "parentId": "routes/system.admin.log", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log._index-AYPT_4A3.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-D-Dx7sSn.js", "/assets/avatar-7s-Yg_xM.js", "/assets/badge-DIbh675r.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-B-b7VvUk.js", "/assets/button-nJ3DiPmc.js", "/assets/log-CzRNw-rf.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/show-B8zOOzE2.js", "/assets/export-DalnBiuQ.js", "/assets/index-qkmBenYE.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/api.permissions.switch": { "id": "routes/api.permissions.switch", "parentId": "root", "path": "api/permissions/switch", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.permissions.switch-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard": { "id": "routes/playground.dashboard", "parentId": "root", "path": "playground/dashboard", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard-DebCyTCj.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/switcher-role-DLaqZWIK.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-qkmBenYE.js", "/assets/index-D-Dx7sSn.js", "/assets/index-B-b7VvUk.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-sCku0w_M.js", "/assets/sidebar-Bmaciprh.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/api.set-preferences": { "id": "routes/api.set-preferences", "parentId": "root", "path": "api/set-preferences", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.set-preferences-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/system.account.role": { "id": "routes/system.account.role", "parentId": "root", "path": "system/account/role", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role-B2qUva3h.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/switcher-role-DLaqZWIK.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-qkmBenYE.js", "/assets/index-D-Dx7sSn.js", "/assets/index-B-b7VvUk.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-sCku0w_M.js", "/assets/sidebar-Bmaciprh.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/system.account.user": { "id": "routes/system.account.user", "parentId": "root", "path": "system/account/user", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user-BVDfD6Bh.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/switcher-role-DLaqZWIK.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-qkmBenYE.js", "/assets/index-D-Dx7sSn.js", "/assets/index-B-b7VvUk.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-sCku0w_M.js", "/assets/sidebar-Bmaciprh.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/api.$resource.bulk": { "id": "routes/api.$resource.bulk", "parentId": "routes/api.$resource", "path": "bulk", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource.bulk-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.image-resize.$": { "id": "routes/api.image-resize.$", "parentId": "root", "path": "api/image-resize/*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.image-resize._-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.$resource.$id": { "id": "routes/api.$resource.$id", "parentId": "routes/api.$resource", "path": ":id", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource._id-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/system.admin.log": { "id": "routes/system.admin.log", "parentId": "root", "path": "system/admin/log", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log-BVDfD6Bh.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-BA71UXe4.js", "/assets/switcher-role-DLaqZWIK.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-C__Q_Qzm.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-qkmBenYE.js", "/assets/index-D-Dx7sSn.js", "/assets/index-B-b7VvUk.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-sCku0w_M.js", "/assets/sidebar-Bmaciprh.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/api.auth.logout": { "id": "routes/api.auth.logout", "parentId": "root", "path": "api/auth/logout", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.logout-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/password-forgot": { "id": "routes/password-forgot", "parentId": "root", "path": "password-forgot", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-forgot-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/password-update": { "id": "routes/password-update", "parentId": "root", "path": "password-update", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-update-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.$resource": { "id": "routes/api.$resource", "parentId": "root", "path": "api/:resource", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.send.code": { "id": "routes/api.send.code", "parentId": "root", "path": "api/send/code", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.send.code-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.auth.me": { "id": "routes/api.auth.me", "parentId": "root", "path": "api/auth/me", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.me-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.publish": { "id": "routes/api.publish", "parentId": "root", "path": "api/publish", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.publish-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/register": { "id": "routes/register", "parentId": "root", "path": "register", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/register-vc3lN4Sd.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/button-nJ3DiPmc.js", "/assets/input-BlF4CSdU.js", "/assets/label-DMeu1U8J.js", "/assets/tcsk-oauth2-Dw0hDdJ6.js", "/assets/components-L3uqpAeb.js", "/assets/gallery-vertical-end-BA4ENofB.js", "/assets/index-DGdd_38J.js"], "css": [] }, "routes/_index": { "id": "routes/_index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_index-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/login": { "id": "routes/login", "parentId": "root", "path": "login", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/login-J-dFGqQo.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/button-nJ3DiPmc.js", "/assets/card-9CeW0Jrm.js", "/assets/input-BlF4CSdU.js", "/assets/label-DMeu1U8J.js", "/assets/tcsk-oauth2-Dw0hDdJ6.js", "/assets/components-L3uqpAeb.js", "/assets/index-DGdd_38J.js"], "css": [] }, "routes/$": { "id": "routes/$", "parentId": "root", "path": "*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_-BXZH7IK6.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/404-7SK4sLAH.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js"], "css": [] } }, "url": "/assets/manifest-a13f037c.js", "version": "a13f037c" };
 const mode = "production";
 const assetsBuildDirectory = "build/client";
 const basename = "/";

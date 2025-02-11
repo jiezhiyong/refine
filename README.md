@@ -32,6 +32,7 @@ pnpm dev
 
 ```sh
 npx prisma migrate dev --name init # 创建数据库
+npx prisma migrate reset --force # 重置数据库
 npx prisma generate # 更新 schema.prisma 文件后，重新生成 Prisma Client
 npx prisma studio # 查看数据库
 ```

@@ -59,22 +59,22 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
       visualizer({ emitFile: true }),
 
-      sentryVitePlugin({
-        debug: false,
-        org: env.SENTRY_ORG,
-        project: env.SENTRY_PROJECT,
-        authToken: env.SENTRY_AUTH_TOKEN,
-        url: env.SENTRY_URL,
-        sourcemaps: {
-          filesToDeleteAfterUpload: ['**/*.map'],
-        },
-        release: {
-          name: 'oss@' + process.env.npm_package_version,
-          uploadLegacySourcemaps: {
-            paths: ['.'],
-          },
-        },
-      }),
+      // sentryVitePlugin({
+      //   debug: false,
+      //   org: env.SENTRY_ORG,
+      //   project: env.SENTRY_PROJECT,
+      //   authToken: env.SENTRY_AUTH_TOKEN,
+      //   url: env.SENTRY_URL,
+      //   sourcemaps: {
+      //     filesToDeleteAfterUpload: ['**/*.map'],
+      //   },
+      //   release: {
+      //     name: 'oss@' + process.env.npm_package_version,
+      //     uploadLegacySourcemaps: {
+      //       paths: ['.'],
+      //     },
+      //   },
+      // }),
     ],
     build: {
       sourcemap: true,

@@ -48,8 +48,6 @@ import { PermissionRule } from '~/types/casbin';
 import { cn } from '~/utils';
 import { generateSignature } from '~/utils/signature';
 
-/** 全局样式、插件样式 */
-
 /** 元数据 */
 export const meta: MetaFunction = () => [
   { property: 'og:title', content: 'This app is the best.' },
@@ -120,7 +118,12 @@ function Document({
   specifiedTheme,
   script = true,
   locale,
-}: PropsWithChildren<{ title?: string; specifiedTheme: Theme | null; script?: boolean; locale: LocaleLanguage }>) {
+}: PropsWithChildren<{
+  title?: string;
+  specifiedTheme: Theme | null | string;
+  script?: boolean;
+  locale: LocaleLanguage;
+}>) {
   const { permissions, permissionsSignature, user } = useLoaderData<typeof loader>();
 
   // 设置 Sentry 用户信息
@@ -155,7 +158,6 @@ function Document({
               // liveProvider={liveProvider}
               options={{
                 disableTelemetry: true,
-                title: { icon: undefined, text: 'Refine & Remix' },
                 mutationMode: 'pessimistic',
                 syncWithLocation: true,
                 warnWhenUnsavedChanges: true,

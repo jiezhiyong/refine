@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { EnumAuthProvider } from '~/constants';
 
 import { categories } from '../public/sql-categories.ts';
+import { CASBIN_POLICIES } from '../public/sql-pemission.ts';
 import { posts } from '../public/sql-posts.ts';
 import { roles } from '../public/sql-roles.ts';
 import { userAdministrator, users } from '../public/sql-users.ts';
@@ -11,15 +12,29 @@ import { userAdministrator, users } from '../public/sql-users.ts';
 const db = new PrismaClient();
 
 async function seed() {
-  // 删除所有已存在的 user、roles、posts、categories
+  // 删除所有已存在的数据
   try {
     await db.user.deleteMany();
     await db.role.deleteMany();
     await db.post.deleteMany();
     await db.category.deleteMany();
+    await db.casbinRule.deleteMany();
   } catch (error) {
     /**  */
   }
+
+  // 初始化 Casbin 规则
+  const rules = CASBIN_POLICIES.map(([ptype, v0, v1, v2, v3]) => ({
+    ptype,
+    v0,
+    v1,
+    v2,
+    v3,
+  }));
+
+  await db.casbinRule.createMany({
+    data: rules,
+  });
 
   // 创建管理员用户
   const adminUser = await db.user.create({
