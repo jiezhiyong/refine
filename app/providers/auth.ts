@@ -61,12 +61,11 @@ export const authProvider: {
           name: 'Invalid credentials',
         },
       };
-    } catch (error) {
-      console.error('@authProvider.login', error);
+    } catch (error: TAny) {
       return {
         success: false,
         error: {
-          message: '登录失败，请检查用户名和密码',
+          message: error.message || '登录失败，请检查用户名和密码',
           name: 'Invalid credentials',
         },
       };

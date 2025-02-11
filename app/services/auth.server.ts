@@ -63,6 +63,7 @@ const strategyForm = new FormStrategy(async ({ form }) => {
   const email = form.get('email') as string;
   const password = form.get('password') as string;
 
+  console.log(email, password);
   const user = await verifyUserpassLogin(email, password);
   if (!user) {
     throw new Error('Invalid email or password.');

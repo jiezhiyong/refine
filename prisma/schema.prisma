@@ -100,3 +100,19 @@ model Log {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
 }
+
+// ========================
+// Casbin 权限规则模型
+// ========================
+model CasbinRule {
+  id    Int     @id @default(autoincrement())
+  ptype String // policy type: 'p' for policy, 'g' for role
+  v0    String? // subject/role
+  v1    String? // object/user
+  v2    String? // action
+  v3    String? // effect (allow/deny)
+  v4    String? // 额外条件
+  v5    String? // 额外条件
+
+  @@map("casbin_rule")
+}

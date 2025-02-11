@@ -1,0 +1,39 @@
+// Casbin 规则配置
+export const CASBIN_POLICIES = [
+  // 管理员权限
+  ['p', 'administrator', '*', 'list|show|create|edit|delete|field|import|export|clone'],
+
+  // 编辑者权限
+  ['p', 'editor', 'playground', 'list'],
+  ['p', 'editor', 'dashboard', 'list'],
+  ['p', 'editor', 'about', 'list'],
+  ['p', 'editor', 'demo', 'list'],
+  ['p', 'editor', 'health', 'list'],
+  ['p', 'editor', 'article', 'list'],
+  ['p', 'editor', 'post', 'list|create|field|import|export'],
+  ['p', 'editor', 'post/*', 'show|edit|field|delete|clone'],
+  ['p', 'editor', 'post/hit', 'field', 'deny'],
+  ['p', 'editor', 'category', 'list|import|export'],
+  ['p', 'editor', 'category/*', 'show|clone'],
+  ['p', 'editor', 'system', 'list'],
+  ['p', 'editor', 'account', 'list'],
+  ['p', 'editor', 'user', 'list|import|export'],
+  ['p', 'editor', 'user/*', 'show'],
+  ['p', 'editor', 'role', 'list|import|export'],
+  ['p', 'editor', 'role/*', 'show'],
+  ['p', 'editor', 'admin', 'list'],
+  ['p', 'editor', 'log', 'list|import|export'],
+  ['p', 'editor', 'log/*', 'show'],
+
+  // 访客权限
+  ['p', 'guest', 'playground', 'list'],
+  ['p', 'guest', 'dashboard', 'list'],
+  ['p', 'guest', 'about', 'list'],
+  ['p', 'guest', 'demo', 'list'],
+  ['p', 'guest', 'health', 'list'],
+  ['p', 'guest', 'article', 'list'],
+  ['p', 'guest', 'post', 'list'],
+  ['p', 'guest', 'post/*', 'show'],
+  ['p', 'guest', 'category', 'list'],
+  ['p', 'guest', 'category/*', 'show'],
+];
