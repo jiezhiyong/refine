@@ -1,2 +1,0 @@
-const e={create:"create",createMany:"createMany",delete:"delete",deleteMany:"deleteMany",update:"update",updateMany:"updateMany"},a={create:{badge:"outline"},createMany:{badge:"outline"},delete:{badge:"destructive"},deleteMany:{badge:"destructive"},update:{badge:void 0},updateMany:{badge:void 0}};export{a as L,e as a};
-//# sourceMappingURL=log-CzRNw-rf.js.map

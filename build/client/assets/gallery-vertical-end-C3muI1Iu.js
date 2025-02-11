@@ -1,0 +1,7 @@
+import{c as d}from"./button-C4tA0yjF.js";(function(){try{var e=typeof window<"u"?window:typeof global<"u"?global:typeof globalThis<"u"?globalThis:typeof self<"u"?self:{},t=new e.Error().stack;t&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[t]="7b118d07-f411-44a2-80ec-66b807bb3947",e._sentryDebugIdIdentifier="sentry-dbid-7b118d07-f411-44a2-80ec-66b807bb3947")}catch{}})();/**
+ * @license lucide-react v0.469.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const a=d("GalleryVerticalEnd",[["path",{d:"M7 2h10",key:"nczekb"}],["path",{d:"M5 6h14",key:"u2x4p"}],["rect",{width:"18",height:"12",x:"3",y:"10",rx:"2",key:"l0tzu3"}]]);export{a as G};
+//# sourceMappingURL=gallery-vertical-end-C3muI1Iu.js.map
