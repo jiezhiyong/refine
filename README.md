@@ -9,8 +9,8 @@
 ```sh
 brew install mkcert # 安装 mkcert
 mkcert -install # 安装本地 CA
-mkcert oss.tcshuke.com localhost 127.0.0.1 ::1 # 在项目根目录创建证书
-sudo echo "127.0.0.1 oss.tcshuke.com" >> /etc/hosts # 修改 hosts 文件，添加本地域名映射
+mkcert refine-jet.vercel.app localhost 127.0.0.1 ::1 # 在项目根目录创建证书
+sudo echo "127.0.0.1 refine-jet.vercel.app" >> /etc/hosts # 修改 hosts 文件，添加本地域名映射
 ```
 
 ## 从环境变量模板文件拷贝，并配置生产环境变量（注意：示例中的变量值仅作参考，需要根据实际情况修改）
@@ -21,7 +21,7 @@ cp .env.example .env
 
 ## Development
 
-Run the dev server, then open `https://oss.tcshuke.com:5173` in your browser. (note: proxy may influence this origin)
+Run the dev server, then open `https://refine-jet.vercel.app:5173` in your browser. (note: proxy may influence this origin)
 
 ```sh
 pnpm i

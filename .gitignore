@@ -43,5 +43,5 @@ Thumbs.db
 .netlify
 
 # cert
-oss.tcshuke.com+3-key.pem
-oss.tcshuke.com+3.pem
+refine-jet.vercel.app+3-key.pem
+refine-jet.vercel.app+3.pem

@@ -22,17 +22,17 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
     },
     server: {
-      host: '0.0.0.0',
       port: 5173,
       strictPort: true,
+      host: '0.0.0.0',
       ...(process.env.NODE_ENV === 'development' && {
         https: {
-          key: fs.readFileSync('./oss.tcshuke.com+3-key.pem'),
-          cert: fs.readFileSync('./oss.tcshuke.com+3.pem'),
+          key: fs.readFileSync('./refine-jet.vercel.app+3-key.pem'),
+          cert: fs.readFileSync('./refine-jet.vercel.app+3.pem'),
         },
         proxy: {
           '/*': {
-            target: 'https://oss.tcshuke.com:5173',
+            target: 'https://refine-jet.vercel.app:5173',
             secure: false,
             changeOrigin: true,
             headers: {
@@ -59,22 +59,22 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
       visualizer({ emitFile: true }),
 
-      // sentryVitePlugin({
-      //   debug: false,
-      //   org: env.SENTRY_ORG,
-      //   project: env.SENTRY_PROJECT,
-      //   authToken: env.SENTRY_AUTH_TOKEN,
-      //   url: env.SENTRY_URL,
-      //   sourcemaps: {
-      //     filesToDeleteAfterUpload: ['**/*.map'],
-      //   },
-      //   release: {
-      //     name: 'oss@' + process.env.npm_package_version,
-      //     uploadLegacySourcemaps: {
-      //       paths: ['.'],
-      //     },
-      //   },
-      // }),
+      sentryVitePlugin({
+        debug: false,
+        org: env.SENTRY_ORG,
+        project: env.SENTRY_PROJECT,
+        authToken: env.SENTRY_AUTH_TOKEN,
+        url: env.SENTRY_URL,
+        sourcemaps: {
+          filesToDeleteAfterUpload: ['**/*.map'],
+        },
+        release: {
+          name: 'oss@' + process.env.npm_package_version,
+          uploadLegacySourcemaps: {
+            paths: ['.'],
+          },
+        },
+      }),
     ],
     build: {
       sourcemap: true,

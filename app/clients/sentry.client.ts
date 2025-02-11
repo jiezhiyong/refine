@@ -27,14 +27,14 @@ export function initSentry() {
       Sentry.replayIntegration({ maskAllText: isProduction, blockAllMedia: isProduction }),
       Sentry.extraErrorDataIntegration(),
       Sentry.httpClientIntegration({
-        failedRequestTargets: ['https://oss.tcshuke.com.com'], // 站内请求错误已在服务端捕获
+        failedRequestTargets: [import.meta.env.VITE_CLIENT_URL ?? ''], // 站内请求错误已在服务端捕获
       }),
       Sentry.reportingObserverIntegration(),
     ],
 
     sendDefaultPii: false,
     tracesSampleRate: 1.0,
-    tracePropagationTargets: ['localhost', /^\/api/, 'https://oss.tcshuke.com.com'],
+    tracePropagationTargets: ['localhost', /^\/api/, import.meta.env.VITE_CLIENT_URL ?? ''],
     profilesSampleRate: 1.0,
     replaysSessionSampleRate: isProduction ? 0.1 : 1.0,
     replaysOnErrorSampleRate: 1.0,
