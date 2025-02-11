@@ -5,6 +5,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "refine dev",
     "build": "refine build",
     "start": "refine start ./build/server/index.js",
@@ -15,8 +16,7 @@
     "prettier": "prettier --write --ignore-unknown .",
     "prepare": "husky",
     "lint-staged": "lint-staged",
-    "test-eslint": "npx eslint --config .eslintrc.cjs --print-config src/index.ts",
-    "postinstall": "prisma generate"
+    "test-eslint": "npx eslint --config .eslintrc.cjs --print-config src/index.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
