@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { RegisterForm } from '~/components';
 import { EnumAuthProvider } from '~/constants';
 import { createUser, getUserByEmail } from '~/models/user.server';
+import { getAllParams } from '~/utils';
 import { typedFormError } from '~/utils/typed-form-error';
 
 // 定义表单验证 schema
@@ -21,10 +22,9 @@ export const meta: MetaFunction = () => {
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
   try {
-    const formData = await request.formData();
-    const rawData = Object.fromEntries(formData) as z.infer<typeof registerSchema>;
+    const mergedParams = await getAllParams<z.infer<typeof registerSchema>>(request);
+    const { email, password } = mergedParams;
 
-    const { email, password } = registerSchema.parse(rawData);
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {

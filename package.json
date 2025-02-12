@@ -30,6 +30,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@nestjsx/crud-request": "5.0.0-alpha.3",
+    "@noble/hashes": "^1.7.1",
     "@prisma/client": "^5.0.0",
     "@radix-ui/react-alert-dialog": "^1.1.4",
     "@radix-ui/react-avatar": "^1.1.2",

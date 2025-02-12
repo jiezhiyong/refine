@@ -4,7 +4,7 @@ import { Undo2 } from 'lucide-react';
 import { type DetailedHTMLProps, type FormHTMLAttributes, type PropsWithChildren, useRef } from 'react';
 import { type FieldValues } from 'react-hook-form';
 
-import { AutoSaveIndicator } from '~/component-refine';
+import { AutoSaveIndicator } from '~/component-refine/auto-save-indicator';
 import { Button } from '~/components-shadcn/button';
 import { Card, CardContent, CardFooter } from '~/components-shadcn/card';
 import { Form as FormUI } from '~/components-shadcn/form';

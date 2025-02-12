@@ -8,7 +8,7 @@ import { EnumAction } from '~/constants';
 export const ImportButton: FC<ButtonProps> = (props) => {
   const { inputProps } = useImport({
     onFinish: (data) => {
-      console.log(data);
+      console.log('ImportButton useImport', data);
     },
   });
   const { label } = useImportButton();

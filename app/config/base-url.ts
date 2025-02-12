@@ -2,6 +2,7 @@ import { canUseDOM } from '~/utils';
 
 export const isServer = !canUseDOM();
 
-export const baseUrl = isServer ? process.env.VITE_CLIENT_URL : window.location.origin;
+// 生产修改环境变量需要重新打包
+export const baseUrl = import.meta.env.VITE_CLIENT_URL;
 
 export const apiBase = `${baseUrl}/api`;

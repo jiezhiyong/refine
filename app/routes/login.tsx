@@ -6,6 +6,7 @@ import { LoginForm } from '~/components';
 import { EnumAuthProvider } from '~/constants';
 import { authProvider } from '~/providers';
 import { commitSession, getSession, getUser } from '~/services';
+import { getAllParams } from '~/utils';
 import { typedFormError } from '~/utils/typed-form-error';
 
 // 定义表单验证 schema
@@ -34,10 +35,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
   try {
-    const form = await request.formData();
-    const formData = Object.fromEntries(form) as z.infer<typeof loginSchema>;
+    const mergedParams = await getAllParams<z.infer<typeof loginSchema>>(request);
+    const { email, password, redirectTo } = mergedParams;
 
-    const { email, password, redirectTo } = loginSchema.parse(formData);
     const { error, success, user } = await authProvider.login({
       providerName: EnumAuthProvider.userpass,
       email,
