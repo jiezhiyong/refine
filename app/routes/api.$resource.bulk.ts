@@ -85,3 +85,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       throw new Error(`不支持的请求方法: ${method}`);
   }
 }
+
+export default function UI() {
+  return null;
+}

@@ -14,3 +14,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     },
   });
 };
+
+export default function UI() {
+  return null;
+}

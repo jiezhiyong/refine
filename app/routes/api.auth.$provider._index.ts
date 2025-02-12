@@ -40,3 +40,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     return Response.json({ message: error?.message || 'Authentication failed, unknown error.' }, { status: 401 });
   }
 };
+
+export default function UI() {
+  return null;
+}

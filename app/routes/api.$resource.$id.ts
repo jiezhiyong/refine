@@ -57,3 +57,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       return Response.json({ message: `不支持的请求方法: ${method}` }, { status: 405 });
   }
 }
+
+export default function UI() {
+  return null;
+}

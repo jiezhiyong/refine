@@ -17,3 +17,7 @@ export const action: ActionFunction = async ({ request }) => {
     return Response.json({ error: '处理请求失败' }, { status: 400 });
   }
 };
+
+export default function UI() {
+  return null;
+}

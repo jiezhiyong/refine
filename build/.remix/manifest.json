@@ -180,22 +180,10 @@
       "path": "api/:resource",
       "parentId": "root"
     },
-    "routes/api.send.code": {
-      "file": "routes/api.send.code.ts",
-      "id": "routes/api.send.code",
-      "path": "api/send/code",
-      "parentId": "root"
-    },
     "routes/api.auth.me": {
       "file": "routes/api.auth.me.ts",
       "id": "routes/api.auth.me",
       "path": "api/auth/me",
-      "parentId": "root"
-    },
-    "routes/api.publish": {
-      "file": "routes/api.publish.ts",
-      "id": "routes/api.publish",
-      "path": "api/publish",
       "parentId": "root"
     },
     "routes/register": {

@@ -6,3 +6,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
   return Response.json({ data: user });
 };
+
+export default function UI() {
+  return null;
+}
