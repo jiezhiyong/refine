@@ -21,7 +21,7 @@ cp .env.example .env
 
 ## Development
 
-Run the dev server, then open `https://refine-jet.vercel.app:5173` in your browser. (note: proxy may influence this origin)
+Run the dev server, then open `https://refine-jet.vercel.app:3000` in your browser. (note: proxy may influence this origin)
 
 ```sh
 pnpm i
@@ -83,6 +83,9 @@ Make sure to deploy the output of `pnpm run build`
 
 ## TODO: 问题、未实现的功能
 
+- deploy to Vercel
+- seed database
+
 - 升级 Remix v3 / React Router v7, 暂时无法升级: @refinedev/remix-router 使用的是 Remix 2.x 版本
 - Sentry source maps 文件路径不匹配
 - Refine Live Provider
@@ -94,6 +97,8 @@ Make sure to deploy the output of `pnpm run build`
 - 单点登录
 - 多因素认证（短信验证码、手机应用验证等）
 - 多租户
+
+- 注册时邮箱认证、忘记密码
 
 ## Remix Resources
 

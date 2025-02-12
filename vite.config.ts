@@ -5,7 +5,6 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
-import { envOnlyMacros } from 'vite-env-only';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 declare module '@remix-run/node' {
@@ -22,29 +21,28 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
     },
     server: {
-      port: 5173,
+      port: 3000,
       strictPort: true,
-      host: '0.0.0.0',
-      ...(process.env.NODE_ENV === 'development' && {
-        https: {
-          key: fs.readFileSync('./refine-jet.vercel.app+3-key.pem'),
-          cert: fs.readFileSync('./refine-jet.vercel.app+3.pem'),
-        },
-        proxy: {
-          '/*': {
-            target: 'https://refine-jet.vercel.app:5173',
-            secure: false,
-            changeOrigin: true,
-            headers: {
-              'X-Forwarded-Proto': 'https',
-            },
-          },
-        },
-      }),
+      // host: '0.0.0.0',
+      // ...(process.env.NODE_ENV === 'development' && {
+      //   https: {
+      //     key: fs.readFileSync('./refine-jet.vercel.app+3-key.pem'),
+      //     cert: fs.readFileSync('./refine-jet.vercel.app+3.pem'),
+      //   },
+      //   proxy: {
+      //     '/*': {
+      //       target: 'https://refine-jet.vercel.app:3000',
+      //       secure: false,
+      //       changeOrigin: true,
+      //       headers: {
+      //         'X-Forwarded-Proto': 'https',
+      //       },
+      //     },
+      //   },
+      // }),
     },
     plugins: [
       tailwindcss(),
-      envOnlyMacros(),
       remix({
         ssr: true, // false: 禁用服务端渲染、启用SPA模式
         manifest: true,
@@ -57,27 +55,27 @@ export default defineConfig(({ mode }) => {
         },
       }),
       tsconfigPaths(),
-      visualizer({ emitFile: true }),
+      visualizer({ emitFile: true }), // 生成构建产物的可视化分析报告 stats.html
 
-      sentryVitePlugin({
-        debug: false,
-        org: env.SENTRY_ORG,
-        project: env.SENTRY_PROJECT,
-        authToken: env.SENTRY_AUTH_TOKEN,
-        url: env.SENTRY_URL,
-        sourcemaps: {
-          filesToDeleteAfterUpload: ['**/*.map'],
-        },
-        release: {
-          name: 'oss@' + process.env.npm_package_version,
-          uploadLegacySourcemaps: {
-            paths: ['.'],
-          },
-        },
-      }),
+      // sentryVitePlugin({
+      //   debug: false,
+      //   org: env.SENTRY_ORG,
+      //   project: env.SENTRY_PROJECT,
+      //   authToken: env.SENTRY_AUTH_TOKEN,
+      //   url: env.SENTRY_URL,
+      //   sourcemaps: {
+      //     filesToDeleteAfterUpload: ['**/*.map'],
+      //   },
+      //   release: {
+      //     name: 'oss@' + process.env.npm_package_version,
+      //     uploadLegacySourcemaps: {
+      //       paths: ['.'],
+      //     },
+      //   },
+      // }),
     ],
     build: {
-      sourcemap: true,
+      // sourcemap: true,
     },
   };
 });

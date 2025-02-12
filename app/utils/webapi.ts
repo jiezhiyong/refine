@@ -1,5 +1,3 @@
-import * as https from 'node:https';
-
 import { apiBase, isServer } from '~/config';
 import { TAny } from '~/types';
 import { generateSignature } from '~/utils/signature';
@@ -10,57 +8,17 @@ type RequestOptions = RequestInit & {
   headers?: Record<string, string>;
 };
 
-// 服务端 HTTPS 请求
-let makeServerRequest: ((url: string, options: RequestOptions) => Promise<Response>) | undefined;
-
-if (isServer) {
-  makeServerRequest = (requestUrl: string, options: RequestOptions = {}): Promise<Response> => {
-    return new Promise((resolve, reject) => {
-      const parsedUrl = new URL(requestUrl);
-      const requestOptions: https.RequestOptions = {
-        method: options.method || 'GET',
-        hostname: parsedUrl.hostname,
-        port: parsedUrl.port,
-        path: parsedUrl.pathname + parsedUrl.search,
-        rejectUnauthorized: false,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          ...(options.headers as Record<string, string>),
-        },
-      };
-
-      const req = https.request(requestOptions, (res: TAny) => {
-        let data = '';
-        res.on('data', (chunk: TAny) => {
-          data += chunk;
-        });
-        res.on('end', () => {
-          resolve({
-            ok: res.statusCode >= 200 && res.statusCode < 300,
-            status: res.statusCode,
-            statusText: res.statusMessage,
-            headers: res.headers,
-            json: async () => {
-              try {
-                return JSON.parse(data);
-              } catch {
-                return {};
-              }
-            },
-          } as Response);
-        });
-      });
-
-      req.on('error', reject);
-
-      if (options.body) {
-        // 如果是 URLSearchParams，需要转换为字符串
-        const body = options.body instanceof URLSearchParams ? options.body.toString() : options.body;
-        req.write(body);
-      }
-      req.end();
-    });
+// 统一的请求函数
+async function makeRequest(requestUrl: string, options: RequestOptions = {}): Promise<Response> {
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    ...(options.headers as Record<string, string>),
   };
+
+  return fetch(requestUrl, {
+    ...options,
+    headers,
+  });
 }
 
 // 数据转换
@@ -112,7 +70,7 @@ const request = async (
     requestOptions.headers = headers;
   }
 
-  return isServer && makeServerRequest ? makeServerRequest(url, requestOptions) : fetch(url, requestOptions);
+  return makeRequest(url, requestOptions);
 };
 
 // Web API 工具类
