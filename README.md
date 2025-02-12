@@ -4,15 +4,6 @@
 
 [Remix](https://remix.run/) 是一个全栈式 Web 框架，可让您专注于用户界面，并通过 Web 标准进行工作，以提供快速、流畅且有弹性的用户体验。实际上 Remix就是 React route 7。
 
-## 默认本地使用HTTPS，需要配置本地 HTTPS 环境
-
-```sh
-brew install mkcert # 安装 mkcert
-mkcert -install # 安装本地 CA
-mkcert refine-jet.vercel.app localhost 127.0.0.1 ::1 # 在项目根目录创建证书
-sudo echo "127.0.0.1 refine-jet.vercel.app" >> /etc/hosts # 修改 hosts 文件，添加本地域名映射
-```
-
 ## 从环境变量模板文件拷贝，并配置生产环境变量（注意：示例中的变量值仅作参考，需要根据实际情况修改）
 
 ```sh
@@ -21,7 +12,7 @@ cp .env.example .env
 
 ## Development
 
-Run the dev server, then open `https://refine-jet.vercel.app:3000` in your browser. (note: proxy may influence this origin)
+Run the dev server, then open `http://localhost:5173` in your browser. (note: proxy may influence this origin)
 
 ```sh
 pnpm i
@@ -63,6 +54,15 @@ Make sure to deploy the output of `pnpm run build`
 
 - `build/server`
 - `build/client`
+
+## 本地使用HTTPS，需要配置本地 HTTPS 环境（可选）
+
+```sh
+brew install mkcert # 安装 mkcert
+mkcert -install # 安装本地 CA
+mkcert refine-jet.vercel.app localhost 127.0.0.1 ::1 # 在项目根目录创建证书
+sudo echo "127.0.0.1 refine-jet.vercel.app" >> /etc/hosts # 修改 hosts 文件，添加本地域名映射
+```
 
 ## Issues
 

@@ -1,1 +1,0 @@
-import{r as e}from"./index-jG6TLAuK.js";var t=globalThis!=null&&globalThis.document?e.useLayoutEffect:()=>{};const a=Object.freeze(Object.defineProperty({__proto__:null,useLayoutEffect:t},Symbol.toStringTag,{value:"Module"}));export{a as d,t as u};
