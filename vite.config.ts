@@ -24,22 +24,20 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       strictPort: true,
       // host: '0.0.0.0',
-      // ...(process.env.NODE_ENV === 'development' && {
-      //   https: {
-      //     key: fs.readFileSync('./refine-jet.vercel.app+3-key.pem'),
-      //     cert: fs.readFileSync('./refine-jet.vercel.app+3.pem'),
-      //   },
-      //   proxy: {
-      //     '/*': {
-      //       target: 'https://refine-jet.vercel.app:3000',
-      //       secure: false,
-      //       changeOrigin: true,
-      //       headers: {
-      //         'X-Forwarded-Proto': 'https',
-      //       },
+      // https: {
+      //   key: fs.readFileSync('./refine-jet.vercel.app+3-key.pem'),
+      //   cert: fs.readFileSync('./refine-jet.vercel.app+3.pem'),
+      // },
+      // proxy: {
+      //   '/*': {
+      //     target: 'https://refine-jet.vercel.app:3000',
+      //     secure: false,
+      //     changeOrigin: true,
+      //     headers: {
+      //       'X-Forwarded-Proto': 'https',
       //     },
       //   },
-      // }),
+      // },
     },
     plugins: [
       tailwindcss(),
