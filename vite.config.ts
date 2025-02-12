@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
     },
     server: {
-      port: 3000,
+      port: 5173,
       strictPort: true,
       // host: '0.0.0.0',
       // https: {
@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
       // },
       // proxy: {
       //   '/*': {
-      //     target: 'https://refine-jet.vercel.app:3000',
+      //     target: 'https://refine-jet.vercel.app:5173',
       //     secure: false,
       //     changeOrigin: true,
       //     headers: {
