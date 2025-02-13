@@ -16,6 +16,8 @@ cp .env.example .env
 brew install postgresql@14
 brew services start postgresql@14
 createdb refine
+npx prisma migrate dev --name init
+npx prisma db seed
 ```
 
 ## Development
@@ -30,10 +32,9 @@ pnpm dev
 ## Prisma cli
 
 ```sh
-npx prisma migrate dev --name init # 创建数据库
-npx prisma migrate reset --force # 重置数据库
-npx prisma generate # 更新 schema.prisma 文件后，重新生成 Prisma Client
 npx prisma studio # 查看数据库
+npx prisma generate # 更新 schema.prisma 文件后，重新生成 Prisma Client
+npx prisma migrate reset --force # 重置数据库
 ```
 
 ## Deployment - https://refine.dev/docs/guides-concepts/deployment/
