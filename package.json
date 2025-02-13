@@ -8,6 +8,8 @@
     "postinstall": "prisma generate",
     "dev": "refine dev",
     "build": "refine build",
+    "postbuild": "npm run db:seed",
+    "db:seed": "ts-node prisma/seed-production.ts",
     "start": "refine start ./build/server/index.js",
     "refine": "refine",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",

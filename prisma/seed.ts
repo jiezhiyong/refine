@@ -1,13 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
+import { categories } from 'public/sql-categories.ts';
+import { CASBIN_POLICIES } from 'public/sql-pemission.ts';
+import { posts } from 'public/sql-posts.ts';
+import { roles } from 'public/sql-roles.ts';
+import { userAdministrator, users } from 'public/sql-users.ts';
 import { EnumAuthProvider } from '~/constants';
-
-import { categories } from '../public/sql-categories.ts';
-import { CASBIN_POLICIES } from '../public/sql-pemission.ts';
-import { posts } from '../public/sql-posts.ts';
-import { roles } from '../public/sql-roles.ts';
-import { userAdministrator, users } from '../public/sql-users.ts';
 
 const db = new PrismaClient();
 
