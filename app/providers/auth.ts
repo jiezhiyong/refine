@@ -2,6 +2,7 @@ import { User } from '@prisma/client';
 import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import * as Sentry from '@sentry/remix';
 
+import { apiBase } from '~/config';
 import { TAuthProvider, TRole } from '~/constants';
 import { PermissionRule, TAny } from '~/types';
 import { canUseDOM, verifySignature, webapi } from '~/utils';
@@ -38,38 +39,32 @@ export const authProvider: {
   onError: Required<Pick<AuthProvider, 'onError'>>['onError'];
 } = {
   login: async ({ providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
-    try {
-      const response = await webapi.post(`/auth/${providerName}`, {
-        email,
-        password,
-      });
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
 
-      const res = await response.json();
+    const response = await fetch(`${apiBase}/auth/${providerName}`, {
+      method: 'POST',
+      body: formData,
+    });
 
-      if (response.ok && res.id) {
-        return {
-          success: true,
-          redirectTo,
-          user: res,
-        };
-      }
+    const res = await response.json();
 
+    if (response.ok && res.id) {
       return {
-        success: false,
-        error: {
-          message: res.message || '登录失败',
-          name: 'Invalid credentials',
-        },
-      };
-    } catch (error: TAny) {
-      return {
-        success: false,
-        error: {
-          message: error.message || '登录失败，请检查用户名和密码',
-          name: 'Invalid credentials',
-        },
+        success: true,
+        redirectTo,
+        user: res,
       };
     }
+
+    return {
+      success: false,
+      error: {
+        message: res.message || '登录失败',
+        name: 'Invalid credentials',
+      },
+    };
   },
 
   logout: async () => {
@@ -87,55 +82,38 @@ export const authProvider: {
   check: async () => {
     const redirectTo = `/login?redirectTo=${window.location.href}`;
 
-    try {
-      const response = await webapi.get(`/auth/me`);
-      const { data } = await response.json();
-      if (data && data.id) {
-        return {
-          authenticated: true,
-        };
-      }
-
+    const response = await webapi.get(`/auth/me`);
+    const { data } = await response.json();
+    if (data && data.id) {
       return {
-        authenticated: false,
-        error: {
-          message: '未登录',
-          name: 'Not authenticated',
-        },
-        logout: true,
-        redirectTo,
-      };
-    } catch (error) {
-      return {
-        authenticated: false,
-        error: {
-          message: '未登录',
-          name: 'Not authenticated',
-        },
-        logout: true,
-        redirectTo,
+        authenticated: true,
       };
     }
+
+    return {
+      authenticated: false,
+      error: {
+        message: '未登录',
+        name: 'Not authenticated',
+      },
+      logout: true,
+      redirectTo,
+    };
   },
 
   getIdentity: async () => {
-    try {
-      if (identityCache) {
-        return identityCache;
-      }
-
-      const response = await webapi.get(`/auth/me`);
-      const { data } = await response.json();
-      if (data && data.id) {
-        identityCache = data;
-        return data;
-      }
-
-      return null;
-    } catch (error) {
-      console.error('@authProvider.getIdentity', error);
-      return null;
+    if (identityCache) {
+      return identityCache;
     }
+
+    const response = await webapi.get(`/auth/me`);
+    const { data } = await response.json();
+    if (data && data.id) {
+      identityCache = data;
+      return data;
+    }
+
+    return null;
   },
 
   onError: async (error) => {

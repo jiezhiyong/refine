@@ -8,57 +8,36 @@ type RequestOptions = RequestInit & {
   headers?: Record<string, string>;
 };
 
-// 统一的请求函数
-async function makeRequest(requestUrl: string, options: RequestOptions = {}): Promise<Response> {
-  const headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    ...(options.headers as Record<string, string>),
-  };
-
-  return fetch(requestUrl, {
-    ...options,
-    headers,
-  });
-}
-
-// 数据转换
-const convertToFormData = (data: Record<string, TAny>): FormData | URLSearchParams => {
-  if (isServer) {
-    const params = new URLSearchParams();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value != null) {
-        params.append(key, String(value));
-      }
-    });
-    return params;
-  }
-
-  const formData = new FormData();
-  Object.entries(data).forEach(([key, value]) => {
-    if (value != null) {
-      formData.append(key, String(value));
-    }
-  });
-  return formData;
-};
-
 // API 请求处理
-const request = async (
+async function request(
   method: HttpMethod,
   path: string,
   data?: Record<string, TAny>,
   options: RequestOptions = {}
-): Promise<Response> => {
-  const url = `${apiBase}${path}`;
-
-  const body = data ? convertToFormData(data) : undefined;
+): Promise<Response> {
+  const url = isServer ? `${apiBase}${path}` : path;
 
   const requestOptions: RequestOptions = {
     ...options,
     method,
     credentials: 'include',
-    body: body instanceof URLSearchParams ? body.toString() : body,
   };
+
+  // 如果有请求体且是 POST/PUT/PATCH 请求，确保正确序列化
+  if (data && ['POST', 'PUT', 'PATCH'].includes(method)) {
+    const contentType = options?.headers?.['Content-Type'];
+    if (contentType === 'application/json') {
+      requestOptions.body = JSON.stringify(data);
+    } else if (contentType === 'application/x-www-form-urlencoded') {
+      const formData = new URLSearchParams();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value != null) {
+          formData.append(key, value.toString());
+        }
+      });
+      requestOptions.body = formData;
+    }
+  }
 
   if (data) {
     const timestamp = Date.now();
@@ -70,24 +49,24 @@ const request = async (
     requestOptions.headers = headers;
   }
 
-  return makeRequest(url, requestOptions);
-};
+  return fetch(url, requestOptions);
+}
 
 // Web API 工具类
 export const webapi = {
-  get: (path: string, options?: RequestOptions) => {
+  async get(path: string, options: RequestOptions = {}) {
     return request('GET', path, undefined, options);
   },
 
-  post: (path: string, data?: Record<string, TAny>, options?: RequestOptions) => {
+  async post(path: string, data?: Record<string, TAny>, options: RequestOptions = {}) {
     return request('POST', path, data, options);
   },
 
-  put: (path: string, data?: Record<string, TAny>, options?: RequestOptions) => {
+  async put(path: string, data?: Record<string, TAny>, options: RequestOptions = {}) {
     return request('PUT', path, data, options);
   },
 
-  delete: (path: string, options?: RequestOptions) => {
+  async delete(path: string, options: RequestOptions = {}) {
     return request('DELETE', path, undefined, options);
   },
 };
