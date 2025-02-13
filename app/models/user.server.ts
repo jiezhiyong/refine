@@ -111,7 +111,18 @@ const withRoles = (_userWithRoles: (User & { roles: { role: { title: string } & 
     return null;
   }
 
-  const roles = _userWithRoles.roles.map((userRole) => userRole.role.title);
+  // 定义角色优先级映射
+  const rolePriority: { [key: string]: number } = {
+    administrator: 1,
+    editor: 2,
+    guest: 3,
+  };
+
+  // 按照预定义顺序排序角色
+  const roles = _userWithRoles.roles
+    .map((userRole) => userRole.role.title)
+    .sort((a, b) => rolePriority[a] - rolePriority[b]);
+
   const userWithRoles = {
     ..._userWithRoles,
     password: '******',
