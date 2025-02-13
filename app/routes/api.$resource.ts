@@ -51,7 +51,3 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   return Response.json(created);
 }
-
-export default function UI() {
-  return null;
-}

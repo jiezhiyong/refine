@@ -12,9 +12,9 @@ import {
   DropdownMenuTrigger,
 } from '~/components-shadcn/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components-shadcn/sidebar';
+import { apiBase } from '~/config';
 import { rolesAll } from '~/constants';
 import { RootLoaderData } from '~/root';
-import { webapi } from '~/utils';
 
 export function RoleSwitcher() {
   const { isMobile } = useSidebar();
@@ -31,9 +31,14 @@ export function RoleSwitcher() {
 
   const switchRole = React.useCallback(async (selectedRole: typeof activeRole) => {
     try {
-      await webapi.post('/permissions/switch', {
-        role: selectedRole?.value,
+      const formData = new FormData();
+      formData.append('role', selectedRole?.value || '');
+
+      await fetch(`${apiBase}/permissions/switch`, {
+        method: 'POST',
+        body: formData,
       });
+
       setActiveRole(selectedRole);
 
       location.reload();

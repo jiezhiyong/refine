@@ -174,7 +174,3 @@ function handleError(error: unknown) {
     },
   });
 }
-
-export default function UI() {
-  return null;
-}

@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/remix';
 import { apiBase } from '~/config';
 import { TAuthProvider, TRole } from '~/constants';
 import { PermissionRule, TAny } from '~/types';
-import { canUseDOM, verifySignature, webapi } from '~/utils';
+import { canUseDOM, verifySignature } from '~/utils';
 
 // 添加全局类型声明
 declare global {
@@ -82,7 +82,7 @@ export const authProvider: {
   check: async () => {
     const redirectTo = `/login?redirectTo=${window.location.href}`;
 
-    const response = await webapi.get(`/auth/me`);
+    const response = await fetch(`${apiBase}/auth/me`);
     const { data } = await response.json();
     if (data && data.id) {
       return {
@@ -106,7 +106,7 @@ export const authProvider: {
       return identityCache;
     }
 
-    const response = await webapi.get(`/auth/me`);
+    const response = await fetch(`${apiBase}/auth/me`);
     const { data } = await response.json();
     if (data && data.id) {
       identityCache = data;

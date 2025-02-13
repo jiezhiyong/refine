@@ -6,7 +6,7 @@ import { authenticator, commitSession, getSession } from '~/services';
 import { TAny } from '~/types';
 
 export async function loader() {
-  return Response.json({ message: 'Method not allowed' }, { status: 405 });
+  return Response.json({ message: 'Method not allowed' });
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -24,24 +24,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       const session = await getSession(request.headers.get('Cookie'));
       session.set('user', user);
 
-      const headers = new Headers({
-        'Content-Type': 'application/json',
+      return Response.json(user, {
+        headers: {
+          'Set-Cookie': await commitSession(session),
+        },
       });
-      headers.append('Set-Cookie', await commitSession(session));
-
-      console.log('@headers', headers);
-      return Response.json(user, { headers });
     }
 
-    return Response.json(
-      { message: 'Authentication failed, unable to get user.' },
-      {
-        status: 401,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    return Response.json({ message: 'Authentication failed, unable to get user.' }, { status: 401 });
   } catch (error: TAny) {
     // 处理 OAuth2.tcshuke 认证提供者 302 重定向
     if (error.status === 302) {
@@ -50,18 +40,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     console.error('@authenticator.catch', error);
     Sentry.captureException(error);
-    return Response.json(
-      { message: error?.message || 'Authentication failed, unknown error.' },
-      {
-        status: 401,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    return Response.json({ message: error?.message || 'Authentication failed, unknown error.' }, { status: 401 });
   }
 };
-
-export default function UI() {
-  return null;
-}

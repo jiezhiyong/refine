@@ -1,4 +1,4 @@
-import { apiBase, isServer } from '~/config';
+import { apiBase } from '~/config';
 import { TAny } from '~/types';
 import { generateSignature } from '~/utils/signature';
 
@@ -15,8 +15,6 @@ async function request(
   data?: Record<string, TAny>,
   options: RequestOptions = {}
 ): Promise<Response> {
-  const url = isServer ? `${apiBase}${path}` : path;
-
   const requestOptions: RequestOptions = {
     ...options,
     method,
@@ -49,7 +47,7 @@ async function request(
     requestOptions.headers = headers;
   }
 
-  return fetch(url, requestOptions);
+  return fetch(`${apiBase}${path}`, requestOptions);
 }
 
 // Web API 工具类

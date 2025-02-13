@@ -40,7 +40,3 @@ export async function action({ request }: ActionFunctionArgs) {
     return Response.json({ error }, { status: 401 });
   }
 }
-
-export default function UI() {
-  return null;
-}
