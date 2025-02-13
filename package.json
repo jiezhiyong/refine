@@ -170,6 +170,6 @@
     "seed": "tsx prisma/seed.ts"
   },
   "msw": {
-    "workerDirectory": "public"
+    "workerDirectory": "mock"
   }
 }
