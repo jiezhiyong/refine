@@ -1,4 +1,4 @@
-# CRUD APP Template, use Refine & Remix
+# [CRUD APP](https://refine-jet.vercel.app), use Refine & Remix
 
 [Refine](https://refine.dev) 是一个无头 React 框架，主要用于构建企业内部工具、管理面板、仪表板、B2B等应用程序。它消除了 CRUD 操作中的重复性任务，并为关键项目组件（如身份验证、访问控制、路由、网络、状态管理和 i18n）提供行业标准解决方案。
 
