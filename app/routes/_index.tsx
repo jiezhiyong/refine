@@ -6,3 +6,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserSession(request);
   return redirect('/playground/dashboard/about');
 }
+
+export default function Index() {
+  return null;
+}

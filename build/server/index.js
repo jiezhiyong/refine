@@ -99,14 +99,14 @@ function initSentry() {
 }
 initSentry();
 const ABORT_DELAY = 5e3;
-async function handleRequest(request2, responseStatusCode, responseHeaders, remixContext) {
-  return isbot(request2.headers.get("user-agent") || "") ? handleBotRequest(request2, responseStatusCode, responseHeaders, remixContext) : handleBrowserRequest(request2, responseStatusCode, responseHeaders, remixContext);
+async function handleRequest(request, responseStatusCode, responseHeaders, remixContext) {
+  return isbot(request.headers.get("user-agent") || "") ? handleBotRequest(request, responseStatusCode, responseHeaders, remixContext) : handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext);
 }
-function handleBotRequest(request2, responseStatusCode, responseHeaders, remixContext) {
+function handleBotRequest(request, responseStatusCode, responseHeaders, remixContext) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      /* @__PURE__ */ jsx(RemixServer, { context: remixContext, url: request2.url, abortDelay: ABORT_DELAY }),
+      /* @__PURE__ */ jsx(RemixServer, { context: remixContext, url: request.url, abortDelay: ABORT_DELAY }),
       {
         onAllReady() {
           shellRendered = true;
@@ -135,11 +135,11 @@ function handleBotRequest(request2, responseStatusCode, responseHeaders, remixCo
     setTimeout(abort, ABORT_DELAY);
   });
 }
-function handleBrowserRequest(request2, responseStatusCode, responseHeaders, remixContext) {
+function handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      /* @__PURE__ */ jsx(RemixServer, { context: remixContext, url: request2.url, abortDelay: ABORT_DELAY }),
+      /* @__PURE__ */ jsx(RemixServer, { context: remixContext, url: request.url, abortDelay: ABORT_DELAY }),
       {
         onShellReady() {
           shellRendered = true;
@@ -168,8 +168,8 @@ function handleBrowserRequest(request2, responseStatusCode, responseHeaders, rem
     setTimeout(abort, ABORT_DELAY);
   });
 }
-const handleError$1 = Sentry.wrapHandleErrorWithSentry((_error, { request: request2 }) => {
-  if (!request2.signal.aborted) ;
+const handleError$1 = Sentry.wrapHandleErrorWithSentry((_error, { request }) => {
+  if (!request.signal.aborted) ;
 });
 const entryServer = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -183,12 +183,12 @@ function canUseDOM() {
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
-async function getAllParams(request2, params = {}) {
-  const url = new URL(request2.url);
+async function getAllParams(request, params = {}) {
+  const url = new URL(request.url);
   const searchParams = Object.fromEntries(url.searchParams.entries());
   let formDataParams = {};
-  if (request2.method === "POST" || request2.method === "PUT") {
-    const formData = await request2.formData();
+  if (request.method === "POST" || request.method === "PUT") {
+    const formData = await request.formData();
     formDataParams = Object.fromEntries(formData.entries());
   }
   return {
@@ -197,7 +197,6 @@ async function getAllParams(request2, params = {}) {
     ...params
   };
 }
-const isServer = !canUseDOM();
 const baseUrl = "http://localhost:3000";
 const apiBase = `${baseUrl}/api`;
 const enTranslation = {
@@ -675,16 +674,16 @@ function getDefaultTitle(matches) {
   action2 = action2.charAt(0).toUpperCase() + action2.slice(1);
   return action2 ? `${title} · ${action2}` : title;
 }
-const getRequestData = async (request2) => {
-  const contentType = request2.headers.get("content-type");
+const getRequestData = async (request) => {
+  const contentType = request.headers.get("content-type");
   let data2;
   if (contentType == null ? void 0 : contentType.includes("application/json")) {
-    data2 = await request2.json();
+    data2 = await request.json();
   } else if ((contentType == null ? void 0 : contentType.includes("application/x-www-form-urlencoded")) || (contentType == null ? void 0 : contentType.includes("multipart/form-data"))) {
-    const formData = await request2.formData();
+    const formData = await request.formData();
     data2 = Object.fromEntries(formData);
   } else {
-    const text = await request2.text();
+    const text = await request.text();
     try {
       data2 = JSON.parse(text);
     } catch {
@@ -894,7 +893,7 @@ function generateSignatureSync(payload) {
 async function generateSignature(payload, timestamp) {
   const timestampedPayload = {
     data: payload,
-    timestamp: timestamp || Date.now()
+    timestamp: Date.now()
   };
   return generateSignatureSync(timestampedPayload);
 }
@@ -935,68 +934,6 @@ const tryParse = (jsonString) => {
     data: status ? jsonObject : void 0,
     original: jsonString
   };
-};
-async function makeRequest(requestUrl, options = {}) {
-  const headers2 = {
-    "Content-Type": "application/x-www-form-urlencoded",
-    ...options.headers
-  };
-  return fetch(requestUrl, {
-    ...options,
-    headers: headers2
-  });
-}
-const convertToFormData = (data2) => {
-  if (isServer) {
-    const params = new URLSearchParams();
-    Object.entries(data2).forEach(([key, value]) => {
-      if (value != null) {
-        params.append(key, String(value));
-      }
-    });
-    return params;
-  }
-  const formData = new FormData();
-  Object.entries(data2).forEach(([key, value]) => {
-    if (value != null) {
-      formData.append(key, String(value));
-    }
-  });
-  return formData;
-};
-const request = async (method, path2, data2, options = {}) => {
-  const url = `${apiBase}${path2}`;
-  const body = data2 ? convertToFormData(data2) : void 0;
-  const requestOptions = {
-    ...options,
-    method,
-    credentials: "include",
-    body: body instanceof URLSearchParams ? body.toString() : body
-  };
-  if (data2) {
-    const timestamp = Date.now();
-    const headers2 = {
-      ...requestOptions.headers || {},
-      "X-Timestamp": timestamp.toString(),
-      "X-Signature": await generateSignature(data2, timestamp)
-    };
-    requestOptions.headers = headers2;
-  }
-  return makeRequest(url, requestOptions);
-};
-const webapi = {
-  get: (path2, options) => {
-    return request("GET", path2, void 0, options);
-  },
-  post: (path2, data2, options) => {
-    return request("POST", path2, data2, options);
-  },
-  put: (path2, data2, options) => {
-    return request("PUT", path2, data2, options);
-  },
-  delete: (path2, options) => {
-    return request("DELETE", path2, void 0, options);
-  }
 };
 const AutoSaveIndicator = ({
   status,
@@ -3383,7 +3320,7 @@ SidebarMenu.displayName = "SidebarMenu";
 const SidebarMenuItem = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("li", { ref, "data-sidebar": "menu-item", className: cn("group/menu-item relative", className), ...props }));
 SidebarMenuItem.displayName = "SidebarMenuItem";
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -5286,8 +5223,11 @@ function RoleSwitcher() {
   );
   const switchRole = React.useCallback(async (selectedRole) => {
     try {
-      await webapi.post("/permissions/switch", {
-        role: selectedRole == null ? void 0 : selectedRole.value
+      const formData = new FormData();
+      formData.append("role", (selectedRole == null ? void 0 : selectedRole.value) || "");
+      await fetch(`${apiBase}/permissions/switch`, {
+        method: "POST",
+        body: formData
       });
       setActiveRole(selectedRole);
       location.reload();
@@ -5371,35 +5311,28 @@ let permissionsCache = null;
 let identityCache = null;
 const authProvider = {
   login: async ({ providerName, email, password, redirectTo = "/" }) => {
-    try {
-      const response = await webapi.post(`/auth/${providerName}`, {
-        email,
-        password
-      });
-      const res = await response.json();
-      if (response.ok && res.id) {
-        return {
-          success: true,
-          redirectTo,
-          user: res
-        };
-      }
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    const response = await fetch(`${apiBase}/auth/${providerName}`, {
+      method: "POST",
+      body: formData
+    });
+    const res = await response.json();
+    if (response.ok && res.id) {
       return {
-        success: false,
-        error: {
-          message: res.message || "登录失败",
-          name: "Invalid credentials"
-        }
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: {
-          message: error.message || "登录失败，请检查用户名和密码",
-          name: "Invalid credentials"
-        }
+        success: true,
+        redirectTo,
+        user: res
       };
     }
+    return {
+      success: false,
+      error: {
+        message: res.message || "登录失败",
+        name: "Invalid credentials"
+      }
+    };
   },
   logout: async () => {
     Sentry.setUser(null);
@@ -5412,51 +5345,34 @@ const authProvider = {
   },
   check: async () => {
     const redirectTo = `/login?redirectTo=${window.location.href}`;
-    try {
-      const response = await webapi.get(`/auth/me`);
-      const { data: data2 } = await response.json();
-      if (data2 && data2.id) {
-        return {
-          authenticated: true
-        };
-      }
+    const response = await fetch(`${apiBase}/auth/me`);
+    const { data: data2 } = await response.json();
+    if (data2 && data2.id) {
       return {
-        authenticated: false,
-        error: {
-          message: "未登录",
-          name: "Not authenticated"
-        },
-        logout: true,
-        redirectTo
-      };
-    } catch (error) {
-      return {
-        authenticated: false,
-        error: {
-          message: "未登录",
-          name: "Not authenticated"
-        },
-        logout: true,
-        redirectTo
+        authenticated: true
       };
     }
+    return {
+      authenticated: false,
+      error: {
+        message: "未登录",
+        name: "Not authenticated"
+      },
+      logout: true,
+      redirectTo
+    };
   },
   getIdentity: async () => {
-    try {
-      if (identityCache) {
-        return identityCache;
-      }
-      const response = await webapi.get(`/auth/me`);
-      const { data: data2 } = await response.json();
-      if (data2 && data2.id) {
-        identityCache = data2;
-        return data2;
-      }
-      return null;
-    } catch (error) {
-      console.error("@authProvider.getIdentity", error);
-      return null;
+    if (identityCache) {
+      return identityCache;
     }
+    const response = await fetch(`${apiBase}/auth/me`);
+    const { data: data2 } = await response.json();
+    if (data2 && data2.id) {
+      identityCache = data2;
+      return data2;
+    }
+    return null;
   },
   onError: async (error) => {
     if (error.status === 401 || error.status === 403) {
@@ -5958,8 +5874,11 @@ const i18nProvider = {
   },
   changeLocale: async (locale) => {
     await changeLanguage(locale);
-    const res = await webapi.post(`/set-preferences`, {
-      locale
+    const formData = new FormData();
+    formData.append("locale", locale);
+    const res = await fetch(`${apiBase}/set-preferences`, {
+      method: "POST",
+      body: formData
     });
     const { data: data2 } = await res.json();
     return Promise.resolve(data2);
@@ -6064,8 +5983,8 @@ class StateStore {
    * Create a new instance from a Request object by getting the store from a
    * cookie with the given name.
    */
-  static fromRequest(request2, cookieName = "oauth2") {
-    const cookie = new Cookie(request2.headers.get("cookie") ?? "");
+  static fromRequest(request, cookieName = "oauth2") {
+    const cookie = new Cookie(request.headers.get("cookie") ?? "");
     const params = new URLSearchParams();
     for (const name of cookie.names()) {
       if (name.startsWith(cookieName)) {
@@ -6099,9 +6018,9 @@ class OAuth2Strategy extends Strategy {
     if (typeof this.options.cookie !== "object") return {};
     return this.options.cookie ?? {};
   }
-  async authenticate(request2) {
-    debug("Request URL", request2.url);
-    const url = new URL(request2.url);
+  async authenticate(request) {
+    debug("Request URL", request.url);
+    const url = new URL(request.url);
     const stateUrl = url.searchParams.get("state");
     const error = url.searchParams.get("error");
     if (error) {
@@ -6114,9 +6033,9 @@ class OAuth2Strategy extends Strategy {
       const { state, codeVerifier: codeVerifier2, url: url2 } = this.createAuthorizationURL();
       debug("State", state);
       debug("Code verifier", codeVerifier2);
-      url2.search = this.authorizationParams(url2.searchParams, request2).toString();
+      url2.search = this.authorizationParams(url2.searchParams, request).toString();
       debug("Authorization URL", url2.toString());
-      const store2 = StateStore.fromRequest(request2, this.cookieName);
+      const store2 = StateStore.fromRequest(request, this.cookieName);
       store2.set(state, codeVerifier2);
       throw redirect(url2.toString(), {
         headers: {
@@ -6126,7 +6045,7 @@ class OAuth2Strategy extends Strategy {
     }
     const code = url.searchParams.get("code");
     if (!code) throw new ReferenceError("Missing code in the URL");
-    const store = StateStore.fromRequest(request2, this.cookieName);
+    const store = StateStore.fromRequest(request, this.cookieName);
     if (!store.has()) {
       throw new ReferenceError("Missing state on cookie.");
     }
@@ -6140,7 +6059,7 @@ class OAuth2Strategy extends Strategy {
     debug("Validating authorization code");
     const tokens = await this.validateAuthorizationCode(code, codeVerifier);
     debug("Verifying the user profile");
-    const user = await this.verify({ request: request2, tokens });
+    const user = await this.verify({ request, tokens });
     debug("User authenticated");
     return user;
   }
@@ -6410,12 +6329,19 @@ m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)
 const MODEL = newModelFromString(MODEL_CONF);
 let enforcer = null;
 async function createEnforcer() {
-  if (enforcer) {
+  try {
+    if (enforcer) {
+      return enforcer;
+    }
+    const adapter = await PrismaAdapter.newAdapter(db);
+    enforcer = await newEnforcer(MODEL, adapter);
+    return enforcer;
+  } catch (error) {
+    console.error("Failed to create enforcer:", error);
+    Sentry.captureException(error);
+    enforcer = await newEnforcer(MODEL);
     return enforcer;
   }
-  const adapter = await PrismaAdapter.newAdapter(db);
-  enforcer = await newEnforcer(MODEL, adapter);
-  return enforcer;
 }
 invariant(process.env.VITE_SECRET, "VITE_SECRET must be set.");
 const sessionStorage = createCookieSessionStorage({
@@ -6431,21 +6357,21 @@ const sessionStorage = createCookieSessionStorage({
   }
 });
 const { getSession, commitSession, destroySession } = sessionStorage;
-const redirectToLogin = (request2, redirectTo = request2.url) => {
+const redirectToLogin = (request, redirectTo = request.url) => {
   const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
   throw redirect$1(`/login?${searchParams}`);
 };
-async function getUserSession(request2) {
+async function getUserSession(request) {
   try {
-    return getSession(request2.headers.get("Cookie"));
+    return getSession(request.headers.get("Cookie"));
   } catch (error) {
     return null;
   }
 }
-async function getUser(request2) {
+async function getUser(request) {
   try {
     let user = null;
-    const session = await getUserSession(request2);
+    const session = await getUserSession(request);
     const { role, id } = session == null ? void 0 : session.get("user");
     if (id) {
       user = await getUserById(id);
@@ -6455,30 +6381,30 @@ async function getUser(request2) {
     return null;
   }
 }
-async function requireUserSession(request2, redirectTo = request2.url) {
+async function requireUserSession(request, redirectTo = request.url) {
   try {
-    const user = await getUser(request2);
+    const user = await getUser(request);
     if (!(user == null ? void 0 : user.id)) {
-      redirectToLogin(request2, redirectTo);
+      redirectToLogin(request, redirectTo);
     }
     return user;
   } catch (error) {
-    redirectToLogin(request2, redirectTo);
+    redirectToLogin(request, redirectTo);
   }
 }
-async function requireUser(request2) {
+async function requireUser(request) {
   try {
-    const user = await getUser(request2);
+    const user = await getUser(request);
     if (!(user == null ? void 0 : user.id)) {
       throw new Error("Unauthorized");
     }
-    return { user, session: await getUserSession(request2) };
+    return { user, session: await getUserSession(request) };
   } catch (error) {
     return Promise.reject(error);
   }
 }
 async function getPermissions({
-  request: request2,
+  request,
   userRole
 }) {
   let rules = [];
@@ -6491,8 +6417,8 @@ async function getPermissions({
     effect
   }));
   let role = userRole;
-  if (!role && request2) {
-    const session = await getUserSession(request2);
+  if (!role && request) {
+    const session = await getUserSession(request);
     const user = session == null ? void 0 : session.get("user");
     if (user == null ? void 0 : user.role) {
       role = user.role;
@@ -6503,8 +6429,8 @@ async function getPermissions({
   }
   return rules;
 }
-const getPreferencesCookie = async (request2) => {
-  const cookieHeader = request2.headers.get("Cookie") || "";
+const getPreferencesCookie = async (request) => {
+  const cookieHeader = request.headers.get("Cookie") || "";
   const cookies = cookieHeader.split("; ").find((s) => s.startsWith("preferences="));
   try {
     return JSON.parse((cookies == null ? void 0 : cookies.split("=")[1]) || "{}");
@@ -6512,8 +6438,8 @@ const getPreferencesCookie = async (request2) => {
     return {};
   }
 };
-const getPreferencesNextCookie = async (request2, cookie) => {
-  const exitingCookie = await getPreferencesCookie(request2) || {};
+const getPreferencesNextCookie = async (request, cookie) => {
+  const exitingCookie = await getPreferencesCookie(request) || {};
   const newCookie = JSON.stringify({
     ...exitingCookie,
     ...cookie
@@ -6757,7 +6683,7 @@ const dataService = {
   }
 };
 const baseStyles = "/assets/base-CNccC1ql.css";
-const tailwindStyles = "/assets/tailwind-D77LHlNy.css";
+const tailwindStyles = "/assets/tailwind-CTz0vaH6.css";
 const meta$e = () => [
   { property: "og:title", content: "This app is the best." },
   { name: "description", content: "Welcome to Remix!" }
@@ -6771,11 +6697,11 @@ const headers = () => ({
   "Document-Policy": "js-profiling"
 });
 const handle$7 = { i18n: ["translation"] };
-async function loader$p({ request: request2 }) {
+async function loader$p({ request }) {
   const [user, permissions, { locale, sidebarIsClose, theme }] = await Promise.all([
-    getUser(request2),
-    getPermissions({ request: request2 }),
-    getPreferencesCookie(request2)
+    getUser(request),
+    getPermissions({ request }),
+    getPreferencesCookie(request)
   ]);
   const localeNext = locale || fallbackLanguage;
   await syncServiceLocaleToClient(localeNext);
@@ -7396,8 +7322,8 @@ const handle$4 = {
     return /* @__PURE__ */ jsx(UiTools$4, {});
   }
 };
-async function loader$l({ request: request2 }) {
-  const url = new URL(request2.url);
+async function loader$l({ request }) {
+  const url = new URL(request.url);
   const tableParams = parseTableParams(url.search);
   const data2 = await dataService.getList({
     ...tableParams,
@@ -7706,14 +7632,14 @@ const route6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   default: PostCreate,
   meta: meta$8
 }, Symbol.toStringTag, { value: "Module" }));
-const loader$k = async ({ request: request2, params }) => {
+const loader$k = async ({ request, params }) => {
   const { provider } = params;
   if (!provider) {
     return Response.json({ message: "provider is required" }, { status: 405 });
   }
-  const url = new URL(request2.url);
+  const url = new URL(request.url);
   url.protocol = "https:";
-  const secureRequest = new Request(url, request2);
+  const secureRequest = new Request(url, request);
   try {
     const user = await authenticator.authenticate(provider, secureRequest);
     const { email, name } = user;
@@ -7728,10 +7654,10 @@ const loader$k = async ({ request: request2, params }) => {
       const userNew = await createUser({ email, name, provider: EnumAuthProvider.tcshuke });
       session.set("user", userNew);
     }
-    const headers2 = new Headers();
-    headers2.append("Set-Cookie", await commitSession(session));
     return redirect$1("/", {
-      headers: headers2
+      headers: {
+        "Set-Cookie": await commitSession(session)
+      }
     });
   } catch (error) {
     console.error("@authenticator.OAuth2.callback", error);
@@ -7768,8 +7694,8 @@ const handle$3 = {
     return /* @__PURE__ */ jsx(UiFilter, {});
   }
 };
-async function loader$j({ request: request2 }) {
-  await syncServiceLocaleToClient((await getPreferencesCookie(request2)).locale);
+async function loader$j({ request }) {
+  await syncServiceLocaleToClient((await getPreferencesCookie(request)).locale);
   return { title: t("title"), description: t("description") };
 }
 function DashboardAbout() {
@@ -7957,8 +7883,8 @@ const handle$2 = {
     return /* @__PURE__ */ jsx(UiTools$2, {});
   }
 };
-async function loader$i({ request: request2 }) {
-  const url = new URL(request2.url);
+async function loader$i({ request }) {
+  const url = new URL(request.url);
   const tableParams = parseTableParams(url.search);
   const data2 = await dataService.getList({
     ...tableParams,
@@ -8138,8 +8064,8 @@ const handle$1 = {
     return /* @__PURE__ */ jsx(UiTools$1, {});
   }
 };
-async function loader$h({ request: request2 }) {
-  const url = new URL(request2.url);
+async function loader$h({ request }) {
+  const url = new URL(request.url);
   const tableParams = parseTableParams(url.search);
   const data2 = await dataService.getList({
     ...tableParams,
@@ -8321,28 +8247,31 @@ const route11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   meta: meta$4
 }, Symbol.toStringTag, { value: "Module" }));
 async function loader$g() {
-  return Response.json({ message: "Method not allowed" }, { status: 405 });
+  return Response.json({ message: "Method not allowed" });
 }
-const action$8 = async ({ request: request2, params }) => {
+const action$8 = async ({ request, params }) => {
   try {
     const { provider } = params;
     if (!provider || ![EnumAuthProvider.userpass, EnumAuthProvider.tcshuke].includes(provider)) {
       return Response.json({ message: "Method not allowed" }, { status: 405 });
     }
-    const user = await authenticator.authenticate(provider, request2);
+    const user = await authenticator.authenticate(provider, request);
     if (provider === EnumAuthProvider.userpass && user) {
-      const session = await getSession(request2.headers.get("Cookie"));
+      const session = await getSession(request.headers.get("Cookie"));
       session.set("user", user);
-      const headers2 = new Headers();
-      headers2.append("Set-Cookie", await commitSession(session));
-      return Response.json(user, { headers: headers2 });
+      return Response.json(user, {
+        headers: {
+          "Set-Cookie": await commitSession(session)
+        }
+      });
     }
     return Response.json({ message: "Authentication failed, unable to get user." }, { status: 401 });
   } catch (error) {
     if (error.status === 302) {
       return error;
     }
-    console.error("@authenticator", error);
+    console.error("@authenticator.catch", error);
+    Sentry.captureException(error);
     return Response.json({ message: (error == null ? void 0 : error.message) || "Authentication failed, unknown error." }, { status: 401 });
   }
 };
@@ -8391,13 +8320,13 @@ TabsContent.displayName = TabsPrimitive.Content.displayName;
 const meta$3 = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
-async function loader$f({ request: request2, params }) {
-  await requireUserSession(request2);
-  await getAllParams(request2, params);
+async function loader$f({ request, params }) {
+  await requireUserSession(request);
+  await getAllParams(request, params);
   return {};
 }
-async function action$7({ request: request2, params }) {
-  await getAllParams(request2, params);
+async function action$7({ request, params }) {
+  await getAllParams(request, params);
   return {};
 }
 function DashboardDemo() {
@@ -8806,8 +8735,8 @@ const route14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   default: LogShow,
   loader: loader$e
 }, Symbol.toStringTag, { value: "Module" }));
-async function loader$d({ request: request2 }) {
-  await requireUserSession(request2);
+async function loader$d({ request }) {
+  await requireUserSession(request);
   return null;
 }
 function Post() {
@@ -8830,8 +8759,8 @@ const handle = {
     return /* @__PURE__ */ jsx(UiTools, {});
   }
 };
-async function loader$c({ request: request2 }) {
-  const url = new URL(request2.url);
+async function loader$c({ request }) {
+  const url = new URL(request.url);
   const tableParams = parseTableParams(url.search);
   const data2 = await dataService.getList({
     ...tableParams,
@@ -9038,18 +8967,18 @@ const route16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   loader: loader$c,
   meta: meta$2
 }, Symbol.toStringTag, { value: "Module" }));
-async function action$6({ request: request2 }) {
+async function action$6({ request }) {
   var _a;
-  if (request2.method !== "POST") {
+  if (request.method !== "POST") {
     return Response.json({ error: "Method not allowed" }, { status: 405 });
   }
   try {
-    const formData = await request2.formData();
+    const formData = await request.formData();
     const nextRole = formData.get("role");
     if (!nextRole) {
       throw new Error("Role is required");
     }
-    const { user, session } = await requireUser(request2);
+    const { user, session } = await requireUser(request);
     if (!((_a = user.roles) == null ? void 0 : _a.includes(nextRole))) {
       throw new Error("You do not have permission to switch to this role");
     }
@@ -9073,8 +9002,8 @@ const route17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   __proto__: null,
   action: action$6
 }, Symbol.toStringTag, { value: "Module" }));
-async function loader$b({ request: request2 }) {
-  await requireUserSession(request2);
+async function loader$b({ request }) {
+  await requireUserSession(request);
   return null;
 }
 function Dashboard() {
@@ -9089,12 +9018,17 @@ const route18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   default: Dashboard,
   loader: loader$b
 }, Symbol.toStringTag, { value: "Module" }));
-const action$5 = async ({ request: request2 }) => {
+const action$5 = async ({ request }) => {
   try {
-    const data2 = await getRequestData(request2);
-    const headers2 = new Headers();
-    headers2.append("Set-Cookie", await getPreferencesNextCookie(request2, data2));
-    return Response.json({ data: data2 }, { headers: headers2 });
+    const data2 = await getRequestData(request);
+    return Response.json(
+      { data: data2 },
+      {
+        headers: {
+          "Set-Cookie": await getPreferencesNextCookie(request, data2)
+        }
+      }
+    );
   } catch (error) {
     console.error("处理偏好设置请求时出错：", error);
     return Response.json({ error: "处理请求失败" }, { status: 400 });
@@ -9104,8 +9038,8 @@ const route19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   __proto__: null,
   action: action$5
 }, Symbol.toStringTag, { value: "Module" }));
-async function loader$a({ request: request2 }) {
-  await requireUserSession(request2);
+async function loader$a({ request }) {
+  await requireUserSession(request);
   return null;
 }
 function Role() {
@@ -9120,8 +9054,8 @@ const route20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   default: Role,
   loader: loader$a
 }, Symbol.toStringTag, { value: "Module" }));
-async function loader$9({ request: request2 }) {
-  await requireUserSession(request2);
+async function loader$9({ request }) {
+  await requireUserSession(request);
   return null;
 }
 function User() {
@@ -9136,12 +9070,12 @@ const route21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   default: User,
   loader: loader$9
 }, Symbol.toStringTag, { value: "Module" }));
-async function loader$8({ request: request2, params }) {
+async function loader$8({ request, params }) {
   const { resource } = params;
   if (!resource) {
     throw new Error("resource is required");
   }
-  const url = new URL(request2.url);
+  const url = new URL(request.url);
   const ids = url.searchParams.get("ids");
   if (!ids) {
     throw new Error("批量获取时 ids 参数是必需的");
@@ -9152,14 +9086,14 @@ async function loader$8({ request: request2, params }) {
   });
   return Response.json(data2);
 }
-async function action$4({ request: request2, params }) {
-  await requireUser(request2);
+async function action$4({ request, params }) {
+  await requireUser(request);
   const { resource } = params;
   if (!resource) {
     throw new Error("resource is required");
   }
-  const method = request2.method;
-  const body = await request2.json();
+  const method = request.method;
+  const body = await request.json();
   switch (method) {
     case "POST": {
       const { variables } = body;
@@ -9202,8 +9136,8 @@ const route22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   loader: loader$8
 }, Symbol.toStringTag, { value: "Module" }));
 const ASSETS_ROOT = "assets";
-const loader$7 = async ({ params, request: request2 }) => {
-  const { src, width, height, fit } = extractParams(params, request2);
+const loader$7 = async ({ params, request }) => {
+  const { src, width, height, fit } = extractParams(params, request);
   try {
     const readStream = readFileAsStream(src);
     return streamingResize(readStream, width, height, fit);
@@ -9211,9 +9145,9 @@ const loader$7 = async ({ params, request: request2 }) => {
     return handleError(error);
   }
 };
-function extractParams(params, request2) {
+function extractParams(params, request) {
   const src = params["*"];
-  const searchParams = new URL(request2.url).searchParams;
+  const searchParams = new URL(request.url).searchParams;
   const width = searchParams.has("w") ? Number.parseInt(searchParams.get("w") ?? "0") : void 0;
   const height = searchParams.has("h") ? Number.parseInt(searchParams.get("h") ?? "0") : void 0;
   const fitEnum = ["contain", "cover", "fill", "inside", "outside"];
@@ -9294,16 +9228,16 @@ async function loader$6({ params }) {
   });
   return Response.json(data2);
 }
-async function action$3({ request: request2, params }) {
-  await requireUser(request2);
+async function action$3({ request, params }) {
+  await requireUser(request);
   const { resource, id } = params;
   if (!resource || !id) {
     throw new Error("resource、id is required");
   }
-  const method = request2.method;
+  const method = request.method;
   switch (method) {
     case "PATCH": {
-      const variables = await request2.json();
+      const variables = await request.json();
       const data2 = await dataService.update({
         resource,
         id,
@@ -9327,8 +9261,8 @@ const route24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   action: action$3,
   loader: loader$6
 }, Symbol.toStringTag, { value: "Module" }));
-async function loader$5({ request: request2 }) {
-  await requireUserSession(request2);
+async function loader$5({ request }) {
+  await requireUserSession(request);
   return null;
 }
 function Log() {
@@ -9343,9 +9277,9 @@ const route25 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   default: Log,
   loader: loader$5
 }, Symbol.toStringTag, { value: "Module" }));
-const loader$4 = async ({ request: request2, params }) => {
-  const mergedParams = await getAllParams(request2, params);
-  const session = await getSession(request2.headers.get("Cookie"));
+const loader$4 = async ({ request, params }) => {
+  const mergedParams = await getAllParams(request, params);
+  const session = await getSession(request.headers.get("Cookie"));
   return redirect$1(`/login?redirectTo=${mergedParams.redirectTo || "/"}`, {
     headers: {
       "Set-Cookie": await destroySession(session)
@@ -9356,18 +9290,26 @@ const route26 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   __proto__: null,
   loader: loader$4
 }, Symbol.toStringTag, { value: "Module" }));
+function PasswordForgot() {
+  return /* @__PURE__ */ jsx("p", { children: "PasswordForgot" });
+}
 const route27 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null
+  __proto__: null,
+  default: PasswordForgot
 }, Symbol.toStringTag, { value: "Module" }));
+function PasswordUpdate() {
+  return /* @__PURE__ */ jsx("p", { children: "PasswordUpdate" });
+}
 const route28 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null
+  __proto__: null,
+  default: PasswordUpdate
 }, Symbol.toStringTag, { value: "Module" }));
-async function loader$3({ request: request2, params }) {
+async function loader$3({ request, params }) {
   const { resource } = params;
   if (!resource) {
     throw new Error("resource is required");
   }
-  const url = new URL(request2.url);
+  const url = new URL(request.url);
   const pagination = getPaginationFromUrl(url);
   const sorters = getSortersFromUrl(url);
   const filters = getFiltersFromUrl(url);
@@ -9381,17 +9323,17 @@ async function loader$3({ request: request2, params }) {
   });
   return Response.json(res);
 }
-async function action$2({ request: request2, params }) {
-  const { user } = await requireUser(request2);
+async function action$2({ request, params }) {
+  const { user } = await requireUser(request);
   const { resource } = params;
-  const { method } = request2;
+  const { method } = request;
   if (!resource) {
     throw new Error("resource is required");
   }
   if (method !== "POST") {
     throw new Error(`不支持的请求方法: ${method}`);
   }
-  const body = await request2.json();
+  const body = await request.json();
   const created = await dataService.create({
     resource,
     variables: { ...body, userId: user == null ? void 0 : user.id }
@@ -9403,19 +9345,13 @@ const route29 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   action: action$2,
   loader: loader$3
 }, Symbol.toStringTag, { value: "Module" }));
-const route30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null
-}, Symbol.toStringTag, { value: "Module" }));
-const loader$2 = async ({ request: request2 }) => {
-  const user = await getUser(request2);
+const loader$2 = async ({ request }) => {
+  const user = await getUser(request);
   return Response.json({ data: user });
 };
-const route31 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const route30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   loader: loader$2
-}, Symbol.toStringTag, { value: "Module" }));
-const route32 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null
 }, Symbol.toStringTag, { value: "Module" }));
 function typedFormError(error) {
   if (error instanceof z.ZodError) {
@@ -9434,9 +9370,9 @@ z.object({
 const meta$1 = () => {
   return [{ title: "Register" }];
 };
-async function action$1({ request: request2 }) {
+async function action$1({ request }) {
   try {
-    const mergedParams = await getAllParams(request2);
+    const mergedParams = await getAllParams(request);
     const { email, password } = mergedParams;
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
@@ -9451,18 +9387,22 @@ async function action$1({ request: request2 }) {
 function Register() {
   return /* @__PURE__ */ jsx("div", { className: "bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10", children: /* @__PURE__ */ jsx("div", { className: "w-full max-w-sm", children: /* @__PURE__ */ jsx(RegisterForm, {}) }) });
 }
-const route33 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const route31 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   action: action$1,
   default: Register,
   meta: meta$1
 }, Symbol.toStringTag, { value: "Module" }));
-async function loader$1({ request: request2 }) {
-  await requireUserSession(request2);
+async function loader$1({ request }) {
+  await requireUserSession(request);
   return redirect$1("/playground/dashboard/about");
 }
-const route34 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+function Index$1() {
+  return null;
+}
+const route32 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
+  default: Index$1,
   loader: loader$1
 }, Symbol.toStringTag, { value: "Module" }));
 z.object({
@@ -9473,16 +9413,16 @@ z.object({
 const meta = () => {
   return [{ title: "Login" }];
 };
-async function loader({ request: request2 }) {
-  const user = await getUser(request2);
+async function loader({ request }) {
+  const user = await getUser(request);
   if (user && user.id) {
     return redirect$1("/");
   }
   return {};
 }
-async function action({ request: request2 }) {
+async function action({ request }) {
   try {
-    const mergedParams = await getAllParams(request2);
+    const mergedParams = await getAllParams(request);
     const { email, password, redirectTo } = mergedParams;
     const { error, success, user } = await authProvider.login({
       providerName: EnumAuthProvider.userpass,
@@ -9494,7 +9434,7 @@ async function action({ request: request2 }) {
       throw { default: [error.message] };
     }
     if (success && (user == null ? void 0 : user.id)) {
-      const session = await getSession(request2.headers.get("Cookie"));
+      const session = await getSession(request.headers.get("Cookie"));
       session.set("user", user);
       return redirect$1(redirectTo, {
         headers: {
@@ -9509,7 +9449,7 @@ async function action({ request: request2 }) {
 function Login() {
   return /* @__PURE__ */ jsx("div", { className: "bg-background flex min-h-svh flex-col items-center justify-center p-6 md:p-10", children: /* @__PURE__ */ jsx("div", { className: "w-full max-w-sm md:max-w-3xl", children: /* @__PURE__ */ jsx(LoginForm, {}) }) });
 }
-const route35 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const route33 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   action,
   default: Login,
@@ -9519,11 +9459,11 @@ const route35 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
 function Index() {
   return /* @__PURE__ */ jsx(NotFound, {});
 }
-const route36 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const route34 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Index
 }, Symbol.toStringTag, { value: "Module" }));
-const serverManifest = { "entry": { "module": "/assets/entry.client-BCfS5uA3.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/components-L3uqpAeb.js", "/assets/performance-BzrtDdss.js", "/assets/node-B7-pBh_n.js", "/assets/isBrowser-C0tq15AE.js"], "css": [] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/root-DNaeaQS_.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/components-L3uqpAeb.js", "/assets/performance-BzrtDdss.js", "/assets/node-B7-pBh_n.js", "/assets/isBrowser-C0tq15AE.js", "/assets/500-DznNHTcq.js", "/assets/index-BVjGJyoY.js", "/assets/button-nJ3DiPmc.js", "/assets/circle-plus-Bp428-Mi.js", "/assets/index-dhnn1sud.js", "/assets/checkbox-DJYn4jr2.js", "/assets/404-7SK4sLAH.js", "/assets/index-0B69M2cR.js", "/assets/try-parse-oHcphYqD.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-Cuy4oVjc.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/playground.dashboard.viewTransition": { "id": "routes/playground.dashboard.viewTransition", "parentId": "routes/playground.dashboard", "path": "viewTransition", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.viewTransition-DmAhNct2.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/get-default-title-B-i1CURY.js", "/assets/button-nJ3DiPmc.js"], "css": [] }, "routes/playground.article.post.clone.$id": { "id": "routes/playground.article.post.clone.$id", "parentId": "routes/playground.article.post", "path": "clone/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.clone._id-W7xqIOKx.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/get-default-title-B-i1CURY.js", "/assets/playground.article.post.edit._id-zhyv-oYh.js", "/assets/components-L3uqpAeb.js", "/assets/button-nJ3DiPmc.js", "/assets/textarea-CHWGKRm-.js", "/assets/index-0B69M2cR.js", "/assets/index-Cuy4oVjc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/label-DMeu1U8J.js", "/assets/index-ans_9-if.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/card-9CeW0Jrm.js", "/assets/index-dhnn1sud.js", "/assets/checkbox-DJYn4jr2.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/post-Tv3N1-wS.js", "/assets/show-f_dlKDQI.js", "/assets/delete-D_LkkB4d.js", "/assets/clone-tm2bGuYp.js"], "css": [] }, "routes/playground.article.post.edit.$id": { "id": "routes/playground.article.post.edit.$id", "parentId": "routes/playground.article.post", "path": "edit/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.edit._id-CNBljClq.js", "imports": ["/assets/playground.article.post.edit._id-zhyv-oYh.js", "/assets/index-jG6TLAuK.js", "/assets/textarea-CHWGKRm-.js", "/assets/button-nJ3DiPmc.js", "/assets/index-0B69M2cR.js", "/assets/index-Cuy4oVjc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/components-L3uqpAeb.js", "/assets/500-DznNHTcq.js", "/assets/label-DMeu1U8J.js", "/assets/index-ans_9-if.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/card-9CeW0Jrm.js", "/assets/index-dhnn1sud.js", "/assets/checkbox-DJYn4jr2.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-B-i1CURY.js", "/assets/show-f_dlKDQI.js", "/assets/delete-D_LkkB4d.js", "/assets/clone-tm2bGuYp.js"], "css": [] }, "routes/playground.article.post.show.$id": { "id": "routes/playground.article.post.show.$id", "parentId": "routes/playground.article.post", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.show._id-DZx0zK6u.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-dhnn1sud.js", "/assets/500-DznNHTcq.js", "/assets/avatar-7s-Yg_xM.js", "/assets/badge-DIbh675r.js", "/assets/typography-NCQmnr0j.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/mail-DQnRLKzy.js", "/assets/button-nJ3DiPmc.js", "/assets/delete-D_LkkB4d.js", "/assets/clone-tm2bGuYp.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-Cuy4oVjc.js", "/assets/index-0B69M2cR.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/playground.article.post._index": { "id": "routes/playground.article.post._index", "parentId": "routes/playground.article.post", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post._index-u4Dw-xib.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-dhnn1sud.js", "/assets/index-Cuy4oVjc.js", "/assets/avatar-7s-Yg_xM.js", "/assets/badge-DIbh675r.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-0B69M2cR.js", "/assets/button-nJ3DiPmc.js", "/assets/playground.article.post.edit._id-zhyv-oYh.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/circle-plus-Bp428-Mi.js", "/assets/export-DylKLw56.js", "/assets/show-f_dlKDQI.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/input-BlF4CSdU.js", "/assets/textarea-CHWGKRm-.js", "/assets/label-DMeu1U8J.js", "/assets/index-ans_9-if.js", "/assets/card-9CeW0Jrm.js", "/assets/delete-D_LkkB4d.js", "/assets/clone-tm2bGuYp.js"], "css": [] }, "routes/playground.article.post.create": { "id": "routes/playground.article.post.create", "parentId": "routes/playground.article.post", "path": "create", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.create-CGeQXhCw.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/get-default-title-B-i1CURY.js", "/assets/playground.article.post.edit._id-zhyv-oYh.js", "/assets/button-nJ3DiPmc.js", "/assets/textarea-CHWGKRm-.js", "/assets/index-0B69M2cR.js", "/assets/index-Cuy4oVjc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/components-L3uqpAeb.js", "/assets/label-DMeu1U8J.js", "/assets/index-ans_9-if.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/card-9CeW0Jrm.js", "/assets/index-dhnn1sud.js", "/assets/checkbox-DJYn4jr2.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/post-Tv3N1-wS.js", "/assets/show-f_dlKDQI.js", "/assets/delete-D_LkkB4d.js", "/assets/clone-tm2bGuYp.js"], "css": [] }, "routes/api.auth.$provider.callback": { "id": "routes/api.auth.$provider.callback", "parentId": "root", "path": "api/auth/:provider/callback", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider.callback-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard.health": { "id": "routes/playground.dashboard.health", "parentId": "routes/playground.dashboard", "path": "health", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.health-BJCzrJns.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/button-nJ3DiPmc.js", "/assets/get-default-title-B-i1CURY.js"], "css": [] }, "routes/playground.dashboard.about": { "id": "routes/playground.dashboard.about", "parentId": "routes/playground.dashboard", "path": "about", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.about-BgFsMmSD.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/badge-DIbh675r.js", "/assets/button-nJ3DiPmc.js", "/assets/checkbox-DJYn4jr2.js", "/assets/sidebar-BXujW_xy.js", "/assets/label-DMeu1U8J.js", "/assets/index-Cuy4oVjc.js", "/assets/components-L3uqpAeb.js", "/assets/try-parse-oHcphYqD.js", "/assets/gallery-vertical-end-BA4ENofB.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/system.account.role._index": { "id": "routes/system.account.role._index", "parentId": "routes/system.account.role", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role._index-DgqmvFt_.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-dhnn1sud.js", "/assets/avatar-7s-Yg_xM.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-0B69M2cR.js", "/assets/button-nJ3DiPmc.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/show-f_dlKDQI.js", "/assets/export-DylKLw56.js", "/assets/index-Cuy4oVjc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/system.account.user._index": { "id": "routes/system.account.user._index", "parentId": "routes/system.account.user", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user._index-BM2v_vWU.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-dhnn1sud.js", "/assets/badge-DIbh675r.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-0B69M2cR.js", "/assets/button-nJ3DiPmc.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/show-f_dlKDQI.js", "/assets/delete-D_LkkB4d.js", "/assets/export-DylKLw56.js", "/assets/index-Cuy4oVjc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/api.auth.$provider._index": { "id": "routes/api.auth.$provider._index", "parentId": "root", "path": "api/auth/:provider", "index": true, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider._index-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard.demo": { "id": "routes/playground.dashboard.demo", "parentId": "routes/playground.dashboard", "path": "demo", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.demo-B161N74j.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/textarea-CHWGKRm-.js", "/assets/500-DznNHTcq.js", "/assets/index-ans_9-if.js", "/assets/index-0B69M2cR.js", "/assets/button-nJ3DiPmc.js", "/assets/input-BlF4CSdU.js", "/assets/index-Cuy4oVjc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/typography-NCQmnr0j.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/label-DMeu1U8J.js"], "css": [] }, "routes/system.admin.log.show.$id": { "id": "routes/system.admin.log.show.$id", "parentId": "routes/system.admin.log", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log.show._id-BBklLUEp.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/avatar-7s-Yg_xM.js", "/assets/badge-DIbh675r.js", "/assets/label-DMeu1U8J.js", "/assets/typography-NCQmnr0j.js", "/assets/log-CzRNw-rf.js", "/assets/components-L3uqpAeb.js", "/assets/mail-DQnRLKzy.js", "/assets/button-nJ3DiPmc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js"], "css": [] }, "routes/playground.article.post": { "id": "routes/playground.article.post", "parentId": "root", "path": "playground/article/post", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post-CLqlcHsB.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/switcher-role-C1k9mqz6.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-Cuy4oVjc.js", "/assets/index-dhnn1sud.js", "/assets/index-0B69M2cR.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-BVjGJyoY.js", "/assets/sidebar-BXujW_xy.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/system.admin.log._index": { "id": "routes/system.admin.log._index", "parentId": "routes/system.admin.log", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log._index-DLpy5Zep.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/dayjs.min-DhVwsScJ.js", "/assets/index-dhnn1sud.js", "/assets/avatar-7s-Yg_xM.js", "/assets/badge-DIbh675r.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-0B69M2cR.js", "/assets/button-nJ3DiPmc.js", "/assets/log-CzRNw-rf.js", "/assets/get-default-title-B-i1CURY.js", "/assets/components-L3uqpAeb.js", "/assets/show-f_dlKDQI.js", "/assets/export-DylKLw56.js", "/assets/index-Cuy4oVjc.js", "/assets/index-B7Nn8ntX.js", "/assets/index-DGdd_38J.js", "/assets/input-BlF4CSdU.js"], "css": [] }, "routes/api.permissions.switch": { "id": "routes/api.permissions.switch", "parentId": "root", "path": "api/permissions/switch", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.permissions.switch-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard": { "id": "routes/playground.dashboard", "parentId": "root", "path": "playground/dashboard", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard-wdeRbdKe.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/switcher-role-C1k9mqz6.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-Cuy4oVjc.js", "/assets/index-dhnn1sud.js", "/assets/index-0B69M2cR.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-BVjGJyoY.js", "/assets/sidebar-BXujW_xy.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/api.set-preferences": { "id": "routes/api.set-preferences", "parentId": "root", "path": "api/set-preferences", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.set-preferences-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/system.account.role": { "id": "routes/system.account.role", "parentId": "root", "path": "system/account/role", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role-BLIRNCrr.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/switcher-role-C1k9mqz6.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-Cuy4oVjc.js", "/assets/index-dhnn1sud.js", "/assets/index-0B69M2cR.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-BVjGJyoY.js", "/assets/sidebar-BXujW_xy.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/system.account.user": { "id": "routes/system.account.user", "parentId": "root", "path": "system/account/user", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user-CLqlcHsB.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/switcher-role-C1k9mqz6.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-Cuy4oVjc.js", "/assets/index-dhnn1sud.js", "/assets/index-0B69M2cR.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-BVjGJyoY.js", "/assets/sidebar-BXujW_xy.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/api.$resource.bulk": { "id": "routes/api.$resource.bulk", "parentId": "routes/api.$resource", "path": "bulk", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource.bulk-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.image-resize.$": { "id": "routes/api.image-resize.$", "parentId": "root", "path": "api/image-resize/*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.image-resize._-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.$resource.$id": { "id": "routes/api.$resource.$id", "parentId": "routes/api.$resource", "path": ":id", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource._id-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/system.admin.log": { "id": "routes/system.admin.log", "parentId": "root", "path": "system/admin/log", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log-CLqlcHsB.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/500-DznNHTcq.js", "/assets/switcher-role-C1k9mqz6.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js", "/assets/checkbox-DJYn4jr2.js", "/assets/index-DGdd_38J.js", "/assets/index-B7Nn8ntX.js", "/assets/index-Cuy4oVjc.js", "/assets/index-dhnn1sud.js", "/assets/index-0B69M2cR.js", "/assets/badge-DIbh675r.js", "/assets/input-BlF4CSdU.js", "/assets/index-BVjGJyoY.js", "/assets/sidebar-BXujW_xy.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-7s-Yg_xM.js", "/assets/gallery-vertical-end-BA4ENofB.js"], "css": [] }, "routes/api.auth.logout": { "id": "routes/api.auth.logout", "parentId": "root", "path": "api/auth/logout", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.logout-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/password-forgot": { "id": "routes/password-forgot", "parentId": "root", "path": "password-forgot", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-forgot-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/password-update": { "id": "routes/password-update", "parentId": "root", "path": "password-update", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-update-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.$resource": { "id": "routes/api.$resource", "parentId": "root", "path": "api/:resource", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.send.code": { "id": "routes/api.send.code", "parentId": "root", "path": "api/send/code", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.send.code-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.auth.me": { "id": "routes/api.auth.me", "parentId": "root", "path": "api/auth/me", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.me-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.publish": { "id": "routes/api.publish", "parentId": "root", "path": "api/publish", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.publish-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/register": { "id": "routes/register", "parentId": "root", "path": "register", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/register-DrPjGJ9T.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/index-ans_9-if.js", "/assets/button-nJ3DiPmc.js", "/assets/input-BlF4CSdU.js", "/assets/label-DMeu1U8J.js", "/assets/tcsk-oauth2-Dw0hDdJ6.js", "/assets/components-L3uqpAeb.js", "/assets/gallery-vertical-end-BA4ENofB.js", "/assets/index-DGdd_38J.js"], "css": [] }, "routes/_index": { "id": "routes/_index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_index-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/login": { "id": "routes/login", "parentId": "root", "path": "login", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/login-CR9lIlVi.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/index-ans_9-if.js", "/assets/button-nJ3DiPmc.js", "/assets/card-9CeW0Jrm.js", "/assets/input-BlF4CSdU.js", "/assets/label-DMeu1U8J.js", "/assets/tcsk-oauth2-Dw0hDdJ6.js", "/assets/components-L3uqpAeb.js", "/assets/index-DGdd_38J.js"], "css": [] }, "routes/$": { "id": "routes/$", "parentId": "root", "path": "*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_-BXZH7IK6.js", "imports": ["/assets/index-jG6TLAuK.js", "/assets/404-7SK4sLAH.js", "/assets/button-nJ3DiPmc.js", "/assets/components-L3uqpAeb.js"], "css": [] } }, "url": "/assets/manifest-30104837.js", "version": "30104837" };
+const serverManifest = { "entry": { "module": "/assets/entry.client-BKxkx5EL.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/components-Dn9ONk9W.js", "/assets/performance-E2NoGl0x.js", "/assets/index-CrQwKKqE.js", "/assets/node-B7-pBh_n.js", "/assets/isBrowser-C0tq15AE.js"], "css": [] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/root-Bx4E5wYR.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/components-Dn9ONk9W.js", "/assets/performance-E2NoGl0x.js", "/assets/index-CrQwKKqE.js", "/assets/node-B7-pBh_n.js", "/assets/isBrowser-C0tq15AE.js", "/assets/500-C8uWvf8m.js", "/assets/index-CcykMMwV.js", "/assets/button-D61r5HEm.js", "/assets/circle-plus-BXHZWwvB.js", "/assets/index-gtHudL3v.js", "/assets/checkbox-CMZjKj-c.js", "/assets/404-Bputcry_.js", "/assets/index-DVTqCAJy.js", "/assets/try-parse-oHcphYqD.js", "/assets/index-DFW_KxOH.js", "/assets/index-CmLywxAY.js", "/assets/index-BUbEaWjm.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js"], "css": [] }, "routes/playground.dashboard.viewTransition": { "id": "routes/playground.dashboard.viewTransition", "parentId": "routes/playground.dashboard", "path": "viewTransition", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.viewTransition-lLxOQm1z.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js"], "css": [] }, "routes/playground.article.post.clone.$id": { "id": "routes/playground.article.post.clone.$id", "parentId": "routes/playground.article.post", "path": "clone/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.clone._id-TPjo_FP1.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/playground.article.post.edit._id-CMkzbuxy.js", "/assets/components-Dn9ONk9W.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js", "/assets/textarea-CnS6s8rv.js", "/assets/index-DVTqCAJy.js", "/assets/index-BUbEaWjm.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js", "/assets/label-CKPpohJl.js", "/assets/index-ans_9-if.js", "/assets/dayjs.min-CICj542N.js", "/assets/card-D20H5Zba.js", "/assets/index-gtHudL3v.js", "/assets/checkbox-CMZjKj-c.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js", "/assets/post-Tv3N1-wS.js", "/assets/show-BWXwhosq.js", "/assets/delete-nuQ8SfGA.js", "/assets/clone-SjVZldWZ.js"], "css": [] }, "routes/playground.article.post.edit.$id": { "id": "routes/playground.article.post.edit.$id", "parentId": "routes/playground.article.post", "path": "edit/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.edit._id-DtAXrm5_.js", "imports": ["/assets/playground.article.post.edit._id-CMkzbuxy.js", "/assets/jsx-runtime-BfjT4Y3f.js", "/assets/textarea-CnS6s8rv.js", "/assets/button-D61r5HEm.js", "/assets/index-DVTqCAJy.js", "/assets/index-BUbEaWjm.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js", "/assets/components-Dn9ONk9W.js", "/assets/index-CrQwKKqE.js", "/assets/500-C8uWvf8m.js", "/assets/label-CKPpohJl.js", "/assets/index-ans_9-if.js", "/assets/dayjs.min-CICj542N.js", "/assets/card-D20H5Zba.js", "/assets/index-gtHudL3v.js", "/assets/checkbox-CMZjKj-c.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/show-BWXwhosq.js", "/assets/delete-nuQ8SfGA.js", "/assets/clone-SjVZldWZ.js"], "css": [] }, "routes/playground.article.post.show.$id": { "id": "routes/playground.article.post.show.$id", "parentId": "routes/playground.article.post", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.show._id-BDFR7H13.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/dayjs.min-CICj542N.js", "/assets/index-gtHudL3v.js", "/assets/500-C8uWvf8m.js", "/assets/avatar-C0hQfVou.js", "/assets/badge-ByomqBS2.js", "/assets/typography-DdiBqiMF.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/components-Dn9ONk9W.js", "/assets/mail-KF-PNu9J.js", "/assets/button-D61r5HEm.js", "/assets/delete-nuQ8SfGA.js", "/assets/clone-SjVZldWZ.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DFW_KxOH.js", "/assets/index-CmLywxAY.js", "/assets/index-BUbEaWjm.js", "/assets/index-DVTqCAJy.js", "/assets/input-CEfo3cmi.js", "/assets/index-CrQwKKqE.js"], "css": [] }, "routes/playground.article.post._index": { "id": "routes/playground.article.post._index", "parentId": "routes/playground.article.post", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post._index-B1xTZrN8.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/dayjs.min-CICj542N.js", "/assets/index-gtHudL3v.js", "/assets/index-BUbEaWjm.js", "/assets/avatar-C0hQfVou.js", "/assets/badge-ByomqBS2.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DVTqCAJy.js", "/assets/button-D61r5HEm.js", "/assets/playground.article.post.edit._id-CMkzbuxy.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/components-Dn9ONk9W.js", "/assets/circle-plus-BXHZWwvB.js", "/assets/export-i-AxzSS1.js", "/assets/show-BWXwhosq.js", "/assets/index-CrQwKKqE.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js", "/assets/input-CEfo3cmi.js", "/assets/textarea-CnS6s8rv.js", "/assets/label-CKPpohJl.js", "/assets/index-ans_9-if.js", "/assets/card-D20H5Zba.js", "/assets/delete-nuQ8SfGA.js", "/assets/clone-SjVZldWZ.js"], "css": [] }, "routes/playground.article.post.create": { "id": "routes/playground.article.post.create", "parentId": "routes/playground.article.post", "path": "create", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post.create-DCT0s2Tz.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/playground.article.post.edit._id-CMkzbuxy.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js", "/assets/textarea-CnS6s8rv.js", "/assets/index-DVTqCAJy.js", "/assets/index-BUbEaWjm.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js", "/assets/components-Dn9ONk9W.js", "/assets/label-CKPpohJl.js", "/assets/index-ans_9-if.js", "/assets/dayjs.min-CICj542N.js", "/assets/card-D20H5Zba.js", "/assets/index-gtHudL3v.js", "/assets/checkbox-CMZjKj-c.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js", "/assets/post-Tv3N1-wS.js", "/assets/show-BWXwhosq.js", "/assets/delete-nuQ8SfGA.js", "/assets/clone-SjVZldWZ.js"], "css": [] }, "routes/api.auth.$provider.callback": { "id": "routes/api.auth.$provider.callback", "parentId": "root", "path": "api/auth/:provider/callback", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider.callback-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard.health": { "id": "routes/playground.dashboard.health", "parentId": "routes/playground.dashboard", "path": "health", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.health-DqwN3eJI.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/button-D61r5HEm.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/index-CrQwKKqE.js"], "css": [] }, "routes/playground.dashboard.about": { "id": "routes/playground.dashboard.about", "parentId": "routes/playground.dashboard", "path": "about", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.about-CD_-Mwcl.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/badge-ByomqBS2.js", "/assets/button-D61r5HEm.js", "/assets/checkbox-CMZjKj-c.js", "/assets/sidebar-B7gIn6my.js", "/assets/label-CKPpohJl.js", "/assets/index-BUbEaWjm.js", "/assets/components-Dn9ONk9W.js", "/assets/try-parse-oHcphYqD.js", "/assets/gallery-vertical-end-C_58LPdx.js", "/assets/index-CrQwKKqE.js", "/assets/index-DFW_KxOH.js", "/assets/index-CmLywxAY.js", "/assets/input-CEfo3cmi.js"], "css": [] }, "routes/system.account.role._index": { "id": "routes/system.account.role._index", "parentId": "routes/system.account.role", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role._index-Bha32qUJ.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/dayjs.min-CICj542N.js", "/assets/index-gtHudL3v.js", "/assets/avatar-C0hQfVou.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DVTqCAJy.js", "/assets/button-D61r5HEm.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/components-Dn9ONk9W.js", "/assets/show-BWXwhosq.js", "/assets/export-i-AxzSS1.js", "/assets/index-CrQwKKqE.js", "/assets/index-BUbEaWjm.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js"], "css": [] }, "routes/system.account.user._index": { "id": "routes/system.account.user._index", "parentId": "routes/system.account.user", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user._index-CqeXgTr-.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/dayjs.min-CICj542N.js", "/assets/index-gtHudL3v.js", "/assets/badge-ByomqBS2.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DVTqCAJy.js", "/assets/button-D61r5HEm.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/components-Dn9ONk9W.js", "/assets/show-BWXwhosq.js", "/assets/delete-nuQ8SfGA.js", "/assets/export-i-AxzSS1.js", "/assets/index-CrQwKKqE.js", "/assets/index-BUbEaWjm.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js", "/assets/input-CEfo3cmi.js"], "css": [] }, "routes/api.auth.$provider._index": { "id": "routes/api.auth.$provider._index", "parentId": "root", "path": "api/auth/:provider", "index": true, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth._provider._index-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard.demo": { "id": "routes/playground.dashboard.demo", "parentId": "routes/playground.dashboard", "path": "demo", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard.demo-C6HmZuLv.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/textarea-CnS6s8rv.js", "/assets/500-C8uWvf8m.js", "/assets/index-ans_9-if.js", "/assets/index-DVTqCAJy.js", "/assets/button-D61r5HEm.js", "/assets/input-CEfo3cmi.js", "/assets/index-BUbEaWjm.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js", "/assets/typography-DdiBqiMF.js", "/assets/post-Tv3N1-wS.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/components-Dn9ONk9W.js", "/assets/label-CKPpohJl.js", "/assets/index-CrQwKKqE.js"], "css": [] }, "routes/system.admin.log.show.$id": { "id": "routes/system.admin.log.show.$id", "parentId": "routes/system.admin.log", "path": "show/:id", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log.show._id-DGl-iyp5.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/avatar-C0hQfVou.js", "/assets/badge-ByomqBS2.js", "/assets/label-CKPpohJl.js", "/assets/typography-DdiBqiMF.js", "/assets/log-CzRNw-rf.js", "/assets/components-Dn9ONk9W.js", "/assets/mail-KF-PNu9J.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js"], "css": [] }, "routes/playground.article.post": { "id": "routes/playground.article.post", "parentId": "root", "path": "playground/article/post", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.article.post-41UvWZMy.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/switcher-role-Cx9AWkcy.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js", "/assets/components-Dn9ONk9W.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DFW_KxOH.js", "/assets/index-CmLywxAY.js", "/assets/index-BUbEaWjm.js", "/assets/index-gtHudL3v.js", "/assets/index-DVTqCAJy.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js", "/assets/index-CcykMMwV.js", "/assets/sidebar-B7gIn6my.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-C0hQfVou.js", "/assets/gallery-vertical-end-C_58LPdx.js"], "css": [] }, "routes/system.admin.log._index": { "id": "routes/system.admin.log._index", "parentId": "routes/system.admin.log", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log._index-BAn9ywxc.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/dayjs.min-CICj542N.js", "/assets/index-gtHudL3v.js", "/assets/avatar-C0hQfVou.js", "/assets/badge-ByomqBS2.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DVTqCAJy.js", "/assets/button-D61r5HEm.js", "/assets/log-CzRNw-rf.js", "/assets/get-default-title-DAAmdVj_.js", "/assets/components-Dn9ONk9W.js", "/assets/show-BWXwhosq.js", "/assets/export-i-AxzSS1.js", "/assets/index-CrQwKKqE.js", "/assets/index-BUbEaWjm.js", "/assets/index-CmLywxAY.js", "/assets/index-DFW_KxOH.js", "/assets/input-CEfo3cmi.js"], "css": [] }, "routes/api.permissions.switch": { "id": "routes/api.permissions.switch", "parentId": "root", "path": "api/permissions/switch", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.permissions.switch-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/playground.dashboard": { "id": "routes/playground.dashboard", "parentId": "root", "path": "playground/dashboard", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/playground.dashboard-DhUT4jpC.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/switcher-role-Cx9AWkcy.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js", "/assets/components-Dn9ONk9W.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DFW_KxOH.js", "/assets/index-CmLywxAY.js", "/assets/index-BUbEaWjm.js", "/assets/index-gtHudL3v.js", "/assets/index-DVTqCAJy.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js", "/assets/index-CcykMMwV.js", "/assets/sidebar-B7gIn6my.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-C0hQfVou.js", "/assets/gallery-vertical-end-C_58LPdx.js"], "css": [] }, "routes/api.set-preferences": { "id": "routes/api.set-preferences", "parentId": "root", "path": "api/set-preferences", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.set-preferences-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/system.account.role": { "id": "routes/system.account.role", "parentId": "root", "path": "system/account/role", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.role-5amhHEFG.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/switcher-role-Cx9AWkcy.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js", "/assets/components-Dn9ONk9W.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DFW_KxOH.js", "/assets/index-CmLywxAY.js", "/assets/index-BUbEaWjm.js", "/assets/index-gtHudL3v.js", "/assets/index-DVTqCAJy.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js", "/assets/index-CcykMMwV.js", "/assets/sidebar-B7gIn6my.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-C0hQfVou.js", "/assets/gallery-vertical-end-C_58LPdx.js"], "css": [] }, "routes/system.account.user": { "id": "routes/system.account.user", "parentId": "root", "path": "system/account/user", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.account.user-41UvWZMy.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/switcher-role-Cx9AWkcy.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js", "/assets/components-Dn9ONk9W.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DFW_KxOH.js", "/assets/index-CmLywxAY.js", "/assets/index-BUbEaWjm.js", "/assets/index-gtHudL3v.js", "/assets/index-DVTqCAJy.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js", "/assets/index-CcykMMwV.js", "/assets/sidebar-B7gIn6my.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-C0hQfVou.js", "/assets/gallery-vertical-end-C_58LPdx.js"], "css": [] }, "routes/api.$resource.bulk": { "id": "routes/api.$resource.bulk", "parentId": "routes/api.$resource", "path": "bulk", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource.bulk-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.image-resize.$": { "id": "routes/api.image-resize.$", "parentId": "root", "path": "api/image-resize/*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.image-resize._-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.$resource.$id": { "id": "routes/api.$resource.$id", "parentId": "routes/api.$resource", "path": ":id", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource._id-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/system.admin.log": { "id": "routes/system.admin.log", "parentId": "root", "path": "system/admin/log", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": true, "module": "/assets/system.admin.log-41UvWZMy.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/500-C8uWvf8m.js", "/assets/switcher-role-Cx9AWkcy.js", "/assets/button-D61r5HEm.js", "/assets/index-CrQwKKqE.js", "/assets/components-Dn9ONk9W.js", "/assets/checkbox-CMZjKj-c.js", "/assets/index-DFW_KxOH.js", "/assets/index-CmLywxAY.js", "/assets/index-BUbEaWjm.js", "/assets/index-gtHudL3v.js", "/assets/index-DVTqCAJy.js", "/assets/badge-ByomqBS2.js", "/assets/input-CEfo3cmi.js", "/assets/index-CcykMMwV.js", "/assets/sidebar-B7gIn6my.js", "/assets/isBrowser-C0tq15AE.js", "/assets/node-B7-pBh_n.js", "/assets/avatar-C0hQfVou.js", "/assets/gallery-vertical-end-C_58LPdx.js"], "css": [] }, "routes/api.auth.logout": { "id": "routes/api.auth.logout", "parentId": "root", "path": "api/auth/logout", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.logout-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/password-forgot": { "id": "routes/password-forgot", "parentId": "root", "path": "password-forgot", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-forgot-B-EqfKIN.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js"], "css": [] }, "routes/password-update": { "id": "routes/password-update", "parentId": "root", "path": "password-update", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/password-update-CLlHnxyY.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js"], "css": [] }, "routes/api.$resource": { "id": "routes/api.$resource", "parentId": "root", "path": "api/:resource", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api._resource-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/api.auth.me": { "id": "routes/api.auth.me", "parentId": "root", "path": "api/auth/me", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/api.auth.me-l0sNRNKZ.js", "imports": [], "css": [] }, "routes/register": { "id": "routes/register", "parentId": "root", "path": "register", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/register-BqLxPNs5.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/index-ans_9-if.js", "/assets/button-D61r5HEm.js", "/assets/input-CEfo3cmi.js", "/assets/label-CKPpohJl.js", "/assets/tcsk-oauth2-ALJmvXPS.js", "/assets/components-Dn9ONk9W.js", "/assets/index-CrQwKKqE.js", "/assets/gallery-vertical-end-C_58LPdx.js", "/assets/index-DFW_KxOH.js"], "css": [] }, "routes/_index": { "id": "routes/_index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_index-C6d-v1ok.js", "imports": [], "css": [] }, "routes/login": { "id": "routes/login", "parentId": "root", "path": "login", "index": void 0, "caseSensitive": void 0, "hasAction": true, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/login-B8dI3vsu.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/index-ans_9-if.js", "/assets/button-D61r5HEm.js", "/assets/card-D20H5Zba.js", "/assets/input-CEfo3cmi.js", "/assets/label-CKPpohJl.js", "/assets/tcsk-oauth2-ALJmvXPS.js", "/assets/components-Dn9ONk9W.js", "/assets/index-CrQwKKqE.js", "/assets/index-DFW_KxOH.js"], "css": [] }, "routes/$": { "id": "routes/$", "parentId": "root", "path": "*", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasErrorBoundary": false, "module": "/assets/_-DRYZCbRD.js", "imports": ["/assets/jsx-runtime-BfjT4Y3f.js", "/assets/404-Bputcry_.js", "/assets/button-D61r5HEm.js", "/assets/components-Dn9ONk9W.js", "/assets/index-CrQwKKqE.js"], "css": [] } }, "url": "/assets/manifest-25b39d3e.js", "version": "25b39d3e" };
 const mode = "production";
 const assetsBuildDirectory = "build/client";
 const basename = "/";
@@ -9772,29 +9712,13 @@ const routes = {
     caseSensitive: void 0,
     module: route29
   },
-  "routes/api.send.code": {
-    id: "routes/api.send.code",
-    parentId: "root",
-    path: "api/send/code",
-    index: void 0,
-    caseSensitive: void 0,
-    module: route30
-  },
   "routes/api.auth.me": {
     id: "routes/api.auth.me",
     parentId: "root",
     path: "api/auth/me",
     index: void 0,
     caseSensitive: void 0,
-    module: route31
-  },
-  "routes/api.publish": {
-    id: "routes/api.publish",
-    parentId: "root",
-    path: "api/publish",
-    index: void 0,
-    caseSensitive: void 0,
-    module: route32
+    module: route30
   },
   "routes/register": {
     id: "routes/register",
@@ -9802,7 +9726,7 @@ const routes = {
     path: "register",
     index: void 0,
     caseSensitive: void 0,
-    module: route33
+    module: route31
   },
   "routes/_index": {
     id: "routes/_index",
@@ -9810,7 +9734,7 @@ const routes = {
     path: void 0,
     index: true,
     caseSensitive: void 0,
-    module: route34
+    module: route32
   },
   "routes/login": {
     id: "routes/login",
@@ -9818,7 +9742,7 @@ const routes = {
     path: "login",
     index: void 0,
     caseSensitive: void 0,
-    module: route35
+    module: route33
   },
   "routes/$": {
     id: "routes/$",
@@ -9826,7 +9750,7 @@ const routes = {
     path: "*",
     index: void 0,
     caseSensitive: void 0,
-    module: route36
+    module: route34
   }
 };
 export {

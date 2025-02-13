@@ -6,7 +6,7 @@ import i18next, { changeLanguage, use as i18nextUse, t } from 'i18next';
 import Cookies from 'js-cookie';
 import { initReactI18next } from 'react-i18next';
 
-import { defaultNS, fallbackLanguage, LocaleLanguage, resourcesLanguages, supportedLanguages } from '~/config';
+import { apiBase, defaultNS, fallbackLanguage, LocaleLanguage, resourcesLanguages, supportedLanguages } from '~/config';
 import { canUseDOM, webapi } from '~/utils';
 
 // 获取 cookie
@@ -55,8 +55,12 @@ export const i18nProvider: I18nProvider = {
   changeLocale: async (locale: string) => {
     await changeLanguage(locale);
 
-    const res = await webapi.post(`/set-preferences`, {
-      locale,
+    const formData = new FormData();
+    formData.append('locale', locale);
+
+    const res = await fetch(`${apiBase}/set-preferences`, {
+      method: 'POST',
+      body: formData,
     });
 
     const { data } = await res.json();

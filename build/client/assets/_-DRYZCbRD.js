@@ -1,0 +1,1 @@
+import{j as o}from"./jsx-runtime-BfjT4Y3f.js";import{N as t}from"./404-Bputcry_.js";import"./button-D61r5HEm.js";import"./components-Dn9ONk9W.js";import"./index-CrQwKKqE.js";function s(){return o.jsx(t,{})}export{s as default};

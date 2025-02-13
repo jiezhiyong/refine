@@ -34,11 +34,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       session.set('user', userNew);
     }
 
-    const headers = new Headers();
-    headers.append('Set-Cookie', await commitSession(session));
-
     return redirect('/', {
-      headers,
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
     });
   } catch (error: TAny) {
     console.error('@authenticator.OAuth2.callback', error);
