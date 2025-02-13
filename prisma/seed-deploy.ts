@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-import { CASBIN_POLICIES } from 'public/sql-pemission';
-import { userAdministrator } from 'public/sql-users';
+import { CASBIN_POLICIES } from 'mock/db/sql-pemission';
+import { userAdministrator } from 'mock/db/sql-users';
 import { EnumAuthProvider } from '~/constants';
 
 const db = new PrismaClient();
@@ -55,14 +55,15 @@ export async function seedProduction() {
   console.log('生产环境数据初始化完成');
 }
 
-// 如果直接执行此文件则运行初始化
-if (require.main === module) {
-  seedProduction()
-    .catch((e) => {
-      console.error('生产环境数据初始化失败:', e);
-      process.exit(1);
-    })
-    .finally(async () => {
-      await db.$disconnect();
-    });
+async function main() {
+  try {
+    await seedProduction();
+  } catch (e) {
+    console.error('生产环境数据初始化失败:', e);
+    process.exit(1);
+  } finally {
+    await db.$disconnect();
+  }
 }
+
+main();

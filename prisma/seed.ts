@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-import { categories } from 'public/sql-categories.ts';
-import { CASBIN_POLICIES } from 'public/sql-pemission.ts';
-import { posts } from 'public/sql-posts.ts';
-import { roles } from 'public/sql-roles.ts';
-import { userAdministrator, users } from 'public/sql-users.ts';
+import { categories } from 'mock/db/sql-categories';
+import { CASBIN_POLICIES } from 'mock/db/sql-pemission';
+import { posts } from 'mock/db/sql-posts';
+import { roles } from 'mock/db/sql-roles';
+import { userAdministrator, users } from 'mock/db/sql-users';
 import { EnumAuthProvider } from '~/constants';
 
 const db = new PrismaClient();

@@ -6683,7 +6683,7 @@ const dataService = {
   }
 };
 const baseStyles = "/assets/base-CNccC1ql.css";
-const tailwindStyles = "/assets/tailwind-CTz0vaH6.css";
+const tailwindStyles = "/assets/tailwind-CrWslZKt.css";
 const meta$e = () => [
   { property: "og:title", content: "This app is the best." },
   { name: "description", content: "Welcome to Remix!" }
