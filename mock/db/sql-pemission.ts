@@ -13,8 +13,6 @@ export const CASBIN_POLICIES = [
   ['p', 'editor', 'post', 'list|create|field|import|export'],
   ['p', 'editor', 'post/*', 'show|edit|field|delete|clone'],
   ['p', 'editor', 'post/hit', 'field', 'deny'],
-  ['p', 'editor', 'category', 'list|import|export'],
-  ['p', 'editor', 'category/*', 'show|clone'],
   ['p', 'editor', 'system', 'list'],
   ['p', 'editor', 'account', 'list'],
   ['p', 'editor', 'user', 'list|import|export'],
@@ -34,6 +32,4 @@ export const CASBIN_POLICIES = [
   ['p', 'guest', 'article', 'list'],
   ['p', 'guest', 'post', 'list'],
   ['p', 'guest', 'post/*', 'show'],
-  ['p', 'guest', 'category', 'list'],
-  ['p', 'guest', 'category/*', 'show'],
 ];

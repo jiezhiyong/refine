@@ -9,7 +9,7 @@
     "dev": "refine dev",
     "build": "refine build",
     "postbuild": "npm run db:deploy",
-    "db:deploy": "prisma migrate deploy && tsx prisma/seed-deploy.ts",
+    "db:deploy": "prisma migrate deploy && tsx prisma/seed-production.ts",
     "start": "refine start ./build/server/index.js",
     "refine": "refine",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
