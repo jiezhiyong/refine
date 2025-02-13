@@ -5,7 +5,7 @@ import { categories } from 'mock/db/sql-categories';
 import { CASBIN_POLICIES } from 'mock/db/sql-pemission';
 import { posts } from 'mock/db/sql-posts';
 import { roles } from 'mock/db/sql-roles';
-import { userAdministrator, users } from 'mock/db/sql-users';
+import { userAdministrator } from 'mock/db/sql-users';
 import { EnumAuthProvider } from '~/constants';
 
 const db = new PrismaClient();
@@ -44,7 +44,7 @@ async function seed() {
       provider: EnumAuthProvider.userpass,
       password: {
         create: {
-          hash: await bcrypt.hash(userAdministrator.password, 10),
+          hash: await bcrypt.hash(userAdministrator.password!, 10),
         },
       },
     },
@@ -74,33 +74,6 @@ async function seed() {
         },
       })
     )
-  );
-
-  // 创建其他用户并分配角色
-  await Promise.all(
-    users.map(async (user) => {
-      const { password, role, ...rest } = user;
-      const newUser = await db.user.create({
-        data: {
-          ...rest,
-          provider: EnumAuthProvider.userpass,
-          password: {
-            create: {
-              hash: await bcrypt.hash(password, 10),
-            },
-          },
-        },
-      });
-
-      await db.userRole.create({
-        data: {
-          userId: newUser.id,
-          roleId: role.id,
-        },
-      });
-
-      return newUser;
-    })
   );
 
   // 创建 categories
