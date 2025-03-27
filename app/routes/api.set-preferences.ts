@@ -1,7 +1,7 @@
 import { ActionFunction } from '@remix-run/node';
 
-import { getPreferencesNextCookie } from '~/services';
-import { getRequestData } from '~/utils';
+import { getPreferencesNextCookie } from '~/services/cookie.server';
+import { getRequestData } from '~/utils/get-request-data';
 
 // 设置用户偏好
 export const action: ActionFunction = async ({ request }) => {

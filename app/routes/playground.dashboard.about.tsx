@@ -25,14 +25,14 @@ import {
 import React from 'react';
 import { DateRange } from 'react-day-picker';
 
-import { PageError } from '~/components';
-import { Badge } from '~/components-shadcn/badge';
-import { Button } from '~/components-shadcn/button';
-import { Calendar } from '~/components-shadcn/calendar';
-import { Checkbox } from '~/components-shadcn/checkbox';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components-shadcn/collapsible';
-import { Label } from '~/components-shadcn/label';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components-shadcn/popover';
+import { PageError } from '~/components/500';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
+import { Calendar } from '~/components/ui/calendar';
+import { Checkbox } from '~/components/ui/checkbox';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components/ui/collapsible';
+import { Label } from '~/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 import {
   Sidebar,
   SidebarContent,
@@ -45,19 +45,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-} from '~/components-shadcn/sidebar';
-import { useDebounceSubmit, useUpdateSearchParams } from '~/hooks';
+} from '~/components/ui/sidebar';
+import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
+import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
 import { syncServiceLocaleToClient } from '~/providers';
-import { getPreferencesCookie } from '~/services';
-import { HandleFunction } from '~/types';
-import { tryParse } from '~/utils';
+import { getPreferencesCookie } from '~/services/cookie.server';
+import { HandleFunction } from '~/types/handle';
+import { tryParse } from '~/utils/try-parse';
 
-// 元数据
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
 
-// 创建应用程序约定
 export const handle: HandleFunction = {
   uiTools: (_match: UIMatch, _matchs: UIMatch[]) => {
     return <UiTools />;
@@ -72,7 +71,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // 注意：如果要使用 SSR 进行翻译，需要手动同步服务端与客户端的 locale
   await syncServiceLocaleToClient((await getPreferencesCookie(request)).locale);
 
-  return { title: t('title'), description: t('description') };
+  return { title: t('pages.about.title'), description: t('pages.about.description') };
 }
 
 // UI
@@ -80,26 +79,22 @@ export default function DashboardAbout() {
   const { translate: t } = useTranslation();
   return (
     <div className="flex flex-1 flex-col items-center justify-center text-center">
-      <h1 className="text-6xl text-[#3defe9]">{t('title', '')}</h1>
-      <p className="my-10 text-3xl text-[#fecc1b]">{t('description', '')}</p>
+      <h1 className="text-6xl text-[#3defe9]">{t('pages.about.title')}</h1>
+      <p className="my-10 text-3xl text-[#fecc1b]">{t('pages.about.description')}</p>
 
       <div className="space-y-2 space-x-2 *:py-1 *:text-sm">
-        <Badge>前后端一体化架构</Badge>
-        <Badge>SSR 服务端渲染</Badge>
-        <Badge>路由并行加载</Badge>
-        <Badge>CRUD 开发简化</Badge>
-        <Badge>状态持久化</Badge>
-        <Badge>TypeScript 类型安全</Badge>
+        <Badge>{t('pages.about.features1')}</Badge>
+        <Badge>{t('pages.about.features2')}</Badge>
+        <Badge>{t('pages.about.features3')}</Badge>
+        <Badge>{t('pages.about.features4')}</Badge>
+        <Badge>{t('pages.about.features5')}</Badge>
         <br />
-        <Badge>身份验证</Badge>
-        <Badge>访问控制</Badge>
-        <Badge>审计日志</Badge>
-        <Badge>实时数据</Badge>
-        <Badge>调试辅助</Badge>
-        <Badge>主题切换</Badge>
-        <Badge>多国语言</Badge>
-        <br />
-        <Badge>日志上报 & 监控告警</Badge>
+        <Badge>{t('pages.about.features6')}</Badge>
+        <Badge>{t('pages.about.features7')}</Badge>
+        <Badge>{t('pages.about.features8')}</Badge>
+        <Badge>{t('pages.about.features9')}</Badge>
+        <Badge>{t('pages.about.features10')}</Badge>
+        <Badge>{t('pages.about.features11')}</Badge>
       </div>
 
       {/* <PrefetchPageLinks page="/playground/article/post" /> */}

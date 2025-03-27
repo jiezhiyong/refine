@@ -1,9 +1,10 @@
 import { hmac } from '@noble/hashes/hmac';
 import { sha256 } from '@noble/hashes/sha256';
 import { bytesToHex } from '@noble/hashes/utils';
+import queryString from 'query-string';
 import invariant from 'tiny-invariant';
 
-import { TAny } from '~/types';
+import { TAny } from '~/types/any';
 
 import { canUseDOM } from './can-use-dom';
 
@@ -27,7 +28,7 @@ interface TimestampedPayload<T = TAny> {
 }
 
 // 生成带时间戳的签名
-async function generateSignature(payload: TAny, timestamp?: number): Promise<string> {
+async function generateSignature(payload: TAny = {}, timestamp?: number): Promise<string> {
   const timestampedPayload: TimestampedPayload = {
     data: payload,
     timestamp: timestamp || Date.now(),
@@ -52,13 +53,36 @@ async function verifySignature(timestampedPayload: TimestampedPayload, signature
 // API 请求签名验证中间件
 async function validateRequestSignature(request: Request): Promise<boolean> {
   const signature = request.headers.get('x-signature');
-  if (!signature) {
+  const timestamp = request.headers.get('x-timestamp');
+
+  if (!signature || !timestamp) {
     return false;
   }
 
   try {
-    const body = await request.clone().json();
-    return verifySignature(body, signature);
+    let data: TAny = {};
+
+    // 根据请求方法获取数据
+    if (request.method === 'GET' || request.method === 'DELETE') {
+      const url = new URL(request.url);
+      data = queryString.parse(url.search.substring(1), {
+        arrayFormat: 'index',
+        parseNumbers: true,
+        parseBooleans: true,
+      });
+    } else {
+      // 检查请求体是否为空
+      const clonedRequest = request.clone();
+      const text = await clonedRequest.text();
+      data = text ? JSON.parse(text) : {};
+    }
+
+    const timestampedPayload: TimestampedPayload = {
+      data,
+      timestamp: parseInt(timestamp, 10),
+    };
+
+    return verifySignature(timestampedPayload, signature);
   } catch (error) {
     console.error('Failed to validate signature:', error);
     return false;

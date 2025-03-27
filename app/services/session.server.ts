@@ -1,8 +1,8 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 
-import { getUserById } from '~/models/user.server';
-import { SessionUser } from '~/types';
+import { getUserById, UserWithRoles } from '~/services/user.server';
+import { SessionUser } from '~/types/user';
 
 invariant(process.env.VITE_SECRET, 'VITE_SECRET must be set.');
 
@@ -38,16 +38,17 @@ export async function getUserSession(request: Request) {
 // 获取用户信息
 export async function getUser(request: Request) {
   try {
-    let user = null;
+    let user: UserWithRoles | null = null;
     const session = await getUserSession(request);
-    const { role, id } = session?.get('user') as SessionUser;
+    const sessionUser = session?.get('user') as SessionUser | undefined;
 
-    if (id) {
-      user = await getUserById(id);
+    if (sessionUser?.id) {
+      user = await getUserById(sessionUser.id);
     }
 
-    return { ...user, role };
+    return user ? { ...user, role: sessionUser?.role || null } : null;
   } catch (error) {
+    console.error('@getUser', error);
     return null;
   }
 }
@@ -72,7 +73,7 @@ export async function requireUser(request: Request) {
     const user = await getUser(request);
 
     if (!user?.id) {
-      throw new Error('Unauthorized');
+      throw new Error('Unauthorized: user not found');
     }
 
     return { user, session: await getUserSession(request) };

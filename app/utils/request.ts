@@ -1,11 +1,12 @@
-import { CrudFilters, CrudSorting, Pagination } from '@refinedev/core';
+import { CrudFilters, CrudSorting, GetListParams, Pagination } from '@refinedev/core';
 
-import { DEFAULT_PAGE_SIZE } from '~/config';
-import { TAny } from '~/types';
+import { EnumResource } from '~/constants/resource';
+import { TAny } from '~/types/any';
+import { schemaMap } from '~/zod';
 
 // 从 URL 参数中解析分页信息
 export function getPaginationFromUrl(url: URL): Pagination {
-  const limit = Number(url.searchParams.get('limit')) || DEFAULT_PAGE_SIZE;
+  const limit = Number(url.searchParams.get('limit'));
   const page = Number(url.searchParams.get('page')) || 1;
 
   return {
@@ -41,25 +42,29 @@ export function getFiltersFromUrl(url: URL): CrudFilters {
       return [];
     }
 
-    return searchObj.$and.map((condition: Record<string, { $eq?: string; $contL?: string; $in?: string[] }>) => {
-      const [field] = Object.keys(condition);
-      const operatorMap = {
-        $eq: 'eq',
-        $contL: 'contains',
-        $in: 'in',
-      } as const;
+    return searchObj.$and.map(
+      (condition: Record<string, { $eq?: string; $contL?: string; $in?: string[]; $gte?: string; $lte?: string }>) => {
+        const [field] = Object.keys(condition);
+        const operatorMap = {
+          $eq: 'eq',
+          $contL: 'contains',
+          $in: 'in',
+          $gte: 'gte',
+          $lte: 'lte',
+        } as const;
 
-      // 找到第一个存在的操作符
-      const operator = Object.keys(condition[field])[0] as keyof typeof operatorMap;
-      const mappedOperator = operatorMap[operator] || 'contains';
-      const value = condition[field][operator];
+        // 找到第一个存在的操作符
+        const operator = Object.keys(condition[field])[0] as keyof typeof operatorMap;
+        const mappedOperator = operatorMap[operator] || 'contains';
+        const value = condition[field][operator];
 
-      return {
-        field,
-        operator: mappedOperator,
-        value,
-      };
-    });
+        return {
+          field,
+          operator: mappedOperator,
+          value,
+        };
+      }
+    );
   } catch (error) {
     console.error('解析过滤参数错误:', error);
     return [];
@@ -86,7 +91,9 @@ export function getJoinFromUrl(url: URL) {
     const [relation, fields] = param.split('||');
     if (!relation || !fields) return;
 
-    include[relation] = {
+    // 将relation按点分割，从右向左构建嵌套的select对象
+    const relationParts = relation.split('.');
+    let currentSelect = {
       select: fields.split(',').reduce(
         (acc, field) => ({
           ...acc,
@@ -95,6 +102,17 @@ export function getJoinFromUrl(url: URL) {
         {}
       ),
     };
+
+    // 从最后一个部分开始，逐层向上构建
+    for (let i = relationParts.length - 1; i > 0; i--) {
+      currentSelect = {
+        select: {
+          [relationParts[i]]: currentSelect,
+        },
+      };
+    }
+
+    include[relationParts[0]] = currentSelect;
   });
 
   return Object.keys(include).length > 0 ? include : undefined;
@@ -262,4 +280,91 @@ export function parseRefineFilters(filters: Filter[]): Filter[] {
     }
     return filter;
   });
+}
+
+/**
+ * 校验数据是否符合指定资源的校验规则
+ * 目前仅在数据创建时使用，数据更新时暂时不校验，以支持字段增量更新，字段格式校验交给 Prisma 数据模型本身来做
+ */
+export function zodParse<TVariables>(resource: EnumResource | string, variables?: TVariables) {
+  const schema = schemaMap[resource as keyof typeof schemaMap];
+  if (!schema) {
+    return { success: true, message: `Server Error, 未找到 ${resource} 的数据校验规则` };
+  }
+
+  try {
+    schema.parse(variables || {});
+  } catch (error: TAny) {
+    const { name, issues } = error || {};
+
+    const err = new Error(`Bad Request, 数据校验失败 (${name})`);
+    (err as TAny).name = name;
+    (err as TAny).issues = issues;
+
+    return { status: 400, message: err.message, originalError: err };
+  }
+
+  return { success: true, message: '校验成功' };
+}
+
+export function getFieldsFromUrl(url: URL) {
+  const fieldsParam = url.searchParams.get('fields');
+  if (!fieldsParam) {
+    return undefined;
+  }
+  return fieldsParam.split(',');
+}
+
+/**
+ * 根据 refine-react-table.GetListParams 构建查询参数
+ */
+export function buildTableParams({ pagination, filters, sorters, meta }: Omit<GetListParams, 'resource'>) {
+  const queryParams: Record<string, TAny> = {};
+
+  if (meta?.include) {
+    queryParams.include = meta.include;
+  }
+  if (meta?.select) {
+    queryParams.select = meta.select;
+  }
+
+  const { current = 1, pageSize } = pagination ?? {};
+  const skip = pageSize ? (Number(current) - 1) * Number(pageSize) : undefined;
+  if (pageSize) {
+    queryParams.skip = skip;
+    queryParams.take = Number(pageSize);
+  }
+
+  // 构建过滤条件
+  const parsedFilters = filters ? parseRefineFilters(filters as Filter[]) : [];
+  const where = parsedFilters.length > 0 ? buildWhereClause(parsedFilters) : {};
+
+  // 处理关联字段的查询条件
+  const whereCondition = Object.entries(where).reduce((acc, [key, value]) => {
+    if (key.includes('.')) {
+      const [relation, field] = key.split('.');
+      return {
+        ...acc,
+        [relation]: {
+          [field]: value,
+        },
+      };
+    }
+
+    return { ...acc, [key]: value };
+  }, {});
+
+  // 处理所有查询条件中的日期字段
+  const processedWhereCondition = processDateFields(whereCondition);
+  if (Object.keys(processedWhereCondition).length) {
+    queryParams.where = processedWhereCondition;
+  }
+
+  // 构建排序条件
+  const orderBy = sorters ? buildOrderByClause(sorters) : {};
+  if (Object.keys(orderBy).length) {
+    queryParams.orderBy = orderBy;
+  }
+
+  return queryParams;
 }

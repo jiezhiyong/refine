@@ -1,11 +1,10 @@
 import { MetaFunction } from '@remix-run/node';
 
-import { PageError } from '~/components';
-import { getDefaultTitle } from '~/utils';
+import { PageError } from '~/components/500';
+import { getDefaultTitle } from '~/utils/get-default-title';
 
 import { PostForm } from './playground.article.post.edit.$id';
 
-// 元数据
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };

@@ -2,10 +2,14 @@ import { User } from '@prisma/client';
 import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
 import * as Sentry from '@sentry/remix';
 
-import { apiBase } from '~/config';
-import { TAuthProvider, TRole } from '~/constants';
-import { PermissionRule, TAny } from '~/types';
-import { canUseDOM, verifySignature } from '~/utils';
+import { apiBase } from '~/config/base-url';
+import { dashboardResource } from '~/config/resources';
+import { TRole } from '~/constants/roles';
+import { TAuthProvider } from '~/constants/user';
+import { TAny } from '~/types/any';
+import { PermissionRule } from '~/types/casbin';
+import { canUseDOM } from '~/utils/can-use-dom';
+import { verifySignature } from '~/utils/signature';
 
 // 添加全局类型声明
 declare global {
@@ -38,7 +42,7 @@ export const authProvider: {
   setPermissions: (permissions: PermissionRule[]) => Promise<void>;
   onError: Required<Pick<AuthProvider, 'onError'>>['onError'];
 } = {
-  login: async ({ providerName, email, password, redirectTo = '/' }: AuthProviderLoginParams) => {
+  login: async ({ providerName, email, password, redirectTo = dashboardResource }: AuthProviderLoginParams) => {
     const formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);

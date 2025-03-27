@@ -1,4 +1,5 @@
 import { UIMatch } from '@remix-run/react';
+import type { JSX } from 'react';
 
 // 自定义处理函数类型
 export type HandleFunction = Record<string, unknown> & {

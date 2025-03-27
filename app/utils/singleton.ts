@@ -1,4 +1,4 @@
-import { TAny } from '~/types';
+import { TAny } from '~/types/any';
 
 const moduleCache: Record<string, TAny> = {};
 

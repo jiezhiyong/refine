@@ -6,7 +6,9 @@ export enum EnumRole {
   guest = 'guest',
 }
 
-export type TRole = `${EnumRole}`;
+export type TRole = string | null;
+
+export const ROLE_LIST = Object.values(EnumRole);
 
 export const rolesAll = [
   { label: 'Administrator', value: EnumRole.administrator, icon: BicepsFlexed },
@@ -14,8 +16,9 @@ export const rolesAll = [
   { label: 'Guest', value: EnumRole.guest, icon: Baby },
 ];
 
-export enum EnumRoleId {
-  administrator = '1',
-  editor = '2',
-  guest = '3',
-}
+// 定义角色优先级映射
+export const rolePriority: { [key: string]: number } = {
+  administrator: 1,
+  editor: 2,
+  guest: 3,
+};

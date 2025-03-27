@@ -1,55 +1,55 @@
-import { Log } from '@prisma/client';
+import { Log, LogAction, Prisma } from '@prisma/client';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { CalendarIcon, LeafyGreen, MailIcon } from 'lucide-react';
+import { CalendarIcon, LeafyGreen } from 'lucide-react';
 
-import { PageError } from '~/components';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
-import { Badge } from '~/components-shadcn/badge';
-import { Label } from '~/components-shadcn/label';
-import { H1 } from '~/components-shadcn/typography';
-import { EnumResource } from '~/constants';
-import { dataService } from '~/services';
-import { LOG_STATUS_MAP, LogStatus, TAny } from '~/types';
+import { PageError } from '~/components/500';
+import { CodeEditor } from '~/components/refine/form/code';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Badge } from '~/components/ui/badge';
+import { Label } from '~/components/ui/label';
+import { H1 } from '~/components/ui/typography';
+import { EnumLogType, LOG_STATUS_MAP } from '~/constants/log';
+import { dataService } from '~/services/data.server';
+import { TAny } from '~/types/any';
+import { deepParse } from '~/utils/deep-parse';
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { id } = params;
 
-  const { data: log } = await dataService.getOne<Log & { user: { name: string; email: string; avatar?: string } }>({
-    resource: EnumResource.log,
-    id: id as string,
-    meta: {
-      include: {
-        user: {
-          select: { name: true, email: true, avatar: true },
-        },
+  const args: Prisma.LogFindUniqueArgs = {
+    where: { id },
+    include: {
+      operatedBy: {
+        select: { name: true, email: true, avatar: true },
       },
     },
-  });
+  };
 
-  if (!log) {
-    throw new Response('未找到日志记录', { status: 404 });
-  }
+  const log = await dataService.findUniqueOrThrow<
+    Log & { operatedBy: { name: string; email: string; avatar?: string } }
+  >('log', args, { request });
 
   return { log };
 }
 
 export default function LogShow() {
   const { log } = useLoaderData<typeof loader>();
+  const { content: data } = deepParse(log.data || '{}');
+  const { content: dataPrevious } = deepParse(log.dataPrevious || '{}');
+  const meta = (log.meta || {}) as Record<string, TAny>;
 
-  const data = JSON.parse(log.data || '{}');
-  const previousData = JSON.parse(log.previousData || '{}');
-  const meta = JSON.parse(log.meta || '{}');
-
+  const showEditor = !([EnumLogType.delete, EnumLogType.deleteMany] as LogAction[]).includes(log.action);
+  const openDiff = ([EnumLogType.update, EnumLogType.updateMany] as LogAction[]).includes(log.action);
   return (
     <article className="px-8 pt-8 pb-4">
       <header className="mb-8">
         <H1 className="relative mb-4 inline-flex gap-3 text-4xl font-bold">
           <span className="capitalize">
-            Audit Log Detail - {meta.parent}.{log.resource}
+            Audit Log - {meta?.parent}.{log.resource}
           </span>
           <div className="inline-flex shrink-0 items-start pt-3.5">
-            <Badge className="tracking-wide" variant={LOG_STATUS_MAP[log.action as LogStatus]?.badge as TAny}>
+            <Badge className="tracking-wide" variant={LOG_STATUS_MAP[log.action as EnumLogType]?.badge as TAny}>
               {log.action}
             </Badge>
           </div>
@@ -68,40 +68,32 @@ export default function LogShow() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Avatar>
-            <AvatarImage src={log.user?.avatar || ''} alt={log.user?.name || ''} />
-            <AvatarFallback>{log.user?.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarImage src={log.operatedBy?.avatar} alt={log.operatedBy?.name || ''} />
+            <AvatarFallback>{log.operatedBy?.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium">{log.user?.name}</p>
-            <p className="text-muted-foreground flex items-center text-sm">
-              <MailIcon className="mr-2 h-4 w-4" />
-              {log.user?.email}
-            </p>
+            <p className="font-medium">{log.operatedBy?.name}</p>
+            <p className="text-muted-foreground text-sm">{log.operatedBy?.email}</p>
           </div>
         </div>
       </header>
 
-      <div className="space-y-6">
-        {log.data && (
-          <div>
-            <Label>Data</Label>
-            <pre className="bg-muted mt-1 overflow-x-auto rounded-lg p-4 text-sm whitespace-pre">
-              {JSON.stringify(data, null, 2)}
-            </pre>
-          </div>
-        )}
+      {(log.dataPrevious || log.data) && showEditor && (
+        <div className="space-y-6">
+          <Label>{openDiff ? 'Previous Resource Data & New Resource Data' : 'Resource Data'}</Label>
+          <CodeEditor
+            language="json"
+            value={JSON.stringify(dataPrevious, null, 2)}
+            modified={JSON.stringify(data, null, 2)}
+            enableToggleDiff={false}
+            openDiff={openDiff}
+          />
+        </div>
+      )}
 
-        {log.previousData && (
-          <div>
-            <Label>Previous Data</Label>
-            <pre className="bg-muted mt-1 overflow-x-auto rounded-lg p-4 text-sm whitespace-pre">
-              {JSON.stringify(previousData, null, 2)}
-            </pre>
-          </div>
-        )}
-
+      <div className="mt-6">
         {log.meta && (
           <div>
             <Label>Meta Data</Label>

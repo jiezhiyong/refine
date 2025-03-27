@@ -16,13 +16,21 @@
   },
   "plantuml.server": "http://www.plantuml.com/plantuml",
   "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
+    "editor.defaultFormatter": "Prisma.prisma-insider"
   },
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "editor.suggest.showModules": true,
 
   "todo-tree.highlights.enabled": true,
+  "todo-tree.filtering.excludeGlobs": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/public/**",
+    "**/*.min.*",
+    "**/*.map"
+  ],
   "todo-tree.general.tags": ["TODO", "FIXME", "BUG", "NOTE", "HACK"],
   "todo-tree.highlights.customHighlight": {
     "TODO": {
@@ -51,5 +59,7 @@
       "iconColour": "#8bc34a"
     }
   },
-  
+  "[zmodel]": {
+    "editor.defaultFormatter": "zenstack.zenstack"
+  },
 }

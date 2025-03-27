@@ -1,27 +1,76 @@
+/**
+ * 中文语言包
+ * 注意：修改后需要重启 server，以避免 Hydration failed
+ */
 export default {
-  title: '全栈式 WEB 框架 (zh)',
-  description: '专注于更快速、轻松的构建数据密集型 Web 应用程序，同时提供快速、流畅的用户体验。',
-
+  backHome: '返回首页',
+  deleteAlert: '此操作不可撤销！',
+  menus: {
+    playground: '演示',
+    dashboard: '仪表板',
+    about: '关于',
+    demo: '示例',
+    demoViewTransition: '示例 viewTransition',
+    article: '文档管理',
+    post: '文章',
+    category: '分类',
+    system: '系统',
+    account: '账户管理',
+    user: '用户',
+    role: '角色',
+    admin: '其他',
+    casbinRule: '权限',
+    log: '审计日志',
+    frontRoute: '前端路由',
+    frontRouteProject: '项目',
+    frontRouteModule: '模块',
+    auditRecord: '审核记录',
+    'auditRecord/applyRole': '角色申请',
+    discover: '发现',
+    menu: '菜单',
+    dynamicPage: '配置化CRUD',
+  },
+  menusSecondary: {
+    'API Docs': '接口文档',
+    'Service Health Check': '服务健康检查',
+    'Report a Bug': '提交缺陷',
+  },
   pages: {
+    about: {
+      title: '全栈式 WEB 框架',
+      description: '专注于更快速、轻松的构建数据密集型 Web 应用程序，同时提供快速、流畅的用户体验。',
+      features1: '前后端一体化架构',
+      features2: 'SSR 服务端渲染',
+      features3: '路由并行加载',
+      features4: 'CRUD 增删改查开发简化',
+      features5: '状态持久化',
+      features6: '身份验证',
+      features7: '访问控制',
+      features8: '审计日志',
+      features9: '实时数据',
+      features10: '多国语言',
+      features11: '主题切换',
+    },
     login: {
-      title: '登录您的账户',
-      signin: '登录',
+      title: '欢迎回来',
+      description: '登录到您的 OSS Inc. 账户',
       signup: '注册',
       divider: '或',
+      noAccount: '没有账户？',
       fields: {
         email: '邮箱',
         password: '密码',
+      },
+      buttons: {
+        submit: '登录',
+        submitWithTcsk: '猎户座 - 联合登录',
+        forgotPassword: '忘记密码？',
+        rememberMe: '记住我',
       },
       errors: {
         validEmail: '无效的邮箱地址',
         requiredEmail: '邮箱是必填项',
         requiredPassword: '密码是必填项',
-      },
-      buttons: {
-        submit: '登录',
-        forgotPassword: '忘记密码？',
-        noAccount: '没有账户？',
-        rememberMe: '记住我',
       },
     },
     forgotPassword: {
@@ -39,8 +88,11 @@ export default {
     },
     register: {
       title: '注册账户',
+      haveAccount: '已有账户？',
+      signin: '登录',
       fields: {
         email: '邮箱',
+        validateCode: '验证码',
         password: '密码',
       },
       errors: {
@@ -50,7 +102,6 @@ export default {
       },
       buttons: {
         submit: '注册',
-        haveAccount: '已有账户？',
       },
     },
     updatePassword: {
@@ -72,7 +123,6 @@ export default {
       info: '您可能忘记将 {{action}} 组件添加到 {{resource}} 资源中。',
       '404': '抱歉，您访问的页面不存在。',
       resource404: '请确认您是否已创建 {{resource}} 资源。',
-      backHome: '返回首页',
     },
   },
   actions: {
@@ -92,11 +142,16 @@ export default {
     filter: '筛选',
     clear: '清除',
     refresh: '刷新',
-    show: '显示',
+    show: '查看',
     undo: '撤销',
     import: '导入',
+    export: '导出',
     clone: '克隆',
     notAccessTitle: '您没有访问权限',
+    back: '返回',
+    columns: '表格列',
+    toggleColumns: '切换列显示 / 不显示',
+    activeToggle: '激活 / 禁用',
   },
   warnWhenUnsavedChanges: '确定要离开吗？您有未保存的更改。',
   notifications: {
@@ -144,14 +199,14 @@ export default {
     actions: '操作',
   },
   documentTitle: {
-    default: 'refine',
-    suffix: ' | Refine',
+    default: 'Inc',
+    suffix: ' | Inc',
     post: {
-      list: '文章列表 | Refine',
-      show: '#{{id}} 查看文章 | Refine',
-      edit: '#{{id}} 编辑文章 | Refine',
-      create: '创建新文章 | Refine',
-      clone: '#{{id}} 克隆文章 | Refine',
+      list: '文章列表 | Inc',
+      show: '#{{id}} 查看文章 | Inc',
+      edit: '#{{id}} 编辑文章 | Inc',
+      create: '创建新文章 | Inc',
+      clone: '#{{id}} 克隆文章 | Inc',
     },
   },
   autoSave: {

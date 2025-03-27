@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import { Sidebar as RefineSidebar } from '~/component-refine';
-import { NavUser, RoleSwitcher } from '~/components';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '~/components-shadcn/sidebar';
+import { NavUser } from '~/components/nav-user';
+import { SidebarEasy } from '~/components/refine/sidebar';
+import { RoleSwitcher } from '~/components/switcher-role';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '~/components/ui/sidebar';
 
 import { NavSecondary } from './nav-secondary';
 
@@ -15,7 +16,7 @@ export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) 
         {/* <SidebarSearchForm /> */}
       </SidebarHeader>
       <SidebarContent>
-        <RefineSidebar />
+        <SidebarEasy />
         <NavSecondary />
       </SidebarContent>
       <SidebarFooter>

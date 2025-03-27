@@ -1,14 +1,15 @@
 import { useFetcher } from '@remix-run/react';
+import { t } from 'i18next';
 
-import { Button } from '~/components-shadcn/button';
-import { EnumAuthProvider } from '~/constants';
+import { Button } from '~/components/ui/button';
+import { EnumAuthProvider } from '~/constants/user';
 
 export const TcskOAuth2 = ({ redirectTo }: { redirectTo: string }) => {
   const fetcher = useFetcher();
   const loading = fetcher.state !== 'idle';
 
   const handleLogin = () => {
-    fetcher.submit({ redirectTo }, { method: 'POST', action: `/api/auth/${EnumAuthProvider.tcshuke}` });
+    fetcher.submit({ redirectTo }, { method: 'POST', action: `/api/auth/${EnumAuthProvider.TC_SHUKE}` });
   };
 
   return (
@@ -19,7 +20,7 @@ export const TcskOAuth2 = ({ redirectTo }: { redirectTo: string }) => {
       onClick={handleLogin}
       loading={loading}
     >
-      {'Continue with TCSK'}
+      {t('pages.login.buttons.submitWithTcsk')}
     </Button>
   );
 };

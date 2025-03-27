@@ -1,25 +1,34 @@
-import { Post } from '@prisma/client';
+import { Post, Prisma } from '@prisma/client';
 import { BaseRecord, HttpError, useCan, useDeleteMany, useModal, useUserFriendlyName } from '@refinedev/core';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
+import { t } from 'i18next';
 import { Paperclip } from 'lucide-react';
 import { useCallback, useRef } from 'react';
 
-import { CreateButton, ExportButton, ImportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
-import { PageError } from '~/components';
+import { PageError } from '~/components/500';
 import { PdfLayout } from '~/components/pdf';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
-import { Badge } from '~/components-shadcn/badge';
-import { Checkbox } from '~/components-shadcn/checkbox';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components-shadcn/dialog';
-import { EnumAction, EnumResource } from '~/constants';
+import { CreateButton } from '~/components/refine/buttons/create';
+import { ExportButton } from '~/components/refine/buttons/export';
+import { ImportButton } from '~/components/refine/buttons/import';
+import { ShowButton } from '~/components/refine/buttons/show';
+import { TableEasy, TableFilterProps } from '~/components/refine/table';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Badge } from '~/components/ui/badge';
+import { Checkbox } from '~/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components/ui/dialog';
+import { EnumAction } from '~/constants/action';
+import { EnumPostStatus, POST_STATUS_LIST, POST_STATUS_MAP } from '~/constants/post';
+import { EnumResource } from '~/constants/resource';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
 import { PostFormModal } from '~/routes/playground.article.post.edit.$id';
-import { dataService } from '~/services';
-import { HandleFunction, POST_STATUS, POST_STATUS_MAP, PostStatus, TAny } from '~/types';
-import { getDefaultTitle } from '~/utils';
+import { dataService } from '~/services/data.server';
+import { TAny } from '~/types/any';
+import { HandleFunction } from '~/types/handle';
+import { getDefaultTitle } from '~/utils/get-default-title';
+import { buildTableParams } from '~/utils/request';
 
 // 自定义获取的数据类型声明
 type PostRecord = Post & { user: { name: string; avatar: string } & { category: { title: string } } };
@@ -35,34 +44,33 @@ export const handle: HandleFunction = {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const tableParams = parseTableParams(url.search);
+  const tableParams = parseTableParams(new URL(request.url).search);
 
-  const data = await dataService.getList<Post>({
-    ...tableParams,
-    resource: EnumResource.post,
-    meta: {
-      include: {
-        user: { select: { name: true, avatar: true } },
-        category: { select: { title: true } },
-      },
-    },
-  });
+  const include: Prisma.PostInclude = {
+    operatedBy: { select: { name: true, avatar: true } },
+    category: { select: { title: true } },
+  };
+  const args: Prisma.PostFindManyArgs = {
+    ...buildTableParams(tableParams),
+    orderBy: { updatedAt: 'desc' },
+    include,
+  };
+  const res = await dataService.findMany<PostRecord>(EnumResource.post as TAny, args, { request });
 
-  return { initialData: data };
+  return { initialData: res, include };
 }
 
 export default function PostIndex() {
-  const { initialData } = useLoaderData<typeof loader>();
+  const { initialData, include } = useLoaderData<typeof loader>();
   const { mutate: deleteMany } = useDeleteMany();
   const { data: deletePermission } = useCan({ resource: EnumResource.post, action: EnumAction.delete });
-  const { data: filedHitPermission } = useCan({
+  const { data: _filedHitPermission } = useCan({
     resource: EnumResource.post,
     action: EnumAction.field,
     params: { field: 'hit' },
   });
 
-  const recordRef = useRef<PostRecord>();
+  const recordRef = useRef<PostRecord>(undefined);
   const useModalReturn1 = useModal();
   const useModalReturn2 = useModal();
   const friendly = useUserFriendlyName();
@@ -93,19 +101,19 @@ export default function PostIndex() {
 
   return (
     <>
-      <PostFormModal {...useModalReturn1} record={recordRef.current} />
-      <Table
+      <PostFormModal {...useModalReturn1} action={EnumAction.edit} record={recordRef.current} />
+      <TableEasy
         enableSorting
         enableFilters
         enableHiding
-        toolbar={[<CreateButton key="create" />]}
+        toolbar={[<CreateButton key="create" />, <ExportButton key="export" />]}
         initialState={{
           columnVisibility: {
-            updatedAt: false,
+            createdAt: false,
           },
           sorting: [
             {
-              id: 'createdAt',
+              id: 'updatedAt',
               desc: true,
             },
           ],
@@ -113,23 +121,14 @@ export default function PostIndex() {
         refineCoreProps={{
           queryOptions: { initialData },
           meta: {
-            join: [
-              {
-                field: EnumResource.user,
-                select: ['name', 'avatar'],
-              },
-              {
-                field: EnumResource.category,
-                select: ['title'],
-              },
-            ],
+            include,
           },
         }}
       >
-        <Table.Column
+        <TableEasy.Column
           accessorKey="id"
           id="id"
-          header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
+          header={({ table }) => <TableEasy.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
           cell={({ row }) => (
             <Checkbox
               className="ml-2"
@@ -141,20 +140,20 @@ export default function PostIndex() {
           )}
         />
 
-        <Table.Column
+        <TableEasy.Column
           header="Title"
           accessorKey="title"
           id="title"
           meta={{
             filterOperator: 'contains',
           }}
-          filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Title" />}
+          filter={(props: TableFilterProps) => <TableEasy.Filter.Search {...props} title="Search Title" />}
           cell={({ row: { index, original }, table }) => {
             const pageIndex = table.getState().pagination.pageIndex;
             const pageSize = table.getState().pagination.pageSize;
             return (
               <ShowButton recordItemId={original.id} asChild>
-                <span className="text-muted-foreground inline-block min-w-8">
+                <span className="text-muted-foreground inline-block min-w-6">
                   {pageIndex * pageSize + index + 1}.&nbsp;
                 </span>
                 <span className="py-3 underline-offset-2 hover:text-green-600 hover:underline">{original.title}</span>
@@ -163,7 +162,7 @@ export default function PostIndex() {
           }}
         />
 
-        <Table.Column
+        <TableEasy.Column
           header="Category"
           accessorKey="category.title"
           id="category.title"
@@ -171,10 +170,10 @@ export default function PostIndex() {
             filterOperator: 'contains',
           }}
           enableHiding
-          filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Category" />}
+          filter={(props: TableFilterProps) => <TableEasy.Filter.Search {...props} title="Search Category" />}
         />
 
-        <Table.Column
+        <TableEasy.Column
           header="Hit"
           accessorKey="hit"
           id="hit"
@@ -183,110 +182,108 @@ export default function PostIndex() {
           cell={({ row: { original } }) => <span>{original.hit.toLocaleString()}</span>}
         />
 
-        <Table.Column
+        <TableEasy.Column
           header="Status"
           accessorKey="status"
           id="status"
           enableSorting
           enableHiding
           cell={({ row: { original } }) => (
-            <Badge variant={POST_STATUS_MAP[original.status as PostStatus]?.badge as TAny}>
-              {original.status?.charAt(0)?.toUpperCase() + original.status?.slice(1)?.toLowerCase()}
-            </Badge>
+            <Badge variant={POST_STATUS_MAP[original.status as EnumPostStatus]?.badge as TAny}>{original.status}</Badge>
           )}
           filter={(props: TableFilterProps) => (
-            <Table.Filter.Dropdown
+            <TableEasy.Filter.Dropdown
               {...props}
-              options={Object.entries(POST_STATUS).map(([key, value]) => ({
-                label: key?.charAt(0)?.toUpperCase() + key?.slice(1)?.toLowerCase(),
-                value,
+              options={POST_STATUS_LIST.map((key) => ({
+                label: key,
+                value: key,
               }))}
             />
           )}
         />
 
-        <Table.Column
+        <TableEasy.Column
           header="CreatedAt"
           accessorKey="createdAt"
           id="createdAt"
           enableSorting
           enableHiding
-          filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
+          filter={(props: TableFilterProps) => <TableEasy.Filter.DateRangePicker {...props} align="end" />}
           cell={({ row: { original } }) => dayjs(original.createdAt).format('YYYY-MM-DD HH:mm:ss')}
         />
 
-        <Table.Column
+        <TableEasy.Column
           header="UpdatedAt"
           accessorKey="updatedAt"
           id="updatedAt"
           enableSorting
           enableHiding
-          filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
+          filter={(props: TableFilterProps) => <TableEasy.Filter.DateRangePicker {...props} align="end" />}
           cell={({ row: { original } }) => dayjs(original.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
         />
 
-        <Table.Column
-          header="Author"
-          accessorKey="user.name"
-          id="user.name"
+        <TableEasy.Column
+          header="OperatedBy"
+          accessorKey="operatedBy.name"
+          id="operatedBy.name"
           enableHiding
           meta={{
             filterOperator: 'contains',
           }}
-          filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
+          filter={(props: TableFilterProps) => <TableEasy.Filter.Search {...props} title="Search OperatedBy" />}
           cell={useCallback(
             ({ row: { original } }: { row: { original: BaseRecord } }) => (
               <div className="flex items-center gap-2">
                 <Avatar className="size-6">
-                  <AvatarImage src={original.user?.avatar || ''} alt={original.user?.name || ''} />
-                  <AvatarFallback>{original.user?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
+                  <AvatarImage src={original.operatedBy?.avatar} alt={original.operatedBy?.name || ''} />
+                  <AvatarFallback>{original.operatedBy?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
                 </Avatar>
-                <span>{original.user?.name}</span>
+                <span>{original.operatedBy?.name}</span>
               </div>
             ),
             []
           )}
         />
 
-        <Table.Column
+        <TableEasy.Column
           header="Actions"
           accessorKey="id"
           id="actions"
           cell={useCallback(
             ({ row: { original } }: { row: { original: PostRecord } }) => (
-              <Table.Actions row={original} resource="post">
-                <Table.ShowAction />
-                <Table.EditAction />
-
-                <Table.EditAction
-                  title="Edit in Modal"
-                  onClick={() => {
-                    recordRef.current = original;
-                    useModalReturn1.show();
-                  }}
-                />
-
-                <Table.CloneAction />
-                <Table.DeleteAction />
-
-                <Table.ShowAction
-                  title="Show PDF"
+              <TableEasy.Actions row={original} resource="post">
+                <TableEasy.ShowAction />
+                <TableEasy.ShowAction
+                  title={`${t('buttons.show')} PDF`}
                   icon={<Paperclip size={16} />}
                   onClick={() => {
                     recordRef.current = original;
                     useModalReturn2.show();
                   }}
                 />
-              </Table.Actions>
+                <TableEasy.EditAction />
+
+                <TableEasy.EditAction
+                  title={`${t('buttons.edit')} in Modal`}
+                  onClick={() => {
+                    recordRef.current = original;
+                    useModalReturn1.show();
+                  }}
+                />
+
+                <TableEasy.CloneAction />
+                <TableEasy.DeleteAction />
+              </TableEasy.Actions>
             ),
-            [useModalReturn1, useModalReturn2]
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            []
           )}
         />
-      </Table>
+      </TableEasy>
 
       {/* View PDF in Modal */}
       <Dialog open={useModalReturn2.visible} onOpenChange={useModalReturn2.close}>
-        <DialogContent className="max-w-6xl">
+        <DialogContent className="sm:max-w-6xl">
           <DialogHeader className="border-b pb-4">
             <DialogTitle>View PDF</DialogTitle>
             <DialogDescription>This is a Demo for View PDF on Modal.</DialogDescription>
@@ -302,7 +299,6 @@ function UiTools() {
   return (
     <div className="flex items-center gap-1 text-sm">
       <ImportButton variant="ghost" size="icon" />
-      <ExportButton variant="ghost" size="icon" />
     </div>
   );
 }

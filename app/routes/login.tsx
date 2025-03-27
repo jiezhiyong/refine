@@ -1,22 +1,15 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { z } from 'zod';
 
-import { LoginForm } from '~/components';
-import { EnumAuthProvider } from '~/constants';
+import { LoginForm } from '~/components/form-login';
+import { dashboardResource } from '~/config/resources';
+import { EnumAuthProvider } from '~/constants/user';
 import { authProvider } from '~/providers';
-import { commitSession, getSession, getUser } from '~/services';
-import { getAllParams } from '~/utils';
+import { commitSession, getSession, getUser } from '~/services/session.server';
+import { getAllParams } from '~/utils/get-all-params';
 import { typedFormError } from '~/utils/typed-form-error';
+import { TSchemaLoginRegister } from '~/zod';
 
-// 定义表单验证 schema
-const loginSchema = z.object({
-  email: z.string().email('请输入有效的邮箱地址'),
-  password: z.string().min(6, '密码至少需要6个字符').max(50, '密码不能超过50个字符'),
-  redirectTo: z.string().optional(),
-});
-
-// 元数据
 export const meta: MetaFunction = () => {
   return [{ title: 'Login' }];
 };
@@ -26,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const user = await getUser(request);
 
   if (user && user.id) {
-    return redirect('/');
+    return redirect(dashboardResource);
   }
 
   return {};
@@ -35,11 +28,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
   try {
-    const mergedParams = await getAllParams<z.infer<typeof loginSchema>>(request);
+    const mergedParams = await getAllParams<TSchemaLoginRegister>(request);
     const { email, password, redirectTo } = mergedParams;
 
     const { error, success, user } = await authProvider.login({
-      providerName: EnumAuthProvider.userpass,
+      providerName: EnumAuthProvider.USER_PASS,
       email,
       password,
       redirectTo,

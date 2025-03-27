@@ -1,6 +1,6 @@
 import { useBack } from '@refinedev/core';
 
-import { Button } from '~/components-shadcn/button';
+import { Button } from '~/components/ui/button';
 
 export function ComingSoon() {
   const back = useBack();

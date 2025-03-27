@@ -1,8 +1,10 @@
 import { CanAccess } from '@refinedev/core';
 import type { LoaderFunctionArgs } from '@remix-run/node';
 
-import { Layout, PageError, PermissionDenied } from '~/components';
-import { requireUserSession } from '~/services';
+import { PermissionDenied } from '~/components/403';
+import { PageError } from '~/components/500';
+import { SidebarLayout } from '~/components/layout';
+import { requireUserSession } from '~/services/session.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserSession(request);
@@ -13,7 +15,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Role() {
   return (
     <CanAccess fallback={<PermissionDenied />}>
-      <Layout />
+      <SidebarLayout />
     </CanAccess>
   );
 }

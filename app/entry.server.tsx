@@ -8,7 +8,7 @@ import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 
 import { initSentry } from '~/services/sentry.server';
-import { TAny } from '~/types';
+import { TAny } from '~/types/any';
 
 /** 初始化服务端 Sentry */
 initSentry();
@@ -143,8 +143,8 @@ function handleBrowserRequest(
 }
 
 /** 错误处理 */
-export const handleError = Sentry.wrapHandleErrorWithSentry((_error, { request }: TAny) => {
+export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }: TAny) => {
   if (!request.signal.aborted) {
-    // console.error('@entry.server.handleError', error);
+    console.error('@entry.server.handleError', error);
   }
 });

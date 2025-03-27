@@ -6,8 +6,9 @@ import i18next, { changeLanguage, use as i18nextUse, t } from 'i18next';
 import Cookies from 'js-cookie';
 import { initReactI18next } from 'react-i18next';
 
-import { apiBase, defaultNS, fallbackLanguage, LocaleLanguage, resourcesLanguages, supportedLanguages } from '~/config';
-import { canUseDOM, webapi } from '~/utils';
+import { apiBase } from '~/config/base-url';
+import { defaultNS, fallbackLanguage, LocaleLanguage, resourcesLanguages, supportedLanguages } from '~/config/i18n';
+import { canUseDOM } from '~/utils/can-use-dom';
 
 // 获取 cookie
 const getCookieLocale = () => {

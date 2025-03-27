@@ -22,7 +22,7 @@ import type { Params } from '@remix-run/react';
 import type { FitEnum } from 'sharp';
 import sharp from 'sharp';
 
-import { TAny } from '~/types';
+import { TAny } from '~/types/any';
 
 const ASSETS_ROOT = 'assets';
 

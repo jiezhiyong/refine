@@ -1,6 +1,6 @@
 import { Fullscreen } from 'lucide-react';
 
-import { Button } from '~/components-shadcn/button';
+import { Button } from '~/components/ui/button';
 
 export const FullscreenSwitcher = () => {
   return (

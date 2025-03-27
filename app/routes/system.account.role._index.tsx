@@ -4,42 +4,37 @@ import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
-import { useCallback } from 'react';
 
-import { ExportButton, ShowButton } from '~/component-refine';
-import { Table, TableFilterProps } from '~/component-refine/table';
-import { PageError } from '~/components';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
-import { Checkbox } from '~/components-shadcn/checkbox';
-import { EnumAction, EnumResource } from '~/constants';
-import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { dataService } from '~/services';
-import { HandleFunction } from '~/types';
-import { getDefaultTitle } from '~/utils';
+import { PageError } from '~/components/500';
+import { CreateButton } from '~/components/refine/buttons/create';
+import { DeleteButton } from '~/components/refine/buttons/delete';
+import { EditButton } from '~/components/refine/buttons/edit';
+import { ExportButton } from '~/components/refine/buttons/export';
+import { TableEasy, TableFilterProps } from '~/components/refine/table';
+import { Checkbox } from '~/components/ui/checkbox';
+import { EnumAction } from '~/constants/action';
+import { EnumResource } from '~/constants/resource';
+import { EnumRole } from '~/constants/roles';
+import { UseTableReturnType } from '~/lib/refinedev-react-table';
+import { dataService } from '~/services/data.server';
+import { getDefaultTitle } from '~/utils/get-default-title';
+import { buildTableParams } from '~/utils/request';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
 
-export const handle: HandleFunction = {
-  uiTools: () => {
-    return <UiTools />;
-  },
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const tableParams = parseTableParams(url.search);
+  const tableParams = parseTableParams(new URL(request.url).search);
 
-  const data = await dataService.getList<Role>({
-    ...tableParams,
-    resource: EnumResource.role,
-    meta: {
-      include: {
-        creator: { select: { name: true, avatar: true } },
-      },
+  const data = await dataService.findMany<Role>(
+    'role',
+    {
+      ...buildTableParams(tableParams),
+      orderBy: { updatedAt: 'desc' },
     },
-  });
+    { request }
+  );
 
   return { initialData: data };
 }
@@ -76,34 +71,30 @@ export default function RoleIndex() {
   };
 
   return (
-    <Table
+    <TableEasy
       enableSorting
       enableFilters
       enableHiding
+      toolbar={[<CreateButton key="create" />, <ExportButton key="export" />]}
       initialState={{
+        columnVisibility: {
+          createdAt: false,
+        },
         sorting: [
           {
-            id: 'createdAt',
+            id: 'updatedAt',
             desc: true,
           },
         ],
       }}
       refineCoreProps={{
         queryOptions: { initialData },
-        meta: {
-          join: [
-            {
-              field: 'creator',
-              select: ['name', 'avatar'],
-            },
-          ],
-        },
       }}
     >
-      <Table.Column
+      <TableEasy.Column
         accessorKey="id"
         id="id"
-        header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
+        header={({ table }) => <TableEasy.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
         cell={({ row }) => (
           <Checkbox
             className="ml-2"
@@ -115,81 +106,79 @@ export default function RoleIndex() {
         )}
       />
 
-      <Table.Column
+      <TableEasy.Column
         header="Title"
         accessorKey="title"
         id="title"
         meta={{
           filterOperator: 'contains',
         }}
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Title" />}
+        filter={(props: TableFilterProps) => <TableEasy.Filter.Search {...props} title="Search Title" />}
         cell={({ row: { index, original }, table }) => {
           const pageIndex = table.getState().pagination.pageIndex;
           const pageSize = table.getState().pagination.pageSize;
 
           return (
-            <ShowButton recordItemId={original.id} asChild>
-              <span className="text-muted-foreground inline-block min-w-8">
+            <EditButton recordItemId={original.id} asChild>
+              <span className="text-muted-foreground inline-block min-w-6">
                 {pageIndex * pageSize + index + 1}.&nbsp;
               </span>
-              <span className="py-3 capitalize underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
+              <span className="py-3 underline-offset-2 visited:text-red-600 hover:text-green-600 hover:underline">
                 {original.title}
               </span>
-            </ShowButton>
+            </EditButton>
           );
         }}
       />
 
-      <Table.Column
+      <TableEasy.Column
+        header="Description"
+        accessorKey="description"
+        id="description"
+        enableSorting
+        enableHiding
+        filter={(props: TableFilterProps) => <TableEasy.Filter.Search {...props} title="Search Description" />}
+        cell={({ row: { original } }) => original.description || '...'}
+      />
+
+      <TableEasy.Column
         header="CreatedAt"
         accessorKey="createdAt"
         id="createdAt"
         enableSorting
         enableHiding
-        filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
+        filter={(props: TableFilterProps) => <TableEasy.Filter.DateRangePicker {...props} align="end" />}
         cell={({ row: { original } }) => dayjs(original.createdAt).format('YYYY-MM-DD HH:mm:ss')}
       />
 
-      <Table.Column
-        header="Creator"
-        accessorKey="creator"
-        id="creator"
+      <TableEasy.Column
+        header="UpdatedAt"
+        accessorKey="updatedAt"
+        id="updatedAt"
+        enableSorting
         enableHiding
-        meta={{
-          filterOperator: 'contains',
-        }}
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Creator" />}
-        cell={useCallback(
-          ({ row: { original } }: { row: { original: BaseRecord } }) => (
-            <div className="flex items-center gap-2">
-              <Avatar className="size-6">
-                <AvatarImage src={original.creator?.avatar || ''} alt={original.creator?.name || ''} />
-                <AvatarFallback>{original.creator?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <span>{original.creator?.name}</span>
-            </div>
-          ),
-          []
-        )}
+        filter={(props: TableFilterProps) => <TableEasy.Filter.DateRangePicker {...props} align="end" />}
+        cell={({ row: { original } }) => dayjs(original.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
       />
 
-      <Table.Column
+      <TableEasy.Column
         header="Actions"
         accessorKey="id"
         id="actions"
         cell={({ row: { original } }: { row: { original: BaseRecord } }) => (
-          <ShowButton recordItemId={original.id} size="icon" variant="ghost" />
+          <>
+            <EditButton recordItemId={original.id} size="icon" variant="ghost" />
+            <DeleteButton
+              disabled={original.title === EnumRole.administrator}
+              recordItemId={original.id}
+              size="icon"
+              variant="ghost"
+              className="text-destructive!"
+            />
+          </>
         )}
       />
-    </Table>
-  );
-}
-
-function UiTools() {
-  return (
-    <div className="flex items-center gap-1 text-sm">
-      <ExportButton variant="ghost" size="icon" />
-    </div>
+    </TableEasy>
   );
 }
 

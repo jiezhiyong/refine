@@ -1,44 +1,42 @@
-import { Category, Post, User } from '@prisma/client';
+import { Category, Post, Prisma, User } from '@prisma/client';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { CalendarIcon, ClockIcon, LeafyGreen, MailIcon } from 'lucide-react';
 
-import { CloneButton, DeleteButton, EditButton } from '~/component-refine';
-import { PageError } from '~/components';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
-import { Badge } from '~/components-shadcn/badge';
-import { H1, Image, P } from '~/components-shadcn/typography';
-import { EnumResource } from '~/constants';
-import { dataService } from '~/services';
-import { HandleFunction, POST_STATUS_MAP, PostStatus, TAny } from '~/types';
-import { getDefaultTitle } from '~/utils';
+import { PageError } from '~/components/500';
+import { CloneButton } from '~/components/refine/buttons/clone';
+import { DeleteButton } from '~/components/refine/buttons/delete';
+import { EditButton } from '~/components/refine/buttons/edit';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Badge } from '~/components/ui/badge';
+import { H1, Image, P } from '~/components/ui/typography';
+import { EnumPostStatus, POST_STATUS_MAP } from '~/constants/post';
+import { dataService } from '~/services/data.server';
+import { TAny } from '~/types/any';
+import { HandleFunction } from '~/types/handle';
+import { getDefaultTitle } from '~/utils/get-default-title';
 
-// 元数据
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
 
-// 创建应用程序约定
 export const handle: HandleFunction = {
   uiTools: () => {
     return <UiTools />;
   },
 };
 
-// 页面初始化时的`GET`请求 && 表单`GET`请求
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  const args: Prisma.PostFindUniqueOrThrowArgs = {
+    where: { id: params?.id || '' },
+    include: {
+      operatedBy: true,
+      category: true,
+    },
+  };
   const [initialData] = await Promise.all([
-    dataService.getOne<Post & { category?: Category; user?: User }>({
-      resource: EnumResource.post,
-      id: params?.id || '',
-      meta: {
-        include: {
-          user: true,
-          category: true,
-        },
-      },
-    }),
+    dataService.findUniqueOrThrow<Post & { category?: Category; operatedBy?: User }>('post', args, { request }),
   ]);
 
   return { initialData };
@@ -46,8 +44,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 // UI
 export default function PostShow() {
-  const { initialData } = useLoaderData<typeof loader>();
-  const { data } = initialData;
+  const { initialData: data } = useLoaderData<typeof loader>();
 
   return (
     <article className="px-8 pt-8 pb-4">
@@ -55,8 +52,8 @@ export default function PostShow() {
         <H1 className="relative mb-4 inline-flex gap-3 text-4xl font-bold">
           <span>{data.title}</span>
           <div className="inline-flex shrink-0 items-start pt-3.5">
-            <Badge className="tracking-wide" variant={POST_STATUS_MAP[data.status as PostStatus]?.badge as TAny}>
-              {data.status?.charAt(0)?.toUpperCase() + data.status?.slice(1)?.toLowerCase()}
+            <Badge className="tracking-wide" variant={POST_STATUS_MAP[data.status as EnumPostStatus]?.badge as TAny}>
+              {data.status}
             </Badge>
           </div>
         </H1>
@@ -78,14 +75,14 @@ export default function PostShow() {
 
         <div className="flex items-center gap-4">
           <Avatar>
-            <AvatarImage src={data.user?.avatar || ''} alt={data.user?.name || ''} />
-            <AvatarFallback>{data.user?.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarImage src={data.operatedBy?.avatar || '?'} alt={data.operatedBy?.name || ''} />
+            <AvatarFallback>{data.operatedBy?.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium">{data.user?.name}</p>
+            <p className="font-medium">{data.operatedBy?.name}</p>
             <p className="text-muted-foreground flex items-center text-sm">
               <MailIcon className="mr-2 h-4 w-4" />
-              {data.user?.email}
+              {data.operatedBy?.email}
             </p>
           </div>
         </div>
@@ -104,8 +101,8 @@ function UiTools() {
   return (
     <div className="flex items-center gap-1 text-sm">
       <EditButton variant="ghost" size="icon" />
-      <DeleteButton variant="ghost" size="icon" />
       <CloneButton variant="ghost" size="icon" />
+      <DeleteButton variant="ghost" size="icon" className="text-destructive!" />
     </div>
   );
 }

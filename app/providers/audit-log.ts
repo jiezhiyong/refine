@@ -1,7 +1,7 @@
 import { AuditLogProvider, BaseKey, MetaQuery } from '@refinedev/core';
 
-import { EnumResource } from '~/constants';
-import { TAny } from '~/types';
+import { EnumResource } from '~/constants/resource';
+import { TAny } from '~/types/any';
 
 import { dataProvider } from './data';
 
@@ -65,19 +65,29 @@ export const auditLogProvider: AuditLogProvider = {
     previousData?: TAny;
     meta?: Record<number | string, TAny>;
   }) => {
-    const { resource, action, data, previousData, meta } = params;
+    const { resource, action, data, previousData: dataPrevious, meta } = params;
 
-    const logEntry = {
+    // 追加自定义字段
+    const { AUDIT_LOG_CUSTOM_OLD = {}, AUDIT_LOG_CUSTOM_NEW = {}, ...restData } = data || {};
+    const variables: Record<string, TAny> = {
       resource,
       action,
-      data: JSON.stringify(data),
-      previousData: JSON.stringify(previousData),
-      meta: JSON.stringify(meta),
+      meta,
     };
+
+    const dataNew = { ...restData, ...AUDIT_LOG_CUSTOM_NEW };
+    if (Object.keys(dataNew).length) {
+      variables.data = dataNew;
+    }
+
+    const dataPreviousNew = { ...dataPrevious, ...AUDIT_LOG_CUSTOM_OLD };
+    if (Object.keys(dataPreviousNew).length) {
+      variables.dataPrevious = dataPreviousNew;
+    }
 
     const response = await dataProvider.create({
       resource: EnumResource.log,
-      variables: logEntry,
+      variables,
     });
 
     return response.data;

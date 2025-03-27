@@ -1,12 +1,22 @@
 import { AccessControlProvider } from '@refinedev/core';
 
-import { EnumAction } from '~/constants';
+import { EnumAction } from '~/constants/action';
+import { lowercaseFirstLetter } from '~/utils/lowercase-first-letter';
 
 import { authProvider } from './auth';
 
 export const accessControlProvider: AccessControlProvider = {
   can: async ({ resource = '', action, params }) => {
     try {
+      resource = lowercaseFirstLetter(resource);
+
+      if (!resource) {
+        resource = '*';
+      }
+      if (!action) {
+        action = EnumAction.list;
+      }
+
       const permissions = await authProvider.getPermissions();
 
       if (!permissions?.length) {
@@ -79,6 +89,12 @@ function keyMatch(key1: string, key2: string): boolean {
 
 function regexMatch(pattern1: string, pattern2: string): boolean {
   try {
+    // 如果 pattern2 包含 |，说明是多个模式的组合
+    if (pattern2.includes('|')) {
+      const patterns = pattern2.split('|').filter(Boolean); // 过滤掉空字符串
+      return patterns.some((p) => regexMatch(pattern1, p));
+    }
+    // 对单个模式进行匹配
     const regex = new RegExp('^' + pattern2 + '$');
     return regex.test(pattern1);
   } catch {
