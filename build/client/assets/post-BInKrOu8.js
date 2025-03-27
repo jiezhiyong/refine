@@ -1,0 +1,1 @@
+var e=(T=>(T.DRAFT="DRAFT",T.PUBLISHED="PUBLISHED",T.REJECTED="REJECTED",T))(e||{});const E=Object.values(e),D={DRAFT:{badge:"outline"},PUBLISHED:{badge:void 0},REJECTED:{badge:"destructive"}};export{e as E,D as P,E as a};

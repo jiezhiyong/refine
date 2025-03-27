@@ -1,0 +1,1 @@
+const f=e=>{let t={},a=!1;if(e&&typeof e=="object"&&(a=!0,t=e),typeof e=="string"&&e.includes("{")&&e.includes("}"))try{t=JSON.parse(e),typeof t=="object"&&(a=!0)}catch{}return{status:a,data:a?t:void 0,original:e}};export{f as t};

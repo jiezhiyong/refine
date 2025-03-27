@@ -1,0 +1,1 @@
+import{t as o}from"./try-parse-D_xF9tNz.js";function f(u){const{status:c,data:t={},original:a}=o(u);return c?(Object.keys(t).forEach(e=>{var r;const s=t[e];if(s&&((r=String(s))!=null&&r.includes("{"))){const n=o(s);t[e]=n.status?n.data:s}}),{status:!0,content:t,original:a}):{status:!1,original:a,content:{}}}export{f as d};

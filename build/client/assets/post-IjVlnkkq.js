@@ -1,0 +1,1 @@
+import{z as t}from"./index-Cb7h-Ku-.js";import{E as s}from"./post-BInKrOu8.js";const o=t.object({title:t.string().min(2,{message:void 0}),content:t.string().min(2),status:t.enum([s.DRAFT,s.PUBLISHED,s.REJECTED]),categoryId:t.string()});export{o as s};

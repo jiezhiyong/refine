@@ -1,0 +1,1 @@
+var o=(t=>(t.user="user",t.userRole="userRole",t.role="role",t.casbinRule="casbinRule",t.log="log",t.post="post",t.category="category",t.frontRouteProject="frontRouteProject",t.frontRouteModule="frontRouteModule",t.auditRecord="auditRecord",t.menu="menu",t.dynamicPage="dynamicPage",t))(o||{});const a=Object.values(o);export{o as E,a as R};

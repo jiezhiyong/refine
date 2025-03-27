@@ -1,0 +1,1 @@
+function i(t,r){const c={};for(let D=0;D<r.length;D++){const n=r[D];Object.hasOwn(t,n)&&(c[n]=t[n])}return c}var s=(t=>(t.ADD="ADD",t.MODIFY="MODIFY",t.DELETE="DELETE",t))(s||{});export{s as O,i as p};

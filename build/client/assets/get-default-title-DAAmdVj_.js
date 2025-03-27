@@ -1,1 +1,0 @@
-import{d as o}from"./button-D61r5HEm.js";function p(l){const{pathname:a}=l[l.length-1],s=o.find(r=>a.startsWith(r.list)),{name:n,meta:i}=s||{};let t=(i==null?void 0:i.title)||n||"OSS Inc.";t=t.charAt(0).toUpperCase()+t.slice(1);let e=a.replace(`${s==null?void 0:s.list}/`,"").split("/").shift();return e=e.charAt(0).toUpperCase()+e.slice(1),e?`${t} · ${e}`:t}export{p as g};

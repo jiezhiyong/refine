@@ -1,0 +1,1 @@
+import{i}from"./isEqual-KSD6Iy0l.js";function c(o){return Object.keys(o).forEach(f=>{!o[f]&&o[f]!==0&&o[f]!==!1&&delete o[f]}),o}function r(o,f){const e={};return Object.keys(o).forEach(s=>{i(o[s],f[s])||(e[s]=o[s])}),e}export{c as d,r as g};
