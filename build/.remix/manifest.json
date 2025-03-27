@@ -5,17 +5,132 @@
       "id": "root",
       "file": "root.tsx"
     },
-    "routes/playground.dashboard.viewTransition": {
-      "file": "routes/playground.dashboard.viewTransition.tsx",
-      "id": "routes/playground.dashboard.viewTransition",
-      "path": "viewTransition",
+    "routes/playground.frontRoute.frontRouteProject.history.$id": {
+      "file": "routes/playground.frontRoute.frontRouteProject.history.$id.tsx",
+      "id": "routes/playground.frontRoute.frontRouteProject.history.$id",
+      "path": "history/:id",
+      "parentId": "routes/playground.frontRoute.frontRouteProject"
+    },
+    "routes/playground.frontRoute.frontRouteModule.history.$id": {
+      "file": "routes/playground.frontRoute.frontRouteModule.history.$id.tsx",
+      "id": "routes/playground.frontRoute.frontRouteModule.history.$id",
+      "path": "history/:id",
+      "parentId": "routes/playground.frontRoute.frontRouteModule"
+    },
+    "routes/playground.frontRoute.frontRouteProject.edit.$id": {
+      "file": "routes/playground.frontRoute.frontRouteProject.edit.$id.tsx",
+      "id": "routes/playground.frontRoute.frontRouteProject.edit.$id",
+      "path": "edit/:id",
+      "parentId": "routes/playground.frontRoute.frontRouteProject"
+    },
+    "routes/playground.frontRoute.frontRouteModule.edit.$id": {
+      "file": "routes/playground.frontRoute.frontRouteModule.edit.$id.tsx",
+      "id": "routes/playground.frontRoute.frontRouteModule.edit.$id",
+      "path": "edit/:id",
+      "parentId": "routes/playground.frontRoute.frontRouteModule"
+    },
+    "routes/playground.frontRoute.frontRouteProject._index": {
+      "file": "routes/playground.frontRoute.frontRouteProject._index.tsx",
+      "id": "routes/playground.frontRoute.frontRouteProject._index",
+      "index": true,
+      "parentId": "routes/playground.frontRoute.frontRouteProject"
+    },
+    "routes/playground.frontRoute.frontRouteProject.create": {
+      "file": "routes/playground.frontRoute.frontRouteProject.create.tsx",
+      "id": "routes/playground.frontRoute.frontRouteProject.create",
+      "path": "create",
+      "parentId": "routes/playground.frontRoute.frontRouteProject"
+    },
+    "routes/playground.frontRoute.frontRouteModule._index": {
+      "file": "routes/playground.frontRoute.frontRouteModule._index.tsx",
+      "id": "routes/playground.frontRoute.frontRouteModule._index",
+      "index": true,
+      "parentId": "routes/playground.frontRoute.frontRouteModule"
+    },
+    "routes/playground.frontRoute.frontRouteModule.create": {
+      "file": "routes/playground.frontRoute.frontRouteModule.create.tsx",
+      "id": "routes/playground.frontRoute.frontRouteModule.create",
+      "path": "create",
+      "parentId": "routes/playground.frontRoute.frontRouteModule"
+    },
+    "routes/playground.dashboard.dynamicPage.clone.$id": {
+      "file": "routes/playground.dashboard.dynamicPage.clone.$id.tsx",
+      "id": "routes/playground.dashboard.dynamicPage.clone.$id",
+      "path": "dynamicPage/clone/:id",
       "parentId": "routes/playground.dashboard"
+    },
+    "routes/playground.dashboard.dynamicPage.edit.$id": {
+      "file": "routes/playground.dashboard.dynamicPage.edit.$id.tsx",
+      "id": "routes/playground.dashboard.dynamicPage.edit.$id",
+      "path": "dynamicPage/edit/:id",
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/playground.dashboard.demoViewTransition": {
+      "file": "routes/playground.dashboard.demoViewTransition.tsx",
+      "id": "routes/playground.dashboard.demoViewTransition",
+      "path": "demoViewTransition",
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/playground.dashboard.dynamicPage._index": {
+      "file": "routes/playground.dashboard.dynamicPage._index.tsx",
+      "id": "routes/playground.dashboard.dynamicPage._index",
+      "path": "dynamicPage",
+      "index": true,
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/playground.dashboard.dynamicPage.create": {
+      "file": "routes/playground.dashboard.dynamicPage.create.tsx",
+      "id": "routes/playground.dashboard.dynamicPage.create",
+      "path": "dynamicPage/create",
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/playground.frontRoute.frontRouteProject": {
+      "file": "routes/playground.frontRoute.frontRouteProject.tsx",
+      "id": "routes/playground.frontRoute.frontRouteProject",
+      "path": "playground/frontRoute/frontRouteProject",
+      "parentId": "root"
+    },
+    "routes/playground.frontRoute.frontRouteModule": {
+      "file": "routes/playground.frontRoute.frontRouteModule.tsx",
+      "id": "routes/playground.frontRoute.frontRouteModule",
+      "path": "playground/frontRoute/frontRouteModule",
+      "parentId": "root"
+    },
+    "routes/playground.article.category.edit.$id": {
+      "file": "routes/playground.article.category.edit.$id.tsx",
+      "id": "routes/playground.article.category.edit.$id",
+      "path": "edit/:id",
+      "parentId": "routes/playground.article.category"
+    },
+    "routes/playground.article.category._index": {
+      "file": "routes/playground.article.category._index.tsx",
+      "id": "routes/playground.article.category._index",
+      "index": true,
+      "parentId": "routes/playground.article.category"
+    },
+    "routes/playground.article.category.create": {
+      "file": "routes/playground.article.category.create.tsx",
+      "id": "routes/playground.article.category.create",
+      "path": "create",
+      "parentId": "routes/playground.article.category"
+    },
+    "routes/system.admin.auditRecord.applyRole": {
+      "file": "routes/system.admin.auditRecord.applyRole.tsx",
+      "id": "routes/system.admin.auditRecord.applyRole",
+      "path": "applyRole",
+      "parentId": "routes/system.admin.auditRecord"
     },
     "routes/playground.article.post.clone.$id": {
       "file": "routes/playground.article.post.clone.$id.tsx",
       "id": "routes/playground.article.post.clone.$id",
       "path": "clone/:id",
       "parentId": "routes/playground.article.post"
+    },
+    "routes/system.admin.auditRecord.show.$id": {
+      "file": "routes/system.admin.auditRecord.show.$id.tsx",
+      "id": "routes/system.admin.auditRecord.show.$id",
+      "path": "show/:id",
+      "parentId": "routes/system.admin.auditRecord"
     },
     "routes/playground.article.post.edit.$id": {
       "file": "routes/playground.article.post.edit.$id.tsx",
@@ -29,6 +144,24 @@
       "path": "show/:id",
       "parentId": "routes/playground.article.post"
     },
+    "routes/system.admin.casbinRule.edit.$id": {
+      "file": "routes/system.admin.casbinRule.edit.$id.tsx",
+      "id": "routes/system.admin.casbinRule.edit.$id",
+      "path": "edit/:id",
+      "parentId": "routes/system.admin.casbinRule"
+    },
+    "routes/system.admin.auditRecord._index": {
+      "file": "routes/system.admin.auditRecord._index.tsx",
+      "id": "routes/system.admin.auditRecord._index",
+      "index": true,
+      "parentId": "routes/system.admin.auditRecord"
+    },
+    "routes/$group.$category.dynamic.$name": {
+      "file": "routes/$group.$category.dynamic.$name.tsx",
+      "id": "routes/$group.$category.dynamic.$name",
+      "path": ":group/:category/dynamic/:name",
+      "parentId": "root"
+    },
     "routes/playground.article.post._index": {
       "file": "routes/playground.article.post._index.tsx",
       "id": "routes/playground.article.post._index",
@@ -41,17 +174,47 @@
       "path": "create",
       "parentId": "routes/playground.article.post"
     },
+    "routes/system.admin.casbinRule._index": {
+      "file": "routes/system.admin.casbinRule._index.tsx",
+      "id": "routes/system.admin.casbinRule._index",
+      "index": true,
+      "parentId": "routes/system.admin.casbinRule"
+    },
+    "routes/system.admin.casbinRule.create": {
+      "file": "routes/system.admin.casbinRule.create.tsx",
+      "id": "routes/system.admin.casbinRule.create",
+      "path": "create",
+      "parentId": "routes/system.admin.casbinRule"
+    },
+    "routes/playground.dashboard.discover": {
+      "file": "routes/playground.dashboard.discover.tsx",
+      "id": "routes/playground.dashboard.discover",
+      "path": "discover",
+      "parentId": "routes/playground.dashboard"
+    },
+    "routes/system.account.role.edit.$id": {
+      "file": "routes/system.account.role.edit.$id.tsx",
+      "id": "routes/system.account.role.edit.$id",
+      "path": "edit/:id",
+      "parentId": "routes/system.account.role"
+    },
+    "routes/system.account.user.edit.$id": {
+      "file": "routes/system.account.user.edit.$id.tsx",
+      "id": "routes/system.account.user.edit.$id",
+      "path": "edit/:id",
+      "parentId": "routes/system.account.user"
+    },
     "routes/api.auth.$provider.callback": {
       "file": "routes/api.auth.$provider.callback.ts",
       "id": "routes/api.auth.$provider.callback",
       "path": "api/auth/:provider/callback",
       "parentId": "root"
     },
-    "routes/playground.dashboard.health": {
-      "file": "routes/playground.dashboard.health.tsx",
-      "id": "routes/playground.dashboard.health",
-      "path": "health",
-      "parentId": "routes/playground.dashboard"
+    "routes/playground.article.category": {
+      "file": "routes/playground.article.category.tsx",
+      "id": "routes/playground.article.category",
+      "path": "playground/article/category",
+      "parentId": "root"
     },
     "routes/playground.dashboard.about": {
       "file": "routes/playground.dashboard.about.tsx",
@@ -63,6 +226,12 @@
       "file": "routes/system.account.role._index.tsx",
       "id": "routes/system.account.role._index",
       "index": true,
+      "parentId": "routes/system.account.role"
+    },
+    "routes/system.account.role.create": {
+      "file": "routes/system.account.role.create.tsx",
+      "id": "routes/system.account.role.create",
+      "path": "create",
       "parentId": "routes/system.account.role"
     },
     "routes/system.account.user._index": {
@@ -90,10 +259,28 @@
       "path": "show/:id",
       "parentId": "routes/system.admin.log"
     },
+    "routes/system.admin.auditRecord": {
+      "file": "routes/system.admin.auditRecord.tsx",
+      "id": "routes/system.admin.auditRecord",
+      "path": "system/admin/auditRecord",
+      "parentId": "root"
+    },
+    "routes/system.admin.menu._index": {
+      "file": "routes/system.admin.menu._index.tsx",
+      "id": "routes/system.admin.menu._index",
+      "index": true,
+      "parentId": "routes/system.admin.menu"
+    },
     "routes/playground.article.post": {
       "file": "routes/playground.article.post.tsx",
       "id": "routes/playground.article.post",
       "path": "playground/article/post",
+      "parentId": "root"
+    },
+    "routes/system.admin.casbinRule": {
+      "file": "routes/system.admin.casbinRule.tsx",
+      "id": "routes/system.admin.casbinRule",
+      "path": "system/admin/casbinRule",
       "parentId": "root"
     },
     "routes/system.admin.log._index": {
@@ -106,6 +293,12 @@
       "file": "routes/api.permissions.switch.ts",
       "id": "routes/api.permissions.switch",
       "path": "api/permissions/switch",
+      "parentId": "root"
+    },
+    "routes/api.tyCallback.$func": {
+      "file": "routes/api.tyCallback.$func.ts",
+      "id": "routes/api.tyCallback.$func",
+      "path": "api/tyCallback/:func",
       "parentId": "root"
     },
     "routes/playground.dashboard": {
@@ -132,11 +325,11 @@
       "path": "system/account/user",
       "parentId": "root"
     },
-    "routes/api.$resource.bulk": {
-      "file": "routes/api.$resource.bulk.ts",
-      "id": "routes/api.$resource.bulk",
-      "path": "bulk",
-      "parentId": "routes/api.$resource"
+    "routes/api.$model.$action": {
+      "file": "routes/api.$model.$action.ts",
+      "id": "routes/api.$model.$action",
+      "path": "api/:model/:action",
+      "parentId": "root"
     },
     "routes/api.image-resize.$": {
       "file": "routes/api.image-resize.$.ts",
@@ -144,11 +337,11 @@
       "path": "api/image-resize/*",
       "parentId": "root"
     },
-    "routes/api.$resource.$id": {
-      "file": "routes/api.$resource.$id.ts",
-      "id": "routes/api.$resource.$id",
-      "path": ":id",
-      "parentId": "routes/api.$resource"
+    "routes/system.admin.menu": {
+      "file": "routes/system.admin.menu.tsx",
+      "id": "routes/system.admin.menu",
+      "path": "system/admin/menu",
+      "parentId": "root"
     },
     "routes/system.admin.log": {
       "file": "routes/system.admin.log.tsx",
@@ -174,10 +367,22 @@
       "path": "password-update",
       "parentId": "root"
     },
-    "routes/api.$resource": {
-      "file": "routes/api.$resource.ts",
-      "id": "routes/api.$resource",
-      "path": "api/:resource",
+    "routes/api.send.code": {
+      "file": "routes/api.send.code.ts",
+      "id": "routes/api.send.code",
+      "path": "api/send/code",
+      "parentId": "root"
+    },
+    "routes/api.discover": {
+      "file": "routes/api.discover.ts",
+      "id": "routes/api.discover",
+      "path": "api/discover",
+      "parentId": "root"
+    },
+    "routes/api.ty.$func": {
+      "file": "routes/api.ty.$func.ts",
+      "id": "routes/api.ty.$func",
+      "path": "api/ty/:func",
       "parentId": "root"
     },
     "routes/api.auth.me": {
@@ -186,10 +391,28 @@
       "path": "api/auth/me",
       "parentId": "root"
     },
+    "routes/api.health": {
+      "file": "routes/api.health.ts",
+      "id": "routes/api.health",
+      "path": "api/health",
+      "parentId": "root"
+    },
+    "routes/api-docs": {
+      "file": "routes/api-docs.tsx",
+      "id": "routes/api-docs",
+      "path": "api-docs",
+      "parentId": "root"
+    },
     "routes/register": {
       "file": "routes/register.tsx",
       "id": "routes/register",
       "path": "register",
+      "parentId": "root"
+    },
+    "routes/api.sql": {
+      "file": "routes/api.sql.ts",
+      "id": "routes/api.sql",
+      "path": "api/sql",
       "parentId": "root"
     },
     "routes/_index": {
