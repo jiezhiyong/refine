@@ -1,28 +1,69 @@
+/**
+ * 英文语言包
+ * 注意：修改后需要重启 server，以避免 Hydration failed
+ */
 export default {
-  title: 'Full-stack WEB framework (en)',
-  description:
-    'Focus on building data-intensive web applications more quickly and easily, while providing a fast, smooth user experience.',
-
+  backHome: 'Back to home',
+  deleteAlert: 'This action cannot be undone!',
+  menus: {
+    playground: 'playground',
+    dashboard: 'dashboard',
+    about: 'about',
+    demo: 'demo',
+    demoViewTransition: 'demo ViewTransition',
+    article: 'article',
+    post: 'post',
+    category: 'category',
+    system: 'system',
+    account: 'account',
+    user: 'user',
+    role: 'role',
+    admin: 'admin',
+    casbinRule: 'permission',
+    log: 'log',
+    frontRoute: 'front route',
+    frontRouteProject: 'project',
+    frontRouteModule: 'module',
+    'auditRecord/applyRole': 'applyRole',
+  },
   pages: {
+    about: {
+      title: 'Full-stack WEB framework',
+      description:
+        'Focus on building data-intensive web applications more quickly and easily, while providing a fast, smooth user experience.',
+      features1: 'Front-back unified architecture',
+      features2: 'SSR server-side rendering',
+      features3: 'Parallel routing loading',
+      features4: 'CRUD development simplified',
+      features5: 'State persistence',
+      features6: 'Authentication',
+      features7: 'Access control',
+      features8: 'Audit log',
+      features9: 'Real-time data',
+      features10: 'Multi-language',
+      features11: 'Theme switch',
+    },
     login: {
-      title: 'Sign in to your account',
+      title: 'Welcome back',
+      description: 'Login to your OSS Inc. account',
       signin: 'Sign in',
       signup: 'Sign up',
       divider: 'or',
+      noAccount: 'Don’t have an account?',
       fields: {
         email: 'Email',
         password: 'Password',
+      },
+      buttons: {
+        submit: 'Login',
+        submitWithTcsk: 'Continue with TCSK',
+        forgotPassword: 'Forgot password?',
+        rememberMe: 'Remember me',
       },
       errors: {
         validEmail: 'Invalid email address',
         requiredEmail: 'Email is required',
         requiredPassword: 'Password is required',
-      },
-      buttons: {
-        submit: 'Login',
-        forgotPassword: 'Forgot password?',
-        noAccount: 'Don’t have an account?',
-        rememberMe: 'Remember me',
       },
     },
     forgotPassword: {
@@ -40,8 +81,11 @@ export default {
     },
     register: {
       title: 'Sign up for your account',
+      haveAccount: 'Already have an account?',
+      signin: 'Sign in',
       fields: {
         email: 'Email',
+        validateCode: 'Validation Code',
         password: 'Password',
       },
       errors: {
@@ -51,7 +95,6 @@ export default {
       },
       buttons: {
         submit: 'Register',
-        haveAccount: 'Have an account?',
       },
     },
     updatePassword: {
@@ -73,7 +116,6 @@ export default {
       info: 'You may have forgotten to add the {{action}} component to {{resource}} resource.',
       '404': 'Sorry, the page you visited does not exist.',
       resource404: 'Are you sure you have created the {{resource}} resource.',
-      backHome: 'Back Home',
     },
   },
   actions: {
@@ -96,8 +138,13 @@ export default {
     show: 'Show',
     undo: 'Undo',
     import: 'Import',
+    export: 'Export',
     clone: 'Clone',
     notAccessTitle: "You don't have permission to access",
+    back: 'Back',
+    columns: 'Columns',
+    toggleColumns: 'Toggle Columns',
+    activeToggle: 'Active / Disable',
   },
   warnWhenUnsavedChanges: 'Are you sure you want to leave? You have unsaved changes.',
   notifications: {
@@ -105,11 +152,11 @@ export default {
     error: 'Error (status code: {{statusCode}})',
     undoable: 'You have {{seconds}} seconds to undo',
     createSuccess: 'Successfully created {{resource}}',
-    createError: 'There was an error creating {{resource}} (status code: {{statusCode}})',
+    createError: 'There was an error creating {{resource}} ({{statusCode}})',
     deleteSuccess: 'Successfully deleted {{resource}}',
-    deleteError: 'Error when deleting {{resource}} (status code: {{statusCode}})',
+    deleteError: 'Error when deleting {{resource}} ({{statusCode}})',
     editSuccess: 'Successfully edited {{resource}}',
-    editError: 'Error when editing {{resource}} (status code: {{statusCode}})',
+    editError: 'Error when editing {{resource}} ({{statusCode}})',
     importProgress: 'Importing: {{processed}}/{{total}}',
   },
   loading: 'Loading',
@@ -145,14 +192,14 @@ export default {
     actions: 'Actions',
   },
   documentTitle: {
-    default: 'refine',
-    suffix: ' | Refine',
+    default: 'Inc',
+    suffix: ' | Inc',
     post: {
-      list: 'Posts | Refine',
-      show: '#{{id}} Show Post | Refine',
-      edit: '#{{id}} Edit Post | Refine',
-      create: 'Create new Post | Refine',
-      clone: '#{{id}} Clone Post | Refine',
+      list: 'Posts | Inc',
+      show: '#{{id}} Show Post | Inc',
+      edit: '#{{id}} Edit Post | Inc',
+      create: 'Create new Post | Inc',
+      clone: '#{{id}} Clone Post | Inc',
     },
   },
   autoSave: {

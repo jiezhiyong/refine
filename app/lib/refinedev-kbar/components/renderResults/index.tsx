@@ -4,11 +4,12 @@ import React from 'react';
 import { ResultItem } from '../resultItem';
 
 const groupNameStyle = {
-  padding: '8px 16px',
+  padding: '8px 0',
+  margin: '0 16px',
   fontSize: '14px',
-  textTransform: 'uppercase' as const,
   fontWeight: 'bold',
   opacity: 0.5,
+  borderBottom: '1px solid rgba(0 0 0 / 0.1)',
 };
 export const RenderResults: React.FC = () => {
   const { results, rootActionId } = useMatches();
@@ -18,7 +19,7 @@ export const RenderResults: React.FC = () => {
       items={results}
       onRender={({ item, active }) => {
         return typeof item === 'string' ? (
-          <div style={groupNameStyle}>{item}</div>
+          <div style={groupNameStyle}>Resource.{item}</div>
         ) : (
           <ResultItem action={item} active={active} currentRootActionId={rootActionId as ActionId} />
         );

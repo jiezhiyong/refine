@@ -1,7 +1,6 @@
-import { forwardRef } from 'react';
 import type { FitEnum } from 'sharp';
 
-export interface ImageProps extends React.ComponentPropsWithRef<'img'> {
+export interface ImageResizeProps extends React.ComponentProps<'img'> {
   src: string; // a path within the assets/images directory, can be a nested path
   width?: number; // either width or height is required
   height?: number;
@@ -12,28 +11,17 @@ export interface ImageProps extends React.ComponentPropsWithRef<'img'> {
 /**
  * eg: <ImageResize src="dog.jpg" width={600} height={600} />
  */
-export const ImageResize = forwardRef<HTMLImageElement, ImageProps>(
-  ({ children, width, height, fit, src, alt = '', ...other }, forwardedRef) => {
-    const query = new URLSearchParams();
-    if (width) {
-      query.set('w', width.toString());
-    }
-    if (height) {
-      query.set('h', height.toString());
-    }
-    if (fit) {
-      query.set('fit', fit);
-    }
-
-    return (
-      <img
-        ref={forwardedRef}
-        alt={alt}
-        src={`/api/image-resize/${src}?${query.toString()}`}
-        {...{ width, height, ...other }}
-      />
-    );
+export const ImageResize = ({ width, height, fit, src, alt = '', ...other }: ImageResizeProps) => {
+  const query = new URLSearchParams();
+  if (width) {
+    query.set('w', width.toString());
   }
-);
+  if (height) {
+    query.set('h', height.toString());
+  }
+  if (fit) {
+    query.set('fit', fit);
+  }
 
-ImageResize.displayName = 'ImageResize';
+  return <img alt={alt} src={`/api/image-resize/${src}?${query.toString()}`} {...{ width, height, ...other }} />;
+};

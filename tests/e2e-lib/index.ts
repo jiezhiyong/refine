@@ -9,3 +9,4 @@ export * from './screenshot';
 export * from './set-cookie';
 export * from './set-local-storage';
 export * from './visible';
+export * from './base';

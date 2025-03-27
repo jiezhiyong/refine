@@ -7,9 +7,9 @@ import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
 import invariant from 'tiny-invariant';
 
-import { EnumAuthProvider } from '~/constants';
+import { EnumAuthProvider } from '~/constants/user';
 import { OAuth2Strategy } from '~/lib/remix-auth-oauth2';
-import { verifyUserpassLogin } from '~/models/user.server';
+import { verifyUserpassLogin } from '~/services/user.server';
 
 invariant(process.env.TCSK_CLIENT_ID, 'TCSK_CLIENT_ID must be set.');
 invariant(process.env.TCSK_CLIENT_SECRET, 'TCSK_CLIENT_SECRET must be set.');
@@ -72,5 +72,5 @@ const strategyForm = new FormStrategy(async ({ form }) => {
 });
 
 // 注册认证策略
-authenticator.use(strategyForm, EnumAuthProvider.userpass);
-authenticator.use(tcskStrategy, EnumAuthProvider.tcshuke);
+authenticator.use(strategyForm, EnumAuthProvider.USER_PASS);
+authenticator.use(tcskStrategy, 'tcshuke');

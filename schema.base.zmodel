@@ -1,0 +1,14 @@
+/**
+ * 基础模型
+ * https://zenstack.dev
+ * https://zenstack.dev/docs/reference/zmodel-language#field-level-validation-attributes
+ */
+abstract model Base {
+  id           String    @id @default(cuid())
+  deleted      Boolean?  @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
+  operatedById String?   @default(auth().id)
+
+  @@allow('all', true) // 由于允许动态新增角色、权限，无法使用 zenstack 的静态访问策略功能
+}

@@ -3,10 +3,9 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
-    "Prisma.prisma",
+    "Prisma.prisma-insider",
     "DavidAnson.vscode-markdownlint",
     "unifiedjs.vscode-mdx",
-    "Gruntfuggly.todo-tree",
-    "graphql.vscode-graphql"
+    "Gruntfuggly.todo-tree"
   ]
 }

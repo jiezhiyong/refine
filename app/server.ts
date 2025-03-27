@@ -1,41 +1,57 @@
-// import { broadcastDevReady } from '@remix-run/node';
-// import type { ServerBuild } from '@remix-run/node';
-// import * as build from '@remix-run/dev/server-build';
 // import { createServer } from 'http';
-// import express from 'express';
-// import { createRequestHandler } from '@remix-run/express';
-// import { initSocketIO } from '~/services';
 
-// let _app: express.Application;
+// import { broadcastDevReady, createRequestHandler } from '@remix-run/node';
+// import type { AppLoadContext, ServerBuild } from '@remix-run/node';
+
+// import { initSocketIO } from '~/services/socket.server';
+
+// // HTTP 服务器实例
 // let _httpServer: ReturnType<typeof createServer>;
 
-// function getServer() {
-//   if (!_app) {
-//     _app = express();
-//     _httpServer = createServer(_app);
-//     initSocketIO(httpServer);
+// // 获取或创建 HTTP 服务器实例
+// function getServer(build: ServerBuild) {
+//   if (!_httpServer) {
+//     const handler = createRequestHandler(build, process.env.NODE_ENV);
+
+//     _httpServer = createServer((req, res) => {
+//       console.log('Request received:', req.url);
+//       return handler(req as unknown as Request, res as unknown as AppLoadContext);
+//     });
+
+//     initSocketIO(_httpServer); // 初始化 Socket.IO 服务
 //   }
-//   return { app: _app, httpServer: _httpServer };
+//   return _httpServer;
 // }
 
-// function attachRemixHandler(_build: ServerBuild) {
-//   const { app } = getServer();
-//   app.all(
-//     '*',
-//     createRequestHandler({
-//       build: _build,
-//       mode: process.env.NODE_ENV,
-//     })
-//   );
+// async function start() {
+//   try {
+//     console.log(`正在启动服务器...`);
+
+//     // 导入服务端构建文件
+//     const build = await import('../build/server/index.js');
+
+//     // 获取服务器实例
+//     const server = getServer(build as unknown as ServerBuild);
+
+//     // 获取端口配置
+//     const port = Number(process.env.VITE_CLIENT_PORT);
+
+//     // 启动服务器
+//     server.listen(port, () => {
+//       console.log(`服务器已启动，监听端口 ${port}`);
+
+//       if (process.env.NODE_ENV === 'development') {
+//         broadcastDevReady(build as unknown as ServerBuild);
+//       }
+//     });
+//   } catch (error) {
+//     console.error('服务器启动失败:', error);
+//     process.exit(1);
+//   }
 // }
 
-// const { httpServer } = getServer();
-// attachRemixHandler(build as unknown as ServerBuild);
-
-// const port = process.env.PORT || 3000;
-// httpServer.listen(port, () => {
-//   console.log(`Express server listening on port ${port}`);
-//   if (process.env.NODE_ENV === 'development') {
-//     broadcastDevReady(build);
-//   }
+// // 启动服务器并处理未捕获的错误
+// start().catch((error) => {
+//   console.error('未捕获的错误:', error);
+//   process.exit(1);
 // });

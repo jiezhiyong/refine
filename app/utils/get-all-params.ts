@@ -1,6 +1,6 @@
 import { Params } from '@remix-run/react';
 
-import { TAny } from '~/types';
+import { TAny } from '~/types/any';
 
 /**
  * 从 loader 和 action 的 request 和 params 中合并获取所有参数。

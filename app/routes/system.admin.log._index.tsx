@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client';
+import { Log, Prisma } from '@prisma/client';
 import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
@@ -6,46 +6,45 @@ import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
 
-import { ExportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
-import { PageError } from '~/components';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components-shadcn/avatar';
-import { Badge } from '~/components-shadcn/badge';
-import { Checkbox } from '~/components-shadcn/checkbox';
-import { EnumAction, EnumResource } from '~/constants';
+import { PageError } from '~/components/500';
+import { ExportButton } from '~/components/refine/buttons/export';
+import { ShowButton } from '~/components/refine/buttons/show';
+import { TableEasy, TableFilterProps } from '~/components/refine/table';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Badge } from '~/components/ui/badge';
+import { Checkbox } from '~/components/ui/checkbox';
+import { EnumAction } from '~/constants/action';
+import { EnumLogType, LOG_STATUS_LIST, LOG_STATUS_MAP } from '~/constants/log';
+import { EnumResource } from '~/constants/resource';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { dataService } from '~/services';
-import { HandleFunction, LOG_STATUS, LOG_STATUS_MAP, LogStatus, TAny } from '~/types';
-import { getDefaultTitle } from '~/utils';
+import { dataService } from '~/services/data.server';
+import { TAny } from '~/types/any';
+import { getDefaultTitle } from '~/utils/get-default-title';
+import { buildTableParams } from '~/utils/request';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
 
-export const handle: HandleFunction = {
-  uiTools: () => {
-    return <UiTools />;
-  },
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const tableParams = parseTableParams(url.search);
+  const tableParams = parseTableParams(new URL(request.url).search);
 
-  const data = await dataService.getList<Post>({
-    ...tableParams,
-    resource: EnumResource.log,
-    meta: {
-      include: {
-        user: { select: { name: true, avatar: true } },
-      },
-    },
-  });
+  const include: Prisma.LogInclude = {
+    operatedBy: { select: { name: true, avatar: true } },
+  };
+  const args: Prisma.LogFindManyArgs = {
+    ...buildTableParams(tableParams),
+    orderBy: { updatedAt: 'desc' },
+    include,
+  };
 
-  return { initialData: data };
+  const res = await dataService.findMany<Log>('log', args, { request });
+
+  return { initialData: res, include };
 }
 
 export default function LogIndex() {
-  const { initialData } = useLoaderData<typeof loader>();
+  const { initialData, include } = useLoaderData<typeof loader>();
 
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
@@ -76,14 +75,15 @@ export default function LogIndex() {
   };
 
   return (
-    <Table
+    <TableEasy
       enableSorting
       enableFilters
       enableHiding
+      toolbar={[<ExportButton key="export" />]}
       initialState={{
         sorting: [
           {
-            id: 'createdAt',
+            id: 'updatedAt',
             desc: true,
           },
         ],
@@ -91,19 +91,14 @@ export default function LogIndex() {
       refineCoreProps={{
         queryOptions: { initialData },
         meta: {
-          join: [
-            {
-              field: EnumResource.user,
-              select: ['name', 'avatar'],
-            },
-          ],
+          include,
         },
       }}
     >
-      <Table.Column
+      <TableEasy.Column
         accessorKey="id"
         id="id"
-        header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
+        header={({ table }) => <TableEasy.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
         cell={({ row }) => (
           <Checkbox
             className="ml-2"
@@ -115,91 +110,91 @@ export default function LogIndex() {
         )}
       />
 
-      <Table.Column
+      <TableEasy.Column
         header="Resource"
         accessorKey="resource"
         id="resource"
         meta={{
           filterOperator: 'contains',
         }}
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Resource" />}
+        filter={(props: TableFilterProps) => <TableEasy.Filter.Search {...props} title="Search Resource" />}
         cell={({ row: { index, original }, table }) => {
           const pageIndex = table.getState().pagination.pageIndex;
           const pageSize = table.getState().pagination.pageSize;
 
           return (
             <ShowButton recordItemId={original.id} asChild>
-              <span className="text-muted-foreground inline-block min-w-8">
+              <span className="text-muted-foreground inline-block min-w-6">
                 {pageIndex * pageSize + index + 1}.&nbsp;
               </span>
               <span className="py-3 capitalize underline-offset-2 hover:text-green-600 hover:underline">
-                {JSON.parse(original.meta).parent}.{original.resource}
+                {original.meta?.parent}.{original.resource}
               </span>
             </ShowButton>
           );
         }}
       />
 
-      <Table.Column
+      <TableEasy.Column
         header="Type"
         accessorKey="action"
         id="action"
         enableSorting
         enableHiding
         cell={({ row: { original } }) => {
-          const ids = JSON.parse(original.meta || '{}').ids;
+          const ids = original.meta?.ids;
           return (
-            <Badge variant={LOG_STATUS_MAP[original.action as LogStatus]?.badge as TAny}>
-              {original.action?.charAt(0)?.toUpperCase() + original.action?.slice(1)}
+            <Badge variant={LOG_STATUS_MAP[original.action as EnumLogType]?.badge as TAny}>
+              {original.action}
               {ids?.length > 1 ? ` x${ids.length}` : ''}
             </Badge>
           );
         }}
         filter={(props: TableFilterProps) => (
-          <Table.Filter.Radio
+          <TableEasy.Filter.Radio
             {...props}
-            options={Object.entries(LOG_STATUS).map(([key, value]) => ({
-              label: key?.charAt(0)?.toUpperCase() + key?.slice(1),
-              value,
+            options={LOG_STATUS_LIST.map((key) => ({
+              label: key,
+              value: key,
             }))}
           />
         )}
       />
 
-      <Table.Column
+      <TableEasy.Column
         header="CreatedAt"
         accessorKey="createdAt"
         id="createdAt"
         enableSorting
         enableHiding
-        filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
+        filter={(props: TableFilterProps) => <TableEasy.Filter.DateRangePicker {...props} align="end" />}
         cell={({ row: { original } }) => dayjs(original.createdAt).format('YYYY-MM-DD HH:mm:ss')}
       />
 
-      <Table.Column
-        header="Author"
-        accessorKey="user.name"
-        id="user.name"
+      <TableEasy.Column
+        header="OperatedBy"
+        accessorKey="operatedBy.name"
+        id="operatedBy.name"
         enableHiding
         meta={{
           filterOperator: 'contains',
         }}
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
+        filter={(props: TableFilterProps) => <TableEasy.Filter.Search {...props} title="Search OperatedBy" />}
         cell={useCallback(
           ({ row: { original } }: { row: { original: BaseRecord } }) => (
             <div className="flex items-center gap-2">
               <Avatar className="size-6">
-                <AvatarImage src={original.user?.avatar || ''} alt={original.user?.name || ''} />
-                <AvatarFallback>{original.user?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={original.operatedBy?.avatar} alt={original.operatedBy?.name || ''} />
+                <AvatarFallback>{original.operatedBy?.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
-              <span>{original.user?.name}</span>
+              <span>{original.operatedBy?.name}</span>
             </div>
           ),
           []
         )}
       />
 
-      <Table.Column
+      <TableEasy.Column
         header="Actions"
         accessorKey="id"
         id="actions"
@@ -207,15 +202,7 @@ export default function LogIndex() {
           <ShowButton recordItemId={original.id} size="icon" variant="ghost" />
         )}
       />
-    </Table>
-  );
-}
-
-function UiTools() {
-  return (
-    <div className="flex items-center gap-1 text-sm">
-      <ExportButton variant="ghost" size="icon" />
-    </div>
+    </TableEasy>
   );
 }
 

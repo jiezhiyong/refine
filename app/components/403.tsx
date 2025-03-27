@@ -1,8 +1,11 @@
+import { useBack } from '@refinedev/core';
 import { Link } from '@remix-run/react';
 
-import { Button } from '~/components-shadcn/button';
+import { Button } from '~/components/ui/button';
 
 export function PermissionDenied() {
+  const back = useBack();
+
   return (
     <div className="relative h-screen font-['sans-serif']">
       <div className="absolute top-1/2 left-1/2 w-full max-w-[520px] -translate-x-1/2 -translate-y-1/2 text-center leading-[1.4]">
@@ -17,8 +20,12 @@ export function PermissionDenied() {
         </div>
         <p className="mb-8 text-xl text-red-500">Sorry, You don&apos;t have permission to access this page.</p>
 
-        <Link prefetch="intent" viewTransition to="/api/auth/logout">
-          <Button>Back To Login</Button>
+        <Button onClick={back} className="mr-3">
+          Go Back
+        </Button>
+
+        <Link prefetch="intent" viewTransition to="/system/admin/auditRecord/applyRole">
+          <Button>Apply Permission</Button>
         </Link>
       </div>
     </div>

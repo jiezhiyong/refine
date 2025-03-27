@@ -9,7 +9,6 @@
 	"Remix function loader": {
 		"prefix": "function loader",
 		"body": [
-      "// 页面初始化时的`GET`请求 && 表单`GET`请求",
       "export async function loader({ request }: LoaderFunctionArgs) {",
       "  return {};",
       "}",
@@ -18,7 +17,6 @@
 	"Remix function action": {
 		"prefix": "function action",
 		"body": [
-      "// 处理 POST、PATCH、DELETE 请求",
       "export async function action({ request }: ActionFunctionArgs) {",
       "  const formData = await request.formData();",
       "  const rawData = Object.fromEntries(formData);",

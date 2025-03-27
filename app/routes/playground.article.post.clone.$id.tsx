@@ -2,25 +2,19 @@ import { Post } from '@prisma/client';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
-import { PageError } from '~/components';
-import { EnumResource } from '~/constants';
-import { dataService } from '~/services';
-import { getDefaultTitle } from '~/utils';
+import { PageError } from '~/components/500';
+import { dataService } from '~/services/data.server';
+import { getDefaultTitle } from '~/utils/get-default-title';
 
 import { PostForm } from './playground.article.post.edit.$id';
 
-// 元数据
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
 
-// 页面初始化时的`GET`请求 && 表单`GET`请求
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const [initialData] = await Promise.all([
-    dataService.getOne<Post>({
-      resource: EnumResource.post,
-      id: params?.id || '',
-    }),
+    dataService.findUniqueOrThrow<Post>('post', { where: { id: params?.id || '' } }, { request }),
   ]);
 
   return { initialData };

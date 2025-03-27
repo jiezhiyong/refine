@@ -18,8 +18,8 @@
 
 import { ChangeEvent, useState } from 'react';
 
-import { Button } from '~/components-shadcn/button';
-import { Image } from '~/components-shadcn/typography';
+import { Button } from '~/components/ui/button';
+import { Image } from '~/components/ui/typography';
 
 interface ImageUploadProps {
   onImageChange: (file: File | null) => void;
@@ -61,7 +61,7 @@ export function ImageUpload({ onImageChange, imagePreview }: ImageUploadProps) {
     >
       {imagePreview ? (
         <div className="relative h-48 w-full">
-          <Image src={imagePreview || '/placeholder.svg'} alt="Preview" className="rounded-lg" />
+          <Image src={imagePreview || '/images/placeholder.svg'} alt="Preview" className="rounded-lg" />
         </div>
       ) : (
         <p className="text-gray-500">拖放图片到这里或点击上传</p>

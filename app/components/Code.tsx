@@ -1,8 +1,9 @@
-import { TAny } from '~/types';
+import { TAny } from '~/types/any';
 
 export interface CodeProps {
   data: TAny;
-  summary: string;
+  summary?: string;
+  open?: boolean;
 }
 
 /**
@@ -10,13 +11,13 @@ export interface CodeProps {
  * @description Simple component to render out our JSON responses.
  */
 export const Code = (props: CodeProps) => {
-  const { data, summary } = props;
+  const { data, summary, open = false } = props;
 
   return (
-    <details>
-      <summary style={{ cursor: 'pointer' }}>{summary}</summary>
+    <details open={open || !summary}>
+      {summary && <summary className="cursor-pointer">{summary}</summary>}
       <code>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre className="border-border/20 mt-2 border-t pt-2">{JSON.stringify(data, null, 2)}</pre>
       </code>
     </details>
   );

@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react';
 
-import { Label } from '~/components-shadcn/label';
-import { SidebarGroup, SidebarGroupContent, SidebarInput } from '~/components-shadcn/sidebar';
+import { Label } from '~/components/ui/label';
+import { SidebarGroup, SidebarGroupContent, SidebarInput } from '~/components/ui/sidebar';
 
 export function SidebarSearchForm({ ...props }: React.ComponentProps<'form'>) {
   return (

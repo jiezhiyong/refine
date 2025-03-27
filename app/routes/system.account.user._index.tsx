@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
@@ -6,49 +6,62 @@ import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
 
-import { DeleteButton, ExportButton, ShowButton, Table, TableFilterProps } from '~/component-refine';
-import { PageError } from '~/components';
-import { Badge } from '~/components-shadcn/badge';
-import { Checkbox } from '~/components-shadcn/checkbox';
-import { EnumAction, EnumResource } from '~/constants';
+import { PageError } from '~/components/500';
+import { DeleteButton } from '~/components/refine/buttons/delete';
+import { EditButton } from '~/components/refine/buttons/edit';
+import { ExportButton } from '~/components/refine/buttons/export';
+import { TableEasy, TableFilterProps } from '~/components/refine/table';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Badge } from '~/components/ui/badge';
+import { Checkbox } from '~/components/ui/checkbox';
+import { EnumAction } from '~/constants/action';
+import { EnumResource } from '~/constants/resource';
+import { EnumRole, rolePriority } from '~/constants/roles';
+import { PROVIDER_LIST } from '~/constants/user';
 import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { dataService } from '~/services';
-import { HandleFunction, TAny, USER_PROVIDER } from '~/types';
-import { getDefaultTitle } from '~/utils';
+import { dataService } from '~/services/data.server';
+import { getDefaultTitle } from '~/utils/get-default-title';
+import { buildTableParams } from '~/utils/request';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
 };
 
-export const handle: HandleFunction = {
-  uiTools: () => {
-    return <UiTools />;
-  },
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const tableParams = parseTableParams(url.search);
+  const tableParams = parseTableParams(new URL(request.url).search);
 
-  const data = await dataService.getList<User>({
-    ...tableParams,
-    resource: EnumResource.user,
-    meta: {
-      include: {
-        _count: {
+  const include: Prisma.UserInclude = {
+    roles: {
+      select: {
+        role: {
           select: {
-            Post: true,
+            title: true,
           },
         },
       },
     },
-  });
+    _count: {
+      select: {
+        posts: true,
+      },
+    },
+  };
 
-  return { initialData: data };
+  const data = await dataService.findMany<User>(
+    'user',
+    {
+      ...buildTableParams(tableParams),
+      orderBy: { updatedAt: 'desc' },
+      include,
+    },
+    { request }
+  );
+
+  return { initialData: data, include };
 }
 
 export default function UserIndex() {
-  const { initialData } = useLoaderData<typeof loader>();
+  const { initialData, include } = useLoaderData<typeof loader>();
 
   const friendly = useUserFriendlyName();
   const { mutate: deleteMany } = useDeleteMany();
@@ -79,14 +92,18 @@ export default function UserIndex() {
   };
 
   return (
-    <Table
+    <TableEasy
       enableSorting
       enableFilters
       enableHiding
+      toolbar={[<ExportButton key="export" />]}
       initialState={{
+        columnVisibility: {
+          createdAt: false,
+        },
         sorting: [
           {
-            id: 'createdAt',
+            id: 'updatedAt',
             desc: true,
           },
         ],
@@ -94,19 +111,14 @@ export default function UserIndex() {
       refineCoreProps={{
         queryOptions: { initialData },
         meta: {
-          join: [
-            {
-              field: EnumResource.post,
-              count: true,
-            },
-          ],
+          include,
         },
       }}
     >
-      <Table.Column
+      <TableEasy.Column
         accessorKey="id"
         id="id"
-        header={({ table }) => <Table.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
+        header={({ table }) => <TableEasy.CheckAll table={table} options={[bulkDeleteAction(table)]} />}
         cell={({ row }) => (
           <Checkbox
             className="ml-2"
@@ -118,7 +130,7 @@ export default function UserIndex() {
         )}
       />
 
-      <Table.Column
+      <TableEasy.Column
         header="Name"
         accessorKey="name"
         id="name"
@@ -126,77 +138,112 @@ export default function UserIndex() {
         meta={{
           filterOperator: 'contains',
         }}
-        filter={(props: TableFilterProps) => <Table.Filter.Search {...props} title="Search Author" />}
-        cell={useCallback(
-          ({ row: { index, original }, table }: { row: { index: number; original: BaseRecord }; table: TAny }) => {
-            const pageIndex = table.getState().pagination.pageIndex;
-            const pageSize = table.getState().pagination.pageSize;
-
-            return (
-              <ShowButton recordItemId={original.id} asChild>
-                <span className="text-muted-foreground inline-block min-w-8">
-                  {pageIndex * pageSize + index + 1}.&nbsp;
-                </span>
-
-                <span className="py-3 capitalize underline-offset-2 hover:text-green-600 hover:underline">
-                  {original.name}
-                </span>
-              </ShowButton>
-            );
-          },
-          []
-        )}
+        filter={(props: TableFilterProps) => <TableEasy.Filter.Search {...props} title="Search user name" />}
+        cell={useCallback(({ row: { original } }: { row: { original: BaseRecord } }) => {
+          return (
+            <EditButton recordItemId={original.id} asChild>
+              <div className="flex items-center gap-2">
+                <Avatar className="size-6">
+                  <AvatarImage src={original.avatar} alt={original.name || ''} />
+                  <AvatarFallback className="border-foreground/10 border">
+                    {original.name?.slice(0, 1).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="underline-offset-2 hover:text-green-600 hover:underline">{original.name}</span>
+              </div>
+            </EditButton>
+          );
+        }, [])}
       />
 
-      <Table.Column
+      <TableEasy.Column
+        header="Roles"
+        accessorKey="roles"
+        id="roles"
+        enableHiding
+        cell={({ row: { original } }) => {
+          const roles: string[] = original.roles?.map((item: { role: { title: string } }) => item.role.title);
+          return <Badge>{roles.sort((a, b) => rolePriority[a] - rolePriority[b]).join(', ')}</Badge>;
+        }}
+      />
+
+      <TableEasy.Column
+        header="Email"
+        accessorKey="email"
+        id="email"
+        enableSorting
+        enableHiding
+        cell={({ row: { original } }) => original.email}
+      />
+
+      <TableEasy.Column
         header="Provider"
         accessorKey="provider"
         id="provider"
         enableSorting
         enableHiding
         cell={({ row: { original } }) => {
-          return (
-            <Badge variant="outline">{original.provider?.charAt(0)?.toUpperCase() + original.provider?.slice(1)}</Badge>
-          );
+          return <Badge variant="outline">{original.provider}</Badge>;
         }}
         filter={(props: TableFilterProps) => (
-          <Table.Filter.Radio
+          <TableEasy.Filter.Radio
             {...props}
-            options={Object.entries(USER_PROVIDER).map(([key, value]) => ({
-              label: key?.charAt(0)?.toUpperCase() + key?.slice(1),
+            options={PROVIDER_LIST.map((value) => ({
+              label: value,
               value,
             }))}
           />
         )}
       />
 
-      <Table.Column
+      <TableEasy.Column
         header="CreatedAt"
         accessorKey="createdAt"
         id="createdAt"
         enableSorting
         enableHiding
-        filter={(props: TableFilterProps) => <Table.Filter.DateRangePicker {...props} align="end" />}
+        filter={(props: TableFilterProps) => <TableEasy.Filter.DateRangePicker {...props} align="end" />}
         cell={({ row: { original } }) => dayjs(original.createdAt).format('YYYY-MM-DD HH:mm:ss')}
       />
 
-      <Table.Column
+      <TableEasy.Column
+        header="UpdatedAt"
+        accessorKey="updatedAt"
+        id="updatedAt"
+        enableSorting
+        enableHiding
+        filter={(props: TableFilterProps) => <TableEasy.Filter.DateRangePicker {...props} align="end" />}
+        cell={({ row: { original } }) => dayjs(original.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
+      />
+
+      <TableEasy.Column
+        header="Post Count"
+        accessorKey="postCount"
+        id="postCount"
+        enableHiding
+        cell={({ row: { original } }) => original?._count?.posts || '0'}
+      />
+
+      <TableEasy.Column
         header="Actions"
         accessorKey="id"
         id="actions"
         cell={({ row: { original } }: { row: { original: BaseRecord } }) => (
-          <DeleteButton recordItemId={original.id} size="icon" variant="ghost" className="text-destructive!" />
+          <>
+            <EditButton recordItemId={original.id} size="icon" variant="ghost" />
+            <DeleteButton
+              disabled={original.roles?.some(
+                (item: { role: { title: string } }) => item.role.title === EnumRole.administrator
+              )}
+              recordItemId={original.id}
+              size="icon"
+              variant="ghost"
+              className="text-destructive!"
+            />
+          </>
         )}
       />
-    </Table>
-  );
-}
-
-function UiTools() {
-  return (
-    <div className="flex items-center gap-1 text-sm">
-      <ExportButton variant="ghost" size="icon" />
-    </div>
+    </TableEasy>
   );
 }
 

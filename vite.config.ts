@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+// import * as fs from 'fs';
 
 import { vitePlugin as remix } from '@remix-run/dev';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
@@ -21,16 +21,18 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.npm_package_version': JSON.stringify(process.env.npm_package_version),
     },
     server: {
-      port: 5173,
+      port: Number(env.VITE_CLIENT_PORT),
       strictPort: true,
-      // host: '0.0.0.0',
+      host: '0.0.0.0',
+
+      // 可选配置: 本地使用自定义 https 域名
       // https: {
-      //   key: fs.readFileSync('./refine-jet.vercel.app+3-key.pem'),
-      //   cert: fs.readFileSync('./refine-jet.vercel.app+3.pem'),
+      //   key: fs.readFileSync('./me.ly.com+3-key.pem'),
+      //   cert: fs.readFileSync('./me.ly.com+3.pem'),
       // },
       // proxy: {
       //   '/*': {
-      //     target: 'https://refine-jet.vercel.app:5173',
+      //     target: `https://me.ly.com:5173`,
       //     secure: false,
       //     changeOrigin: true,
       //     headers: {
@@ -55,25 +57,25 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
       visualizer({ emitFile: true }), // 生成构建产物的可视化分析报告 stats.html
 
-      // sentryVitePlugin({
-      //   debug: false,
-      //   org: env.SENTRY_ORG,
-      //   project: env.SENTRY_PROJECT,
-      //   authToken: env.SENTRY_AUTH_TOKEN,
-      //   url: env.SENTRY_URL,
-      //   sourcemaps: {
-      //     filesToDeleteAfterUpload: ['**/*.map'],
-      //   },
-      //   release: {
-      //     name: 'oss@' + process.env.npm_package_version,
-      //     uploadLegacySourcemaps: {
-      //       paths: ['.'],
-      //     },
-      //   },
-      // }),
+      sentryVitePlugin({
+        debug: false,
+        org: env.SENTRY_ORG,
+        project: env.SENTRY_PROJECT,
+        authToken: env.SENTRY_AUTH_TOKEN,
+        url: env.SENTRY_URL,
+        sourcemaps: {
+          filesToDeleteAfterUpload: ['**/*.map'],
+        },
+        release: {
+          name: 'oss@' + process.env.npm_package_version,
+          uploadLegacySourcemaps: {
+            paths: ['.'],
+          },
+        },
+      }),
     ],
     build: {
-      // sourcemap: true,
+      sourcemap: true,
     },
   };
 });

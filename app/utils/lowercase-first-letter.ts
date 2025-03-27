@@ -1,0 +1,6 @@
+/**
+ * 首字母小写
+ */
+export function lowercaseFirstLetter(str: string): string {
+  return str.charAt(0).toLowerCase() + str.slice(1);
+}

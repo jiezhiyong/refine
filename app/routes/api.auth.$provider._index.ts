@@ -1,9 +1,10 @@
 import { type ActionFunctionArgs } from '@remix-run/node';
 import * as Sentry from '@sentry/remix';
 
-import { EnumAuthProvider } from '~/constants';
-import { authenticator, commitSession, getSession } from '~/services';
-import { TAny } from '~/types';
+import { EnumAuthProvider } from '~/constants/user';
+import { authenticator } from '~/services/auth.server';
+import { commitSession, getSession } from '~/services/session.server';
+import { TAny } from '~/types/any';
 
 export async function loader() {
   return Response.json({ message: 'Method not allowed' });
@@ -12,7 +13,7 @@ export async function loader() {
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
     const { provider } = params as { provider: EnumAuthProvider };
-    if (!provider || ![EnumAuthProvider.userpass, EnumAuthProvider.tcshuke].includes(provider)) {
+    if (!provider || ![EnumAuthProvider.USER_PASS, EnumAuthProvider.TC_SHUKE].includes(provider)) {
       return Response.json({ message: 'Method not allowed' }, { status: 405 });
     }
 
@@ -20,7 +21,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const user = await authenticator.authenticate(provider, request);
 
     // 处理 userpass 认证提供者成功回调 - 将用户信息存入session
-    if (provider === EnumAuthProvider.userpass && user) {
+    if (provider === EnumAuthProvider.USER_PASS && user) {
       const session = await getSession(request.headers.get('Cookie'));
       session.set('user', user);
 

@@ -1,12 +1,13 @@
-import { TRole } from '~/constants';
-import { PermissionRule } from '~/types';
+import { TRole } from '~/constants/roles';
+import { PermissionRule } from '~/types/casbin';
+import { lowercaseFirstLetter } from '~/utils/lowercase-first-letter';
 
 import { createEnforcer } from './casbin-enforcer.server';
 import { getUserSession } from './session.server';
 
 export async function checkPermission(subject: string, object: string, action: string): Promise<boolean> {
   const enforcer = await createEnforcer();
-  return enforcer.enforce(subject, object, action);
+  return enforcer.enforce(lowercaseFirstLetter(subject), object, action);
 }
 
 export async function getPermissions({

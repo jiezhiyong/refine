@@ -1,20 +1,12 @@
 import { type ActionFunctionArgs, type MetaFunction, redirect } from '@remix-run/node';
-import { z } from 'zod';
 
-import { RegisterForm } from '~/components';
-import { EnumAuthProvider } from '~/constants';
-import { createUser, getUserByEmail } from '~/models/user.server';
-import { getAllParams } from '~/utils';
+import { RegisterForm } from '~/components/form-register';
+import { EnumAuthProvider } from '~/constants/user';
+import { createUser, getUserByEmail } from '~/services/user.server';
+import { getAllParams } from '~/utils/get-all-params';
 import { typedFormError } from '~/utils/typed-form-error';
+import { TSchemaLoginRegister } from '~/zod';
 
-// 定义表单验证 schema
-const registerSchema = z.object({
-  email: z.string().email('请输入有效的邮箱地址'),
-  password: z.string().min(6, '密码至少需要6个字符').max(50, '密码不能超过50个字符'),
-  redirectTo: z.string().optional(),
-});
-
-// 元数据
 export const meta: MetaFunction = () => {
   return [{ title: 'Register' }];
 };
@@ -22,7 +14,7 @@ export const meta: MetaFunction = () => {
 // Action 处理函数
 export async function action({ request }: ActionFunctionArgs) {
   try {
-    const mergedParams = await getAllParams<z.infer<typeof registerSchema>>(request);
+    const mergedParams = await getAllParams<TSchemaLoginRegister>(request);
     const { email, password } = mergedParams;
 
     const existingUser = await getUserByEmail(email);
@@ -31,7 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
       throw { email: ['A user already exists with this email.'] };
     }
 
-    await createUser({ email, password, provider: EnumAuthProvider.userpass });
+    await createUser({ email, password, provider: EnumAuthProvider.USER_PASS });
 
     return redirect(`/login?email=${email}`);
   } catch (error) {

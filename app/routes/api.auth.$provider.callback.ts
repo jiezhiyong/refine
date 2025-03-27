@@ -1,9 +1,11 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 
-import { EnumAuthProvider } from '~/constants';
-import { createUser, getUserByEmail } from '~/models/user.server';
-import { authenticator, commitSession, getSession } from '~/services';
-import { TAny } from '~/types';
+import { dashboardResource } from '~/config/resources';
+import { EnumAuthProvider } from '~/constants/user';
+import { authenticator } from '~/services/auth.server';
+import { commitSession, getSession } from '~/services/session.server';
+import { createUser, getUserByEmail } from '~/services/user.server';
+import { TAny } from '~/types/any';
 
 // OAuth2 认证回调 - 处理重定向触发的 GET 请求
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -30,11 +32,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     if (existingUser?.id) {
       session.set('user', existingUser);
     } else {
-      const userNew = await createUser({ email, name, provider: EnumAuthProvider.tcshuke });
+      const userNew = await createUser({ email, name, provider: EnumAuthProvider.TC_SHUKE });
       session.set('user', userNew);
     }
 
-    return redirect('/', {
+    return redirect(dashboardResource, {
       headers: {
         'Set-Cookie': await commitSession(session),
       },

@@ -1,9 +1,11 @@
 import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
+import { t } from 'i18next';
 
-import { Button } from '~/components-shadcn/button';
-import { Card, CardContent } from '~/components-shadcn/card';
-import { Input } from '~/components-shadcn/input';
-import { Label } from '~/components-shadcn/label';
+import { Button } from '~/components/ui/button';
+import { Card, CardContent } from '~/components/ui/card';
+import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
+import { dashboardResource } from '~/config/resources';
 
 import { ErrorMessage } from './error';
 import { PrivacyPolicy } from './privacy-policy';
@@ -22,7 +24,7 @@ interface ActionData {
 export function LoginForm() {
   const { errors } = useActionData<ActionData>() || {};
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get('redirectTo') || '/';
+  const redirectTo = searchParams.get('redirectTo') || dashboardResource;
   const navigation = useNavigation();
 
   return (
@@ -34,12 +36,12 @@ export function LoginForm() {
 
             <div className="flex flex-col gap-6">
               <div className="flex flex-col">
-                <h1 className="flex items-center text-2xl font-bold">Welcome back</h1>
-                <p className="text-muted-foreground text-balance">Login to your OSS Inc. account</p>
+                <h1 className="flex items-center text-2xl font-bold">{t('pages.login.title')}</h1>
+                <p className="text-muted-foreground text-balance">{t('pages.login.description')}</p>
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('pages.login.fields.email')}</Label>
                 <Input
                   name="email"
                   id="email"
@@ -55,14 +57,9 @@ export function LoginForm() {
 
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    prefetch="intent"
-                    viewTransition
-                    to="#"
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot your password?
+                  <Label htmlFor="password">{t('pages.login.fields.password')}</Label>
+                  <Link prefetch="intent" viewTransition to="#" className="ml-auto text-sm">
+                    {t('pages.login.buttons.forgotPassword')}
                   </Link>
                 </div>
                 <Input
@@ -71,8 +68,8 @@ export function LoginForm() {
                   type="password"
                   required
                   autoComplete="current-password"
-                  minLength={6}
-                  maxLength={50}
+                  minLength={8}
+                  maxLength={32}
                   defaultValue="Abc@12345678"
                 />
                 <ErrorMessage error={errors?.password?.[0]} />
@@ -80,27 +77,33 @@ export function LoginForm() {
 
               <div className="grid gap-2">
                 <Button type="submit" className="w-full" disabled={navigation.state === 'submitting'}>
-                  Login
+                  {t('pages.login.buttons.submit')}
                 </Button>
                 <ErrorMessage error={errors?.default?.[0]} />
               </div>
 
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                <span className="bg-background text-muted-foreground relative z-10 px-2">or</span>
+                <span className="bg-background text-muted-foreground relative z-10 px-2">
+                  {t('pages.login.divider')}
+                </span>
               </div>
 
               <TcskOAuth2 redirectTo={redirectTo} />
 
               <div className="text-center text-sm">
-                {`Don't have an account? `}
+                {t('pages.login.noAccount')}
                 <Link prefetch="intent" viewTransition to="/register" replace className="underline underline-offset-4">
-                  Sign up
+                  {t('pages.login.signup')}
                 </Link>
               </div>
             </div>
           </Form>
           <div className="bg-muted relative hidden md:block">
-            <img src="/logo.png" alt="" className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.3]" />
+            <img
+              src="/images/logo.png"
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.3]"
+            />
           </div>
         </CardContent>
       </Card>

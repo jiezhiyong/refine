@@ -43,5 +43,8 @@ Thumbs.db
 .netlify
 
 # cert
-refine-jet.vercel.app+3-key.pem
-refine-jet.vercel.app+3.pem
+me.ly.com+3-key.pem
+me.ly.com+3.pem
+
+# tests
+test-results

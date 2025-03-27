@@ -16,7 +16,7 @@ import {
   type TableOptions,
   useReactTable,
 } from '@tanstack/react-table';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'es-toolkit';
 import { useEffect } from 'react';
 
 import { columnFiltersToCrudFilters, crudFiltersToColumnFilters, getRemovedFilters, useIsFirstRender } from '../utils';

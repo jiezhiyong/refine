@@ -1,4 +1,4 @@
-import { useRouteLoaderData } from '@remix-run/react';
+import { Link, useRouteLoaderData } from '@remix-run/react';
 import { ChevronsUpDown, GalleryVerticalEnd, Plus } from 'lucide-react';
 import * as React from 'react';
 
@@ -10,10 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '~/components-shadcn/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components-shadcn/sidebar';
-import { apiBase } from '~/config';
-import { rolesAll } from '~/constants';
+} from '~/components/ui/dropdown-menu';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components/ui/sidebar';
+import { apiBase } from '~/config/base-url';
+import { rolesAll } from '~/constants/roles';
 import { RootLoaderData } from '~/root';
 
 export function RoleSwitcher() {
@@ -92,7 +92,11 @@ export function RoleSwitcher() {
               <div className="bg-background flex size-6 items-center justify-center rounded-md border">
                 <Plus className="size-4" />
               </div>
-              <div className="text-muted-foreground font-medium">Apply Role</div>
+              <div className="text-muted-foreground font-medium">
+                <Link prefetch="intent" viewTransition to="/system/admin/auditRecord/applyRole">
+                  Apply More Roles
+                </Link>
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -8,6 +8,7 @@ export const handlersExample = [
 
     return HttpResponse.json({
       name: 'John Maverick',
+      email,
     });
   }),
   // GraphQL

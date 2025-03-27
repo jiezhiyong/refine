@@ -1,0 +1,293 @@
+import "./schema.base.zmodel"
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+plugin openapi {
+  provider = "@zenstackhq/openapi"
+  output = "openapi.yaml"
+  title = "OpenAPI - CRUD OSS"
+  description = "..."
+  version = "1.0.0"
+  flavor = "rpc"
+  prefix = "/api"
+  omitInputDetails = true
+}
+
+// ========================
+// 枚举
+// ========================
+enum AuthProvider {
+  USER_PASS
+  TC_SHUKE
+}
+
+// ========================
+// 用户、角色、权限
+// ========================
+model User extends Base {
+  email              String              @unique @email @endsWith('@ly.com')
+  name               String              @length(min: 8, max: 32)
+  avatar             String?             @url
+  provider           AuthProvider        @default(USER_PASS)
+  roles              UserRole[]          // 注意：用户拥有的所有角色列表, 当前系统支持一个用户可以分配多个角色
+  role               String?             // 注意：用户当前切换的角色，只有用户登录后或者切换角色时才会被赋值 => session.server.ts/getUser, 只用于类型提示
+  password           String?             @length(min: 8, max: 32) @password
+  posts              Post[]              @relation("PostOperator")
+  frontRouteProjects FrontRouteProject[] @relation("FrontRouteProjectOperator")
+  frontRouteModules  FrontRouteModule[]  @relation("FrontRouteModuleOperator")
+  logs               Log[]
+  auditRecords       AuditRecord[]       @relation("AuditRecordOperator")
+
+  @@index([name])
+}
+
+// 角色模型
+model Role extends Base {
+  title       String     @unique @length(min: 2)
+  description String
+  users       UserRole[]
+
+  @@index([operatedById])
+}
+
+// 用户-角色关联表（多对多关系）
+model UserRole extends Base {
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId String
+
+  @@unique([userId, roleId])
+}
+
+// ========================
+// 文章状态枚举
+// ========================
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  REJECTED
+}
+
+// ========================
+// Post 
+// ========================
+model Post extends Base {
+  operatedBy User?      @relation("PostOperator", references: [id], fields: [operatedById])
+  title      String     @length(min: 2) @trim
+  content    String     @length(min: 2) @trim
+  hit        Int        @default(0)
+  like       Int        @default(0)
+  image      String?
+  status     PostStatus @default(DRAFT)
+  category   Category   @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@index([operatedById])
+  @@index([categoryId])
+  @@index([status])
+  @@index([title])
+  @@index([createdAt])
+}
+
+// ========================
+// category 
+// ========================
+model Category extends Base {
+  title       String  @unique @length(min: 2)
+  description String?
+  posts       Post[]
+
+  @@index([operatedById])
+  @@index([title])
+}
+
+// ========================
+// Casbin 权限规则模型
+// ========================
+model CasbinRule extends Base {
+  ptype String // policy type: 'p' for policy, 'g' for role
+  v0    String // subject/role
+  v1    String // object/user
+  v2    String // action
+  v3    String? // effect (allow/deny)
+  v4    String? // 其他额外条件
+
+  @@index([operatedById])
+  @@index([ptype, v0, v1, v2])
+  @@map("casbin_rule")
+}
+
+// ========================
+// 前端路由项目配置
+// ========================
+model FrontRouteProject extends Base {
+  operatedBy  User?              @relation("FrontRouteProjectOperator", references: [id], fields: [operatedById])
+  title       String             @unique @length(min: 2)
+  description String?
+  global      Json
+  modules     FrontRouteModule[]
+
+  @@index([title])
+}
+
+// ========================
+// 前端路由模块配置
+// ========================
+model FrontRouteModule extends Base {
+  operatedBy         User?             @relation("FrontRouteModuleOperator", references: [id], fields: [operatedById])
+  title              String            @unique @length(min: 2)
+  description        String?
+  pathReplaceProject String?
+  pathReplaceModule  String?
+  global             Json?
+  project            FrontRouteProject @relation(fields: [projectId], references: [id])
+  projectId          String
+
+  @@index([title])
+}
+
+// ========================
+// 审核状态枚举
+// ========================
+enum AuditStatus {
+  PENDING
+  RESOLVED
+  REJECTED
+  FAILED
+}
+
+// ========================
+// 审核渠道枚举
+// ========================
+enum AuditChannel {
+  TIAN_YUAN
+  SELF
+}
+
+// ========================
+// 审核记录
+// ========================
+model AuditRecord extends Base {
+  operatedBy   User?        @relation("AuditRecordOperator", references: [id], fields: [operatedById])
+  title        String       @length(min: 2)
+  dataPrevious Json?
+  data         Json?
+  meta         Json
+  resource     String
+  error        String?
+  status       AuditStatus  @default(PENDING)
+  channel      AuditChannel @default(SELF)
+  action       LogAction
+
+  @@index([title])
+  @@index([status])
+  @@index([resource])
+  @@index([operatedById])
+}
+
+// ========================
+// 日志状态枚举
+// ========================
+enum LogAction {
+  create
+  createMany
+  delete
+  deleteMany
+  update
+  updateMany
+}
+
+// ========================
+// Log 
+// ========================
+model Log extends Base {
+  operatedBy   User?     @relation(references: [id], fields: [operatedById])
+  resource     String
+  action       LogAction
+  data         Json?
+  dataPrevious Json?
+  meta         Json?
+
+  @@index([operatedById])
+  @@index([resource])
+  @@index([action])
+}
+
+// ========================
+// 菜单管理
+// ========================
+
+model Menu extends Base {
+  name     String   @length(min: 2)
+  title    String?  @length(min: 2)
+  order    Int?     @default(0)
+  isActive Boolean? @default(true)
+  list     String?
+  create   String?
+  edit     String?
+  show     String?
+  clone    String?
+  meta     Json?
+
+  @@index([name])
+  @@index([operatedById])
+}
+
+// ========================
+// 表单类型枚举
+// ========================
+enum FormType {
+  text
+  textarea
+  select
+  selectMany
+  checkbox
+  checkboxMany
+  date
+  dateRange
+  number
+  slider
+  radio
+  switch
+  file
+  code
+  video
+}
+
+// ========================
+// 表单下拉选项数据来源类型枚举
+// ========================
+enum OptionsType {
+  static
+  database
+  api
+}
+
+// ========================
+// 低代码页面模板配置
+// ========================
+
+model DynamicPage extends Base {
+  path            String   @unique // 菜单路径 eg: /playground/dashboard/post
+  title           String   // 页面标题
+  isActive        Boolean? @default(true) // 是否启用
+  enableCreate    Boolean? // 是否启用创建
+  enableDelete    Boolean? // 是否启用删除
+  enableEdit      Boolean? // 是否启用编辑
+  enableClone     Boolean? // 是否启用克隆
+  db              String // 数据库
+  tableSql        String // SQL查询语句
+  tableRecordLink Json? // 表格记录链接
+  formField       Json? // 表单字段 - 参考FormType, 决定Form的字段展示、排序
+  meta            Json? // 其他元数据
+
+  @@index([path])
+}

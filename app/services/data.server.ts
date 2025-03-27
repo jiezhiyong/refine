@@ -1,302 +1,436 @@
-import { DataProvider } from '@refinedev/core';
+import { Prisma, PrismaClient } from '@prisma/client';
 
-import { dataResources, DEFAULT_PAGE_SIZE } from '~/config';
-import { Resources } from '~/constants';
-import { db } from '~/services';
-import { PrismaFunc } from '~/types';
-import { buildOrderByClause, buildWhereClause, Filter, parseRefineFilters, processDateFields } from '~/utils';
+import { EnumAction } from '~/constants/action';
+import { Resources } from '~/constants/resource';
+import { getUser } from '~/services/session.server';
+import { TAny } from '~/types/any';
+import { handlePrismaError } from '~/utils/prisma-error-handler';
+import { zodParse } from '~/utils/request';
 
-function isPrismaModel(resource: string): resource is Resources {
-  return dataResources.some((r) => r.name.endsWith(resource));
+import { checkPermission } from './casbin-permission.server';
+import { EnhancedDbContext, getEnhancedDb } from './db.server';
+
+/**
+ * 检查指定的操作是否为有效的数据服务操作
+ * @param action 操作名称
+ * @returns 是否为有效操作
+ */
+export function isValidDataServiceAction(action: string): action is keyof typeof dataService {
+  return action in dataService;
 }
 
-export const dataService: DataProvider = {
-  // 获取列表数据
-  getList: async ({ resource, pagination, sorters, filters, meta }) => {
-    const { current = 1, pageSize = DEFAULT_PAGE_SIZE } = pagination ?? {};
-    const skip = (Number(current) - 1) * Number(pageSize);
+/**
+ * 映射数据服务操作到权限操作
+ * @param action 数据服务操作
+ * @returns 对应的权限操作
+ */
+export function mapDataActionToPermissionAction(action: string): string {
+  if (['findMany', 'findFirst', 'findUnique', 'findUniqueOrThrow', 'count'].includes(action)) {
+    return 'list';
+  } else if (['create', 'createMany'].includes(action)) {
+    return 'create';
+  } else if (['update', 'updateMany'].includes(action)) {
+    return 'edit';
+  } else if (['delete', 'deleteMany'].includes(action)) {
+    return 'delete';
+  }
+  return 'unknown';
+}
 
-    // 构建过滤条件
-    const parsedFilters = filters ? parseRefineFilters(filters as Filter[]) : [];
-    const where = parsedFilters.length > 0 ? buildWhereClause(parsedFilters) : {};
+/**
+ * 检查当前用户是否有权限执行指定操作
+ * @param model 资源模型
+ * @param action 操作名称
+ * @param context 请求上下文
+ * @returns 权限检查结果和相关信息
+ */
+export async function checkPermissionForAction(
+  model: Resources,
+  action: string,
+  context: EnhancedDbContext
+): Promise<{ hasPermission: boolean; subject: string; object: string; action: string }> {
+  const { user, request } = context;
+  const auth = user || (request ? await getUser(request) : undefined);
 
-    // 构建排序条件
-    const orderBy = sorters ? buildOrderByClause(sorters) : {};
-    if (!Object.keys(orderBy).length) {
-      orderBy.createdAt = 'desc';
-    }
+  let role: string | null = 'unknown';
+  if (auth?.role) {
+    role = auth.role;
+  } else {
+    return { hasPermission: false, subject: 'anonymous', object: model, action };
+  }
 
-    // 确保 resource 是有效的 Prisma 模型
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
-    }
-    const prismaModel = db[resource] as PrismaFunc;
+  const subject = role;
+  const permissionAction = mapDataActionToPermissionAction(action);
+  const object = [EnumAction.edit, EnumAction.delete].includes(permissionAction as EnumAction) ? `${model}/*` : model;
+  const hasPermission = await checkPermission(subject, object, permissionAction);
 
-    // 处理关联字段的查询条件
-    const whereCondition = Object.entries(where).reduce((acc, [key, value]) => {
-      if (key.includes('.')) {
-        const [relation, field] = key.split('.');
-        return {
-          ...acc,
-          [relation]: {
-            [field]: value,
-          },
-        };
+  return { hasPermission, subject, object, action: permissionAction };
+}
+
+/**
+ * 通用数据服务
+ * 提供对所有 Prisma 模型的通用 CRUD 操作，并进行权限检查（需要在调用时传入 context.user）
+ */
+export const dataService = {
+  /**
+   * 查找多个记录
+   * @param model Prisma 模型名称
+   * @param args 查询参数
+   * @param context 请求上下文
+   * @returns 查询结果数组
+   */
+  async findMany<T = unknown>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'findMany'>,
+    context: EnhancedDbContext
+  ): Promise<{ data: T[]; total: number }> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'findMany', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
       }
-      return { ...acc, [key]: value };
-    }, {});
 
-    // 处理所有查询条件中的日期字段
-    const processedWhereCondition = processDateFields(whereCondition);
+      const db: TAny = await getEnhancedDb(context || {});
+      const [data, total] = await Promise.all([db[model].findMany(args), this.count(model, args.where, context)]);
 
-    const queryParams = {
-      skip,
-      take: Number(pageSize),
-      where: processedWhereCondition,
-      orderBy,
-      ...meta,
-    };
-
-    const [total, items] = await Promise.all([
-      prismaModel.count({ where: processedWhereCondition }),
-      prismaModel.findMany(queryParams),
-    ]);
-
-    // 确保返回的数据格式符合 Refine 的期望
-    const result = {
-      data: items,
-      total,
-    };
-
-    return result;
+      return { data, total };
+    } catch (error) {
+      throw handlePrismaError(error);
+    }
   },
 
-  // 创建数据
-  create: async ({ resource, variables, meta }) => {
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
-    }
-    const prismaModel = db[resource] as PrismaFunc;
+  /**
+   * 查找第一个匹配的记录
+   * @param model Prisma 模型名称
+   * @param args 查询参数
+   * @param context 请求上下文
+   * @returns 查询结果或 null
+   */
+  async findFirst<T = unknown>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'findFirst'>,
+    context: EnhancedDbContext
+  ): Promise<T | null> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'findFirst', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
 
-    const data = await prismaModel.create({
-      data: variables,
-      ...meta,
-    });
-    return {
-      success: true,
-      data,
-    };
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].findFirst(args);
+    } catch (error) {
+      throw handlePrismaError(error);
+    }
   },
 
-  // 更新数据
-  update: async ({ resource, id, variables, meta }) => {
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
+  /**
+   * 通过唯一标识查找记录
+   * @param model Prisma 模型名称
+   * @param args 查询参数
+   * @param context 请求上下文
+   * @returns 查询结果或 null
+   */
+  async findUnique<T = unknown>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'findUnique'>,
+    context: EnhancedDbContext
+  ): Promise<T | null> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'findUnique', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].findUnique(args);
+    } catch (error) {
+      throw handlePrismaError(error);
     }
-    const prismaModel = db[resource] as PrismaFunc;
-
-    // 先检查记录是否存在
-    const existingRecord = await prismaModel.findUnique({
-      where: { id },
-      select: { id: true },
-    });
-
-    if (!existingRecord) {
-      throw new Error(`要更新的 \`${resource}\` 记录不存在, ID: ${id}`);
-    }
-
-    const data = await prismaModel.update({
-      where: { id },
-      data: variables,
-      ...meta,
-    });
-
-    return {
-      success: true,
-      data,
-    };
   },
 
-  // 删除数据
-  deleteOne: async ({ resource, id, meta }) => {
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
+  /**
+   * 通过唯一标识查找记录，如果不存在则抛出错误
+   * @param model Prisma 模型名称
+   * @param args 查询参数
+   * @param context 请求上下文
+   * @returns 查询结果
+   */
+  async findUniqueOrThrow<T = unknown>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'findUniqueOrThrow'>,
+    context: EnhancedDbContext
+  ): Promise<T> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'findUniqueOrThrow', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+
+      return db[model].findUniqueOrThrow(args);
+    } catch (error) {
+      throw handlePrismaError(error);
     }
-    const prismaModel = db[resource] as PrismaFunc;
-
-    // 先检查记录是否存在
-    const existingRecord = await prismaModel.findUnique({
-      where: { id },
-      select: { id: true },
-    });
-
-    if (!existingRecord) {
-      throw new Error(`要删除的 \`${resource}\` 记录不存在, ID: ${id}`);
-    }
-
-    const data = await prismaModel.delete({
-      where: { id },
-      ...meta,
-    });
-
-    return {
-      success: true,
-      data,
-    };
   },
 
-  // 获取单条数据
-  getOne: async ({ resource, id, meta }) => {
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
+  /**
+   * 计数查询
+   * @param model Prisma 模型名称
+   * @param args 查询参数
+   * @param context 请求上下文
+   * @returns 记录数
+   */
+  async count(model: Resources, args: Prisma.Args<unknown, 'count'>, context: EnhancedDbContext): Promise<number> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'count', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].count(args);
+    } catch (error) {
+      throw handlePrismaError(error);
     }
-    const prismaModel = db[resource] as PrismaFunc;
-
-    const data = await prismaModel.findUnique({
-      where: { id },
-      ...meta,
-    });
-
-    if (!data) {
-      throw new Error(`404 数据实体 \`${resource}\` 中没有找到相关数据`);
-    }
-
-    return {
-      success: true,
-      data,
-    };
   },
 
-  // 获取多条数据
-  getMany: async ({ resource, ids, meta }) => {
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
+  /**
+   * 创建记录
+   * @param model Prisma 模型名称
+   * @param args 创建参数
+   * @param context 请求上下文
+   * @returns 创建的记录
+   */
+  async create<T = unknown>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'create'>,
+    context: EnhancedDbContext
+  ): Promise<T> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'create', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      const { success, originalError } = zodParse(String(model), args.data);
+      if (!success) {
+        throw originalError;
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].create(args);
+    } catch (error) {
+      throw handlePrismaError(error);
     }
-    const prismaModel = db[resource] as PrismaFunc;
-
-    const data = await prismaModel.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-      ...meta,
-    });
-
-    return {
-      success: true,
-      data,
-    };
   },
 
-  // 批量创建
-  createMany: async ({ resource, variables, meta }) => {
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
+  /**
+   * 批量创建记录
+   * @param model Prisma 模型名称
+   * @param args 创建参数
+   * @param context 请求上下文
+   * @returns 创建结果
+   */
+  async createMany<T = Prisma.BatchPayload>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'createMany'>,
+    context: EnhancedDbContext
+  ): Promise<T> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'createMany', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      for (const item of args.data) {
+        const { success, originalError } = zodParse(String(model), item);
+        if (!success) {
+          throw originalError;
+        }
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].createMany(args);
+    } catch (error) {
+      throw handlePrismaError(error);
     }
-    const prismaModel = db[resource] as PrismaFunc;
-
-    const data = await prismaModel.createMany({
-      data: variables,
-      ...meta,
-    });
-
-    return {
-      success: true,
-      data,
-    };
   },
 
-  // 批量删除
-  deleteMany: async ({ resource, ids, meta }) => {
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
+  /**
+   * 更新记录
+   * @param model Prisma 模型名称
+   * @param args 更新参数
+   * @param context 请求上下文
+   * @returns 更新后的记录
+   */
+  async update<T = unknown>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'update'>,
+    context: EnhancedDbContext
+  ): Promise<T> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'update', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].update(args);
+    } catch (error) {
+      throw handlePrismaError(error);
     }
-    const prismaModel = db[resource] as PrismaFunc;
-
-    // 检查所有要删除的记录是否存在
-    const existingRecords = await prismaModel.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-      select: { id: true },
-    });
-
-    // 找出不存在的ID
-    const existingIds = existingRecords.map((record) => record.id);
-    const nonExistingIds = ids.filter((id) => !existingIds.includes(id));
-
-    if (nonExistingIds.length > 0) {
-      throw new Error(`要删除的 \`${resource}\` 记录不存在, ID: ${nonExistingIds.join(', ')}`);
-    }
-
-    const data = await prismaModel.deleteMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-      ...meta,
-    });
-
-    return {
-      success: true,
-      data,
-    };
   },
 
-  // 批量更新
-  updateMany: async ({ resource, ids, variables, meta }) => {
-    if (!isPrismaModel(resource)) {
-      throw new Error(`invalid resource type: ${resource}`);
+  /**
+   * 批量更新记录
+   * @param model Prisma 模型名称
+   * @param args 更新参数
+   * @param context 请求上下文
+   * @returns 更新结果
+   */
+  async updateMany<T = Prisma.BatchPayload>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'updateMany'>,
+    context: EnhancedDbContext
+  ): Promise<T> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'updateMany', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].updateMany(args);
+    } catch (error) {
+      throw handlePrismaError(error);
     }
-    const prismaModel = db[resource] as PrismaFunc;
-
-    // 先检查记录是否存在
-    const existingRecords = await prismaModel.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-      select: { id: true },
-    });
-
-    // 找出不存在的ID
-    const existingIds = existingRecords.map((record) => record.id);
-    const nonExistingIds = ids.filter((id) => !existingIds.includes(id));
-
-    if (nonExistingIds.length > 0) {
-      throw new Error(`要更新的 \`${resource}\` 记录不存在, ID: ${nonExistingIds.join(', ')}`);
-    }
-
-    const data = await prismaModel.updateMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-      data: variables,
-      ...meta,
-    });
-
-    return {
-      success: true,
-      data,
-    };
   },
 
-  // 获取 API URL
-  // 用 db 时不需要 API URL，但为了展示完整性保留
-  getApiUrl: () => {
-    return '';
+  /**
+   * 删除记录
+   * @param model Prisma 模型名称
+   * @param args 删除参数
+   * @param context 请求上下文
+   * @returns 删除的记录
+   */
+  async delete<T = unknown>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'delete'>,
+    context: EnhancedDbContext
+  ): Promise<T> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'delete', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].delete(args);
+    } catch (error) {
+      throw handlePrismaError(error);
+    }
   },
 
-  // 自定义请求
-  // 由于使用 db，通常不需要这个方法，但为了展示完整性保留
-  custom: async () => {
-    throw new Error('Custom method not implemented');
+  /**
+   * 批量删除记录
+   * @param model Prisma 模型名称
+   * @param args 删除参数
+   * @param context 请求上下文
+   * @returns 删除结果
+   */
+  async deleteMany<T = Prisma.BatchPayload>(
+    model: Resources,
+    args: Prisma.Args<unknown, 'deleteMany'>,
+    context: EnhancedDbContext
+  ): Promise<T> {
+    try {
+      // 权限检查
+      const { hasPermission, action } = await checkPermissionForAction(model, 'deleteMany', context);
+      if (!hasPermission) {
+        throw new Error(`你没有权限执行操作 \`${model}.${action}\``);
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db[model].deleteMany(args);
+    } catch (error) {
+      throw handlePrismaError(error);
+    }
+  },
+
+  /**
+   * 执行原始数据库查询
+   * @param query 查询语句
+   * @param params 查询参数
+   * @param context 请求上下文
+   * @returns 查询结果
+   */
+  async executeRaw<T = unknown>(query: string, params: unknown[] = [], context: EnhancedDbContext): Promise<T> {
+    try {
+      // 原始查询操作需要特殊的权限处理，这里简化为系统级操作
+      // 可以选择不进行权限检查，或者检查特定的系统级权限
+      if (context.user?.role !== 'admin') {
+        throw new Error('只有管理员才能执行原始数据库查询');
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db.$executeRaw.apply(db, [query, ...params]);
+    } catch (error) {
+      throw handlePrismaError(error);
+    }
+  },
+
+  /**
+   * 执行原始数据库查询并返回查询结果
+   * @param query 查询语句
+   * @param params 查询参数
+   * @param context 请求上下文
+   * @returns 查询结果
+   */
+  async queryRaw<T = unknown>(query: string, params: unknown[] = [], context: EnhancedDbContext): Promise<T> {
+    try {
+      // 原始查询操作需要特殊的权限处理，这里简化为系统级操作
+      // 可以选择不进行权限检查，或者检查特定的系统级权限
+      if (context.user?.role !== 'admin') {
+        throw new Error('只有管理员才能执行原始数据库查询');
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return db.$queryRaw.apply(db, [query, ...params]);
+    } catch (error) {
+      throw handlePrismaError(error);
+    }
+  },
+
+  /**
+   * 事务操作
+   * @param fn 事务函数
+   * @param context 请求上下文
+   * @returns 事务结果
+   */
+  async transaction<T>(fn: (prisma: PrismaClient) => Promise<T>, context: EnhancedDbContext): Promise<T> {
+    try {
+      // 事务操作需要特殊的权限处理，这里简化为系统级操作
+      // 可以选择不进行权限检查，或者检查特定的系统级权限
+      if (context.user?.role !== 'admin') {
+        throw new Error('只有管理员才能执行事务操作');
+      }
+
+      const db: TAny = await getEnhancedDb(context || {});
+      return await db.$transaction(fn);
+    } catch (error) {
+      throw handlePrismaError(error);
+    }
   },
 };

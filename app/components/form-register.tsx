@@ -1,9 +1,13 @@
+import { useNotification } from '@refinedev/core';
 import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
+import { t } from 'i18next';
 import { GalleryVerticalEnd } from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from '~/components-shadcn/button';
-import { Input } from '~/components-shadcn/input';
-import { Label } from '~/components-shadcn/label';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
+import { dashboardResource } from '~/config/resources';
 
 import { ErrorMessage } from './error';
 import { PrivacyPolicy } from './privacy-policy';
@@ -23,56 +27,57 @@ interface ActionData {
 export function RegisterForm() {
   const { errors } = useActionData<ActionData>() || {};
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get('redirectTo') || '/';
+  const redirectTo = searchParams.get('redirectTo') || dashboardResource;
   const navigation = useNavigation();
-  // const { open } = useNotification();
-  // const [isSending, setIsSending] = useState(false);
-  // const [countdown, setCountdown] = useState(0);
+  const { open } = useNotification();
+  const [isSending, setIsSending] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [email, setEmail] = useState('administrator@goodman.com');
 
-  // async function sendVerificationCode(email: string) {
-  //   setIsSending(true);
-  //   try {
-  //     const response = await fetch('/api/send-code', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ email }),
-  //     });
+  async function sendVerificationCode(email: string) {
+    setIsSending(true);
+    try {
+      const response = await fetch('/api/send-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
 
-  //     const data = await response.json();
+      const data = await response.json();
 
-  //     if (!response.ok) {
-  //       throw new Error(data.error || '发送验证码失败');
-  //     }
+      if (!response.ok) {
+        throw new Error(data.error || '发送验证码失败');
+      }
 
-  //     open?.({
-  //       key: 'register-email-sent',
-  //       message: '验证码已发送',
-  //       description: '请查看您的邮箱',
-  //       type: 'success',
-  //     });
+      open?.({
+        key: 'register-email-sent',
+        message: '验证码已发送',
+        description: '请查看您的邮箱',
+        type: 'success',
+      });
 
-  //     // 开始倒计时
-  //     setCountdown(60);
-  //     const timer = setInterval(() => {
-  //       setCountdown((prev) => {
-  //         if (prev <= 1) {
-  //           clearInterval(timer);
-  //           return 0;
-  //         }
-  //         return prev - 1;
-  //       });
-  //     }, 1000);
-  //   } catch (error) {
-  //     open?.({
-  //       key: 'register-email-sent',
-  //       message: 'Error',
-  //       description: error instanceof Error ? error.message : '发送验证码失败',
-  //       type: 'error',
-  //     });
-  //   } finally {
-  //     setIsSending(false);
-  //   }
-  // }
+      // 开始倒计时
+      setCountdown(60);
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch (error) {
+      open?.({
+        key: 'register-email-sent',
+        message: 'Error',
+        description: error instanceof Error ? error.message : '发送验证码失败',
+        type: 'error',
+      });
+    } finally {
+      setIsSending(false);
+    }
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -87,18 +92,18 @@ export function RegisterForm() {
               </div>
               <span className="sr-only">Remix Inc.</span>
             </Link>
-            <h1 className="text-xl font-bold">Welcome to Signup OSS Inc.</h1>
+            <h1 className="text-xl font-bold">{t('pages.register.title')}</h1>
             <div className="text-center text-sm">
-              {`Already has an account? `}
+              {t('pages.register.haveAccount')}
               <Link prefetch="intent" viewTransition to="/login" replace className="underline underline-offset-4">
-                Sign in
+                {t('pages.register.signin')}
               </Link>
             </div>
           </div>
 
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('pages.register.fields.email')}</Label>
               <div className="flex gap-2">
                 <Input
                   name="email"
@@ -108,36 +113,38 @@ export function RegisterForm() {
                   required
                   autoFocus
                   autoComplete="email"
-                  defaultValue="administrator@goodman.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                {/* <Button
+                <Button
+                  className="h-9"
                   type="button"
-                  disabled={isSending || countdown > 0 || !field.value}
+                  disabled={isSending || countdown > 0 || !email}
                   variant="outline"
-                  onClick={sendVerificationCode}
+                  onClick={() => sendVerificationCode(email)}
                 >
                   {countdown > 0 ? `${countdown}s` : 'Send Code'}
-                </Button> */}
+                </Button>
               </div>
               <ErrorMessage error={errors?.email?.[0]} />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="code">Validate Code</Label>
-              <Input name="code" id="code" type="code" required minLength={6} maxLength={6} />
+              <Label htmlFor="code">{t('pages.register.fields.validateCode')}</Label>
+              <Input name="code" id="code" type="code" required minLength={8} maxLength={6} defaultValue="123456" />
               <ErrorMessage error={errors?.code?.[0]} />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('pages.register.fields.password')}</Label>
               <Input
                 name="password"
                 id="password"
                 type="password"
                 required
                 autoComplete="new-password"
-                minLength={6}
-                maxLength={50}
+                minLength={8}
+                maxLength={32}
                 defaultValue="Abc@12345678"
               />
               <ErrorMessage error={errors?.password?.[0]} />
@@ -145,7 +152,7 @@ export function RegisterForm() {
 
             <div className="grid gap-2">
               <Button type="submit" className="w-full" disabled={navigation.state === 'submitting'}>
-                Register
+                {t('pages.register.buttons.submit')}
               </Button>
               <ErrorMessage error={errors?.default?.[0]} />
             </div>
