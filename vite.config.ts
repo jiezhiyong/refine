@@ -57,25 +57,25 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
       visualizer({ emitFile: true }), // 生成构建产物的可视化分析报告 stats.html
 
-      sentryVitePlugin({
-        debug: false,
-        org: env.SENTRY_ORG,
-        project: env.SENTRY_PROJECT,
-        authToken: env.SENTRY_AUTH_TOKEN,
-        url: env.SENTRY_URL,
-        sourcemaps: {
-          filesToDeleteAfterUpload: ['**/*.map'],
-        },
-        release: {
-          name: 'oss@' + process.env.npm_package_version,
-          uploadLegacySourcemaps: {
-            paths: ['.'],
-          },
-        },
-      }),
+      // sentryVitePlugin({
+      //   debug: false,
+      //   org: env.SENTRY_ORG,
+      //   project: env.SENTRY_PROJECT,
+      //   authToken: env.SENTRY_AUTH_TOKEN,
+      //   url: env.SENTRY_URL,
+      //   sourcemaps: {
+      //     filesToDeleteAfterUpload: ['**/*.map'],
+      //   },
+      //   release: {
+      //     name: 'oss@' + process.env.npm_package_version,
+      //     uploadLegacySourcemaps: {
+      //       paths: ['.'],
+      //     },
+      //   },
+      // }),
     ],
     build: {
-      sourcemap: true,
+      // sourcemap: true,
     },
   };
 });
