@@ -212,6 +212,7 @@ CREATE TABLE "DynamicPage" (
     "enableDelete" BOOLEAN,
     "enableEdit" BOOLEAN,
     "enableClone" BOOLEAN,
+    "db" TEXT NOT NULL,
     "tableSql" TEXT NOT NULL,
     "tableRecordLink" JSONB,
     "formField" JSONB,
