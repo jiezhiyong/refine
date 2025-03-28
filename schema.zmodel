@@ -12,7 +12,7 @@ generator client {
 plugin openapi {
   provider = "@zenstackhq/openapi"
   output = "openapi.yaml"
-  title = "OpenAPI - CRUD OSS"
+  title = "OpenAPI - NODE CRUD"
   description = "..."
   version = "1.0.0"
   flavor = "rpc"
