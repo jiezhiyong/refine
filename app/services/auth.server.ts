@@ -73,4 +73,4 @@ const strategyForm = new FormStrategy(async ({ form }) => {
 
 // 注册认证策略
 authenticator.use(strategyForm, EnumAuthProvider.USER_PASS);
-authenticator.use(tcskStrategy, 'tcshuke');
+authenticator.use(tcskStrategy, EnumAuthProvider.TC_SHUKE);
