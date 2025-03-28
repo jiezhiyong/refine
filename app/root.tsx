@@ -16,6 +16,8 @@ import {
 } from '@remix-run/react';
 import * as Sentry from '@sentry/remix';
 import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
+import { Analytics } from '@vercel/analytics/remix';
+import { SpeedInsights } from '@vercel/speed-insights/remix';
 import { Loader } from 'lucide-react';
 import nProgress from 'nprogress';
 import nProgressStyles from 'nprogress/nprogress.css?url';
@@ -195,6 +197,8 @@ function Document({
         </RefineKbarProvider>
         {/* </DevtoolsProvider> */}
         <ScrollRestoration />
+        <Analytics />
+        <SpeedInsights />
         {script && <Scripts crossOrigin="anonymous" />}
 
         {/* 注入权限数据和签名、菜单资源到全局变量 */}

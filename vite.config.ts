@@ -3,6 +3,7 @@
 import { vitePlugin as remix } from '@remix-run/dev';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
+import { vercelPreset } from '@vercel/remix/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -44,6 +45,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       tailwindcss(),
       remix({
+        presets: [vercelPreset()],
         ssr: true, // false: 禁用服务端渲染、启用SPA模式
         manifest: true,
         future: {
