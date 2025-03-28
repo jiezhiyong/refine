@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => {
       // },
     },
     plugins: [
-      lucideIconsPlugin(), // 添加 lucide 图标优化插件
+      // lucideIconsPlugin(), // 添加 lucide 图标优化插件
       tailwindcss(),
       remix({
         presets: [vercelPreset()],

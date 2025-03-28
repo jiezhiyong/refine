@@ -1,1 +1,0 @@
-import{B as a,A as i,f as e}from"./lucide-icons-Cs_6wGxK.js";var r=(t=>(t.administrator="administrator",t.editor="editor",t.guest="guest",t))(r||{});Object.values(r);const o=[{label:"Administrator",value:"administrator",icon:a},{label:"Editor",value:"editor",icon:i},{label:"Guest",value:"guest",icon:e}],l={administrator:1,editor:2,guest:3};export{r as E,o as a,l as r};

@@ -1,0 +1,6 @@
+import{a as e}from"./button-hXZAo1l1.js";import"./jsx-runtime-C-_spy54.js";import"./index-aGVi9Z7h.js";/**
+ * @license lucide-react v0.475.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const r=[["rect",{x:"3",y:"3",width:"18",height:"18",rx:"2",key:"h1oib"}],["rect",{x:"8",y:"8",width:"8",height:"8",rx:"1",key:"z9xiuo"}]],a=e("SquareSquare",r);export{r as __iconNode,a as default};
