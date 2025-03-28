@@ -8,6 +8,8 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
+import lucideIconsPlugin from './vite-plugin-lucide-icons';
+
 declare module '@remix-run/node' {
   interface Future {
     v3_singleFetch: true;
@@ -43,6 +45,7 @@ export default defineConfig(({ mode }) => {
       // },
     },
     plugins: [
+      lucideIconsPlugin(), // 添加 lucide 图标优化插件
       tailwindcss(),
       remix({
         presets: [vercelPreset()],
