@@ -1,4 +1,3 @@
-import * as LucideIcons from 'lucide-react';
 import { Lightbulb, LucideIcon } from 'lucide-react';
 
 import { TAny } from '~/types/any';
@@ -11,19 +10,19 @@ import { TAny } from '~/types/any';
 export function DynamicIcon({
   name,
   ...props
-}: React.ComponentPropsWithoutRef<typeof LucideIcons.AlertCircle> & {
+}: React.ComponentPropsWithoutRef<TAny> & {
   name?: string | null;
 }) {
   // 如果没有提供图标名称，返回 null
-  if (!name) return null;
+  // if (!name) return null;
 
-  try {
-    const modules = LucideIcons as Record<string, TAny>;
-    const IconComponent = modules[name] as LucideIcon;
-    return <IconComponent {...props} />;
-  } catch (error) {
-    console.error(`图标 "${name}" 不存在`, error);
-  }
+  // try {
+  //   const modules = LucideIcons as Record<string, TAny>;
+  //   const IconComponent = modules[name] as LucideIcon;
+  //   return <IconComponent {...props} />;
+  // } catch (error) {
+  //   console.error(`图标 "${name}" 不存在`, error);
+  // }
 
   return <Lightbulb />;
 }
