@@ -1,0 +1,1 @@
+import{j as o}from"./jsx-runtime-C-_spy54.js";import{N as t}from"./404-Dmort30f.js";import"./index-Cr0IeYe7.js";import"./index-aGVi9Z7h.js";import"./button-BExhSn8V.js";import"./components-BZV9jaWy.js";import"./index-DN0hhrBY.js";function u(){return o.jsx(t,{})}export{u as default};

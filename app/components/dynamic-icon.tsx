@@ -14,7 +14,7 @@ export function DynamicIcon({
   name?: string | null;
 }) {
   // 如果没有提供图标名称，返回 null
-  // if (!name) return null;
+  if (!name) return null;
 
   // try {
   //   const modules = LucideIcons as Record<string, TAny>;

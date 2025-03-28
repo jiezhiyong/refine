@@ -1,1 +1,0 @@
-import{B as r,A as i,a as e}from"./biceps-flexed-C0ar0uvG.js";var a=(t=>(t.administrator="administrator",t.editor="editor",t.guest="guest",t))(a||{});Object.values(a);const o=[{label:"Administrator",value:"administrator",icon:r},{label:"Editor",value:"editor",icon:i},{label:"Guest",value:"guest",icon:e}],l={administrator:1,editor:2,guest:3};export{a as E,o as a,l as r};
