@@ -19,7 +19,6 @@ import { Input } from '~/components/ui/input';
 import { EnumAction } from '~/constants/action';
 import { useMountEffect } from '~/hooks/use-mount-effect';
 import { dataService } from '~/services/data.server';
-import { tyServer } from '~/services/ty.server';
 import { TAny } from '~/types/any';
 import { OperateTypeEnum, TAuditRecord, TDeployServiceBuild, TyIssues } from '~/types/ty';
 import { easyAxios } from '~/utils/axios';
@@ -36,8 +35,7 @@ export const meta: MetaFunction = ({ matches }) => {
 type TLoaderData = FrontRouteModule & { project: { title: string } };
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const [myIssues, { data: projectList }, initialData] = await Promise.all([
-    tyServer.getMyIssues<TyIssues[]>(request),
+  const [{ data: projectList }, initialData] = await Promise.all([
     dataService.findMany<FrontRouteProject>('frontRouteProject', { select: { id: true, title: true } }, { request }),
     dataService.findUniqueOrThrow<TLoaderData>(
       'frontRouteModule',
@@ -56,7 +54,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   ]);
 
   return {
-    myIssues,
     projectList,
     initialData,
   };
@@ -64,8 +61,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 // UI
 export default function FrontRouteModuleEdit() {
-  const { initialData, myIssues, projectList } = useLoaderData<typeof loader>();
-  return <FrontRouteModuleForm initialData={initialData} myIssues={myIssues} projectList={projectList} />;
+  const { initialData, projectList } = useLoaderData<typeof loader>();
+  return <FrontRouteModuleForm initialData={initialData} projectList={projectList} />;
 }
 
 // 错误边界处理
@@ -100,16 +97,20 @@ export const FrontRouteModuleForm = ({
   redirect = EnumAction.list,
   initialData,
   action,
-  myIssues = [],
   projectList,
 }: {
   className?: string;
   redirect?: RedirectAction;
   initialData?: TLoaderData;
   action?: FormAction;
-  myIssues?: TyIssues[];
   projectList: FrontRouteProject[];
 }) => {
+  const [myIssues, setMyIssues] = useState<TyIssues[]>([]);
+  useMountEffect(async () => {
+    const { data: res } = await easyAxios.post<{ data: TyIssues[] }>(`/api/ty/getMyIssues`);
+    setMyIssues(res.data);
+  });
+
   const { formAction, id = initialData?.id, identifier } = useResourceParams({ action });
   const defaultValues = filterFormData(initialData);
   const form = useForm<TSchemaFrontRouteModuleNew>({

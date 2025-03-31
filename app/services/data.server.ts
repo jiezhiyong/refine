@@ -92,7 +92,10 @@ export const dataService = {
       }
 
       const db: TAny = await getEnhancedDb(context || {});
-      const [data, total] = await Promise.all([db[model].findMany(args), this.count(model, args.where, context)]);
+      const [data, total] = await Promise.all([
+        db[model].findMany(args),
+        this.count(model, { where: args.where }, context),
+      ]);
 
       return { data, total };
     } catch (error) {

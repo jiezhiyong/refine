@@ -5,8 +5,6 @@ import { useLoaderData } from '@remix-run/react';
 import { PageError } from '~/components/500';
 import { FrontRouteModuleForm } from '~/routes/playground.frontRoute.frontRouteModule.edit.$id';
 import { dataService } from '~/services/data.server';
-import { tyServer } from '~/services/ty.server';
-import { TyIssues } from '~/types/ty';
 import { getDefaultTitle } from '~/utils/get-default-title';
 
 export const meta: MetaFunction = ({ matches }) => {
@@ -14,20 +12,18 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [myIssues, { data: projectList }] = await Promise.all([
-    tyServer.getMyIssues<TyIssues[]>(request),
+  const [{ data: projectList }] = await Promise.all([
     dataService.findMany<FrontRouteProject>('frontRouteProject', { select: { id: true, title: true } }, { request }),
   ]);
   return {
-    myIssues,
     projectList,
   };
 }
 
 // UI
 export default function FrontRouteModuleCreate() {
-  const { myIssues, projectList } = useLoaderData<typeof loader>();
-  return <FrontRouteModuleForm myIssues={myIssues} projectList={projectList} />;
+  const { projectList } = useLoaderData<typeof loader>();
+  return <FrontRouteModuleForm projectList={projectList} />;
 }
 
 // 错误边界处理
