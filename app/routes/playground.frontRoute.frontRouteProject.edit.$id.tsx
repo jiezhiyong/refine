@@ -19,7 +19,6 @@ import { Input } from '~/components/ui/input';
 import { EnumAction } from '~/constants/action';
 import { useMountEffect } from '~/hooks/use-mount-effect';
 import { dataService } from '~/services/data.server';
-import { tyServer } from '~/services/ty.server';
 import { TAny } from '~/types/any';
 import { OperateTypeEnum, TAuditRecord, TDeployServiceBuild, TyIssues } from '~/types/ty';
 import { easyAxios } from '~/utils/axios';
@@ -34,8 +33,7 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const [myIssues, initialData] = await Promise.all([
-    tyServer.getMyIssues<TyIssues[]>(request),
+  const [initialData] = await Promise.all([
     dataService.findUniqueOrThrow<FrontRouteProject>(
       'frontRouteProject',
       {
@@ -46,15 +44,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   ]);
 
   return {
-    myIssues,
     initialData,
   };
 }
 
 // UI
 export default function FrontRouteProjectEdit() {
-  const { initialData, myIssues } = useLoaderData<typeof loader>();
-  return <FrontRouteProjectForm initialData={initialData} myIssues={myIssues} />;
+  const { initialData } = useLoaderData<typeof loader>();
+  return <FrontRouteProjectForm initialData={initialData} />;
 }
 
 // 错误边界处理
@@ -86,14 +83,18 @@ export const FrontRouteProjectForm = ({
   redirect = EnumAction.list,
   initialData,
   action,
-  myIssues = [],
 }: {
   className?: string;
   redirect?: RedirectAction;
   initialData?: FrontRouteProject;
   action?: FormAction;
-  myIssues?: TyIssues[];
 }) => {
+  const [myIssues, setMyIssues] = useState<TyIssues[]>([]);
+  useMountEffect(async () => {
+    const { data: res } = await easyAxios.post<{ data: TyIssues[] }>(`/api/ty/getMyIssues`);
+    setMyIssues(res.data);
+  });
+
   const { formAction, id = initialData?.id, identifier } = useResourceParams({ action });
   const defaultValues = filterFormData(initialData);
   const form = useForm<TSchemaFrontRouteProjectNew>({
