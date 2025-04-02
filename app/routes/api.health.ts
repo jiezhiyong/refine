@@ -1,7 +1,5 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
 
-import { Resources } from '~/constants/resource';
-import { dataService } from '~/services/data.server';
 import { db } from '~/services/db.server';
 import { TAny } from '~/types/any';
 
@@ -16,19 +14,21 @@ import { TAny } from '~/types/any';
  *
  * UptimeRobot 可以通过以下方式使用:
  * - 基本监控: GET /api/health
- * - 特定资源监控: GET /api/health?resource=user
+ * - 特定资源监控: GET /api/health?resource=User
  */
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const url = new URL(request.url);
     const resource = url.searchParams.get('resource');
 
-    // 数据库连接检查 - 执行简单查询验证数据库连接
-    await db.$queryRaw`SELECT 1`;
-
     // 如果指定了资源，检查该资源的可用性
     if (resource) {
-      await dataService.findMany(resource as Resources, { skip: 0, take: 1 }, { request });
+      await db.$queryRawUnsafe(`SELECT 1 FROM "${resource}"`);
+    }
+
+    // 否则执行简单查询验证数据库连接
+    else {
+      await db.$queryRaw`SELECT 1`;
     }
 
     return Response.json({ status: 'healthy', message: '服务正常' }, { status: 200 });
