@@ -2,13 +2,21 @@
  * auth.server.ts
  * https://sergiodxa.github.io/remix-auth/
  */
+
+// 确保 crypto 在全局对象上可用
+import * as nodeCrypto from 'crypto';
+if (!globalThis.crypto) {
+  // @ts-expect-error 将 Node.js 的 crypto 模块赋值给全局对象
+  globalThis.crypto = nodeCrypto;
+}
+
 import { User } from '@prisma/client';
 import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
+import { OAuth2Strategy } from 'remix-auth-oauth2';
 import invariant from 'tiny-invariant';
 
 import { EnumAuthProvider } from '~/constants/user';
-import { OAuth2Strategy } from '~/lib/remix-auth-oauth2';
 import { verifyUserpassLogin } from '~/services/user.server';
 
 invariant(process.env.TCSK_CLIENT_ID, 'TCSK_CLIENT_ID must be set.');
