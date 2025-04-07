@@ -15,25 +15,50 @@ let lastPolicyLoadTime = 0;
 
 export async function createEnforcer() {
   try {
-    if (enforcer) {
-      // 检查是否需要重新加载策略
+    if (enforcer !== null && enforcer !== undefined) {
       if (Date.now() - lastPolicyLoadTime > 60000) {
-        await enforcer.loadPolicy();
-        lastPolicyLoadTime = Date.now();
+        try {
+          if (typeof enforcer.loadPolicy === 'function') {
+            await enforcer.loadPolicy();
+            lastPolicyLoadTime = Date.now();
+          } else {
+            const adapter = await PrismaAdapter.newAdapter(db);
+            enforcer = await newEnforcer(MODEL, adapter);
+            lastPolicyLoadTime = Date.now();
+          }
+        } catch (loadError) {
+          console.error('Error loading policy:', loadError);
+          Sentry.captureException(loadError);
+
+          const adapter = await PrismaAdapter.newAdapter(db);
+          enforcer = await newEnforcer(MODEL, adapter);
+          lastPolicyLoadTime = Date.now();
+        }
       }
 
       return enforcer;
     }
 
+    console.log('Creating new enforcer...');
     const adapter = await PrismaAdapter.newAdapter(db);
     enforcer = await newEnforcer(MODEL, adapter);
+    lastPolicyLoadTime = Date.now();
 
     return enforcer;
   } catch (error) {
     console.error('Failed to create enforcer:', error);
     Sentry.captureException(error);
 
-    enforcer = await newEnforcer(MODEL);
-    return enforcer;
+    try {
+      console.log('Attempting to create enforcer with model only...');
+      enforcer = await newEnforcer(MODEL);
+      lastPolicyLoadTime = Date.now();
+      return enforcer;
+    } catch (fallbackError) {
+      console.error('Failed to create fallback enforcer:', fallbackError);
+      Sentry.captureException(fallbackError);
+
+      throw new Error('无法创建权限检查器，请联系系统管理员');
+    }
   }
 }
