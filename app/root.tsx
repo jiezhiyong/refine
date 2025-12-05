@@ -29,7 +29,7 @@ import { PageError } from '~/components/500';
 import { RefineKbarCustom } from '~/components/refine/kbar';
 import { Toaster } from '~/components/ui/sonner';
 import { fallbackLanguage, LocaleLanguage } from '~/config/i18n';
-import { setDataResources } from '~/config/resources';
+import { defaultDashboardResource, setDataResources } from '~/config/resources';
 import { TRole } from '~/constants/roles';
 import { liveProvider } from '~/lib/refinedev-ably';
 import { RefineKbarProvider } from '~/lib/refinedev-kbar';
@@ -102,8 +102,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // 设置服务端 Sentry 用户信息
   Sentry.setUser({ email: user?.email, username: user?.name || '?', id: user?.id });
 
+  // 设置菜单资源
   setDataResources(menus);
-  const dashboardResource = (menus.find((r) => r.list)?.list as string) || '/404';
+
+  // 获取仪表盘资源路径: 第一个有 list 属性的资源的路径
+  const dashboardResource = (menus.find((r) => r.list)?.list as string) || defaultDashboardResource;
 
   return data({
     user,

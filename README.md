@@ -99,7 +99,7 @@ sudo echo "127.0.0.1 me.ly.com" >> /etc/hosts # 修改 hosts 文件，添加本�
 
 - 升级 Remix v3 / React Router v7, 暂时无法升级: @refinedev/remix-router 使用的是 Remix 2.x 版本
 - Refine devtool 选择器无法使用
-- Refine Live Provider 使用 socket.io | SSE?
+- Refine Live Provider 使用 SSE?
 - Redis
 - MQ
 - 单点登录

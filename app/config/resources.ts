@@ -169,9 +169,14 @@ import { canUseDOM } from '~/utils/can-use-dom';
 //   },
 // ];
 
+// 默认仪表盘资源路径
+export const defaultDashboardResource = '/playground/dashboard/about';
+
 // 服务端获取菜单资源
 let dataResources: ResourceProps[] = canUseDOM() ? (window as TAny).__MENUS__ || [] : [];
-let dashboardResource = (dataResources.find((r) => r.list)?.list as string) || '/404';
+
+// 获取仪表盘资源路径: 第一个有 list 属性的资源的路径
+let dashboardResource = (dataResources.find((r) => r.list)?.list as string) || defaultDashboardResource;
 
 // 不能禁用的菜单
 const cannotDisableMenus = ['system', 'admin', 'menu'];
@@ -179,7 +184,7 @@ const cannotDisableMenus = ['system', 'admin', 'menu'];
 // 设置菜单资源
 const setDataResources = (resources: ResourceProps[]) => {
   dataResources = resources;
-  dashboardResource = (resources.find((r) => r.list)?.list as string) || '/404';
+  dashboardResource = (resources.find((r) => r.list)?.list as string) || defaultDashboardResource;
 };
 
 const getDataResources = () => dataResources;

@@ -54,11 +54,11 @@ async function apiPost<T>(
   const { _userKey, ...rest } = params || {};
   const body = JSON.stringify({
     ...rest,
-    secretKey: process.env.TY_SECRET_KEY,
+    secretKey: process.env.THIRD_OSS_API_SECRET,
     [_userKey || '?']: user?.email.split('@')[0],
   });
 
-  const response = await fetch(`${process.env.TY_HOST}${api}`, {
+  const response = await fetch(`${process.env.THIRD_OSS_API_HOST}${api}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body,

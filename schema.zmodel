@@ -77,7 +77,7 @@ enum PostStatus {
 }
 
 // ========================
-// Post 
+// Post
 // ========================
 model Post extends Base {
   operatedBy User?      @relation("PostOperator", references: [id], fields: [operatedById])
@@ -98,7 +98,7 @@ model Post extends Base {
 }
 
 // ========================
-// category 
+// category
 // ========================
 model Category extends Base {
   title       String  @unique @length(min: 2)
@@ -206,7 +206,7 @@ enum LogAction {
 }
 
 // ========================
-// Log 
+// Log
 // ========================
 model Log extends Base {
   operatedBy   User?     @relation(references: [id], fields: [operatedById])

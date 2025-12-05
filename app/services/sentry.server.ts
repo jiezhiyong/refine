@@ -1,4 +1,4 @@
-import * as SentryProfiling from '@sentry/profiling-node';
+// import * as SentryProfiling from '@sentry/profiling-node';
 import * as Sentry from '@sentry/remix';
 
 let isInitialized = false;
@@ -18,7 +18,7 @@ export function initSentry() {
       Sentry.prismaIntegration(),
       Sentry.anrIntegration({ captureStackTrace: true }),
       Sentry.extraErrorDataIntegration(),
-      SentryProfiling.nodeProfilingIntegration(),
+      // SentryProfiling.nodeProfilingIntegration(),
     ],
   });
 
