@@ -6,7 +6,7 @@ import {
   useGetToPath,
   useGo,
   useNavigation,
-  useResource,
+  useResourceParams,
   useRouterType,
   useTranslate,
   useUserFriendlyName,
@@ -27,7 +27,7 @@ enum RefineKbarActionType {
 
 export const useRefineKbar = (): void => {
   const t = useTranslate();
-  const { resource: resourceFromParams, resources, id: idFromParams, action: actionFromParams } = useResource();
+  const { resource: resourceFromParams, resources, id: idFromParams, action: actionFromParams } = useResourceParams();
   const routerType = useRouterType();
   const getToPath = useGetToPath();
   const go = useGo();

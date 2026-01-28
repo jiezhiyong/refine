@@ -1,3 +1,5 @@
+// TODO: Complete migration from useResource to useResourceParams
+// See: http://localhost:3000/docs/migration-guide/4x-to-5x/#useresource--useresourceparams
 import {
   AccessControlContext,
   CanReturnType,

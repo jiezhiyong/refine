@@ -1,3 +1,5 @@
+// TODO: Complete migration from useResource to useResourceParams
+// See: http://localhost:3000/docs/migration-guide/4x-to-5x/#useresource--useresourceparams
 import {
   AccessControlContext,
   CanReturnType,
@@ -34,7 +36,9 @@ export const useDeleteHelper = (resource: string, recordItemId: string, meta?: T
 
   const { mutationMode } = useMutationMode();
 
-  const { mutate, isLoading } = useDelete();
+  const { mutate, mutation: {
+    isPending
+  } } = useDelete();
 
   const { data } = useCan({
     resource: _resource?.name,

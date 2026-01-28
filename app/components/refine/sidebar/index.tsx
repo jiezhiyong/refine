@@ -37,7 +37,7 @@ export function SidebarEasy() {
 
   return menuItems.map((menus_1, index) => (
     // <CanAccess key={menus_1.key} resource={menus_1.name} action="list">
-    <SidebarGroup key={index}>
+    (<SidebarGroup key={index}>
       <SidebarGroupLabel>{menus_1.meta?.label || t(`menus.${menus_1.name}`, menus_1.name)}</SidebarGroupLabel>
       <SidebarMenu>
         {menus_1.children.map((menus_2, idx) => {
@@ -49,6 +49,7 @@ export function SidebarEasy() {
           const menu2Name = menus_2.meta?.label || t(`menus.${menus_2.name}`, menus_2.name);
           return (
             // <CanAccess key={menus_2.key} resource={menus_2.name} action="list">
+            // </CanAccess>
             <Collapsible key={idx} asChild defaultOpen={isCollapsibleOpen} className="group/collapsible">
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
@@ -70,6 +71,7 @@ export function SidebarEasy() {
                       const menu3Name = item.meta?.label || t(`menus.${item.name}`, item.name);
                       return (
                         // <CanAccess key={item.key} resource={item.name} action="list">
+                        // </CanAccess>
                         <SidebarMenuSubItem key={item.key}>
                           <SidebarMenuSubButton
                             asChild
@@ -81,18 +83,16 @@ export function SidebarEasy() {
                             </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
-                        // </CanAccess>
                       );
                     })}
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenuItem>
             </Collapsible>
-            // </CanAccess>
           );
         })}
       </SidebarMenu>
-    </SidebarGroup>
+    </SidebarGroup>)
     // </CanAccess>
   ));
 }

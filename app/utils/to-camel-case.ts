@@ -20,12 +20,10 @@ export const toCamelCase = (str: string): string => {
   }
 
   // 先将字符串转换为小写
-  return (
-    str
-      .toLowerCase()
-      // 将短横线和空格都转换为下划线，统一处理
-      .replace(/[-\s]/g, '_')
-      // 将下划线后面的字母转换为大写
-      .replace(/_([a-z])/g, (_, char) => char.toUpperCase())
-  );
+  return (str
+    .toLowerCase()
+    // 将短横线和空格都转换为下划线，统一处理
+    .replace(/[-\s]/g, '_')
+    // 将下划线后面的字母转换为大写
+    .replace(/_([a-z])/g, (_, char) => char.toUpperCase()));
 };

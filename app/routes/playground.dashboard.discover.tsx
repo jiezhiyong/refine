@@ -184,7 +184,14 @@ export default function DashboardDiscover() {
   }, []);
 
   // 使用 refine 的 useCustom 钩子查询数据
-  const { error, isError, isFetching, isLoading } = useCustom<TAny[], HttpError>({
+  const {
+    query: {
+      error,
+      isError,
+      isFetching,
+      isLoading
+    }
+  } = useCustom<TAny[], HttpError>({
     url: '/api/discover',
     method: 'get',
     config: {

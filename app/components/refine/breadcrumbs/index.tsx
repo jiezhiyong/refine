@@ -1,4 +1,4 @@
-import { matchResourceFromRoute, useBreadcrumb, useRefineContext, useResource } from '@refinedev/core';
+import { matchResourceFromRoute, useBreadcrumb, useRefineContext, useResourceParams } from '@refinedev/core';
 import { RefineBreadcrumbProps } from '@refinedev/ui-types';
 import { t } from 'i18next';
 import { HomeIcon } from 'lucide-react';
@@ -25,7 +25,7 @@ export const Breadcrumbs: FC<BreadcrumbProps> = ({ showHome = true, meta }) => {
 
   const { hasDashboard } = useRefineContext();
 
-  const { resources } = useResource();
+  const { resources } = useResourceParams();
 
   const dashboardResource = resources[0];
 
