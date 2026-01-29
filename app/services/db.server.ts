@@ -53,8 +53,6 @@ const excludeTables = [
   'DynamicPage',
   'AuditRecord',
   'Log',
-  'FrontRouteProject',
-  'FrontRouteModule',
 ];
 
 // 查询所有可访问的表, 用于 discover、dynamicPage 等场景

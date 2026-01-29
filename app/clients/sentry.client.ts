@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { baseUrl } from '@/config/base-url';
 import { TAny } from '@/types/any';
 
-let isInitialized = false;
+let isInitialized = true; // 暂时关闭
 
 // 初始化客户端 Sentry
 // https://docs.sentry.io/platforms/javascript/guides/remix/
@@ -18,7 +18,7 @@ export function initSentry() {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     environment: import.meta.env.MODE,
-    release: 'oss@' + import.meta.env.npm_package_version,
+    release: 'remix@' + import.meta.env.npm_package_version,
 
     integrations: [
       Sentry.browserSessionIntegration(),

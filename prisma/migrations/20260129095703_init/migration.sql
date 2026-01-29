@@ -111,37 +111,6 @@ CREATE TABLE "casbin_rule" (
 );
 
 -- CreateTable
-CREATE TABLE "FrontRouteProject" (
-    "id" TEXT NOT NULL,
-    "deleted" BOOLEAN DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3),
-    "operatedById" TEXT,
-    "title" TEXT NOT NULL,
-    "description" TEXT,
-    "global" JSONB NOT NULL,
-
-    CONSTRAINT "FrontRouteProject_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "FrontRouteModule" (
-    "id" TEXT NOT NULL,
-    "deleted" BOOLEAN DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3),
-    "operatedById" TEXT,
-    "title" TEXT NOT NULL,
-    "description" TEXT,
-    "pathReplaceProject" TEXT,
-    "pathReplaceModule" TEXT,
-    "global" JSONB,
-    "projectId" TEXT NOT NULL,
-
-    CONSTRAINT "FrontRouteModule_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "AuditRecord" (
     "id" TEXT NOT NULL,
     "deleted" BOOLEAN DEFAULT false,
@@ -267,18 +236,6 @@ CREATE INDEX "casbin_rule_operatedById_idx" ON "casbin_rule"("operatedById");
 CREATE INDEX "casbin_rule_ptype_v0_v1_v2_idx" ON "casbin_rule"("ptype", "v0", "v1", "v2");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "FrontRouteProject_title_key" ON "FrontRouteProject"("title");
-
--- CreateIndex
-CREATE INDEX "FrontRouteProject_title_idx" ON "FrontRouteProject"("title");
-
--- CreateIndex
-CREATE UNIQUE INDEX "FrontRouteModule_title_key" ON "FrontRouteModule"("title");
-
--- CreateIndex
-CREATE INDEX "FrontRouteModule_title_idx" ON "FrontRouteModule"("title");
-
--- CreateIndex
 CREATE INDEX "AuditRecord_title_idx" ON "AuditRecord"("title");
 
 -- CreateIndex
@@ -322,15 +279,6 @@ ALTER TABLE "Post" ADD CONSTRAINT "Post_operatedById_fkey" FOREIGN KEY ("operate
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "FrontRouteProject" ADD CONSTRAINT "FrontRouteProject_operatedById_fkey" FOREIGN KEY ("operatedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "FrontRouteModule" ADD CONSTRAINT "FrontRouteModule_operatedById_fkey" FOREIGN KEY ("operatedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "FrontRouteModule" ADD CONSTRAINT "FrontRouteModule_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "FrontRouteProject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "AuditRecord" ADD CONSTRAINT "AuditRecord_operatedById_fkey" FOREIGN KEY ("operatedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

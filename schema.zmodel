@@ -32,18 +32,16 @@ enum AuthProvider {
 // 用户、角色、权限
 // ========================
 model User extends Base {
-  email              String              @unique @email @endsWith('@ly.com')
-  name               String              @length(min: 8, max: 32)
-  avatar             String?             @url
-  provider           AuthProvider        @default(USER_PASS)
-  roles              UserRole[]          // 注意：用户拥有的所有角色列表, 当前系统支持一个用户可以分配多个角色
-  role               String?             // 注意：用户当前切换的角色，只有用户登录后或者切换角色时才会被赋值 => session.server.ts/getUser, 只用于类型提示
-  password           String?             @length(min: 8, max: 32) @password
-  posts              Post[]              @relation("PostOperator")
-  frontRouteProjects FrontRouteProject[] @relation("FrontRouteProjectOperator")
-  frontRouteModules  FrontRouteModule[]  @relation("FrontRouteModuleOperator")
-  logs               Log[]
-  auditRecords       AuditRecord[]       @relation("AuditRecordOperator")
+  email        String        @unique @email @endsWith('@ly.com')
+  name         String        @length(min: 8, max: 32)
+  avatar       String?       @url
+  provider     AuthProvider  @default(USER_PASS)
+  roles        UserRole[]          // 注意：用户拥有的所有角色列表, 当前系统支持一个用户可以分配多个角色
+  role         String?             // 注意：用户当前切换的角色，只有用户登录后或者切换角色时才会被赋值 => session.server.ts/getUser, 只用于类型提示
+  password     String?       @length(min: 8, max: 32) @password
+  posts        Post[]        @relation("PostOperator")
+  logs         Log[]
+  auditRecords AuditRecord[] @relation("AuditRecordOperator")
 
   @@index([name])
 }
@@ -123,35 +121,6 @@ model CasbinRule extends Base {
   @@index([operatedById])
   @@index([ptype, v0, v1, v2])
   @@map("casbin_rule")
-}
-
-// ========================
-// 前端路由项目配置
-// ========================
-model FrontRouteProject extends Base {
-  operatedBy  User?              @relation("FrontRouteProjectOperator", references: [id], fields: [operatedById])
-  title       String             @unique @length(min: 2)
-  description String?
-  global      Json
-  modules     FrontRouteModule[]
-
-  @@index([title])
-}
-
-// ========================
-// 前端路由模块配置
-// ========================
-model FrontRouteModule extends Base {
-  operatedBy         User?             @relation("FrontRouteModuleOperator", references: [id], fields: [operatedById])
-  title              String            @unique @length(min: 2)
-  description        String?
-  pathReplaceProject String?
-  pathReplaceModule  String?
-  global             Json?
-  project            FrontRouteProject @relation(fields: [projectId], references: [id])
-  projectId          String
-
-  @@index([title])
 }
 
 // ========================

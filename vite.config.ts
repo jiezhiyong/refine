@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       remix({
         presets: [vercelPreset()],
-        ssr: true, // false: 禁用服务端渲染、启用SPA模式
+        ssr: true, // 是否启用服务端渲染、设置为 `false` 时启用SPA模式
         manifest: true,
         future: {
           v3_fetcherPersist: true,
@@ -69,7 +69,7 @@ export default defineConfig(({ mode }) => {
           filesToDeleteAfterUpload: ['**/*.map'],
         },
         release: {
-          name: 'oss@' + process.env.npm_package_version,
+          name: 'remix@' + process.env.npm_package_version,
           uploadLegacySourcemaps: {
             paths: ['.'],
           },

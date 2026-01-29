@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/remix';
 
-let isInitialized = false;
+let isInitialized = true; // 暂时关闭
 
 export function initSentry() {
   if (isInitialized) {
@@ -10,7 +10,7 @@ export function initSentry() {
   Sentry.init({
     dsn: process.env.VITE_SENTRY_DSN,
     environment: process.env.NODE_ENV,
-    release: 'oss@' + process.env.npm_package_version,
+    release: 'remix@' + process.env.npm_package_version,
     tracesSampleRate: 1,
     integrations: [Sentry.prismaIntegration(), Sentry.extraErrorDataIntegration()],
   });
