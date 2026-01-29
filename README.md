@@ -29,6 +29,13 @@ pnpm i
 pnpm dev
 ```
 
+## shadcn/ui 组件库
+
+```sh
+pnpm dlx shadcn@latest add <component>
+pnpm dlx shadcn@latest add https://ui.refine.dev/r/views.json # 需要手动将组件移动到 app/components/refine-ui 目录下
+```
+
 ## 其他 Prisma 命令行
 
 ```sh
