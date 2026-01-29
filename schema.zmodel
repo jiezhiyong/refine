@@ -25,7 +25,7 @@ plugin openapi {
 // ========================
 enum AuthProvider {
   USER_PASS
-  TC_SHUKE
+  GITHUB
 }
 
 // ========================

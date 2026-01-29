@@ -14,7 +14,7 @@ generator client {
 
 enum AuthProvider {
   USER_PASS
-  TC_SHUKE
+  GITHUB
 }
 
 enum PostStatus {

@@ -174,8 +174,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@remix-run/react@2.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.7.3))(react@19.2.4)
       '@vercel/remix':
-        specifier: ^2.15.2
-        version: 2.15.2(@remix-run/dev@2.15.3(@remix-run/react@2.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.7.3))(@remix-run/serve@2.17.4(typescript@5.7.3))(@types/node@22.10.6)(bufferutil@4.0.9)(lightningcss@1.29.1)(ts-node@10.9.2(@types/node@22.10.6)(typescript@5.7.3))(typescript@5.7.3)(vite@5.4.11(@types/node@22.10.6)(lightningcss@1.29.1)))(@remix-run/node@2.17.4(typescript@5.7.3))(@remix-run/server-runtime@2.17.4(typescript@5.7.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^2.16.7
+        version: 2.16.7(@remix-run/dev@2.15.3(@remix-run/react@2.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.7.3))(@remix-run/serve@2.17.4(typescript@5.7.3))(@types/node@22.10.6)(bufferutil@4.0.9)(lightningcss@1.29.1)(ts-node@10.9.2(@types/node@22.10.6)(typescript@5.7.3))(typescript@5.7.3)(vite@5.4.11(@types/node@22.10.6)(lightningcss@1.29.1)))(@remix-run/node@2.17.4(typescript@5.7.3))(@remix-run/server-runtime@2.17.4(typescript@5.7.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@vercel/speed-insights':
         specifier: ^1.2.0
         version: 1.2.0(react@19.2.4)
@@ -236,6 +236,9 @@ importers:
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
+      kbar:
+        specifier: 0.1.0-beta.40
+        version: 0.1.0-beta.40(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       lucide-react:
         specifier: ^0.484.0
         version: 0.484.0(react@19.2.4)
@@ -3697,13 +3700,13 @@ packages:
       vue-router:
         optional: true
 
-  '@vercel/remix@2.15.2':
-    resolution: {integrity: sha512-JZJmuM/pZl5zLACRHzq2uOamzTOeiKRnco0o07A+hUxTKemhS1tqc2R9PdQ6Mf/8ZcXY5ZxW5tah3zjBea6D4w==}
+  '@vercel/remix@2.16.7':
+    resolution: {integrity: sha512-lQ7GdUO0ilX5eqIC4Wwewo5coAvacZzZrirr46BRwCp71jFqLscsruLqd6RI8s55cZWsXFZsIuOIQhcYUiL/3Q==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@remix-run/dev': 2.15.2
-      '@remix-run/node': 2.15.2
-      '@remix-run/server-runtime': 2.15.2
+      '@remix-run/dev': 2.16.7
+      '@remix-run/node': 2.16.7
+      '@remix-run/server-runtime': 2.16.7
       react: '*'
       react-dom: '*'
 
@@ -12743,7 +12746,7 @@ snapshots:
       '@remix-run/react': 2.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.7.3)
       react: 19.2.4
 
-  '@vercel/remix@2.15.2(@remix-run/dev@2.15.3(@remix-run/react@2.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.7.3))(@remix-run/serve@2.17.4(typescript@5.7.3))(@types/node@22.10.6)(bufferutil@4.0.9)(lightningcss@1.29.1)(ts-node@10.9.2(@types/node@22.10.6)(typescript@5.7.3))(typescript@5.7.3)(vite@5.4.11(@types/node@22.10.6)(lightningcss@1.29.1)))(@remix-run/node@2.17.4(typescript@5.7.3))(@remix-run/server-runtime@2.17.4(typescript@5.7.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@vercel/remix@2.16.7(@remix-run/dev@2.15.3(@remix-run/react@2.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.7.3))(@remix-run/serve@2.17.4(typescript@5.7.3))(@types/node@22.10.6)(bufferutil@4.0.9)(lightningcss@1.29.1)(ts-node@10.9.2(@types/node@22.10.6)(typescript@5.7.3))(typescript@5.7.3)(vite@5.4.11(@types/node@22.10.6)(lightningcss@1.29.1)))(@remix-run/node@2.17.4(typescript@5.7.3))(@remix-run/server-runtime@2.17.4(typescript@5.7.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@remix-run/dev': 2.15.3(@remix-run/react@2.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.7.3))(@remix-run/serve@2.17.4(typescript@5.7.3))(@types/node@22.10.6)(bufferutil@4.0.9)(lightningcss@1.29.1)(ts-node@10.9.2(@types/node@22.10.6)(typescript@5.7.3))(typescript@5.7.3)(vite@5.4.11(@types/node@22.10.6)(lightningcss@1.29.1))
       '@remix-run/node': 2.17.4(typescript@5.7.3)

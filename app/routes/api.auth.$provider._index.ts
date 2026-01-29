@@ -13,7 +13,7 @@ export async function loader() {
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
     const { provider } = params as { provider: EnumAuthProvider };
-    if (!provider || ![EnumAuthProvider.USER_PASS, EnumAuthProvider.TC_SHUKE].includes(provider)) {
+    if (!provider || ![EnumAuthProvider.USER_PASS, EnumAuthProvider.GITHUB].includes(provider)) {
       return Response.json({ message: 'Method not allowed' }, { status: 405 });
     }
 

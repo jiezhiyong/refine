@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "AuthProvider" AS ENUM ('USER_PASS', 'TC_SHUKE');
+CREATE TYPE "AuthProvider" AS ENUM ('USER_PASS', 'GITHUB');
 
 -- CreateEnum
 CREATE TYPE "PostStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'REJECTED');

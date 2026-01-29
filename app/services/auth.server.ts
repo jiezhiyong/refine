@@ -19,30 +19,30 @@ import invariant from 'tiny-invariant';
 import { EnumAuthProvider } from '@/constants/user';
 import { verifyUserpassLogin } from '@/services/user.server';
 
-invariant(process.env.TCSK_CLIENT_ID, 'TCSK_CLIENT_ID must be set.');
-invariant(process.env.TCSK_CLIENT_SECRET, 'TCSK_CLIENT_SECRET must be set.');
-invariant(process.env.TCSK_AUTHORIZE, 'TCSK_AUTHORIZE must be set.');
-invariant(process.env.TCSK_TOKEN, 'TCSK_TOKEN must be set.');
-invariant(process.env.TCSK_REDIRECT, 'TCSK_REDIRECT must be set.');
-invariant(process.env.TCSK_PROFILE, 'TCSK_PROFILE must be set.');
+invariant(process.env.GITHUB_CLIENT_ID, 'GITHUB_CLIENT_ID must be set.');
+invariant(process.env.GITHUB_CLIENT_SECRET, 'GITHUB_CLIENT_SECRET must be set.');
+invariant(process.env.GITHUB_AUTHORIZE, 'GITHUB_AUTHORIZE must be set.');
+invariant(process.env.GITHUB_TOKEN, 'GITHUB_TOKEN must be set.');
+invariant(process.env.GITHUB_REDIRECT, 'GITHUB_REDIRECT must be set.');
+invariant(process.env.GITHUB_PROFILE, 'GITHUB_PROFILE must be set.');
 
 // 创建认证器实例
 export const authenticator = new Authenticator<User>();
 
-// TCSK OAuth2 策略
-const tcskStrategy = new OAuth2Strategy<User>(
+// GitHub OAuth2 策略
+const githubStrategy = new OAuth2Strategy<User>(
   {
-    clientId: process.env.TCSK_CLIENT_ID,
-    clientSecret: process.env.TCSK_CLIENT_SECRET,
-    authorizationEndpoint: process.env.TCSK_AUTHORIZE,
-    tokenEndpoint: process.env.TCSK_TOKEN,
-    redirectURI: process.env.TCSK_REDIRECT,
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    authorizationEndpoint: process.env.GITHUB_AUTHORIZE,
+    tokenEndpoint: process.env.GITHUB_TOKEN,
+    redirectURI: process.env.GITHUB_REDIRECT,
     scopes: ['profile'],
   },
   async ({ tokens }) => {
     const { access_token } = (tokens?.data || {}) as Record<string, string>;
     try {
-      const response = await fetch(process.env.TCSK_PROFILE!, {
+      const response = await fetch(process.env.GITHUB_PROFILE!, {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
@@ -53,11 +53,11 @@ const tcskStrategy = new OAuth2Strategy<User>(
       }
 
       const data = await response.json();
-      const { email, realName } = data || {};
+      const { email, name } = data || {};
 
       return {
         email,
-        name: realName,
+        name,
       } as User;
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -81,4 +81,4 @@ const strategyForm = new FormStrategy(async ({ form }) => {
 
 // 注册认证策略
 authenticator.use(strategyForm, EnumAuthProvider.USER_PASS);
-authenticator.use(tcskStrategy, EnumAuthProvider.TC_SHUKE);
+authenticator.use(githubStrategy, EnumAuthProvider.GITHUB);
