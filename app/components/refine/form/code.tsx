@@ -1,11 +1,10 @@
-import { DiffEditor, DiffEditorProps, Editor, EditorProps, loader, useMonaco } from '@monaco-editor/react';
+import { DiffEditor, DiffEditorProps, Editor, EditorProps, useMonaco } from '@monaco-editor/react';
 import { Eye } from 'lucide-react';
 import { editor } from 'monaco-editor';
 import { useEffect, useRef, useState } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
-import { baseUrl } from '@/config/base-url';
 import { cn } from '@/lib/utils';
 import { TAny } from '@/types/any';
 
@@ -21,10 +20,10 @@ type TCodeProps<TFieldValues extends FieldValues = FieldValues> = TEditorProps &
 // 自定义配置Monaco编辑器的CDN路径
 // 使用函数包装配置，确保只在组件挂载时执行一次
 const configureLoader = () => {
-  loader.config({
-    ['paths']: { vs: `${baseUrl}/monaco-editor/vs` },
-    ['vs/nls']: { availableLanguages: { '*': 'zh-cn' } },
-  });
+  // loader.config({
+  //   ['paths']: { vs: `${baseUrl}/monaco-editor/vs` },
+  //   ['vs/nls']: { availableLanguages: { '*': 'zh-cn' } },
+  // });
 };
 
 /**

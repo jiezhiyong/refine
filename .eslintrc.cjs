@@ -13,7 +13,7 @@ module.exports = {
       jsx: true,
     },
   },
-  ignorePatterns: ['!**/.server', '!**/.client'],
+  ignorePatterns: ['!**/.server', '!**/.client', '.changeset',],
   extends: ['eslint:recommended', 'prettier'],
   rules: {
     'import/order': [

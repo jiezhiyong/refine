@@ -100,15 +100,6 @@ sudo echo "127.0.0.1 me.ly.com" >> /etc/hosts # 修改 hosts 文件，添加本�
 - Q: Sentry source maps 无法上传到自托管服务器
 - A: 旧版本不支持 Artifact Bundle，需要升级自托管版本到 23.6.1 以上，或使用旧版本方式上传（cli、sentryVitePlugin uploadLegacySourcemaps等）
 
-## TODO: 问题、未实现的功能
-
-- Sentry source maps 文件路径不匹配
-
-- 升级 Remix v3 / React Router v7, 暂时无法升级: @refinedev/remix-router 使用的是 Remix 2.x 版本
-- Refine devtool 选择器无法使用
-- Refine Live Provider 使用 SSE?
-- 服务状态监控 https://github.com/louislam/uptime-kuma?tab=readme-ov-file、https://prometheus.io
-
 ## Remix Resources
 
 - https://remix.run/blog
