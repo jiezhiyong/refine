@@ -79,7 +79,11 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './app'),
+        lodash: 'lodash-es',
       },
+    },
+    ssr: {
+      noExternal: ['@refinedev/react-table', 'lodash', 'lodash-es'],
     },
     build: {
       sourcemap: false,

@@ -1,5 +1,6 @@
 import { User } from '@prisma/client';
 import { Refine, ResourceProps } from '@refinedev/core';
+import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
 import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import {
@@ -26,13 +27,11 @@ import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 
 import { NotFound } from '@/components/404';
 import { PageError } from '@/components/500';
-import { RefineKbarCustom } from '@/components/refine/kbar';
 import { Toaster } from '@/components/ui/sonner';
 import { fallbackLanguage, LocaleLanguage } from '@/config/i18n';
 import { defaultDashboardResource, setDataResources } from '@/config/resources';
 import { TRole } from '@/constants/roles';
 import { liveProvider } from '@/lib/refinedev-ably';
-import { RefineKbarProvider } from '@/lib/refinedev-kbar';
 import { cn } from '@/lib/utils';
 import {
   ablyClient,
@@ -194,7 +193,7 @@ function Document({
           >
             {children}
             <UnsavedChangesNotifier />
-            <RefineKbarCustom />
+            <RefineKbar />
             {/* <DevtoolsPanel /> */}
           </Refine>
         </RefineKbarProvider>

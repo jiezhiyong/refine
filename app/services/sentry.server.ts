@@ -1,4 +1,3 @@
-import * as SentryProfiling from '@sentry/profiling-node';
 import * as Sentry from '@sentry/remix';
 
 let isInitialized = false;
@@ -13,13 +12,7 @@ export function initSentry() {
     environment: process.env.NODE_ENV,
     release: 'oss@' + process.env.npm_package_version,
     tracesSampleRate: 1,
-    autoInstrumentRemix: true,
-    integrations: [
-      Sentry.prismaIntegration(),
-      Sentry.anrIntegration({ captureStackTrace: true }),
-      Sentry.extraErrorDataIntegration(),
-      SentryProfiling.nodeProfilingIntegration(),
-    ],
+    integrations: [Sentry.prismaIntegration(), Sentry.extraErrorDataIntegration()],
   });
 
   isInitialized = true;
