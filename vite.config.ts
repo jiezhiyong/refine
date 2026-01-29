@@ -1,6 +1,7 @@
 import path from 'path';
 
 import { vitePlugin as remix } from '@remix-run/dev';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import { vercelPreset } from '@vercel/remix/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -58,22 +59,22 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
       visualizer({ emitFile: true }), // 生成构建产物的可视化分析报告 stats.html
 
-      // sentryVitePlugin({
-      //   debug: false,
-      //   org: env.SENTRY_ORG,
-      //   project: env.SENTRY_PROJECT,
-      //   authToken: env.SENTRY_AUTH_TOKEN,
-      //   url: env.SENTRY_URL,
-      //   sourcemaps: {
-      //     filesToDeleteAfterUpload: ['**/*.map'],
-      //   },
-      //   release: {
-      //     name: 'oss@' + process.env.npm_package_version,
-      //     uploadLegacySourcemaps: {
-      //       paths: ['.'],
-      //     },
-      //   },
-      // }),
+      sentryVitePlugin({
+        debug: false,
+        org: env.SENTRY_ORG,
+        project: env.SENTRY_PROJECT,
+        authToken: env.SENTRY_AUTH_TOKEN,
+        url: env.SENTRY_URL,
+        sourcemaps: {
+          filesToDeleteAfterUpload: ['**/*.map'],
+        },
+        release: {
+          name: 'oss@' + process.env.npm_package_version,
+          uploadLegacySourcemaps: {
+            paths: ['.'],
+          },
+        },
+      }),
     ],
     resolve: {
       alias: {

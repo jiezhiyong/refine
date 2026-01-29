@@ -52,10 +52,10 @@ export function initSentry() {
       }
 
       // 出现错误时自动弹窗、引导用户反馈
-      // if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
-      //   window._isRenderedReortDialog = true;
-      //   Sentry.showReportDialog({ eventId: event.event_id });
-      // }
+      if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
+        window._isRenderedReortDialog = true;
+        Sentry.showReportDialog({ eventId: event.event_id });
+      }
       return event;
     },
   });
