@@ -11,9 +11,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '~/components/ui/sidebar';
-import { useMountEffect } from '~/hooks/use-mount-effect';
-import { cn } from '~/lib/utils';
+} from '@/components/ui/sidebar';
+import { useMountEffect } from '@/hooks/use-mount-effect';
+import { cn } from '@/lib/utils';
 
 import { ThemeSwitcher } from './switcher-theme';
 

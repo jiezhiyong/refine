@@ -2,9 +2,9 @@ import { useEditButton } from '@refinedev/core';
 import { Pencil } from 'lucide-react';
 import type { FC } from 'react';
 
-import { EditButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/utils';
+import { EditButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export const EditButton: FC<EditButtonProps> = ({
   resource,

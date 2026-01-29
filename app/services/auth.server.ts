@@ -16,8 +16,8 @@ import { FormStrategy } from 'remix-auth-form';
 import { OAuth2Strategy } from 'remix-auth-oauth2';
 import invariant from 'tiny-invariant';
 
-import { EnumAuthProvider } from '~/constants/user';
-import { verifyUserpassLogin } from '~/services/user.server';
+import { EnumAuthProvider } from '@/constants/user';
+import { verifyUserpassLogin } from '@/services/user.server';
 
 invariant(process.env.TCSK_CLIENT_ID, 'TCSK_CLIENT_ID must be set.');
 invariant(process.env.TCSK_CLIENT_SECRET, 'TCSK_CLIENT_SECRET must be set.');

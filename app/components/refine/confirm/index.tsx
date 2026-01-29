@@ -2,7 +2,7 @@ import { t } from 'i18next';
 import { CheckIcon, XIcon } from 'lucide-react';
 import { FC, isValidElement, useMemo } from 'react';
 
-import { ConfirmDialogProps } from '~/components/refine/types/confirm-dialog';
+import { ConfirmDialogProps } from '@/components/refine/types/confirm-dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,8 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '~/components/ui/alert-dialog';
-import { LoadingIcon } from '~/components/ui/loading';
+} from '@/components/ui/alert-dialog';
+import { LoadingIcon } from '@/components/ui/loading';
 
 export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   children,

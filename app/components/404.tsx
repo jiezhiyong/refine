@@ -1,9 +1,9 @@
 import { useBack } from '@refinedev/core';
 import { Link } from '@remix-run/react';
 
-import { Button } from '~/components/ui/button';
+import { Button } from '@/components/ui/button';
 
-export function NotFound({ message }: { message?: string }) {
+export function NotFound(_props: { message?: string }) {
   const back = useBack();
 
   return (

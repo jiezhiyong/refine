@@ -3,13 +3,13 @@ import { PopoverTrigger } from '@radix-ui/react-popover';
 import { BaseOption, BaseRecord, UseSelectReturnType } from '@refinedev/core';
 import { ComponentPropsWithoutRef, useState } from 'react';
 
-import { Button } from '~/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '~/components/ui/command';
-import { FormControl } from '~/components/ui/form';
-import { Popover, PopoverContent } from '~/components/ui/popover';
-import { ScrollArea } from '~/components/ui/scroll-area';
-import { cn } from '~/lib/utils';
-import { TAny } from '~/types/any';
+import { Button } from '@/components/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { FormControl } from '@/components/ui/form';
+import { Popover, PopoverContent } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
+import { TAny } from '@/types/any';
 
 type ComboboxProps = ComponentPropsWithoutRef<typeof Command> &
   Pick<UseSelectReturnType<BaseOption, TAny>, 'options'> & {

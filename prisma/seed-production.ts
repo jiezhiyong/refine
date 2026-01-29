@@ -3,6 +3,7 @@ import { Post, PrismaClient, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 // 导入业务数据
+import { EnumAuthProvider } from '@/constants/user';
 import { categories } from 'mock/db/sql-categories';
 import { dynamicPages } from 'mock/db/sql-dynamic-page';
 import { frontRouteModules, frontRouteProjects } from 'mock/db/sql-front-routes';
@@ -11,7 +12,6 @@ import { CASBIN_POLICIES } from 'mock/db/sql-pemission';
 import { posts } from 'mock/db/sql-posts';
 import { roles } from 'mock/db/sql-roles';
 import { userAdministrator } from 'mock/db/sql-users';
-import { EnumAuthProvider } from '~/constants/user';
 
 const db = new PrismaClient();
 

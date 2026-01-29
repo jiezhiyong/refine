@@ -2,8 +2,8 @@ import { HttpError } from '@refinedev/core';
 import axios, { AxiosHeaders } from 'axios';
 import queryString from 'query-string';
 
-import { TAny } from '~/types/any';
-import { generateSignature } from '~/utils/signature';
+import { TAny } from '@/types/any';
+import { generateSignature } from '@/utils/signature';
 
 /**
  * 服务器端验证

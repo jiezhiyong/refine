@@ -2,9 +2,9 @@ import { Post } from '@prisma/client';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
-import { PageError } from '~/components/500';
-import { dataService } from '~/services/data.server';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { PageError } from '@/components/500';
+import { dataService } from '@/services/data.server';
+import { getDefaultTitle } from '@/utils/get-default-title';
 
 import { PostForm } from './playground.article.post.edit.$id';
 

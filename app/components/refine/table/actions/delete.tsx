@@ -2,10 +2,10 @@ import { t } from 'i18next';
 import { Trash2 } from 'lucide-react';
 import { useContext } from 'react';
 
-import { useDeleteHelper } from '~/components/refine/hooks/useDeleteHelper';
-import { DeleteContext } from '~/components/refine/providers/deleteProvider';
-import { cn } from '~/lib/utils';
-import { TAny } from '~/types/any';
+import { useDeleteHelper } from '@/components/refine/hooks/useDeleteHelper';
+import { DeleteContext } from '@/components/refine/providers/deleteProvider';
+import { cn } from '@/lib/utils';
+import { TAny } from '@/types/any';
 
 import type { RowActionProps } from '.';
 import { RowAction } from '.';

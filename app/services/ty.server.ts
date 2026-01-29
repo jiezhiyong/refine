@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/remix';
 import dayjs from 'dayjs';
 
-import { requireUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
-import { TDeployServiceBuild, TDeployServiceHistory } from '~/types/ty';
+import { requireUser } from '@/services/session.server';
+import { TAny } from '@/types/any';
+import { TDeployServiceBuild, TDeployServiceHistory } from '@/types/ty';
 
 /**
  * 天元相关接口

@@ -1,5 +1,5 @@
-import { TAny } from '~/types/any';
-import { tryParse } from '~/utils/try-parse';
+import { TAny } from '@/types/any';
+import { tryParse } from '@/utils/try-parse';
 
 export function deepParse(data: TAny) {
   const { status, data: content = {}, original } = tryParse(data);

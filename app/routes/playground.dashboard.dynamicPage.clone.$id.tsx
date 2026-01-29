@@ -1,10 +1,10 @@
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
-import { PageError } from '~/components/500';
-import { DynamicPageForm, TDynamicPage } from '~/routes/playground.dashboard.dynamicPage.edit.$id';
-import { dataService } from '~/services/data.server';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { PageError } from '@/components/500';
+import { DynamicPageForm, TDynamicPage } from '@/routes/playground.dashboard.dynamicPage.edit.$id';
+import { dataService } from '@/services/data.server';
+import { getDefaultTitle } from '@/utils/get-default-title';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];

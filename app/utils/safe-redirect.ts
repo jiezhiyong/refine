@@ -1,4 +1,4 @@
-import { dashboardResource } from '~/config/resources';
+import { dashboardResource } from '@/config/resources';
 
 /**
  * This should be used any time the redirect path is user-provided

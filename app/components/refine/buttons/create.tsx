@@ -2,9 +2,9 @@ import { useCreateButton } from '@refinedev/core';
 import { CirclePlus } from 'lucide-react';
 import type { FC } from 'react';
 
-import { CreateButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/utils';
+import { CreateButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export const CreateButton: FC<CreateButtonProps> = ({
   resource,

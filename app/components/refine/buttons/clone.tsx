@@ -2,9 +2,9 @@ import { useCloneButton } from '@refinedev/core';
 import { CopyCheck } from 'lucide-react';
 import type { FC } from 'react';
 
-import { CloneButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/utils';
+import { CloneButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export const CloneButton: FC<CloneButtonProps> = ({
   resource,

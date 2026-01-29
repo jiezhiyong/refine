@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { EnumAuditStatus } from '~/constants/audit-status';
-import { EnumLogType } from '~/constants/log';
+import { EnumAuditStatus } from '@/constants/audit-status';
+import { EnumLogType } from '@/constants/log';
 
 // schema: AuditRecord
 export const schemaAuditRecord = z.object({

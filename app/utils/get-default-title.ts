@@ -1,8 +1,8 @@
 import { t } from 'i18next';
 
-import { dataResources } from '~/config/resources';
-import { TAny } from '~/types/any';
-import { capitalizeFirstLetter } from '~/utils/capitalize-first-letter';
+import { dataResources } from '@/config/resources';
+import { TAny } from '@/types/any';
+import { capitalizeFirstLetter } from '@/utils/capitalize-first-letter';
 
 /**
  * 获取默认标题

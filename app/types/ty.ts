@@ -1,7 +1,7 @@
 import { BaseKey } from '@refinedev/core';
 
-import { EnumLogType } from '~/constants/log';
-import { TAny } from '~/types/any';
+import { EnumLogType } from '@/constants/log';
+import { TAny } from '@/types/any';
 
 // 天元需求类型
 export type TyIssues = {

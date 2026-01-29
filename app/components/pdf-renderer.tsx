@@ -1,6 +1,6 @@
 import { Document, Image, Page, PDFViewer, StyleSheet, Text, View } from '@react-pdf/renderer';
 
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 type PdfRendererProps = {
   record: TAny;

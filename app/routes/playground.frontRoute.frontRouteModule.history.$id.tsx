@@ -3,20 +3,20 @@ import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { CalendarIcon, IdCard, LeafyGreen, Type, User2 } from 'lucide-react';
 
-import { PageError } from '~/components/500';
-import { Empty } from '~/components/empty';
-import { CodeEditor } from '~/components/refine/form/code';
-import { Badge } from '~/components/ui/badge';
-import { H1 } from '~/components/ui/typography';
-import { EnumAction } from '~/constants/action';
-import { cn } from '~/lib/utils';
-import { dataService } from '~/services/data.server';
-import { tyServer } from '~/services/ty.server';
-import { TAny } from '~/types/any';
-import { TyHistory } from '~/types/ty';
-import { deepParse } from '~/utils/deep-parse';
-import { getAllParams } from '~/utils/get-all-params';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { PageError } from '@/components/500';
+import { Empty } from '@/components/empty';
+import { CodeEditor } from '@/components/refine/form/code';
+import { Badge } from '@/components/ui/badge';
+import { H1 } from '@/components/ui/typography';
+import { EnumAction } from '@/constants/action';
+import { cn } from '@/lib/utils';
+import { dataService } from '@/services/data.server';
+import { tyServer } from '@/services/ty.server';
+import { TAny } from '@/types/any';
+import { TyHistory } from '@/types/ty';
+import { deepParse } from '@/utils/deep-parse';
+import { getAllParams } from '@/utils/get-all-params';
+import { getDefaultTitle } from '@/utils/get-default-title';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];

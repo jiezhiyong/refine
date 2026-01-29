@@ -1,7 +1,6 @@
-// import * as fs from 'fs';
+import path from 'path';
 
 import { vitePlugin as remix } from '@remix-run/dev';
-import { sentryVitePlugin } from '@sentry/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import { vercelPreset } from '@vercel/remix/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -76,6 +75,11 @@ export default defineConfig(({ mode }) => {
       //   },
       // }),
     ],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './app'),
+      },
+    },
     build: {
       sourcemap: false,
     },

@@ -1,10 +1,10 @@
 import { type ActionFunctionArgs } from '@remix-run/node';
 import * as Sentry from '@sentry/remix';
 
-import { EnumAuthProvider } from '~/constants/user';
-import { authenticator } from '~/services/auth.server';
-import { commitSession, getSession } from '~/services/session.server';
-import { TAny } from '~/types/any';
+import { EnumAuthProvider } from '@/constants/user';
+import { authenticator } from '@/services/auth.server';
+import { commitSession, getSession } from '@/services/session.server';
+import { TAny } from '@/types/any';
 
 export async function loader() {
   return Response.json({ message: 'Method not allowed' });

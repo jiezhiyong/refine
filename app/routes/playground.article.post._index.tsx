@@ -1,5 +1,6 @@
 import { Post, Prisma } from '@prisma/client';
 import { BaseRecord, HttpError, useCan, useDeleteMany, useModal, useUserFriendlyName } from '@refinedev/core';
+import { type UseTableReturnType } from '@refinedev/react-table';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
@@ -8,27 +9,26 @@ import { t } from 'i18next';
 import { Paperclip } from 'lucide-react';
 import { useCallback, useRef } from 'react';
 
-import { PageError } from '~/components/500';
-import { PdfLayout } from '~/components/pdf';
-import { CreateButton } from '~/components/refine/buttons/create';
-import { ExportButton } from '~/components/refine/buttons/export';
-import { ImportButton } from '~/components/refine/buttons/import';
-import { ShowButton } from '~/components/refine/buttons/show';
-import { TableEasy, TableFilterProps } from '~/components/refine/table';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { Checkbox } from '~/components/ui/checkbox';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components/ui/dialog';
-import { EnumAction } from '~/constants/action';
-import { EnumPostStatus, POST_STATUS_LIST, POST_STATUS_MAP } from '~/constants/post';
-import { EnumResource } from '~/constants/resource';
-import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { PostFormModal } from '~/routes/playground.article.post.edit.$id';
-import { dataService } from '~/services/data.server';
-import { TAny } from '~/types/any';
-import { HandleFunction } from '~/types/handle';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { buildTableParams } from '~/utils/request';
+import { PageError } from '@/components/500';
+import { PdfLayout } from '@/components/pdf';
+import { CreateButton } from '@/components/refine/buttons/create';
+import { ExportButton } from '@/components/refine/buttons/export';
+import { ImportButton } from '@/components/refine/buttons/import';
+import { ShowButton } from '@/components/refine/buttons/show';
+import { TableEasy, TableFilterProps } from '@/components/refine/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { EnumAction } from '@/constants/action';
+import { EnumPostStatus, POST_STATUS_LIST, POST_STATUS_MAP } from '@/constants/post';
+import { EnumResource } from '@/constants/resource';
+import { PostFormModal } from '@/routes/playground.article.post.edit.$id';
+import { dataService } from '@/services/data.server';
+import { TAny } from '@/types/any';
+import { HandleFunction } from '@/types/handle';
+import { getDefaultTitle } from '@/utils/get-default-title';
+import { buildTableParams } from '@/utils/request';
 
 // 自定义获取的数据类型声明
 type PostRecord = Post & { user: { name: string; avatar: string } & { category: { title: string } } };
@@ -76,7 +76,7 @@ export default function PostIndex() {
   const friendly = useUserFriendlyName();
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const rows = table.getSelectedRowModel().rows;
+    const rows = table.reactTable.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
@@ -91,7 +91,7 @@ export default function PostIndex() {
           },
           {
             onSuccess: () => {
-              table.resetRowSelection();
+              table.reactTable.resetRowSelection();
             },
           }
         );

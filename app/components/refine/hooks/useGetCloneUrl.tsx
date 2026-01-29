@@ -1,36 +1,32 @@
-// TODO: Complete migration from useResource to useResourceParams
-// See: http://localhost:3000/docs/migration-guide/4x-to-5x/#useresource--useresourceparams
 import {
   AccessControlContext,
   CanReturnType,
   useCan,
   useNavigation,
-  useResource,
   useResourceParams,
   useTranslate,
 } from '@refinedev/core';
 import { useContext } from 'react';
 
-import { EnumAction } from '~/constants/action';
-import { TAny } from '~/types/any';
+import { EnumAction } from '@/constants/action';
+import { TAny } from '@/types/any';
 
 type GetEditUrlReturnType = CanReturnType & {
   url: string;
 };
 
-export const useGetCloneUrl = (resource: string, recordItemId: string, meta?: TAny): GetEditUrlReturnType => {
+export const useGetCloneUrl = (resourceName: string, recordItemId: string, meta?: TAny): GetEditUrlReturnType => {
   const accessControlContext = useContext(AccessControlContext);
   const accessControlEnabled = accessControlContext.options.buttons.enableAccessControl;
 
   const { cloneUrl: generateCloneUrl } = useNavigation();
 
-  const { resource: _resource } = useResource(resource);
-  const { id } = useResourceParams();
+  const { id, resource } = useResourceParams({ resource: resourceName });
 
   const { data } = useCan({
-    resource: resource,
+    resource: resourceName,
     action: EnumAction.clone,
-    params: { id: recordItemId, resource: _resource },
+    params: { id: recordItemId, resource },
     queryOptions: {
       enabled: accessControlEnabled,
     },
@@ -44,7 +40,8 @@ export const useGetCloneUrl = (resource: string, recordItemId: string, meta?: TA
     else return translate('buttons.notAccessTitle', "You don't have permission to access");
   };
 
-  const editUrl = resource && (recordItemId ?? id) ? generateCloneUrl(resource, recordItemId! ?? id!, meta) : '';
+  const editUrl =
+    resourceName && (recordItemId ?? id) ? generateCloneUrl(resourceName, recordItemId! ?? id!, meta) : '';
 
   return {
     can: !(accessControlEnabled && !data?.can),

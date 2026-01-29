@@ -2,17 +2,17 @@ import { AuditRecord } from '@prisma/client';
 import { ActionFunctionArgs } from '@remix-run/node';
 import { pick } from 'es-toolkit';
 
-import { EnumAuditChannel } from '~/constants/audit-channel';
-import { EnumAuditStatus } from '~/constants/audit-status';
-import { EnumLogType } from '~/constants/log';
-import { EnumResource } from '~/constants/resource';
-import { db, isPrismaModel } from '~/services/db.server';
-import { requireUser } from '~/services/session.server';
-import { tyServer } from '~/services/ty.server';
-import { TAny } from '~/types/any';
-import { OperateTypeEnum, TAuditRecord, TDeployServiceBuild } from '~/types/ty';
-import { getRequestData } from '~/utils/get-request-data';
-import { validateRequestSignature } from '~/utils/signature';
+import { EnumAuditChannel } from '@/constants/audit-channel';
+import { EnumAuditStatus } from '@/constants/audit-status';
+import { EnumLogType } from '@/constants/log';
+import { EnumResource } from '@/constants/resource';
+import { db, isPrismaModel } from '@/services/db.server';
+import { requireUser } from '@/services/session.server';
+import { tyServer } from '@/services/ty.server';
+import { TAny } from '@/types/any';
+import { OperateTypeEnum, TAuditRecord, TDeployServiceBuild } from '@/types/ty';
+import { getRequestData } from '@/utils/get-request-data';
+import { validateRequestSignature } from '@/utils/signature';
 
 export async function loader() {
   return Response.json({ message: '不支持的请求方法' }, { status: 405 });

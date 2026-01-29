@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { EnumPostStatus } from '~/constants/post';
+import { EnumPostStatus } from '@/constants/post';
 
 // schema: post
 export const schemaPost = z.object({

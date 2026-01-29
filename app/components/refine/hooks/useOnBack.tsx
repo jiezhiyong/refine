@@ -1,6 +1,6 @@
 import { BackFunction, useBack, useResourceParams } from '@refinedev/core';
 
-import { EnumAction } from '~/constants/action';
+import { EnumAction } from '@/constants/action';
 
 export const useOnBack = (): BackFunction | undefined => {
   const back = useBack();

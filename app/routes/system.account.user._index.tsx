@@ -1,27 +1,27 @@
 import { Prisma, User } from '@prisma/client';
 import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
+import { type UseTableReturnType } from '@refinedev/react-table';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
 
-import { PageError } from '~/components/500';
-import { DeleteButton } from '~/components/refine/buttons/delete';
-import { EditButton } from '~/components/refine/buttons/edit';
-import { ExportButton } from '~/components/refine/buttons/export';
-import { TableEasy, TableFilterProps } from '~/components/refine/table';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { Checkbox } from '~/components/ui/checkbox';
-import { EnumAction } from '~/constants/action';
-import { EnumResource } from '~/constants/resource';
-import { EnumRole, rolePriority } from '~/constants/roles';
-import { PROVIDER_LIST } from '~/constants/user';
-import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { dataService } from '~/services/data.server';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { buildTableParams } from '~/utils/request';
+import { PageError } from '@/components/500';
+import { DeleteButton } from '@/components/refine/buttons/delete';
+import { EditButton } from '@/components/refine/buttons/edit';
+import { ExportButton } from '@/components/refine/buttons/export';
+import { TableEasy, TableFilterProps } from '@/components/refine/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { EnumAction } from '@/constants/action';
+import { EnumResource } from '@/constants/resource';
+import { EnumRole, rolePriority } from '@/constants/roles';
+import { PROVIDER_LIST } from '@/constants/user';
+import { dataService } from '@/services/data.server';
+import { getDefaultTitle } from '@/utils/get-default-title';
+import { buildTableParams } from '@/utils/request';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -68,7 +68,7 @@ export default function UserIndex() {
   const { data: deletePermission } = useCan({ resource: EnumResource.user, action: EnumAction.delete });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const rows = table.getSelectedRowModel().rows;
+    const rows = table.reactTable.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
@@ -83,7 +83,7 @@ export default function UserIndex() {
           },
           {
             onSuccess: () => {
-              table.resetRowSelection();
+              table.reactTable.resetRowSelection();
             },
           }
         );

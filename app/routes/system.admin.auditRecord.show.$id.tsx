@@ -5,25 +5,25 @@ import { AlertCircle, Ban, CalendarIcon, CheckCheck, Info, LeafyGreen, Lightbulb
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { PageError } from '~/components/500';
-import { CodeEditor } from '~/components/refine/form/code';
-import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
-import { Label } from '~/components/ui/label';
-import { Textarea } from '~/components/ui/textarea';
-import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
-import { H1 } from '~/components/ui/typography';
-import { EnumAuditChannel } from '~/constants/audit-channel';
-import { AUDIT_STATUS_MAP, EnumAuditStatus } from '~/constants/audit-status';
-import { EnumLogType } from '~/constants/log';
-import { EnumRole } from '~/constants/roles';
-import { AuditProcessor } from '~/services/audit-processor.server';
-import { dataService } from '~/services/data.server';
-import { getUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
-import { deepParse } from '~/utils/deep-parse';
+import { PageError } from '@/components/500';
+import { CodeEditor } from '@/components/refine/form/code';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { H1 } from '@/components/ui/typography';
+import { EnumAuditChannel } from '@/constants/audit-channel';
+import { AUDIT_STATUS_MAP, EnumAuditStatus } from '@/constants/audit-status';
+import { EnumLogType } from '@/constants/log';
+import { EnumRole } from '@/constants/roles';
+import { AuditProcessor } from '@/services/audit-processor.server';
+import { dataService } from '@/services/data.server';
+import { getUser } from '@/services/session.server';
+import { TAny } from '@/types/any';
+import { deepParse } from '@/utils/deep-parse';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { id } = params;

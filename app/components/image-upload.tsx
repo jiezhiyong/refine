@@ -18,8 +18,8 @@
 
 import { ChangeEvent, useState } from 'react';
 
-import { Button } from '~/components/ui/button';
-import { Image } from '~/components/ui/typography';
+import { Button } from '@/components/ui/button';
+import { Image } from '@/components/ui/typography';
 
 interface ImageUploadProps {
   onImageChange: (file: File | null) => void;

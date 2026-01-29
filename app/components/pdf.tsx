@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 
-import { Loader } from '~/components/refine/loader';
-import { TAny } from '~/types/any';
+import { Loader } from '@/components/refine/loader';
+import { TAny } from '@/types/any';
 
 // 使用动态导入隔离PDF渲染器的加载，确保PDF渲染器的代码只在需要时才加载和执行
 // 解决从使用 @monaco-editor/react 的页面导航到使用 @react-pdf/renderer 的页面时的冲突问题（同一个脚本文件中有多个匿名define调用）

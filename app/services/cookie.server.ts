@@ -1,6 +1,6 @@
 import { Theme } from 'remix-themes';
 
-import { LocaleLanguage } from '~/config/i18n';
+import { LocaleLanguage } from '@/config/i18n';
 
 export interface CookiePreferences {
   sidebarClose?: string;

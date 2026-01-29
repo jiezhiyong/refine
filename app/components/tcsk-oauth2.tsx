@@ -1,8 +1,8 @@
 import { useFetcher } from '@remix-run/react';
 import { t } from 'i18next';
 
-import { Button } from '~/components/ui/button';
-import { EnumAuthProvider } from '~/constants/user';
+import { Button } from '@/components/ui/button';
+import { EnumAuthProvider } from '@/constants/user';
 
 export const TcskOAuth2 = ({ redirectTo }: { redirectTo: string }) => {
   const fetcher = useFetcher();

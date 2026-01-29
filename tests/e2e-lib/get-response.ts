@@ -1,6 +1,6 @@
 import { type Page } from '@playwright/test';
 
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 /**
  * 进入指定页面后 获取指定接口的数据

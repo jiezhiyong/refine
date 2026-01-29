@@ -15,6 +15,7 @@ import {
   useResourceParams,
   useUserFriendlyName,
 } from '@refinedev/core';
+import { type UseTableReturnType } from '@refinedev/react-table';
 import { ActionFunctionArgs, data, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useActionData, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import dayjs from 'dayjs';
@@ -24,17 +25,17 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { PermissionDenied } from '~/components/403';
-import { NotFound } from '~/components/404';
-import { PageError } from '~/components/500';
-import { SidebarLayout } from '~/components/layout';
-import { CreateButton } from '~/components/refine/buttons/create';
-import { EditButton } from '~/components/refine/buttons/edit';
-import { ExportButton } from '~/components/refine/buttons/export';
-import { CodeEditor } from '~/components/refine/form/code';
-import { Combobox } from '~/components/refine/form/combobox';
-import { SelectMulti } from '~/components/refine/form/select-multi';
-import { TableEasy, TableFilterProps } from '~/components/refine/table';
+import { PermissionDenied } from '@/components/403';
+import { NotFound } from '@/components/404';
+import { PageError } from '@/components/500';
+import { SidebarLayout } from '@/components/layout';
+import { CreateButton } from '@/components/refine/buttons/create';
+import { EditButton } from '@/components/refine/buttons/edit';
+import { ExportButton } from '@/components/refine/buttons/export';
+import { CodeEditor } from '@/components/refine/form/code';
+import { Combobox } from '@/components/refine/form/combobox';
+import { SelectMulti } from '@/components/refine/form/select-multi';
+import { TableEasy, TableFilterProps } from '@/components/refine/table';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -44,11 +45,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '~/components/ui/alert-dialog';
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
-import { Calendar } from '~/components/ui/calendar';
-import { Checkbox } from '~/components/ui/checkbox';
+} from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -56,31 +57,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '~/components/ui/dialog';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
-import { Input } from '~/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
-import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
-import { Slider } from '~/components/ui/slider';
-import { Switch } from '~/components/ui/switch';
-import { Textarea } from '~/components/ui/textarea';
-import { H2 } from '~/components/ui/typography';
-import { EnumAction } from '~/constants/action';
-import { EnumResource } from '~/constants/resource';
-import { UseTableReturnType } from '~/lib/refinedev-react-table';
-import { cn } from '~/lib/utils';
-import { selectFormFieldTypes } from '~/routes/playground.dashboard.dynamicPage.edit.$id';
-import { dataService } from '~/services/data.server';
-import { getEnhancedDb } from '~/services/db.server';
-import { requireUserSession } from '~/services/session.server';
-import { TAny } from '~/types/any';
-import { TFormFieldItem, TTableRecordLinkItem } from '~/types/dynamic-page';
-import { easyAxios } from '~/utils/axios';
-import { dropEmptyKey } from '~/utils/drop-empty-key';
-import { get } from '~/utils/get';
-import { getChangedValues } from '~/utils/get-changed-values';
-import { parseSql, parseTableFieldArrayFromSql, parseTablenameFromSql } from '~/utils/sql';
-import { schemaJson } from '~/zod';
+} from '@/components/ui/dialog';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { H2 } from '@/components/ui/typography';
+import { EnumAction } from '@/constants/action';
+import { EnumResource } from '@/constants/resource';
+import { cn } from '@/lib/utils';
+import { selectFormFieldTypes } from '@/routes/playground.dashboard.dynamicPage.edit.$id';
+import { dataService } from '@/services/data.server';
+import { getEnhancedDb } from '@/services/db.server';
+import { requireUserSession } from '@/services/session.server';
+import { TAny } from '@/types/any';
+import { TFormFieldItem, TTableRecordLinkItem } from '@/types/dynamic-page';
+import { easyAxios } from '@/utils/axios';
+import { dropEmptyKey } from '@/utils/drop-empty-key';
+import { get } from '@/utils/get';
+import { getChangedValues } from '@/utils/get-changed-values';
+import { parseSql, parseTableFieldArrayFromSql, parseTablenameFromSql } from '@/utils/sql';
+import { schemaJson } from '@/zod';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.config?.title || '配置化CRUD页面' }];
@@ -212,7 +212,7 @@ export default function DynamicPageIndex() {
 
     toast.success(`${type} 操作成功`, { description: 'success' });
     if (type === 'deleteMany') {
-      tableRef.current?.resetRowSelection();
+      tableRef.current?.reactTable.resetRowSelection();
     } else if (['create', 'edit'].includes(type || '')) {
       closeDialog();
     }
@@ -230,7 +230,7 @@ export default function DynamicPageIndex() {
   const [deleteAlertOpen, setDeleteAlertOpen] = useState<boolean>(false);
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const rows = table.getSelectedRowModel().rows;
+    const rows = table.reactTable.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
     return {
       className: 'text-destructive!',

@@ -1,7 +1,7 @@
 import * as LucideIcons from 'lucide-react';
 import { Lightbulb, LucideIcon } from 'lucide-react';
 
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 /**
  * 动态图标组件，根据字符串名称渲染对应的 lucide-react 图标

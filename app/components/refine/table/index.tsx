@@ -1,5 +1,6 @@
 import { PopoverContentProps } from '@radix-ui/react-popover';
 import { BaseOption, BaseRecord, HttpError, useTranslate } from '@refinedev/core';
+import { useTable, UseTableProps, UseTableReturnType } from '@refinedev/react-table';
 import {
   CellContext,
   Column,
@@ -11,11 +12,10 @@ import {
 } from '@tanstack/react-table';
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
 
-import { DeleteProvider } from '~/components/refine/providers/deleteProvider';
-import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as TableUi } from '~/components/ui/table';
-import { DEFAULT_PAGE_SIZE } from '~/config/pagination';
-import { useTable, UseTableProps, UseTableReturnType } from '~/lib/refinedev-react-table';
-import { TAny } from '~/types/any';
+import { DeleteProvider } from '@/components/refine/providers/deleteProvider';
+import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as TableUi } from '@/components/ui/table';
+import { DEFAULT_PAGE_SIZE } from '@/config/pagination';
+import { TAny } from '@/types/any';
 
 import { Loader } from '../loader';
 
@@ -123,16 +123,19 @@ export function TableEasy<
     return [];
   }, [children, mapColumn]);
 
-  const table = useTable({
+  const tableResult = useTable({
     columns,
     refineCoreProps: {
-      initialPageSize: DEFAULT_PAGE_SIZE,
+      pagination: {
+        pageSize: DEFAULT_PAGE_SIZE,
+      },
       ...refineCoreProps,
     },
     ...props,
   });
 
-  const tableOptions = useMemo<TableOptionsResolved<TData>>(() => table.options, [table]);
+  const { reactTable, refineCore } = tableResult;
+  const tableOptions = useMemo<TableOptionsResolved<TData>>(() => reactTable.options, [reactTable]);
 
   const isFilterable = useMemo<boolean>(
     () => Boolean(tableOptions.enableColumnFilters || tableOptions?.enableFilters),
@@ -142,12 +145,12 @@ export function TableEasy<
   return (
     <DeleteProvider>
       <div className="mt-1 space-y-4">
-        <DataTableToolbar table={table} toolbar={toolbar} />
+        <DataTableToolbar table={reactTable} toolbar={toolbar} />
         <div className="border-border rounded-md border">
           <TableUi>
             {showHeader && (
               <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
+                {reactTable.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       const columnDef = header.column.columnDef as CustomColumnDef<TData, TError>;
@@ -175,7 +178,7 @@ export function TableEasy<
               </TableHeader>
             )}
             <TableBody>
-              {table.refineCore.tableQuery.isLoading ? (
+              {refineCore.tableQuery.isLoading ? (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center text-nowrap">
                     <div className="flex flex-row items-center justify-center">
@@ -183,8 +186,8 @@ export function TableEasy<
                     </div>
                   </TableCell>
                 </TableRow>
-              ) : table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row: TAny) => (
+              ) : reactTable.getRowModel().rows?.length ? (
+                reactTable.getRowModel().rows.map((row: TAny) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                     {row.getVisibleCells().map((cell: TAny) => (
                       <TableCell key={cell.id} className="text-nowrap">
@@ -203,7 +206,7 @@ export function TableEasy<
             </TableBody>
           </TableUi>
         </div>
-        <Pagination table={table} />
+        <Pagination table={tableResult} />
       </div>
     </DeleteProvider>
   );

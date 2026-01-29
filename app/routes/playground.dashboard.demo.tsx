@@ -10,10 +10,10 @@ import { useCallback } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-import { PageError } from '~/components/500';
-import { Combobox } from '~/components/refine/form/combobox';
-import { Field } from '~/components/refine/form/field';
-import { SelectEasy } from '~/components/refine/form/select';
+import { PageError } from '@/components/500';
+import { Combobox } from '@/components/refine/form/combobox';
+import { Field } from '@/components/refine/form/field';
+import { SelectEasy } from '@/components/refine/form/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,9 +24,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '~/components/ui/alert-dialog';
-import { Button } from '~/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
@@ -34,7 +34,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from '~/components/ui/chart';
+} from '@/components/ui/chart';
 import {
   Dialog,
   DialogClose,
@@ -44,23 +44,23 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '~/components/ui/dialog';
-import { Form } from '~/components/ui/form';
-import { Input } from '~/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
-import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs';
-import { Textarea } from '~/components/ui/textarea';
-import { H2 } from '~/components/ui/typography';
-import { EnumAction } from '~/constants/action';
-import { EnumPostStatus, POST_STATUS_LIST } from '~/constants/post';
-import { EnumResource } from '~/constants/resource';
-import { cn } from '~/lib/utils';
-import { requireUserSession } from '~/services/session.server';
-import { dropEmptyKey } from '~/utils/drop-empty-key';
-import { getAllParams } from '~/utils/get-all-params';
-import { getChangedValues } from '~/utils/get-changed-values';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { schemaPost, TSchemaPost } from '~/zod';
+} from '@/components/ui/dialog';
+import { Form } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { H2 } from '@/components/ui/typography';
+import { EnumAction } from '@/constants/action';
+import { EnumPostStatus, POST_STATUS_LIST } from '@/constants/post';
+import { EnumResource } from '@/constants/resource';
+import { cn } from '@/lib/utils';
+import { requireUserSession } from '@/services/session.server';
+import { dropEmptyKey } from '@/utils/drop-empty-key';
+import { getAllParams } from '@/utils/get-all-params';
+import { getChangedValues } from '@/utils/get-changed-values';
+import { getDefaultTitle } from '@/utils/get-default-title';
+import { schemaPost, TSchemaPost } from '@/zod';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];

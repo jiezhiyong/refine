@@ -1,13 +1,9 @@
-// TODO: Complete migration from useResource to useResourceParams
-// See: http://localhost:3000/docs/migration-guide/4x-to-5x/#useresource--useresourceparams
 import {
   AccessControlContext,
   CanReturnType,
-  pickNotDeprecated,
   useCan,
   useDelete,
   useMutationMode,
-  useResource,
   useResourceParams,
   useTranslate,
   useWarnAboutChange,
@@ -15,35 +11,34 @@ import {
 import { MutateOptions } from '@tanstack/react-query';
 import { useContext } from 'react';
 
-import { EnumAction } from '~/constants/action';
-import { TAny } from '~/types/any';
+import { EnumAction } from '@/constants/action';
+import { TAny } from '@/types/any';
 
 type DeleteHelperReturnType = CanReturnType & {
-  isLoading: boolean;
+  isPending: boolean;
   mutate: (e?: MutateOptions<unknown, unknown, unknown, unknown>) => DeleteHelperReturnType;
 };
 
-export const useDeleteHelper = (resource: string, recordItemId: string, meta?: TAny): DeleteHelperReturnType => {
+export const useDeleteHelper = (resourceName: string, recordItemId: string, meta?: TAny): DeleteHelperReturnType => {
   const accessControlContext = useContext(AccessControlContext);
 
   const accessControlEnabled = accessControlContext.options.buttons.enableAccessControl;
 
   const translate = useTranslate();
 
-  const id = useResourceParams();
-
-  const { resource: _resource, identifier } = useResource(resource);
+  const { id, resource, identifier } = useResourceParams({ resource: resourceName });
 
   const { mutationMode } = useMutationMode();
 
-  const { mutate, mutation: {
-    isPending
-  } } = useDelete();
+  const {
+    mutate,
+    mutation: { isPending },
+  } = useDelete();
 
   const { data } = useCan({
-    resource: _resource?.name,
+    resource: resource?.name,
     action: EnumAction.delete,
-    params: { id: recordItemId ?? id, resource: _resource },
+    params: { id: recordItemId ?? id, resource },
     queryOptions: {
       enabled: accessControlEnabled,
     },
@@ -68,8 +63,7 @@ export const useDeleteHelper = (resource: string, recordItemId: string, meta?: T
           id: recordItemId ?? id ?? '',
           resource: identifier,
           mutationMode,
-          meta: pickNotDeprecated(meta),
-          metaData: pickNotDeprecated(meta),
+          meta,
         },
         options
       );
@@ -82,6 +76,6 @@ export const useDeleteHelper = (resource: string, recordItemId: string, meta?: T
     can: !(accessControlEnabled && !data?.can),
     reason: reason(),
     mutate: onDeleteMutate,
-    isLoading,
+    isPending,
   };
 };

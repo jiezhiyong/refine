@@ -1,10 +1,10 @@
 import { ActionFunctionArgs } from '@remix-run/node';
 
-import { getEnhancedDb } from '~/services/db.server';
-import { requireUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
-import { validateRequestSignature } from '~/utils/signature';
-import { buildCountSql, buildSql, parseSql } from '~/utils/sql';
+import { getEnhancedDb } from '@/services/db.server';
+import { requireUser } from '@/services/session.server';
+import { TAny } from '@/types/any';
+import { validateRequestSignature } from '@/utils/signature';
+import { buildCountSql, buildSql, parseSql } from '@/utils/sql';
 
 // 查询参数类型
 interface QueryParams {

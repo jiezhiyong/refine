@@ -1,6 +1,6 @@
 // import type { ActionFunction } from '@remix-run/node';
 // import { data } from '@remix-run/node';
-// import { getSocketIO } from '~/services';
+// import { getSocketIO } from '@/services';
 
 // export const action: ActionFunction = async ({ request }) => {
 //   if (request.method !== 'POST') {

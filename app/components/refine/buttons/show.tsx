@@ -2,9 +2,9 @@ import { useShowButton } from '@refinedev/core';
 import { EyeIcon } from 'lucide-react';
 import type { FC } from 'react';
 
-import { ShowButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/utils';
+import { ShowButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export const ShowButton: FC<ShowButtonProps> = ({
   resource: resourceNameFromProps,

@@ -2,7 +2,7 @@ import { RemixBrowser } from '@remix-run/react';
 import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 
-import { initSentry } from '~/clients/sentry.client';
+import { initSentry } from '@/clients/sentry.client';
 
 /** 初始化客户端 Sentry */
 initSentry();

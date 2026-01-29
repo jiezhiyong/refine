@@ -1,11 +1,11 @@
 import { DataProvider } from '@refinedev/core';
 import { serialize } from 'superjson';
 
-import { apiBase } from '~/config/base-url';
-import { TAny } from '~/types/any';
-import { easyAxios } from '~/utils/axios';
-import { buildTableParams } from '~/utils/request';
-import { addMetaToParams, handleResponse, serializeToRequestBody, serializeToUrlParams } from '~/utils/superjson';
+import { apiBase } from '@/config/base-url';
+import { TAny } from '@/types/any';
+import { easyAxios } from '@/utils/axios';
+import { buildTableParams } from '@/utils/request';
+import { addMetaToParams, handleResponse, serializeToRequestBody, serializeToUrlParams } from '@/utils/superjson';
 
 /**
  * 处理 GET 请求

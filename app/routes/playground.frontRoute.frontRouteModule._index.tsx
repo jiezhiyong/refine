@@ -1,5 +1,6 @@
 import { FrontRouteModule, Prisma } from '@prisma/client';
 import { BaseRecord, HttpError, useCan, useModal, useUserFriendlyName } from '@refinedev/core';
+import { type UseTableReturnType } from '@refinedev/react-table';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData, useNavigate } from '@remix-run/react';
@@ -7,29 +8,28 @@ import dayjs from 'dayjs';
 import { Clock, EyeIcon } from 'lucide-react';
 import { useCallback, useRef } from 'react';
 
-import { PageError } from '~/components/500';
-import { CreateButton } from '~/components/refine/buttons/create';
-import { DeleteButton } from '~/components/refine/buttons/delete';
-import { EditButton } from '~/components/refine/buttons/edit';
-import { ExportButton } from '~/components/refine/buttons/export';
-import { ListButton } from '~/components/refine/buttons/list';
-import { TableEasy, TableFilterProps } from '~/components/refine/table';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
-import { Checkbox } from '~/components/ui/checkbox';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
-import { EnumAction } from '~/constants/action';
-import { EnumResource } from '~/constants/resource';
-import { EnumRole } from '~/constants/roles';
-import { type UseTableReturnType } from '~/lib/refinedev-react-table';
+import { PageError } from '@/components/500';
+import { CreateButton } from '@/components/refine/buttons/create';
+import { DeleteButton } from '@/components/refine/buttons/delete';
+import { EditButton } from '@/components/refine/buttons/edit';
+import { ExportButton } from '@/components/refine/buttons/export';
+import { ListButton } from '@/components/refine/buttons/list';
+import { TableEasy, TableFilterProps } from '@/components/refine/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { EnumAction } from '@/constants/action';
+import { EnumResource } from '@/constants/resource';
+import { EnumRole } from '@/constants/roles';
 import {
   FrontRouteModuleDeleteFormModal,
   TFrontRouteModuleDeleteRecord,
-} from '~/routes/playground.frontRoute.frontRouteModule.edit.$id';
-import { dataService } from '~/services/data.server';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { buildTableParams } from '~/utils/request';
+} from '@/routes/playground.frontRoute.frontRouteModule.edit.$id';
+import { dataService } from '@/services/data.server';
+import { getDefaultTitle } from '@/utils/get-default-title';
+import { buildTableParams } from '@/utils/request';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -69,7 +69,7 @@ export default function FrontRouteModuleIndex() {
   const { data: deletePermission } = useCan({ resource: EnumResource.frontRouteProject, action: EnumAction.delete });
 
   const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const rows = table.getSelectedRowModel().rows;
+    const rows = table.reactTable.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
@@ -93,7 +93,7 @@ export default function FrontRouteModuleIndex() {
       <FrontRouteModuleDeleteFormModal
         {...useModalReturn}
         records={recordsRef.current}
-        tableResetRowSelection={tableRef.current?.resetRowSelection}
+        tableResetRowSelection={() => tableRef.current?.reactTable.resetRowSelection()}
       />
       <TableEasy
         enableSorting

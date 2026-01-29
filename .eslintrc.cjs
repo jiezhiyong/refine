@@ -71,7 +71,7 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'off',
       },
       settings: {
-        'import/internal-regex': '^~/',
+        'import/internal-regex': '^@/',
         'import/resolver': {
           node: { extensions: ['.ts', '.tsx'] },
           typescript: { alwaysTryTypes: true },

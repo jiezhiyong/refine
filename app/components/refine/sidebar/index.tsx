@@ -1,11 +1,10 @@
-import { useMenu, useResourceParams } from '@refinedev/core';
+import { TreeMenuItem, useMenu, useResourceParams } from '@refinedev/core';
 import { Link } from '@remix-run/react';
 import { t } from 'i18next';
 import { ChevronRight } from 'lucide-react';
-import { TreeMenuItem } from 'node_modules/@refinedev/core/dist/hooks/menu/useMenu';
 
-import { DynamicIcon } from '~/components/dynamic-icon';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components/ui/collapsible';
+import { DynamicIcon } from '@/components/dynamic-icon';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -15,8 +14,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from '~/components/ui/sidebar';
-import { cn } from '~/lib/utils';
+} from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
 
 export function SidebarEasy() {
   const { menuItems, selectedKey, defaultOpenKeys } = useMenu();
@@ -37,7 +36,7 @@ export function SidebarEasy() {
 
   return menuItems.map((menus_1, index) => (
     // <CanAccess key={menus_1.key} resource={menus_1.name} action="list">
-    (<SidebarGroup key={index}>
+    <SidebarGroup key={index}>
       <SidebarGroupLabel>{menus_1.meta?.label || t(`menus.${menus_1.name}`, menus_1.name)}</SidebarGroupLabel>
       <SidebarMenu>
         {menus_1.children.map((menus_2, idx) => {
@@ -92,7 +91,7 @@ export function SidebarEasy() {
           );
         })}
       </SidebarMenu>
-    </SidebarGroup>)
+    </SidebarGroup>
     // </CanAccess>
   ));
 }

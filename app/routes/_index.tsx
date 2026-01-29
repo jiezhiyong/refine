@@ -1,6 +1,6 @@
 import { redirect } from '@remix-run/node';
 
-import { getDashboardResource } from '~/config/resources';
+import { getDashboardResource } from '@/config/resources';
 
 export async function loader() {
   const dashboardResource = getDashboardResource();

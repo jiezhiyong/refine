@@ -7,8 +7,8 @@ import * as Sentry from '@sentry/remix';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 
-import { initSentry } from '~/services/sentry.server';
-import { TAny } from '~/types/any';
+import { initSentry } from '@/services/sentry.server';
+import { TAny } from '@/types/any';
 
 /** 初始化服务端 Sentry */
 // 使用立即执行的异步函数来处理可选的 profiling 集成加载

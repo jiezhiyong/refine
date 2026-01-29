@@ -1,4 +1,4 @@
-import { EnumResource } from '~/constants/resource';
+import { EnumResource } from '@/constants/resource';
 
 export const menus = [
   // 一级菜单 playground

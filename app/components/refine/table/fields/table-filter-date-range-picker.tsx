@@ -4,12 +4,12 @@ import { FilterIcon, FilterX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
-import { Calendar } from '~/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
-import { Separator } from '~/components/ui/separator';
-import { cn } from '~/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 import type { TableFilterProps } from '..';
 

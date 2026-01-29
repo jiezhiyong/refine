@@ -1,11 +1,11 @@
 import { type ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 
-import { dataService, isValidDataServiceAction } from '~/services/data.server';
-import { isPrismaModel } from '~/services/db.server';
-import { requireUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
-import { validateRequestSignature } from '~/utils/signature';
-import { getBodyFromRequest, getQueryParamsFromRequest, serializeResponse } from '~/utils/superjson';
+import { dataService, isValidDataServiceAction } from '@/services/data.server';
+import { isPrismaModel } from '@/services/db.server';
+import { requireUser } from '@/services/session.server';
+import { TAny } from '@/types/any';
+import { validateRequestSignature } from '@/utils/signature';
+import { getBodyFromRequest, getQueryParamsFromRequest, serializeResponse } from '@/utils/superjson';
 
 /**
  * 数据服务通用方法类型

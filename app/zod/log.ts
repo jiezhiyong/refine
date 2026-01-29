@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { EnumLogType } from '~/constants/log';
+import { EnumLogType } from '@/constants/log';
 
 // schema: log
 export const schemaLog = z.object({

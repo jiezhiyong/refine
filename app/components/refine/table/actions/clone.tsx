@@ -1,8 +1,8 @@
 import { t } from 'i18next';
 import { CopyCheck } from 'lucide-react';
 
-import { useGetCloneUrl } from '~/components/refine/hooks/useGetCloneUrl';
-import { TAny } from '~/types/any';
+import { useGetCloneUrl } from '@/components/refine/hooks/useGetCloneUrl';
+import { TAny } from '@/types/any';
 
 import type { RowActionProps } from '.';
 import { RowAction } from '.';

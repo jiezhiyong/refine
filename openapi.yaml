@@ -3232,6 +3232,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     UserUpdateArgs:
@@ -3420,6 +3432,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     RoleUpdateArgs:
@@ -3608,6 +3632,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     UserRoleUpdateArgs:
@@ -3796,6 +3832,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     PostUpdateArgs:
@@ -3992,6 +4040,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     CategoryUpdateArgs:
@@ -4172,6 +4232,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     CasbinRuleUpdateArgs:
@@ -4354,6 +4426,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     FrontRouteProjectUpdateArgs:
@@ -4542,6 +4626,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     FrontRouteModuleUpdateArgs:
@@ -4730,6 +4826,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     AuditRecordUpdateArgs:
@@ -4918,6 +5026,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     LogUpdateArgs:
@@ -5098,6 +5218,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     MenuUpdateArgs:
@@ -5280,6 +5412,18 @@ components:
           $ref: "#/components/schemas/_AnyObject"
         where:
           $ref: "#/components/schemas/_AnyObject"
+        orderBy:
+          oneOf:
+            - $ref: "#/components/schemas/_AnyObject"
+            - type: array
+              items:
+                $ref: "#/components/schemas/_AnyObject"
+        cursor:
+          $ref: "#/components/schemas/_AnyObject"
+        take:
+          type: integer
+        skip:
+          type: integer
         meta:
           $ref: "#/components/schemas/_Meta"
     DynamicPageUpdateArgs:

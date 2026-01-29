@@ -24,16 +24,16 @@ import nProgressStyles from 'nprogress/nprogress.css?url';
 import { type PropsWithChildren, useEffect } from 'react';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 
-import { NotFound } from '~/components/404';
-import { PageError } from '~/components/500';
-import { RefineKbarCustom } from '~/components/refine/kbar';
-import { Toaster } from '~/components/ui/sonner';
-import { fallbackLanguage, LocaleLanguage } from '~/config/i18n';
-import { defaultDashboardResource, setDataResources } from '~/config/resources';
-import { TRole } from '~/constants/roles';
-import { liveProvider } from '~/lib/refinedev-ably';
-import { RefineKbarProvider } from '~/lib/refinedev-kbar';
-import { cn } from '~/lib/utils';
+import { NotFound } from '@/components/404';
+import { PageError } from '@/components/500';
+import { RefineKbarCustom } from '@/components/refine/kbar';
+import { Toaster } from '@/components/ui/sonner';
+import { fallbackLanguage, LocaleLanguage } from '@/config/i18n';
+import { defaultDashboardResource, setDataResources } from '@/config/resources';
+import { TRole } from '@/constants/roles';
+import { liveProvider } from '@/lib/refinedev-ably';
+import { RefineKbarProvider } from '@/lib/refinedev-kbar';
+import { cn } from '@/lib/utils';
 import {
   ablyClient,
   accessControlProvider,
@@ -43,15 +43,15 @@ import {
   i18nProvider,
   notificationProvider,
   syncServiceLocaleToClient,
-} from '~/providers';
-import { getPermissions } from '~/services/casbin-permission.server';
-import { getPreferencesCookie } from '~/services/cookie.server';
-import { getRefineMenusResources } from '~/services/menu';
-import { getUser } from '~/services/session.server';
-import baseStyles from '~/styles/base.css?url';
-import tailwindStyles from '~/styles/tailwind.css?url';
-import { PermissionRule } from '~/types/casbin';
-import { generateSignature } from '~/utils/signature';
+} from '@/providers';
+import { getPermissions } from '@/services/casbin-permission.server';
+import { getPreferencesCookie } from '@/services/cookie.server';
+import { getRefineMenusResources } from '@/services/menu';
+import { getUser } from '@/services/session.server';
+import baseStyles from '@/styles/base.css?url';
+import tailwindStyles from '@/styles/tailwind.css?url';
+import { PermissionRule } from '@/types/casbin';
+import { generateSignature } from '@/utils/signature';
 
 /** 元数据 */
 export const meta: MetaFunction = () => [

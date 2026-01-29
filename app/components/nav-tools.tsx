@@ -1,12 +1,12 @@
 import { useMatches, useSearchParams } from '@remix-run/react';
 import { Filter, FilterX, Search } from 'lucide-react';
 
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
-import { Separator } from '~/components/ui/separator';
-import { useKBar } from '~/lib/refinedev-kbar';
-import { cn } from '~/lib/utils';
-import { HandleFunction } from '~/types/handle';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { useKBar } from '@/lib/refinedev-kbar';
+import { cn } from '@/lib/utils';
+import { HandleFunction } from '@/types/handle';
 
 import { FullscreenSwitcher } from './switcher-fullscreen';
 import { LanguageSwitcher } from './switcher-language';

@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client';
 import { LoaderFunctionArgs } from '@remix-run/node';
 
-import { checkPermission } from '~/services/casbin-permission.server';
-import { db } from '~/services/db.server';
-import { requireUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
-import { validateRequestSignature } from '~/utils/signature';
+import { checkPermission } from '@/services/casbin-permission.server';
+import { db } from '@/services/db.server';
+import { requireUser } from '@/services/session.server';
+import { TAny } from '@/types/any';
+import { validateRequestSignature } from '@/utils/signature';
 
 // 处理图表数据聚合查询
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -167,7 +167,7 @@ async function executeAggregationQuery(
 
   // 执行查询
   const results = await db.$queryRaw`
-    SELECT 
+    SELECT
       DATE("createdAt") as date,
       ${Prisma.join(selectFields, ', ')}
     FROM "${Prisma.raw(resource)}"

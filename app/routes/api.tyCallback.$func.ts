@@ -3,13 +3,13 @@ import { MetaQuery } from '@refinedev/core';
 import { ActionFunctionArgs } from '@remix-run/node';
 import { pick } from 'es-toolkit';
 
-import { EnumAuditStatus } from '~/constants/audit-status';
-import { EnumLogType } from '~/constants/log';
-import { db, isPrismaModel } from '~/services/db.server';
-import { TAny } from '~/types/any';
-import { OperateTypeEnum, TConfigParam, TConfigType, TContentJsonObject } from '~/types/ty';
-import { getRequestData } from '~/utils/get-request-data';
-import { handlePrismaError } from '~/utils/prisma-error-handler';
+import { EnumAuditStatus } from '@/constants/audit-status';
+import { EnumLogType } from '@/constants/log';
+import { db, isPrismaModel } from '@/services/db.server';
+import { TAny } from '@/types/any';
+import { OperateTypeEnum, TConfigParam, TConfigType, TContentJsonObject } from '@/types/ty';
+import { getRequestData } from '@/utils/get-request-data';
+import { handlePrismaError } from '@/utils/prisma-error-handler';
 
 type TFunc = 'queryOldData' | 'execute';
 type TEntity = FrontRouteProject | FrontRouteModule;

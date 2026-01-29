@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/remix';
 import { newEnforcer } from 'casbin';
 import { PrismaAdapter } from 'casbin-prisma-adapter';
 
-import { db } from '~/services/db.server';
+import { db } from '@/services/db.server';
 
 import { MODEL } from './casbin-rules.server';
 

@@ -3,8 +3,8 @@ import { useLocation, useMatches } from '@remix-run/react';
 import * as Sentry from '@sentry/remix';
 import { useEffect } from 'react';
 
-import { baseUrl } from '~/config/base-url';
-import { TAny } from '~/types/any';
+import { baseUrl } from '@/config/base-url';
+import { TAny } from '@/types/any';
 
 let isInitialized = false;
 

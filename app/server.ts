@@ -3,7 +3,7 @@
 // import { broadcastDevReady, createRequestHandler } from '@remix-run/node';
 // import type { AppLoadContext, ServerBuild } from '@remix-run/node';
 
-// import { initSocketIO } from '~/services/socket.server';
+// import { initSocketIO } from '@/services/socket.server';
 
 // // HTTP 服务器实例
 // let _httpServer: ReturnType<typeof createServer>;

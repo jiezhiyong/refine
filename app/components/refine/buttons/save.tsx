@@ -2,8 +2,8 @@ import { useCan, useSaveButton } from '@refinedev/core';
 import { CheckCheck } from 'lucide-react';
 import type { FC } from 'react';
 
-import { SaveButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
+import { SaveButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
 
 export const SaveButton: FC<SaveButtonProps> = ({
   hideText = false,

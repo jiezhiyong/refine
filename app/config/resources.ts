@@ -2,14 +2,14 @@
 
 import { ResourceProps } from '@refinedev/core';
 
-import { TAny } from '~/types/any';
-import { canUseDOM } from '~/utils/can-use-dom';
+import { TAny } from '@/types/any';
+import { canUseDOM } from '@/utils/can-use-dom';
 
 // import { ResourceProps } from '@refinedev/core';
 // import { Bot, Brain, PieChart, Route, UsersRound } from 'lucide-react';
 
-// import { EnumResource } from '~/constants/resource';
-// import { TAny } from '~/types/any';
+// import { EnumResource } from '@/constants/resource';
+// import { TAny } from '@/types/any';
 
 // // icons - https://lucide.dev/icons/
 // export const dataResources: ResourceProps[] = [

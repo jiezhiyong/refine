@@ -15,15 +15,15 @@ import { t } from 'i18next';
 import { ChevronDown, ChevronRight, GripVertical, Pencil, Trash2 } from 'lucide-react';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { DynamicIcon } from '~/components/dynamic-icon';
-import { Button } from '~/components/ui/button';
-import { Card, CardHeader } from '~/components/ui/card';
-import { Switch } from '~/components/ui/switch';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
-import { cannotDisableMenus } from '~/config/resources';
-import { EnumAction } from '~/constants/action';
-import { EnumResource } from '~/constants/resource';
-import { cn } from '~/lib/utils';
+import { DynamicIcon } from '@/components/dynamic-icon';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cannotDisableMenus } from '@/config/resources';
+import { EnumAction } from '@/constants/action';
+import { EnumResource } from '@/constants/resource';
+import { cn } from '@/lib/utils';
 
 // 菜单项类型定义
 export interface MenuTreeItem {

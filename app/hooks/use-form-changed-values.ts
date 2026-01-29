@@ -1,8 +1,8 @@
 import { useCallback, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
-import { TAny } from '~/types/any';
-import { getChangedValues as getChangedValuesUtil } from '~/utils/get-changed-values';
+import { TAny } from '@/types/any';
+import { getChangedValues as getChangedValuesUtil } from '@/utils/get-changed-values';
 
 /**
  * 自定义钩子，用于获取表单中变更的值

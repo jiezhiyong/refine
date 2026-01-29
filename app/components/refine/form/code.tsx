@@ -4,10 +4,10 @@ import { editor } from 'monaco-editor';
 import { useEffect, useRef, useState } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 
-import { Button } from '~/components/ui/button';
-import { baseUrl } from '~/config/base-url';
-import { cn } from '~/lib/utils';
-import { TAny } from '~/types/any';
+import { Button } from '@/components/ui/button';
+import { baseUrl } from '@/config/base-url';
+import { cn } from '@/lib/utils';
+import { TAny } from '@/types/any';
 
 type TEditorProps = EditorProps & DiffEditorProps;
 type TCodeProps<TFieldValues extends FieldValues = FieldValues> = TEditorProps & {

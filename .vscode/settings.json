@@ -62,4 +62,7 @@
   "[zmodel]": {
     "editor.defaultFormatter": "zenstack.zenstack"
   },
+  "[zmodel-v3]": {
+    "editor.defaultFormatter": "zenstack.zenstack-v3"
+  },
 }

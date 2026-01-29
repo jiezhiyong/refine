@@ -1,8 +1,8 @@
 import { AuditRecord, AuditStatus, LogAction } from '@prisma/client';
 import { BaseOption } from '@refinedev/core';
 
-import { updateUserRoles } from '~/services/user.server';
-import { TAny } from '~/types/any';
+import { updateUserRoles } from '@/services/user.server';
+import { TAny } from '@/types/any';
 
 import { db, isPrismaModel } from './db.server';
 

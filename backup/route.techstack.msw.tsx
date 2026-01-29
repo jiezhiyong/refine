@@ -1,9 +1,9 @@
 // import { useState } from 'react';
 // import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 // import { useLoaderData } from '@remix-run/react';
-// import { Button } from '~/components-shadcn/button';
-// import { getDefaultTitle } from '~/utils/get-default-title';
-// import { PageError} from '~/components/500';
+// import { Button } from '@/components-shadcn/button';
+// import { getDefaultTitle } from '@/utils/get-default-title';
+// import { PageError} from '@/components/500';
 
 // // 元数据
 // export const meta: MetaFunction = ({ matches }) => {

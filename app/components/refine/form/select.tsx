@@ -2,8 +2,8 @@ import type { Content as SelectContentType, SelectProps as SelectCoreProps } fro
 import { BaseOption } from '@refinedev/core';
 import React from 'react';
 
-import { FormControl } from '~/components/ui/form';
-import { SelectContent, SelectItem, SelectTrigger, Select as SelectUI, SelectValue } from '~/components/ui/select';
+import { FormControl } from '@/components/ui/form';
+import { SelectContent, SelectItem, SelectTrigger, Select as SelectUI, SelectValue } from '@/components/ui/select';
 
 type SelectProps = React.ComponentProps<typeof SelectContentType> &
   SelectCoreProps & {

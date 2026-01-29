@@ -3,16 +3,16 @@ import { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { CalendarIcon, LeafyGreen } from 'lucide-react';
 
-import { PageError } from '~/components/500';
-import { CodeEditor } from '~/components/refine/form/code';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { Label } from '~/components/ui/label';
-import { H1 } from '~/components/ui/typography';
-import { EnumLogType, LOG_STATUS_MAP } from '~/constants/log';
-import { dataService } from '~/services/data.server';
-import { TAny } from '~/types/any';
-import { deepParse } from '~/utils/deep-parse';
+import { PageError } from '@/components/500';
+import { CodeEditor } from '@/components/refine/form/code';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import { H1 } from '@/components/ui/typography';
+import { EnumLogType, LOG_STATUS_MAP } from '@/constants/log';
+import { dataService } from '@/services/data.server';
+import { TAny } from '@/types/any';
+import { deepParse } from '@/utils/deep-parse';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { id } = params;

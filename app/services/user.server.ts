@@ -1,9 +1,9 @@
 import type { AuthProvider, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-import { EnumRole, rolePriority } from '~/constants/roles';
-import { db } from '~/services/db.server';
-import { TAny } from '~/types/any';
+import { EnumRole, rolePriority } from '@/constants/roles';
+import { db } from '@/services/db.server';
+import { TAny } from '@/types/any';
 
 /** 根据 ID 获取用户 */
 export async function getUserById(id: User['id']) {

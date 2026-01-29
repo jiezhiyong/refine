@@ -1,4 +1,4 @@
-import type { Menu, MenuTreeItem } from '~/types/menu';
+import type { Menu, MenuTreeItem } from '@/types/menu';
 
 /**
  * 构建菜单树
