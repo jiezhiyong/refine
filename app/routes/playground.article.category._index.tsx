@@ -1,6 +1,5 @@
 import { Category, Prisma } from '@prisma/client';
-import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
-import { type UseTableReturnType } from '@refinedev/react-table';
+import { BaseRecord, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
@@ -19,6 +18,7 @@ import { EnumRole } from '@/constants/roles';
 import { dataService } from '@/services/data.server';
 import { getDefaultTitle } from '@/utils/get-default-title';
 import { buildTableParams } from '@/utils/request';
+import { Table } from '@tanstack/react-table';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -43,8 +43,8 @@ export default function CategoryIndex() {
   const { mutate: deleteMany } = useDeleteMany();
   const { data: deletePermission } = useCan({ resource: EnumResource.category, action: EnumAction.delete });
 
-  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const rows = table.reactTable.getSelectedRowModel().rows;
+  const bulkDeleteAction = (table: Table<BaseRecord>) => {
+    const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
@@ -59,7 +59,7 @@ export default function CategoryIndex() {
           },
           {
             onSuccess: () => {
-              table.reactTable.resetRowSelection();
+              table.resetRowSelection();
             },
           }
         );

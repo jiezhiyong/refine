@@ -1,6 +1,5 @@
 import { Post, Prisma } from '@prisma/client';
-import { BaseRecord, HttpError, useCan, useDeleteMany, useModal, useUserFriendlyName } from '@refinedev/core';
-import { type UseTableReturnType } from '@refinedev/react-table';
+import { BaseRecord, useCan, useDeleteMany, useModal, useUserFriendlyName } from '@refinedev/core';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
@@ -29,6 +28,7 @@ import { TAny } from '@/types/any';
 import { HandleFunction } from '@/types/handle';
 import { getDefaultTitle } from '@/utils/get-default-title';
 import { buildTableParams } from '@/utils/request';
+import { Table } from '@tanstack/react-table';
 
 // 自定义获取的数据类型声明
 type PostRecord = Post & { user: { name: string; avatar: string } & { category: { title: string } } };
@@ -75,8 +75,8 @@ export default function PostIndex() {
   const useModalReturn2 = useModal();
   const friendly = useUserFriendlyName();
 
-  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const rows = table.reactTable.getSelectedRowModel().rows;
+  const bulkDeleteAction = (table: Table<BaseRecord>) => {
+    const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
@@ -91,7 +91,7 @@ export default function PostIndex() {
           },
           {
             onSuccess: () => {
-              table.reactTable.resetRowSelection();
+              table.resetRowSelection();
             },
           }
         );

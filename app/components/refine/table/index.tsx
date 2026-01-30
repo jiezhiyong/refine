@@ -1,6 +1,6 @@
 import { PopoverContentProps } from '@radix-ui/react-popover';
 import { BaseOption, BaseRecord, HttpError, useTranslate } from '@refinedev/core';
-import { useTable, UseTableProps, UseTableReturnType } from '@refinedev/react-table';
+import { useTable, UseTableProps } from '@refinedev/react-table';
 import {
   CellContext,
   Column,
@@ -8,6 +8,7 @@ import {
   ColumnDefTemplate,
   ColumnMeta,
   flexRender,
+  Table,
   TableOptionsResolved,
 } from '@tanstack/react-table';
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
@@ -43,11 +44,7 @@ export type TableFilterProps<TData extends BaseRecord = BaseRecord> = {
   options?: TableListFilterOption[];
 };
 
-export type ColumnProps<
-  TData extends BaseRecord = BaseRecord,
-  TValue = unknown,
-  TError extends HttpError = HttpError,
-> = {
+export type ColumnProps<TData extends BaseRecord = BaseRecord, TValue = unknown> = {
   id: string;
   accessorKey: string;
   enableSorting?: boolean;
@@ -55,7 +52,7 @@ export type ColumnProps<
   header?:
     | string
     | FC<{
-        table: UseTableReturnType<TData, TError>;
+        table: Table<TData>;
       }>;
   cell?: ColumnDefTemplate<CellContext<TData, TValue>>;
   children?: ReactElement<TAny>;

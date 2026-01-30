@@ -1,6 +1,5 @@
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
-import { BaseRecord, HttpError, useTranslate } from '@refinedev/core';
-import { type UseTableReturnType } from '@refinedev/react-table';
+import { BaseRecord, useTranslate } from '@refinedev/core';
 import { FC, PropsWithChildren } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -14,10 +13,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { Table } from '@tanstack/react-table';
 
 type CheckAllProps = React.ComponentProps<typeof Checkbox> &
   PropsWithChildren<{
-    table: UseTableReturnType<BaseRecord, HttpError>;
+    table: Table<BaseRecord>;
     options?: {
       disabled?: boolean;
       label: string;
@@ -28,16 +28,15 @@ type CheckAllProps = React.ComponentProps<typeof Checkbox> &
 
 export const CheckAll: FC<CheckAllProps> = ({ table, children, options }: CheckAllProps) => {
   const t = useTranslate();
-  const { reactTable } = table;
 
-  const isSomeSelected = reactTable.getIsSomeRowsSelected();
-  const isAllSelected = reactTable.getIsAllPageRowsSelected();
+  const isSomeSelected = table.getIsSomeRowsSelected();
+  const isAllSelected = table.getIsAllPageRowsSelected();
 
   return (
     <>
       <Checkbox
         checked={isSomeSelected ? 'indeterminate' : isAllSelected}
-        onCheckedChange={(value) => reactTable.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         className="ml-2"
         aria-label={t('Select all')}
       />

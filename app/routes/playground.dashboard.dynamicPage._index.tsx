@@ -1,6 +1,5 @@
 import { DynamicPage } from '@prisma/client';
-import { BaseRecord, HttpError, useCan, useDeleteMany, useModal, useUserFriendlyName } from '@refinedev/core';
-import { type UseTableReturnType } from '@refinedev/react-table';
+import { BaseRecord, useCan, useDeleteMany, useModal, useUserFriendlyName } from '@refinedev/core';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData, useNavigate } from '@remix-run/react';
@@ -25,6 +24,7 @@ import { EnumResource } from '@/constants/resource';
 import { dataService } from '@/services/data.server';
 import { getDefaultTitle } from '@/utils/get-default-title';
 import { buildTableParams } from '@/utils/request';
+import { Table } from '@tanstack/react-table';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -53,8 +53,8 @@ export default function DynamicPageIndex() {
 
   const { data: deletePermission } = useCan({ resource: EnumResource.dynamicPage, action: EnumAction.delete });
 
-  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const rows = table.reactTable.getSelectedRowModel().rows;
+  const bulkDeleteAction = (table: Table<BaseRecord>) => {
+    const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 
     return {
@@ -69,7 +69,7 @@ export default function DynamicPageIndex() {
           },
           {
             onSuccess: () => {
-              table.reactTable.resetRowSelection();
+              table.resetRowSelection();
             },
           }
         );

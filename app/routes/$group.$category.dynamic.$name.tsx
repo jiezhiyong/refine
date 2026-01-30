@@ -9,13 +9,11 @@ import {
   BaseRecord,
   CanAccess,
   FormAction,
-  HttpError,
   useCan,
   useModal,
   useResourceParams,
   useUserFriendlyName,
 } from '@refinedev/core';
-import { type UseTableReturnType } from '@refinedev/react-table';
 import { ActionFunctionArgs, data, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useActionData, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import dayjs from 'dayjs';
@@ -81,6 +79,7 @@ import { get } from '@/utils/get';
 import { getChangedValues } from '@/utils/get-changed-values';
 import { parseSql, parseTableFieldArrayFromSql, parseTablenameFromSql } from '@/utils/sql';
 import { schemaJson } from '@/zod';
+import { Table } from '@tanstack/react-table';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.config?.title || '配置化CRUD页面' }];
@@ -212,7 +211,7 @@ export default function DynamicPageIndex() {
 
     toast.success(`${type} 操作成功`, { description: 'success' });
     if (type === 'deleteMany') {
-      tableRef.current?.reactTable.resetRowSelection();
+      tableRef.current?.resetRowSelection();
     } else if (['create', 'edit'].includes(type || '')) {
       closeDialog();
     }
@@ -224,13 +223,13 @@ export default function DynamicPageIndex() {
 
   const recordRef = useRef<TAny>(undefined);
   const actionRef = useRef<FormAction>(undefined);
-  const tableRef = useRef<UseTableReturnType<BaseRecord, HttpError>>(undefined);
+  const tableRef = useRef<Table<BaseRecord>>(undefined);
 
   // 删除确认对话框
   const [deleteAlertOpen, setDeleteAlertOpen] = useState<boolean>(false);
 
-  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
-    const rows = table.reactTable.getSelectedRowModel().rows;
+  const bulkDeleteAction = (table: Table<BaseRecord>) => {
+    const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
     return {
       className: 'text-destructive!',
