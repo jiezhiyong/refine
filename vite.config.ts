@@ -1,7 +1,7 @@
 // import * as fs from 'fs';
 
 import { vitePlugin as remix } from '@remix-run/dev';
-import { sentryVitePlugin } from '@sentry/vite-plugin';
+// import { sentryVitePlugin } from '@sentry/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import { vercelPreset } from '@vercel/remix/vite';
 import { visualizer } from 'rollup-plugin-visualizer';

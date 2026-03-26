@@ -3,7 +3,7 @@ import { Link } from '@remix-run/react';
 
 import { Button } from '~/components/ui/button';
 
-export function NotFound({ message }: { message?: string }) {
+export function NotFound({ message: _ }: { message?: string }) {
   const back = useBack();
 
   return (

@@ -32,13 +32,13 @@ enum AuthProvider {
 // 用户、角色、权限
 // ========================
 model User extends Base {
-  email              String              @unique @email @endsWith('@ly.com')
+  email              String              @unique @email
   name               String              @length(min: 8, max: 32)
   avatar             String?             @url
   provider           AuthProvider        @default(USER_PASS)
   roles              UserRole[]          // 注意：用户拥有的所有角色列表, 当前系统支持一个用户可以分配多个角色
   role               String?             // 注意：用户当前切换的角色，只有用户登录后或者切换角色时才会被赋值 => session.server.ts/getUser, 只用于类型提示
-  password           String?             @length(min: 8, max: 32) @password
+  password           String?             @length(min: 8, max: 128) @password
   posts              Post[]              @relation("PostOperator")
   frontRouteProjects FrontRouteProject[] @relation("FrontRouteProjectOperator")
   frontRouteModules  FrontRouteModule[]  @relation("FrontRouteModuleOperator")

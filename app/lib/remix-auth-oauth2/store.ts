@@ -99,10 +99,13 @@ export class StateStore {
 
     const params = new URLSearchParams();
 
-    for (const name of cookie.names()) {
+    for (const name of cookie.names) {
       if (name.startsWith(cookieName)) {
-        for (const [key, value] of new URLSearchParams(cookie.get(name))) {
-          params.append(key, value);
+        const cookieValue = cookie.get(name);
+        if (cookieValue) {
+          for (const [key, value] of new URLSearchParams(cookieValue)) {
+            params.append(key, value);
+          }
         }
       }
     }
