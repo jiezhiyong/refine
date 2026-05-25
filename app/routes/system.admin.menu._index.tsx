@@ -6,9 +6,9 @@ import { Plus } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-import { MenuDialog } from '~/components/menu/menu-dialog';
-import { MenuTree, type MenuTreeItem } from '~/components/menu/menu-tree';
-import { Loader } from '~/components/refine/loader';
+import { MenuDialog } from '@/components/menu/menu-dialog';
+import { MenuTree, type MenuTreeItem } from '@/components/menu/menu-tree';
+import { Loader } from '@/components/refine/loader';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,13 +18,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '~/components/ui/alert-dialog';
-import { Button } from '~/components/ui/button';
-import { H2 } from '~/components/ui/typography';
-import { EnumAction } from '~/constants/action';
-import { EnumResource } from '~/constants/resource';
-import { createMenu, deleteMenu, getMenus, updateMenu, updateMenuOrder, updateMenuParent } from '~/services/menu';
-import type { Menu, MenuCreateUpdate, MenuOrderUpdate, MenuParentUpdate } from '~/types/menu';
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { H2 } from '@/components/ui/typography';
+import { EnumAction } from '@/constants/action';
+import { EnumResource } from '@/constants/resource';
+import { createMenu, deleteMenu, getMenus, updateMenu, updateMenuOrder, updateMenuParent } from '@/services/menu';
+import type { Menu, MenuCreateUpdate, MenuOrderUpdate, MenuParentUpdate } from '@/types/menu';
 
 /**
  * 获取菜单列表

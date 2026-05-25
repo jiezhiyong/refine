@@ -1,7 +1,7 @@
 import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons';
 import type { BaseRecord } from '@refinedev/core';
 
-import { cn } from '~/lib/utils';
+import { cn } from '@/lib/utils';
 
 import type { TableFilterProps } from '..';
 

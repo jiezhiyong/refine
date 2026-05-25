@@ -1,6 +1,6 @@
 import { isEqual } from 'es-toolkit';
 
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 /**
  * 获取表单中变更的值，过滤掉未变更的值

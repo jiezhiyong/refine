@@ -2,10 +2,10 @@ import { Prisma } from '@prisma/client';
 import { ResourceProps } from '@refinedev/core';
 import { ResourceMeta } from 'node_modules/@refinedev/core/dist/contexts/resource/types';
 
-import { db } from '~/services/db.server';
-import { TAny } from '~/types/any';
-import type { Menu, MenuCreateUpdate, MenuOrderUpdate, MenuParentUpdate } from '~/types/menu';
-import { dropEmptyKey } from '~/utils/drop-empty-key';
+import { db } from '@/services/db.server';
+import { TAny } from '@/types/any';
+import type { Menu, MenuCreateUpdate, MenuOrderUpdate, MenuParentUpdate } from '@/types/menu';
+import { dropEmptyKey } from '@/utils/drop-empty-key';
 
 /**
  * 获取所有菜单

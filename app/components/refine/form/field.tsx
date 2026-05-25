@@ -2,9 +2,9 @@
 import { cloneElement, ReactElement } from 'react';
 import { ControllerRenderProps, FieldPath, FieldValues, UseControllerProps } from 'react-hook-form';
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
-import { cn } from '~/lib/utils';
-import { TAny } from '~/types/any';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { cn } from '@/lib/utils';
+import { TAny } from '@/types/any';
 
 export type FieldProps<
   TFieldValues extends FieldValues = FieldValues,

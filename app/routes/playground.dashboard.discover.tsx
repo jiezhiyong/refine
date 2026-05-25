@@ -9,12 +9,12 @@ import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { PageError } from '~/components/500';
-import { Empty } from '~/components/empty';
-import { Combobox } from '~/components/refine/form/combobox';
-import { SelectMulti } from '~/components/refine/form/select-multi';
-import { Loader } from '~/components/refine/loader';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
+import { PageError } from '@/components/500';
+import { Empty } from '@/components/empty';
+import { Combobox } from '@/components/refine/form/combobox';
+import { SelectMulti } from '@/components/refine/form/select-multi';
+import { Loader } from '@/components/refine/loader';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
@@ -22,12 +22,12 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from '~/components/ui/chart';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
-import { H2 } from '~/components/ui/typography';
-import { db, queryTablesAll } from '~/services/db.server';
-import { TAny } from '~/types/any';
+} from '@/components/ui/chart';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { H2 } from '@/components/ui/typography';
+import { db, queryTablesAll } from '@/services/db.server';
+import { TAny } from '@/types/any';
 
 // 定义数据聚合类型
 const AGGREGATION_TYPES = [
@@ -184,7 +184,9 @@ export default function DashboardDiscover() {
   }, []);
 
   // 使用 refine 的 useCustom 钩子查询数据
-  const { error, isError, isFetching, isLoading } = useCustom<TAny[], HttpError>({
+  const {
+    query: { data: queryData, error, isError, isFetching, isLoading },
+  } = useCustom<TAny[], HttpError>({
     url: '/api/discover',
     method: 'get',
     config: {
@@ -199,13 +201,14 @@ export default function DashboardDiscover() {
     queryOptions: {
       enabled: !!selectedModel && !!selectedFields.length,
       queryKey: [selectedFields, selectedTimeRange, selectedAggregationType],
-      onSuccess: ({ data }) => {
-        if (data) {
-          setChartData(data);
-        }
-      },
     },
   });
+
+  useEffect(() => {
+    if (queryData?.data) {
+      setChartData(queryData.data);
+    }
+  }, [queryData]);
 
   // 生成图表配置
   const generateChartConfig = () => {

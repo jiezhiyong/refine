@@ -14,7 +14,7 @@ generator client {
 
 enum AuthProvider {
   USER_PASS
-  TC_SHUKE
+  GITHUB
 }
 
 enum PostStatus {
@@ -69,23 +69,21 @@ enum OptionsType {
 }
 
 model User {
-  id                 String              @id() @default(cuid())
-  deleted            Boolean?            @default(false)
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime?           @updatedAt()
-  operatedById       String?
-  email              String              @unique()
-  name               String
-  avatar             String?
-  provider           AuthProvider        @default(USER_PASS)
-  roles              UserRole[]
-  role               String?
-  password           String?
-  posts              Post[]              @relation("PostOperator")
-  frontRouteProjects FrontRouteProject[] @relation("FrontRouteProjectOperator")
-  frontRouteModules  FrontRouteModule[]  @relation("FrontRouteModuleOperator")
-  logs               Log[]
-  auditRecords       AuditRecord[]       @relation("AuditRecordOperator")
+  id           String        @id() @default(cuid())
+  deleted      Boolean?      @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime?     @updatedAt()
+  operatedById String?
+  email        String        @unique()
+  name         String
+  avatar       String?
+  provider     AuthProvider  @default(USER_PASS)
+  roles        UserRole[]
+  role         String?
+  password     String?
+  posts        Post[]        @relation("PostOperator")
+  logs         Log[]
+  auditRecords AuditRecord[] @relation("AuditRecordOperator")
 
   @@index([name])
 }
@@ -170,39 +168,6 @@ model CasbinRule {
   @@index([operatedById])
   @@index([ptype, v0, v1, v2])
   @@map("casbin_rule")
-}
-
-model FrontRouteProject {
-  id           String             @id() @default(cuid())
-  deleted      Boolean?           @default(false)
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime?          @updatedAt()
-  operatedById String?
-  operatedBy   User?              @relation("FrontRouteProjectOperator", references: [id], fields: [operatedById])
-  title        String             @unique()
-  description  String?
-  global       Json
-  modules      FrontRouteModule[]
-
-  @@index([title])
-}
-
-model FrontRouteModule {
-  id                 String            @id() @default(cuid())
-  deleted            Boolean?          @default(false)
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime?         @updatedAt()
-  operatedById       String?
-  operatedBy         User?             @relation("FrontRouteModuleOperator", references: [id], fields: [operatedById])
-  title              String            @unique()
-  description        String?
-  pathReplaceProject String?
-  pathReplaceModule  String?
-  global             Json?
-  project            FrontRouteProject @relation(fields: [projectId], references: [id])
-  projectId          String
-
-  @@index([title])
 }
 
 model AuditRecord {

@@ -1,6 +1,6 @@
 import { deserialize, serialize } from 'superjson';
 
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 /**
  * 从请求URL中获取superjson序列化的查询参数

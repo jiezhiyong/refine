@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
 
-import { db } from '~/services/db.server';
-import { TAny } from '~/types/any';
+import { db } from '@/services/db.server';
+import { TAny } from '@/types/any';
 
 /**
  * 健康检查接口

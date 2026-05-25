@@ -1,8 +1,8 @@
 import { t } from 'i18next';
 import { Eye } from 'lucide-react';
 
-import { useGetShowUrl } from '~/components/refine/hooks/useGetShowUrl';
-import { TAny } from '~/types/any';
+import { useGetShowUrl } from '@/components/refine/hooks/useGetShowUrl';
+import { TAny } from '@/types/any';
 
 import type { RowActionProps } from '.';
 import { RowAction } from '.';

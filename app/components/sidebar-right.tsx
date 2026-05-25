@@ -1,9 +1,9 @@
 import { useMatches, useSearchParams } from '@remix-run/react';
 import * as React from 'react';
 
-import { Sidebar } from '~/components/ui/sidebar';
-import { cn } from '~/lib/utils';
-import { HandleFunction } from '~/types/handle';
+import { Sidebar } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
+import { HandleFunction } from '@/types/handle';
 
 /**
  * 右侧筛选栏

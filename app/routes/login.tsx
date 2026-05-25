@@ -1,14 +1,14 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 
-import { LoginForm } from '~/components/form-login';
-import { dashboardResource } from '~/config/resources';
-import { EnumAuthProvider } from '~/constants/user';
-import { authProvider } from '~/providers';
-import { commitSession, getSession, getUser } from '~/services/session.server';
-import { getAllParams } from '~/utils/get-all-params';
-import { typedFormError } from '~/utils/typed-form-error';
-import { TSchemaLoginRegister } from '~/zod';
+import { LoginForm } from '@/components/form-login';
+import { dashboardResource } from '@/config/resources';
+import { EnumAuthProvider } from '@/constants/user';
+import { authProvider } from '@/providers';
+import { commitSession, getSession, getUser } from '@/services/session.server';
+import { getAllParams } from '@/utils/get-all-params';
+import { typedFormError } from '@/utils/typed-form-error';
+import { TSchemaLoginRegister } from '@/zod';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Login' }];

@@ -1,4 +1,4 @@
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 /**
  * 删除对象中的空键：空字符串、null、undefined

@@ -14,7 +14,7 @@ import {
 } from '@refinedev/ui-types';
 import { ComponentProps } from 'react';
 
-import type { ButtonProps } from '~/components/ui/button';
+import type { ButtonProps } from '@/components/ui/button';
 
 import type { ConfirmDialogProps } from './confirm-dialog';
 

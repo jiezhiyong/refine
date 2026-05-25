@@ -4,18 +4,18 @@ import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { CalendarIcon, ClockIcon, LeafyGreen, MailIcon } from 'lucide-react';
 
-import { PageError } from '~/components/500';
-import { CloneButton } from '~/components/refine/buttons/clone';
-import { DeleteButton } from '~/components/refine/buttons/delete';
-import { EditButton } from '~/components/refine/buttons/edit';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { H1, Image, P } from '~/components/ui/typography';
-import { EnumPostStatus, POST_STATUS_MAP } from '~/constants/post';
-import { dataService } from '~/services/data.server';
-import { TAny } from '~/types/any';
-import { HandleFunction } from '~/types/handle';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { PageError } from '@/components/500';
+import { CloneButton } from '@/components/refine/buttons/clone';
+import { DeleteButton } from '@/components/refine/buttons/delete';
+import { EditButton } from '@/components/refine/buttons/edit';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { H1, Image, P } from '@/components/ui/typography';
+import { EnumPostStatus, POST_STATUS_MAP } from '@/constants/post';
+import { dataService } from '@/services/data.server';
+import { TAny } from '@/types/any';
+import { HandleFunction } from '@/types/handle';
+import { getDefaultTitle } from '@/utils/get-default-title';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];

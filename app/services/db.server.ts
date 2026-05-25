@@ -1,8 +1,8 @@
 import { PrismaClient, User } from '@prisma/client';
 import { enhance } from '@zenstackhq/runtime';
 
-import { Resources, RESOURCES_LIST } from '~/constants/resource';
-import { singleton } from '~/utils/singleton';
+import { Resources, RESOURCES_LIST } from '@/constants/resource';
+import { singleton } from '@/utils/singleton';
 
 import { getUser } from './session.server';
 
@@ -53,8 +53,6 @@ const excludeTables = [
   'DynamicPage',
   'AuditRecord',
   'Log',
-  'FrontRouteProject',
-  'FrontRouteModule',
 ];
 
 // 查询所有可访问的表, 用于 discover、dynamicPage 等场景

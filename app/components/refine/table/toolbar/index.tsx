@@ -1,7 +1,7 @@
 import { Table } from '@tanstack/react-table';
 import { cloneElement, ReactNode, useCallback } from 'react';
 
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 import { DataTableViewOptions } from './table-view-options-dropdown';
 

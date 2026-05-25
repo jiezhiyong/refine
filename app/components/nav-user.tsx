@@ -3,7 +3,7 @@ import { Link, useRouteLoaderData } from '@remix-run/react';
 import { t } from 'i18next';
 import { Baby, ChevronsUpDown, LogOut } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +12,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components/ui/sidebar';
-import { loader } from '~/root';
-import { getFirstLetter } from '~/utils/capitalize-first-letter';
+} from '@/components/ui/dropdown-menu';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
+import { loader } from '@/root';
+import { getFirstLetter } from '@/utils/capitalize-first-letter';
 
 export function NavUser() {
   const { user } = useRouteLoaderData<typeof loader>('root') || {};

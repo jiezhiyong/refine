@@ -1,11 +1,11 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 
-import { dashboardResource } from '~/config/resources';
-import { EnumAuthProvider } from '~/constants/user';
-import { authenticator } from '~/services/auth.server';
-import { commitSession, getSession } from '~/services/session.server';
-import { createUser, getUserByEmail } from '~/services/user.server';
-import { TAny } from '~/types/any';
+import { dashboardResource } from '@/config/resources';
+import { EnumAuthProvider } from '@/constants/user';
+import { authenticator } from '@/services/auth.server';
+import { commitSession, getSession } from '@/services/session.server';
+import { createUser, getUserByEmail } from '@/services/user.server';
+import { TAny } from '@/types/any';
 
 // OAuth2 认证回调 - 处理重定向触发的 GET 请求
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {

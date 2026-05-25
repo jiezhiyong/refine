@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { zodI18nMap } from 'zod-i18n-map';
 import translation from 'zod-i18n-map/locales/zh-CN/zod.json';
 
-import enTranslation from '~/locales/en';
-import zhTranslation from '~/locales/zh';
+import enTranslation from '@/locales/en';
+import zhTranslation from '@/locales/zh';
 // This is the list of languages your application supports, the last one is your fallback language
 export const supportedLanguages = ['zh', 'en'];
 

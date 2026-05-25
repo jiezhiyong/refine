@@ -4,14 +4,14 @@ import { useTranslate } from '@refinedev/core';
 import { Table } from '@tanstack/react-table';
 import { FC, useMemo } from 'react';
 
-import { Button } from '~/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from '~/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;

@@ -1,17 +1,13 @@
-import { AutoSaveIndicatorElements, BaseRecord, HttpError, useTranslate, UseUpdateReturnType } from '@refinedev/core';
+import { AutoSaveIndicatorElements, BaseRecord, HttpError, useTranslate } from '@refinedev/core';
 import dayjs from 'dayjs';
 import React from 'react';
 
-import { cn } from '~/lib/utils';
+import { cn } from '@/lib/utils';
 
-export type AutoSaveIndicatorProps<
-  TData extends BaseRecord = BaseRecord,
-  TError extends HttpError = HttpError,
-  TVariables = object,
-> = {
-  data?: UseUpdateReturnType<TData, TError, TVariables>['data'];
-  error?: UseUpdateReturnType<TData, TError, TVariables>['error'];
-  status: UseUpdateReturnType<TData, TError, TVariables>['status'];
+export type AutoSaveIndicatorProps<TData extends BaseRecord = BaseRecord, TError extends HttpError = HttpError> = {
+  data?: TData;
+  error?: TError | null;
+  status: 'pending' | 'error' | 'idle' | 'success';
   elements?: AutoSaveIndicatorElements;
 };
 
@@ -29,7 +25,7 @@ export const AutoSaveIndicator: React.FC<AutoSaveIndicatorProps> = ({
       return <>{success}</>;
     case 'error':
       return <>{error}</>;
-    case 'loading':
+    case 'pending':
       return <>{loading}</>;
     default:
       return <>{idle}</>;

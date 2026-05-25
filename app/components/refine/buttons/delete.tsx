@@ -2,8 +2,8 @@ import { useBack, useDeleteButton, useResourceParams } from '@refinedev/core';
 import { Trash2Icon } from 'lucide-react';
 import { type FC } from 'react';
 
-import { DeleteButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
+import { DeleteButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
 
 import { ConfirmDialog } from '../confirm';
 

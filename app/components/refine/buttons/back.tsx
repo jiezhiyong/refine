@@ -3,8 +3,8 @@ import { t } from 'i18next';
 import { ArrowLeftToLine } from 'lucide-react';
 import type { FC } from 'react';
 
-import { ShowButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
+import { ShowButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
 
 export const BackButton: FC<ShowButtonProps> = ({ ...props }) => {
   const back = useBack();

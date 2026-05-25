@@ -1,11 +1,11 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 
-import { EnumAction } from '~/constants/action';
-import { Resources } from '~/constants/resource';
-import { getUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
-import { handlePrismaError } from '~/utils/prisma-error-handler';
-import { zodParse } from '~/utils/request';
+import { EnumAction } from '@/constants/action';
+import { Resources } from '@/constants/resource';
+import { getUser } from '@/services/session.server';
+import { TAny } from '@/types/any';
+import { handlePrismaError } from '@/utils/prisma-error-handler';
+import { zodParse } from '@/utils/request';
 
 import { checkPermission } from './casbin-permission.server';
 import { EnhancedDbContext, getEnhancedDb } from './db.server';

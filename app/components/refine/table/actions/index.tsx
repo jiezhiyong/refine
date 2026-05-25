@@ -1,14 +1,14 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { cloneElement, FC, memo, PropsWithChildren, ReactNode, useCallback, useMemo } from 'react';
 
-import { Button } from '~/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
-import { TAny } from '~/types/any';
+} from '@/components/ui/dropdown-menu';
+import { TAny } from '@/types/any';
 
 import { Link } from '../../link';
 

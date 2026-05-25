@@ -1,11 +1,11 @@
 import { type ActionFunctionArgs, type MetaFunction, redirect } from '@remix-run/node';
 
-import { RegisterForm } from '~/components/form-register';
-import { EnumAuthProvider } from '~/constants/user';
-import { createUser, getUserByEmail } from '~/services/user.server';
-import { getAllParams } from '~/utils/get-all-params';
-import { typedFormError } from '~/utils/typed-form-error';
-import { TSchemaLoginRegister } from '~/zod';
+import { RegisterForm } from '@/components/form-register';
+import { EnumAuthProvider } from '@/constants/user';
+import { createUser, getUserByEmail } from '@/services/user.server';
+import { getAllParams } from '@/utils/get-all-params';
+import { typedFormError } from '@/utils/typed-form-error';
+import { TSchemaLoginRegister } from '@/zod';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Register' }];

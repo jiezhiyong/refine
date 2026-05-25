@@ -1,7 +1,7 @@
 import { useBack } from '@refinedev/core';
 import { Link } from '@remix-run/react';
 
-import { Button } from '~/components/ui/button';
+import { Button } from '@/components/ui/button';
 
 export function PermissionDenied() {
   const back = useBack();

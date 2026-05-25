@@ -2,8 +2,8 @@ import { useRefreshButton } from '@refinedev/core';
 import { RefreshCwIcon } from 'lucide-react';
 import type { FC } from 'react';
 
-import { RefreshButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
+import { RefreshButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
 
 export const RefreshButton: FC<RefreshButtonProps> = ({
   resource,

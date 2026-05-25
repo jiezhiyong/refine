@@ -1,7 +1,7 @@
 // import { data } from '@remix-run/node';
 // import { Form, useActionData, useTransition } from '@remix-run/react';
-// import { Queue } from '~/services/queue.server';
-// import { sleep } from '~/utils/sleep';
+// import { Queue } from '@/services/queue.server';
+// import { sleep } from '@/utils/sleep';
 
 // type QueueData = {
 //   emailAddress: string;

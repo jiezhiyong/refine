@@ -1,7 +1,7 @@
 import { AccessControlProvider } from '@refinedev/core';
 
-import { EnumAction } from '~/constants/action';
-import { lowercaseFirstLetter } from '~/utils/lowercase-first-letter';
+import { EnumAction } from '@/constants/action';
+import { lowercaseFirstLetter } from '@/utils/lowercase-first-letter';
 
 import { authProvider } from './auth';
 
@@ -72,7 +72,7 @@ export const accessControlProvider: AccessControlProvider = {
   },
   options: {
     buttons: { enableAccessControl: true, hideIfUnauthorized: false },
-    queryOptions: { cacheTime: 5 * 60 * 1000, staleTime: 0 },
+    queryOptions: { gcTime: 5 * 60 * 1000, staleTime: 0 },
   },
 };
 

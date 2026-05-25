@@ -1,8 +1,8 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 
-import { getUserById, UserWithRoles } from '~/services/user.server';
-import { SessionUser } from '~/types/user';
+import { getUserById, UserWithRoles } from '@/services/user.server';
+import { SessionUser } from '@/types/user';
 
 invariant(process.env.VITE_SECRET, 'VITE_SECRET must be set.');
 

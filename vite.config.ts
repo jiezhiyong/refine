@@ -1,4 +1,4 @@
-// import * as fs from 'fs';
+import path from 'path';
 
 import { vitePlugin as remix } from '@remix-run/dev';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       remix({
         presets: [vercelPreset()],
-        ssr: true, // false: 禁用服务端渲染、启用SPA模式
+        ssr: true, // 是否启用服务端渲染、设置为 `false` 时启用SPA模式
         manifest: true,
         future: {
           v3_fetcherPersist: true,
@@ -59,23 +59,32 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
       visualizer({ emitFile: true }), // 生成构建产物的可视化分析报告 stats.html
 
-      // sentryVitePlugin({
-      //   debug: false,
-      //   org: env.SENTRY_ORG,
-      //   project: env.SENTRY_PROJECT,
-      //   authToken: env.SENTRY_AUTH_TOKEN,
-      //   url: env.SENTRY_URL,
-      //   sourcemaps: {
-      //     filesToDeleteAfterUpload: ['**/*.map'],
-      //   },
-      //   release: {
-      //     name: 'oss@' + process.env.npm_package_version,
-      //     uploadLegacySourcemaps: {
-      //       paths: ['.'],
-      //     },
-      //   },
-      // }),
+      sentryVitePlugin({
+        debug: false,
+        org: env.SENTRY_ORG,
+        project: env.SENTRY_PROJECT,
+        authToken: env.SENTRY_AUTH_TOKEN,
+        url: env.SENTRY_URL,
+        sourcemaps: {
+          filesToDeleteAfterUpload: ['**/*.map'],
+        },
+        release: {
+          name: 'remix@' + process.env.npm_package_version,
+          uploadLegacySourcemaps: {
+            paths: ['.'],
+          },
+        },
+      }),
     ],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './app'),
+        lodash: 'lodash-es',
+      },
+    },
+    ssr: {
+      noExternal: ['@refinedev/react-table', 'lodash', 'lodash-es'],
+    },
     build: {
       sourcemap: false,
     },

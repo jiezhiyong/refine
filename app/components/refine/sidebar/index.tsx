@@ -1,11 +1,10 @@
-import { useMenu, useResourceParams } from '@refinedev/core';
+import { TreeMenuItem, useMenu, useResourceParams } from '@refinedev/core';
 import { Link } from '@remix-run/react';
 import { t } from 'i18next';
 import { ChevronRight } from 'lucide-react';
-import { TreeMenuItem } from 'node_modules/@refinedev/core/dist/hooks/menu/useMenu';
 
-import { DynamicIcon } from '~/components/dynamic-icon';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components/ui/collapsible';
+import { DynamicIcon } from '@/components/dynamic-icon';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -15,8 +14,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from '~/components/ui/sidebar';
-import { cn } from '~/lib/utils';
+} from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
 
 export function SidebarEasy() {
   const { menuItems, selectedKey, defaultOpenKeys } = useMenu();
@@ -49,6 +48,7 @@ export function SidebarEasy() {
           const menu2Name = menus_2.meta?.label || t(`menus.${menus_2.name}`, menus_2.name);
           return (
             // <CanAccess key={menus_2.key} resource={menus_2.name} action="list">
+            // </CanAccess>
             <Collapsible key={idx} asChild defaultOpen={isCollapsibleOpen} className="group/collapsible">
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
@@ -70,6 +70,7 @@ export function SidebarEasy() {
                       const menu3Name = item.meta?.label || t(`menus.${item.name}`, item.name);
                       return (
                         // <CanAccess key={item.key} resource={item.name} action="list">
+                        // </CanAccess>
                         <SidebarMenuSubItem key={item.key}>
                           <SidebarMenuSubButton
                             asChild
@@ -81,14 +82,12 @@ export function SidebarEasy() {
                             </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
-                        // </CanAccess>
                       );
                     })}
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenuItem>
             </Collapsible>
-            // </CanAccess>
           );
         })}
       </SidebarMenu>

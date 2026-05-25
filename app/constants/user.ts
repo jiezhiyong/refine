@@ -2,7 +2,7 @@ import { AuthProvider } from '@prisma/client';
 
 export enum EnumAuthProvider {
   USER_PASS = 'USER_PASS',
-  TC_SHUKE = 'TC_SHUKE',
+  GITHUB = 'GITHUB',
 }
 
 export type TAuthProvider = `${AuthProvider}`;

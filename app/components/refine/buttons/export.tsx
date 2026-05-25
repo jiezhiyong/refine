@@ -2,8 +2,8 @@ import { useCan, useExport, useExportButton } from '@refinedev/core';
 import { Download } from 'lucide-react';
 import type { FC } from 'react';
 
-import { Button, ButtonProps } from '~/components/ui/button';
-import { EnumAction } from '~/constants/action';
+import { Button, ButtonProps } from '@/components/ui/button';
+import { EnumAction } from '@/constants/action';
 
 export const ExportButton: FC<ButtonProps> = ({ children, ...props }) => {
   const { label } = useExportButton();

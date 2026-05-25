@@ -7,11 +7,18 @@ import * as Sentry from '@sentry/remix';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 
-import { initSentry } from '~/services/sentry.server';
-import { TAny } from '~/types/any';
+import { initSentry } from '@/services/sentry.server';
+import { TAny } from '@/types/any';
 
 /** 初始化服务端 Sentry */
-initSentry();
+// 使用立即执行的异步函数来处理可选的 profiling 集成加载
+(async () => {
+  try {
+    await initSentry();
+  } catch (error) {
+    console.error('Sentry 初始化失败:', error);
+  }
+})();
 
 const ABORT_DELAY = 5_000;
 

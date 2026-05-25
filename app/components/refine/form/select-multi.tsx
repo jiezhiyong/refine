@@ -3,13 +3,13 @@ import { BaseOption } from '@refinedev/core';
 import { Check } from 'lucide-react';
 import { useState } from 'react';
 
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '~/components/ui/command';
-import { FormControl } from '~/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
-import { cn } from '~/lib/utils';
-import { TAny } from '~/types/any';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
+import { FormControl } from '@/components/ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { TAny } from '@/types/any';
 
 type SelectMultiProps = {
   options: BaseOption[];

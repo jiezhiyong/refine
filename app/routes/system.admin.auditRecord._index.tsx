@@ -1,30 +1,30 @@
 import { AuditRecord, Prisma } from '@prisma/client';
-import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
 
-import { PageError } from '~/components/500';
-import { DeleteButton } from '~/components/refine/buttons/delete';
-import { ExportButton } from '~/components/refine/buttons/export';
-import { ShowButton } from '~/components/refine/buttons/show';
-import { TableEasy, TableFilterProps } from '~/components/refine/table';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { Checkbox } from '~/components/ui/checkbox';
-import { EnumAction } from '~/constants/action';
-import { AUDIT_CHANNEL_LIST } from '~/constants/audit-channel';
-import { AUDIT_STATUS_LIST, AUDIT_STATUS_MAP, EnumAuditStatus } from '~/constants/audit-status';
-import { LOG_STATUS_LIST } from '~/constants/log';
-import { EnumResource } from '~/constants/resource';
-import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { dataService } from '~/services/data.server';
-import { getUser } from '~/services/session.server';
-import { TAny } from '~/types/any';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { buildTableParams } from '~/utils/request';
+import { PageError } from '@/components/500';
+import { DeleteButton } from '@/components/refine/buttons/delete';
+import { ExportButton } from '@/components/refine/buttons/export';
+import { ShowButton } from '@/components/refine/buttons/show';
+import { TableEasy, TableFilterProps } from '@/components/refine/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { EnumAction } from '@/constants/action';
+import { AUDIT_CHANNEL_LIST } from '@/constants/audit-channel';
+import { AUDIT_STATUS_LIST, AUDIT_STATUS_MAP, EnumAuditStatus } from '@/constants/audit-status';
+import { LOG_STATUS_LIST } from '@/constants/log';
+import { EnumResource } from '@/constants/resource';
+import { dataService } from '@/services/data.server';
+import { getUser } from '@/services/session.server';
+import { TAny } from '@/types/any';
+import { getDefaultTitle } from '@/utils/get-default-title';
+import { buildTableParams } from '@/utils/request';
+import { Table } from '@tanstack/react-table';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -59,7 +59,7 @@ export default function AuditRecordIndex() {
   const { mutate: deleteMany } = useDeleteMany();
   const { data: deletePermission } = useCan({ resource: EnumResource.auditRecord, action: EnumAction.delete });
 
-  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
+  const bulkDeleteAction = (table: Table<BaseRecord>) => {
     const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 

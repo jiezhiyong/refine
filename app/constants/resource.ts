@@ -7,8 +7,6 @@ export enum EnumResource {
   log = 'log',
   post = 'post',
   category = 'category',
-  frontRouteProject = 'frontRouteProject',
-  frontRouteModule = 'frontRouteModule',
   auditRecord = 'auditRecord',
   menu = 'menu',
   dynamicPage = 'dynamicPage',

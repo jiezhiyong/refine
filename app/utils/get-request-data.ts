@@ -1,4 +1,4 @@
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 // 根据 Content-Type 选择正确的解析方法
 export const getRequestData = async <T extends Record<string, TAny>>(request: Request): Promise<T> => {

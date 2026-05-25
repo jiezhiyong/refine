@@ -1,8 +1,7 @@
 # Refine & Remix APP
 
 [Refine](https://refine.dev) 是一个无头 React 框架，主要用于构建企业内部工具、管理面板、仪表板、B2B等应用程序。它消除了 CRUD 操作中的重复性任务，并为关键项目组件（如身份验证、访问控制、路由、网络、状态管理和 i18n）提供行业标准解决方案。
-
-[Remix](https://remix.run) 是一个全栈式 Web 框架，专注于用户界面，并通过 Web 标准进行工作，以提供快速、流畅且有弹性的用户体验。
+[Remix ](https://remix.run) 是一个全栈式 Web 框架，专注于用户界面，并通过 Web 标准进行工作，以提供快速、流畅且有弹性的用户体验。
 
 ## 从环境变量模板文件拷贝，按需修改、配置生产环境变量
 
@@ -27,6 +26,13 @@ Run the dev server, then open `http://localhost:5173` in your browser. (note: pr
 ```sh
 pnpm i
 pnpm dev
+```
+
+## shadcn/ui 组件库
+
+```sh
+pnpm dlx shadcn@latest add <component>
+pnpm dlx shadcn@latest add https://ui.refine.dev/r/views.json # 需要手动将组件移动到 app/components/refine-ui 目录下
 ```
 
 ## 其他 Prisma 命令行
@@ -92,19 +98,6 @@ sudo echo "127.0.0.1 me.ly.com" >> /etc/hosts # 修改 hosts 文件，添加本�
 
 - Q: Sentry source maps 无法上传到自托管服务器
 - A: 旧版本不支持 Artifact Bundle，需要升级自托管版本到 23.6.1 以上，或使用旧版本方式上传（cli、sentryVitePlugin uploadLegacySourcemaps等）
-
-## TODO: 问题、未实现的功能
-
-- Sentry source maps 文件路径不匹配
-
-- 升级 Remix v3 / React Router v7, 暂时无法升级: @refinedev/remix-router 使用的是 Remix 2.x 版本
-- Refine devtool 选择器无法使用
-- Refine Live Provider 使用 socket.io | SSE?
-- Redis
-- MQ
-- 单点登录
-- 多租户
-- 服务状态监控 https://github.com/louislam/uptime-kuma?tab=readme-ov-file、https://prometheus.io
 
 ## Remix Resources
 

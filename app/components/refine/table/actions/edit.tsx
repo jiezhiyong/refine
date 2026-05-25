@@ -1,8 +1,8 @@
 import { t } from 'i18next';
 import { Pencil } from 'lucide-react';
 
-import { useGetEditUrl } from '~/components/refine/hooks/useGetEditUrl';
-import { TAny } from '~/types/any';
+import { useGetEditUrl } from '@/components/refine/hooks/useGetEditUrl';
+import { TAny } from '@/types/any';
 
 import type { RowActionProps } from '.';
 import { RowAction } from '.';

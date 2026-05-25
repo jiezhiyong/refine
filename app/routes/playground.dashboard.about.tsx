@@ -25,14 +25,14 @@ import {
 import React from 'react';
 import { DateRange } from 'react-day-picker';
 
-import { PageError } from '~/components/500';
-import { Badge } from '~/components/ui/badge';
-import { Button } from '~/components/ui/button';
-import { Calendar } from '~/components/ui/calendar';
-import { Checkbox } from '~/components/ui/checkbox';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components/ui/collapsible';
-import { Label } from '~/components/ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
+import { PageError } from '@/components/500';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Sidebar,
   SidebarContent,
@@ -45,13 +45,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-} from '~/components/ui/sidebar';
-import { useDebounceSubmit } from '~/hooks/use-debounce-submit';
-import { useUpdateSearchParams } from '~/hooks/use-update-search-params';
-import { syncServiceLocaleToClient } from '~/providers';
-import { getPreferencesCookie } from '~/services/cookie.server';
-import { HandleFunction } from '~/types/handle';
-import { tryParse } from '~/utils/try-parse';
+} from '@/components/ui/sidebar';
+import { useDebounceSubmit } from '@/hooks/use-debounce-submit';
+import { useUpdateSearchParams } from '@/hooks/use-update-search-params';
+import { syncServiceLocaleToClient } from '@/providers';
+import { getPreferencesCookie } from '@/services/cookie.server';
+import { HandleFunction } from '@/types/handle';
+import { tryParse } from '@/utils/try-parse';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.title }, { name: 'description', content: data?.description }];

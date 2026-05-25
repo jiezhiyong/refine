@@ -2,14 +2,14 @@
 
 import { ResourceProps } from '@refinedev/core';
 
-import { TAny } from '~/types/any';
-import { canUseDOM } from '~/utils/can-use-dom';
+import { TAny } from '@/types/any';
+import { canUseDOM } from '@/utils/can-use-dom';
 
 // import { ResourceProps } from '@refinedev/core';
 // import { Bot, Brain, PieChart, Route, UsersRound } from 'lucide-react';
 
-// import { EnumResource } from '~/constants/resource';
-// import { TAny } from '~/types/any';
+// import { EnumResource } from '@/constants/resource';
+// import { TAny } from '@/types/any';
 
 // // icons - https://lucide.dev/icons/
 // export const dataResources: ResourceProps[] = [
@@ -76,28 +76,6 @@ import { canUseDOM } from '~/utils/can-use-dom';
 //     create: `/playground/article/${EnumResource.category}/create`,
 //     edit: `/playground/article/${EnumResource.category}/edit/:id`,
 //     meta: { parent: 'article' },
-//   },
-
-//   // 二级菜单 playground/frontRoute
-//   {
-//     name: 'frontRoute',
-//     meta: { parent: 'playground', icon: Route },
-//   },
-
-//   // 三级菜单 playground/frontRoute/project、module
-//   {
-//     name: EnumResource.frontRouteProject,
-//     list: `/playground/frontRoute/${EnumResource.frontRouteProject}`,
-//     create: `/playground/frontRoute/${EnumResource.frontRouteProject}/create`,
-//     edit: `/playground/frontRoute/${EnumResource.frontRouteProject}/edit/:id`,
-//     meta: { parent: 'frontRoute' },
-//   },
-//   {
-//     name: EnumResource.frontRouteModule,
-//     list: `/playground/frontRoute/${EnumResource.frontRouteModule}`,
-//     create: `/playground/frontRoute/${EnumResource.frontRouteModule}/create`,
-//     edit: `/playground/frontRoute/${EnumResource.frontRouteModule}/edit/:id`,
-//     meta: { parent: 'frontRoute' },
 //   },
 
 //   // 一级菜单 system
@@ -169,9 +147,14 @@ import { canUseDOM } from '~/utils/can-use-dom';
 //   },
 // ];
 
+// 默认仪表盘资源路径
+export const defaultDashboardResource = '/playground/dashboard/about';
+
 // 服务端获取菜单资源
 let dataResources: ResourceProps[] = canUseDOM() ? (window as TAny).__MENUS__ || [] : [];
-let dashboardResource = (dataResources.find((r) => r.list)?.list as string) || '/404';
+
+// 获取仪表盘资源路径: 第一个有 list 属性的资源的路径
+let dashboardResource = (dataResources.find((r) => r.list)?.list as string) || defaultDashboardResource;
 
 // 不能禁用的菜单
 const cannotDisableMenus = ['system', 'admin', 'menu'];
@@ -179,7 +162,7 @@ const cannotDisableMenus = ['system', 'admin', 'menu'];
 // 设置菜单资源
 const setDataResources = (resources: ResourceProps[]) => {
   dataResources = resources;
-  dashboardResource = (resources.find((r) => r.list)?.list as string) || '/404';
+  dashboardResource = (resources.find((r) => r.list)?.list as string) || defaultDashboardResource;
 };
 
 const getDataResources = () => dataResources;

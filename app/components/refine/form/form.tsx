@@ -5,15 +5,15 @@ import { Undo2 } from 'lucide-react';
 import { type DetailedHTMLProps, type FormHTMLAttributes, type PropsWithChildren, useRef } from 'react';
 import { type FieldValues } from 'react-hook-form';
 
-import { AutoSaveIndicator } from '~/components/refine/auto-save-indicator';
-import { CreateButton } from '~/components/refine/buttons/create';
-import { SaveButton } from '~/components/refine/buttons/save';
-import { Button } from '~/components/ui/button';
-import { Card, CardContent, CardFooter } from '~/components/ui/card';
-import { Form as FormUI } from '~/components/ui/form';
-import { EnumAction } from '~/constants/action';
-import { cn } from '~/lib/utils';
-import { TAny } from '~/types/any';
+import { AutoSaveIndicator } from '@/components/refine/auto-save-indicator';
+import { CreateButton } from '@/components/refine/buttons/create';
+import { SaveButton } from '@/components/refine/buttons/save';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Form as FormUI } from '@/components/ui/form';
+import { EnumAction } from '@/constants/action';
+import { cn } from '@/lib/utils';
+import { TAny } from '@/types/any';
 
 type NativeFormProps = Omit<DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>, 'onSubmit'>;
 

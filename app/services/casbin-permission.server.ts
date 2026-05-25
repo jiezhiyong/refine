@@ -1,6 +1,6 @@
-import { TRole } from '~/constants/roles';
-import { PermissionRule } from '~/types/casbin';
-import { lowercaseFirstLetter } from '~/utils/lowercase-first-letter';
+import { TRole } from '@/constants/roles';
+import { PermissionRule } from '@/types/casbin';
+import { lowercaseFirstLetter } from '@/utils/lowercase-first-letter';
 
 import { createEnforcer } from './casbin-enforcer.server';
 import { getUserSession } from './session.server';

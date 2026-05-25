@@ -1,6 +1,6 @@
-// import { apiBase } from '~/config';
-// import { TAny } from '~/types/any';
-// import { generateSignature } from '~/utils/signature';
+// import { apiBase } from '@/config';
+// import { TAny } from '@/types/any';
+// import { generateSignature } from '@/utils/signature';
 
 // // 类型定义
 // type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';

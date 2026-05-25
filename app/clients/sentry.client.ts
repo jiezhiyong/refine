@@ -3,10 +3,10 @@ import { useLocation, useMatches } from '@remix-run/react';
 import * as Sentry from '@sentry/remix';
 import { useEffect } from 'react';
 
-import { baseUrl } from '~/config/base-url';
-import { TAny } from '~/types/any';
+import { baseUrl } from '@/config/base-url';
+import { TAny } from '@/types/any';
 
-let isInitialized = false;
+let isInitialized = true; // 暂时关闭
 
 // 初始化客户端 Sentry
 // https://docs.sentry.io/platforms/javascript/guides/remix/
@@ -18,7 +18,7 @@ export function initSentry() {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     environment: import.meta.env.MODE,
-    release: 'oss@' + import.meta.env.npm_package_version,
+    release: 'remix@' + import.meta.env.npm_package_version,
 
     integrations: [
       Sentry.browserSessionIntegration(),
@@ -52,10 +52,10 @@ export function initSentry() {
       }
 
       // 出现错误时自动弹窗、引导用户反馈
-      // if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
-      //   window._isRenderedReortDialog = true;
-      //   Sentry.showReportDialog({ eventId: event.event_id });
-      // }
+      if (event.exception && event.event_id && !window?._isRenderedReortDialog) {
+        window._isRenderedReortDialog = true;
+        Sentry.showReportDialog({ eventId: event.event_id });
+      }
       return event;
     },
   });

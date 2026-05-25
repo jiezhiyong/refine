@@ -1,10 +1,10 @@
 import { Outlet, useRouteLoaderData } from '@remix-run/react';
 
-import { Breadcrumbs } from '~/components/refine/breadcrumbs';
-import { SidebarLeft } from '~/components/sidebar-left';
-import { Separator } from '~/components/ui/separator';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar';
-import { loader, type RootLoaderData } from '~/root';
+import { Breadcrumbs } from '@/components/refine/breadcrumbs';
+import { SidebarLeft } from '@/components/sidebar-left';
+import { Separator } from '@/components/ui/separator';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { loader, type RootLoaderData } from '@/root';
 
 import { NavTools } from './nav-tools';
 import { SidebarRight } from './sidebar-right';

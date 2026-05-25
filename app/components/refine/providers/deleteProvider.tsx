@@ -1,9 +1,9 @@
 import { useTranslate } from '@refinedev/core';
 import React, { createContext, PropsWithChildren, useCallback, useState } from 'react';
 
-import { useDeleteHelper } from '~/components/refine/hooks/useDeleteHelper';
-import { useOnBack } from '~/components/refine/hooks/useOnBack';
-import { TAny } from '~/types/any';
+import { useDeleteHelper } from '@/components/refine/hooks/useDeleteHelper';
+import { useOnBack } from '@/components/refine/hooks/useOnBack';
+import { TAny } from '@/types/any';
 
 import { ConfirmDialog } from '../confirm';
 
@@ -22,7 +22,7 @@ export interface DeleteContextType {
 
 export function DeleteActionModal(props: DeleteContextType) {
   const back = useOnBack();
-  const { can, isLoading, mutate } = useDeleteHelper(props.data?.resource, props.data?.row?.id);
+  const { can, isPending, mutate } = useDeleteHelper(props.data?.resource, props.data?.row?.id);
 
   const translate = useTranslate();
 
@@ -57,14 +57,14 @@ export function DeleteActionModal(props: DeleteContextType) {
   return (
     <ConfirmDialog
       open={can && props?.data?.toogle}
-      loading={isLoading}
+      loading={isPending}
       title={translate('buttons.confirm')}
       description={translate('deleteAlert')}
       okText={translate('Delete')}
       cancelText={translate('Cancel')}
       okButtonVariant={'destructive'}
       onOpenChange={() => {
-        if (!isLoading) {
+        if (!isPending) {
           props?.updateData({
             toogle: false,
             row: undefined,

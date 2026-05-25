@@ -1,7 +1,7 @@
 import { MetaFunction } from '@remix-run/node';
 
-import { PageError } from '~/components/500';
-import { getDefaultTitle } from '~/utils/get-default-title';
+import { PageError } from '@/components/500';
+import { getDefaultTitle } from '@/utils/get-default-title';
 
 import { CategoryForm } from './playground.article.category.edit.$id';
 

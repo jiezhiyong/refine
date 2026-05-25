@@ -16,7 +16,7 @@
   },
   "plantuml.server": "http://www.plantuml.com/plantuml",
   "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma-insider"
+    "editor.defaultFormatter": "Prisma.prisma"
   },
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifier": "non-relative",

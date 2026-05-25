@@ -2,8 +2,8 @@ import { useNavigate } from '@remix-run/react';
 import { t } from 'i18next';
 import { HomeIcon } from 'lucide-react';
 
-import { dashboardResource } from '~/config/resources';
-import { createAction, Priority, useRegisterActions } from '~/lib/refinedev-kbar';
+import { dashboardResource } from '@/config/resources';
+import { createAction, Priority, useRegisterActions } from '@/lib/refinedev-kbar';
 
 export const useBackToHomeKbarActions = () => {
   const navigate = useNavigate();

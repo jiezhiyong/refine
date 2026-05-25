@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { NavUser } from '~/components/nav-user';
-import { SidebarEasy } from '~/components/refine/sidebar';
-import { RoleSwitcher } from '~/components/switcher-role';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '~/components/ui/sidebar';
+import { NavUser } from '@/components/nav-user';
+import { SidebarEasy } from '@/components/refine/sidebar';
+import { RoleSwitcher } from '@/components/switcher-role';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar';
 
 import { NavSecondary } from './nav-secondary';
 

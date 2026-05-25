@@ -3,15 +3,14 @@ import { Post, PrismaClient, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 // 导入业务数据
+import { EnumAuthProvider } from '@/constants/user';
 import { categories } from 'mock/db/sql-categories';
 import { dynamicPages } from 'mock/db/sql-dynamic-page';
-import { frontRouteModules, frontRouteProjects } from 'mock/db/sql-front-routes';
 import { menus } from 'mock/db/sql-menus';
 import { CASBIN_POLICIES } from 'mock/db/sql-pemission';
 import { posts } from 'mock/db/sql-posts';
 import { roles } from 'mock/db/sql-roles';
 import { userAdministrator } from 'mock/db/sql-users';
-import { EnumAuthProvider } from '~/constants/user';
 
 const db = new PrismaClient();
 
@@ -118,28 +117,6 @@ async function createCategoriesAndPosts(adminUserId: string): Promise<void> {
   }
 }
 
-async function createFrontRoutes(adminUserId: string): Promise<void> {
-  try {
-    // 创建前端路由项目
-    await db.frontRouteProject.createMany({
-      data: frontRouteProjects.map((item) => ({ ...item, operatedById: adminUserId })),
-    });
-    console.log('已创建 FrontRouteProject');
-
-    // 创建前端路由模块
-    await db.frontRouteModule.createMany({
-      data: frontRouteModules.map((item) => {
-        const { projectId, ...rest } = item;
-        return { ...rest, projectId, operatedById: adminUserId };
-      }),
-    });
-    console.log('已创建 FrontRouteModule');
-  } catch (error) {
-    console.error('创建 frontRouteProject 或 frontRouteModule 时出错:', error);
-    throw error;
-  }
-}
-
 async function createMenus(adminUserId: string): Promise<void> {
   try {
     // 创建菜单
@@ -189,9 +166,6 @@ export async function seedProduction(): Promise<void> {
 
     // 创建分类和文章
     await createCategoriesAndPosts(adminUser.id);
-
-    // 创建前端路由
-    await createFrontRoutes(adminUser.id);
 
     // 创建菜单
     await createMenus(adminUser.id);

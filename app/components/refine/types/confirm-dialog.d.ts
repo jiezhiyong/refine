@@ -3,7 +3,7 @@ import { DeleteButtonValues } from '@refinedev/core';
 import { VariantProps } from 'class-variance-authority';
 import type { ReactElement } from 'react';
 
-import type { buttonVariants } from '~/components/ui/button';
+import type { buttonVariants } from '@/components/ui/button';
 
 export type ConfirmDialogProps = AlertDialogProps & {
   title?: string;

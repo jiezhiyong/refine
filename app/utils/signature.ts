@@ -4,7 +4,7 @@ import { bytesToHex } from '@noble/hashes/utils';
 import queryString from 'query-string';
 import invariant from 'tiny-invariant';
 
-import { TAny } from '~/types/any';
+import { TAny } from '@/types/any';
 
 import { canUseDOM } from './can-use-dom';
 

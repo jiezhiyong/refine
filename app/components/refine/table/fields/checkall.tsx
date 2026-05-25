@@ -1,9 +1,9 @@
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
-import { BaseRecord, HttpError, useTranslate } from '@refinedev/core';
+import { BaseRecord, useTranslate } from '@refinedev/core';
 import { FC, PropsWithChildren } from 'react';
 
-import { Button } from '~/components/ui/button';
-import { Checkbox } from '~/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +11,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
-import { UseTableReturnType } from '~/lib/refinedev-react-table';
-import { cn } from '~/lib/utils';
+} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
+import { Table } from '@tanstack/react-table';
 
 type CheckAllProps = React.ComponentProps<typeof Checkbox> &
   PropsWithChildren<{
-    table: UseTableReturnType<BaseRecord, HttpError>;
+    table: Table<BaseRecord>;
     options?: {
       disabled?: boolean;
       label: string;

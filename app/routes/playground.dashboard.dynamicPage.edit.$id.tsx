@@ -30,13 +30,13 @@ import { useForm as useHookForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { PageError } from '~/components/500';
-import { CodeEditor } from '~/components/refine/form/code';
-import { Combobox } from '~/components/refine/form/combobox';
-import { Field } from '~/components/refine/form/field';
-import { FormEasy } from '~/components/refine/form/form';
-import { Button } from '~/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
+import { PageError } from '@/components/500';
+import { CodeEditor } from '@/components/refine/form/code';
+import { Combobox } from '@/components/refine/form/combobox';
+import { Field } from '@/components/refine/form/field';
+import { FormEasy } from '@/components/refine/form/form';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -44,23 +44,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '~/components/ui/dialog';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
-import { Switch } from '~/components/ui/switch';
-import { H2 } from '~/components/ui/typography';
-import { EnumAction } from '~/constants/action';
-import { dataService } from '~/services/data.server';
-import { TAny } from '~/types/any';
-import { TFormFieldItem, TTableFieldItem, TTableRecordLinkItem } from '~/types/dynamic-page';
-import { dropEmptyKey } from '~/utils/drop-empty-key';
-import { getRefineQueryOptions } from '~/utils/form';
-import { getChangedValues } from '~/utils/get-changed-values';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { parseTablenameFromSql } from '~/utils/sql';
-import { schemaDynamicPage, schemaJson } from '~/zod';
+} from '@/components/ui/dialog';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { H2 } from '@/components/ui/typography';
+import { EnumAction } from '@/constants/action';
+import { dataService } from '@/services/data.server';
+import { TAny } from '@/types/any';
+import { TFormFieldItem, TTableFieldItem, TTableRecordLinkItem } from '@/types/dynamic-page';
+import { dropEmptyKey } from '@/utils/drop-empty-key';
+import { getRefineQueryOptions } from '@/utils/form';
+import { getChangedValues } from '@/utils/get-changed-values';
+import { getDefaultTitle } from '@/utils/get-default-title';
+import { parseTablenameFromSql } from '@/utils/sql';
+import { schemaDynamicPage, schemaJson } from '@/zod';
 
 // meta
 export const meta: MetaFunction = ({ matches }) => {
@@ -151,23 +151,23 @@ export const dateFormFieldTypes: TFormFieldItem['type'][] = ['date', 'dateRange'
 
 // 示例 tableSql 数据
 const exampleTableSql = `
-SELECT 
-  p."id", 
-  p."title", 
+SELECT
+  p."id",
+  p."title",
   c."title" AS "category",
   p."hit",
   p."status",
   p."updatedAt",
   u."name" AS "operatedBy"
-FROM 
+FROM
   "Post" p
-JOIN 
+JOIN
   "Category" c ON p."categoryId" = c.id
-JOIN 
+JOIN
   "User" u ON p."operatedById" = u.id
-WHERE 
+WHERE
   p."deleted" IS NOT TRUE
-ORDER BY 
+ORDER BY
   p."updatedAt" DESC;
 `;
 

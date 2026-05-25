@@ -10,11 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/components/ui/sidebar';
-import { apiBase } from '~/config/base-url';
-import { rolesAll } from '~/constants/roles';
-import { RootLoaderData } from '~/root';
+} from '@/components/ui/dropdown-menu';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
+import { apiBase } from '@/config/base-url';
+import { rolesAll } from '@/constants/roles';
+import { RootLoaderData } from '@/root';
 
 export function RoleSwitcher() {
   const { isMobile } = useSidebar();

@@ -2,10 +2,10 @@ import { useTranslation } from '@refinedev/core';
 import { useRouteLoaderData, useSearchParams } from '@remix-run/react';
 import { Languages } from 'lucide-react';
 
-import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/utils';
-import { RootLoaderData } from '~/root';
-import { canUseDOM } from '~/utils/can-use-dom';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { RootLoaderData } from '@/root';
+import { canUseDOM } from '@/utils/can-use-dom';
 
 export function LanguageSwitcher() {
   const [searchParams, setSearchParams] = useSearchParams();

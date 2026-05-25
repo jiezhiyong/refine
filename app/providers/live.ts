@@ -1,10 +1,10 @@
 import { LiveEvent, LiveProvider } from '@refinedev/core';
 import { io, Socket } from 'socket.io-client';
 
-import { baseUrl } from '~/config/base-url';
-import { Ably } from '~/lib/refinedev-ably';
-import { TAny } from '~/types/any';
-import { canUseDOM } from '~/utils/can-use-dom';
+import { baseUrl } from '@/config/base-url';
+import { Ably } from '@/lib/refinedev-ably';
+import { TAny } from '@/types/any';
+import { canUseDOM } from '@/utils/can-use-dom';
 
 // Ably 配置
 export const ablyClient = new Ably.Realtime('BPxcXA.E1bxAw:T4H-_uL4SC0WfJfZUlRnXZ_XPgZkN8N_DNmGVsH8JNs');

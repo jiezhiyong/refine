@@ -21,9 +21,6 @@ export default {
     admin: 'admin',
     casbinRule: 'permission',
     log: 'log',
-    frontRoute: 'front route',
-    frontRouteProject: 'project',
-    frontRouteModule: 'module',
     'auditRecord/applyRole': 'applyRole',
   },
   pages: {

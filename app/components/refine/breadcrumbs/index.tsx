@@ -1,4 +1,4 @@
-import { matchResourceFromRoute, useBreadcrumb, useRefineContext, useResource } from '@refinedev/core';
+import { matchResourceFromRoute, useBreadcrumb, useResourceParams } from '@refinedev/core';
 import { RefineBreadcrumbProps } from '@refinedev/ui-types';
 import { t } from 'i18next';
 import { HomeIcon } from 'lucide-react';
@@ -11,8 +11,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '~/components/ui/breadcrumb';
-import { toCamelCase } from '~/utils/to-camel-case';
+} from '@/components/ui/breadcrumb';
+import { toCamelCase } from '@/utils/to-camel-case';
 
 import { Link } from '../link';
 
@@ -23,9 +23,7 @@ export const Breadcrumbs: FC<BreadcrumbProps> = ({ showHome = true, meta }) => {
     meta,
   });
 
-  const { hasDashboard } = useRefineContext();
-
-  const { resources } = useResource();
+  const { resources } = useResourceParams();
 
   const dashboardResource = resources[0];
 
@@ -49,7 +47,7 @@ export const Breadcrumbs: FC<BreadcrumbProps> = ({ showHome = true, meta }) => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {showHome || hasDashboard || rootRouteResource.found ? (
+        {showHome || rootRouteResource.found ? (
           <>
             <BreadcrumbItem>
               <BreadcrumbLink

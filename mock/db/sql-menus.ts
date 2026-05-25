@@ -1,4 +1,4 @@
-import { EnumResource } from '~/constants/resource';
+import { EnumResource } from '@/constants/resource';
 
 export const menus = [
   // 一级菜单 playground
@@ -70,28 +70,6 @@ export const menus = [
     create: `/playground/article/${EnumResource.category}/create`,
     edit: `/playground/article/${EnumResource.category}/edit/:id`,
     meta: { parent: 'article' },
-  },
-
-  // 二级菜单 playground/frontRoute
-  {
-    name: 'frontRoute',
-    meta: { parent: 'playground', icon: 'Route' },
-  },
-
-  // 三级菜单 playground/frontRoute/project、module
-  {
-    name: EnumResource.frontRouteProject,
-    list: `/playground/frontRoute/${EnumResource.frontRouteProject}`,
-    create: `/playground/frontRoute/${EnumResource.frontRouteProject}/create`,
-    edit: `/playground/frontRoute/${EnumResource.frontRouteProject}/edit/:id`,
-    meta: { parent: 'frontRoute' },
-  },
-  {
-    name: EnumResource.frontRouteModule,
-    list: `/playground/frontRoute/${EnumResource.frontRouteModule}`,
-    create: `/playground/frontRoute/${EnumResource.frontRouteModule}/create`,
-    edit: `/playground/frontRoute/${EnumResource.frontRouteModule}/edit/:id`,
-    meta: { parent: 'frontRoute' },
   },
 
   // 一级菜单 system

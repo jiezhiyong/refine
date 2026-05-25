@@ -1,8 +1,8 @@
 import { CrudFilters, CrudSorting, GetListParams, Pagination } from '@refinedev/core';
 
-import { EnumResource } from '~/constants/resource';
-import { TAny } from '~/types/any';
-import { schemaMap } from '~/zod';
+import { EnumResource } from '@/constants/resource';
+import { TAny } from '@/types/any';
+import { schemaMap } from '@/zod';
 
 // 从 URL 参数中解析分页信息
 export function getPaginationFromUrl(url: URL): Pagination {
@@ -10,7 +10,7 @@ export function getPaginationFromUrl(url: URL): Pagination {
   const page = Number(url.searchParams.get('page')) || 1;
 
   return {
-    current: page,
+    currentPage: page,
     pageSize: limit,
   };
 }
@@ -328,8 +328,8 @@ export function buildTableParams({ pagination, filters, sorters, meta }: Omit<Ge
     queryParams.select = meta.select;
   }
 
-  const { current = 1, pageSize } = pagination ?? {};
-  const skip = pageSize ? (Number(current) - 1) * Number(pageSize) : undefined;
+  const { currentPage = 1, pageSize } = pagination ?? {};
+  const skip = pageSize ? (Number(currentPage) - 1) * Number(pageSize) : undefined;
   if (pageSize) {
     queryParams.skip = skip;
     queryParams.take = Number(pageSize);

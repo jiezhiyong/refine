@@ -1,11 +1,11 @@
 import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
 import { t } from 'i18next';
 
-import { Button } from '~/components/ui/button';
-import { Card, CardContent } from '~/components/ui/card';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
-import { dashboardResource } from '~/config/resources';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { dashboardResource } from '@/config/resources';
 
 import { ErrorMessage } from './error';
 import { PrivacyPolicy } from './privacy-policy';

@@ -1,5 +1,5 @@
-import { AUDIT_LOG_CUSTOM_NEW, AUDIT_LOG_CUSTOM_OLD } from '~/constants/log';
-import { TAny } from '~/types/any';
+import { AUDIT_LOG_CUSTOM_NEW, AUDIT_LOG_CUSTOM_OLD } from '@/constants/log';
+import { TAny } from '@/types/any';
 
 /**
  * 删除对象或对象数组中的自定义审计日志键

@@ -3,32 +3,30 @@ import {
   CanReturnType,
   useCan,
   useNavigation,
-  useResource,
   useResourceParams,
   useTranslate,
 } from '@refinedev/core';
 import { useContext } from 'react';
 
-import { EnumAction } from '~/constants/action';
-import { TAny } from '~/types/any';
+import { EnumAction } from '@/constants/action';
+import { TAny } from '@/types/any';
 
 type GetShowUrlReturnType = CanReturnType & {
   url: string;
 };
 
-export const useGetShowUrl = (resource: string, recordItemId: string, meta?: TAny): GetShowUrlReturnType => {
+export const useGetShowUrl = (resourceName: string, recordItemId: string, meta?: TAny): GetShowUrlReturnType => {
   const accessControlContext = useContext(AccessControlContext);
   const accessControlEnabled = accessControlContext.options.buttons.enableAccessControl;
 
   const { showUrl: generateShowUrl } = useNavigation();
 
-  const { resource: _resource } = useResource(resource);
-  const { id } = useResourceParams();
+  const { id, resource } = useResourceParams({ resource: resourceName });
 
   const { data } = useCan({
-    resource: resource,
+    resource: resourceName,
     action: EnumAction.show,
-    params: { id: recordItemId, resource: _resource },
+    params: { id: recordItemId, resource },
     queryOptions: {
       enabled: accessControlEnabled,
     },
@@ -42,7 +40,7 @@ export const useGetShowUrl = (resource: string, recordItemId: string, meta?: TAn
     else return translate('buttons.notAccessTitle', "You don't have permission to access");
   };
 
-  const showUrl = resource && (recordItemId || id) ? generateShowUrl(resource, recordItemId! ?? id!, meta) : '';
+  const showUrl = resourceName && (recordItemId || id) ? generateShowUrl(resourceName, recordItemId! ?? id!, meta) : '';
 
   return {
     can: !(accessControlEnabled && !data?.can),

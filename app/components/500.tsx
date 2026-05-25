@@ -2,8 +2,8 @@ import { useBack } from '@refinedev/core';
 import { ErrorResponse } from '@remix-run/node';
 import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import { Button } from '~/components/ui/button';
-import { useMountEffect } from '~/hooks/use-mount-effect';
+import { Button } from '@/components/ui/button';
+import { useMountEffect } from '@/hooks/use-mount-effect';
 
 export function PageError({ error }: { error?: Error | ErrorResponse | { message: string } | unknown }) {
   const routeError = useRouteError();

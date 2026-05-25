@@ -1,26 +1,26 @@
 import { Log, Prisma } from '@prisma/client';
-import { BaseRecord, HttpError, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
+import { BaseRecord, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
 import { parseTableParams } from '@refinedev/remix-router';
 import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
 
-import { PageError } from '~/components/500';
-import { ExportButton } from '~/components/refine/buttons/export';
-import { ShowButton } from '~/components/refine/buttons/show';
-import { TableEasy, TableFilterProps } from '~/components/refine/table';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Badge } from '~/components/ui/badge';
-import { Checkbox } from '~/components/ui/checkbox';
-import { EnumAction } from '~/constants/action';
-import { EnumLogType, LOG_STATUS_LIST, LOG_STATUS_MAP } from '~/constants/log';
-import { EnumResource } from '~/constants/resource';
-import { type UseTableReturnType } from '~/lib/refinedev-react-table';
-import { dataService } from '~/services/data.server';
-import { TAny } from '~/types/any';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { buildTableParams } from '~/utils/request';
+import { PageError } from '@/components/500';
+import { ExportButton } from '@/components/refine/buttons/export';
+import { ShowButton } from '@/components/refine/buttons/show';
+import { TableEasy, TableFilterProps } from '@/components/refine/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { EnumAction } from '@/constants/action';
+import { EnumLogType, LOG_STATUS_LIST, LOG_STATUS_MAP } from '@/constants/log';
+import { EnumResource } from '@/constants/resource';
+import { dataService } from '@/services/data.server';
+import { TAny } from '@/types/any';
+import { getDefaultTitle } from '@/utils/get-default-title';
+import { buildTableParams } from '@/utils/request';
+import { Table } from '@tanstack/react-table';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
@@ -50,7 +50,7 @@ export default function LogIndex() {
   const { mutate: deleteMany } = useDeleteMany();
   const { data: deletePermission } = useCan({ resource: EnumResource.log, action: EnumAction.delete });
 
-  const bulkDeleteAction = (table: UseTableReturnType<BaseRecord, HttpError>) => {
+  const bulkDeleteAction = (table: Table<BaseRecord>) => {
     const rows = table.getSelectedRowModel().rows;
     const label = `Delete Selected (${rows.length}) ${friendly('Row', rows.length > 1 ? 'plural' : 'singular')}`;
 

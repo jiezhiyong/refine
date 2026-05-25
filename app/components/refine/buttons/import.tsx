@@ -2,8 +2,8 @@ import { useCan, useImport, useImportButton } from '@refinedev/core';
 import { Upload } from 'lucide-react';
 import type { ChangeEvent, FC } from 'react';
 
-import { Button, ButtonProps } from '~/components/ui/button';
-import { EnumAction } from '~/constants/action';
+import { Button, ButtonProps } from '@/components/ui/button';
+import { EnumAction } from '@/constants/action';
 
 export const ImportButton: FC<ButtonProps> = (props) => {
   const { inputProps } = useImport({

@@ -2,9 +2,9 @@ import { useListButton } from '@refinedev/core';
 import { ListIcon } from 'lucide-react';
 import type { FC } from 'react';
 
-import { ListButtonProps } from '~/components/refine/types/buttons';
-import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/utils';
+import { ListButtonProps } from '@/components/refine/types/buttons';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export const ListButton: FC<ListButtonProps> = ({
   resource: resourceNameFromProps,

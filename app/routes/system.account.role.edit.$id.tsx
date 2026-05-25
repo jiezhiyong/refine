@@ -6,21 +6,21 @@ import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { UIMatch, useLoaderData } from '@remix-run/react';
 import { useCallback } from 'react';
 
-import { PageError } from '~/components/500';
-import { DeleteButton } from '~/components/refine/buttons/delete';
-import { Field } from '~/components/refine/form/field';
-import { FormEasy } from '~/components/refine/form/form';
-import { Input } from '~/components/ui/input';
-import { Textarea } from '~/components/ui/textarea';
-import { EnumAction } from '~/constants/action';
-import { EnumRole } from '~/constants/roles';
-import { dataService } from '~/services/data.server';
-import { HandleFunction } from '~/types/handle';
-import { dropEmptyKey } from '~/utils/drop-empty-key';
-import { getRefineQueryOptions } from '~/utils/form';
-import { getChangedValues } from '~/utils/get-changed-values';
-import { getDefaultTitle } from '~/utils/get-default-title';
-import { schemaRole, TSchemaRole } from '~/zod';
+import { PageError } from '@/components/500';
+import { DeleteButton } from '@/components/refine/buttons/delete';
+import { Field } from '@/components/refine/form/field';
+import { FormEasy } from '@/components/refine/form/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { EnumAction } from '@/constants/action';
+import { EnumRole } from '@/constants/roles';
+import { dataService } from '@/services/data.server';
+import { HandleFunction } from '@/types/handle';
+import { dropEmptyKey } from '@/utils/drop-empty-key';
+import { getRefineQueryOptions } from '@/utils/form';
+import { getChangedValues } from '@/utils/get-changed-values';
+import { getDefaultTitle } from '@/utils/get-default-title';
+import { schemaRole, TSchemaRole } from '@/zod';
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];
