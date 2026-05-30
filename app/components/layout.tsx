@@ -1,4 +1,4 @@
-import { Outlet, useRouteLoaderData } from '@remix-run/react';
+import { Outlet, useRouteLoaderData } from 'react-router';
 
 import { Breadcrumbs } from '@/components/refine/breadcrumbs';
 import { SidebarLeft } from '@/components/sidebar-left';
@@ -17,7 +17,7 @@ export function SidebarLayout({ children }: { children?: React.ReactNode }) {
       <SidebarLeft />
 
       <SidebarInset className="max-w-[100vw] group-has-data-[collapsible=icon]/sidebar-wrapper:max-w-[calc(100vw-var(--sidebar-width-icon))] group-has-data-[state=expanded]/sidebar-wrapper:max-w-[calc(100vw-var(--sidebar-width))]">
-        <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 overflow-auto transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-2!" />

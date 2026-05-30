@@ -13,8 +13,6 @@ if (!globalThis.crypto) {
 import { User } from '@prisma/client';
 import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
-import { OAuth2Strategy } from 'remix-auth-oauth2';
-import invariant from 'tiny-invariant';
 
 import { EnumAuthProvider } from '@/constants/user';
 import { verifyUserpassLogin } from '@/services/user.server';

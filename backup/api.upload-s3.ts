@@ -1,11 +1,11 @@
-// import type { ActionFunction, UploadHandler } from '@remix-run/node';
+// import type { ActionFunction, UploadHandler } from '@react-router/node';
 // import {
 //   json,
 //   unstable_composeUploadHandlers as composeUploadHandlers,
 //   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
 //   unstable_parseMultipartFormData as parseMultipartFormData,
-// } from '@remix-run/node';
-// import { useFetcher } from '@remix-run/react';
+// } from '@react-router/node';
+// import { useFetcher } from 'react-router';
 // import { s3UploadHandler } from '@/services/s3.server';
 
 // type ActionData = {

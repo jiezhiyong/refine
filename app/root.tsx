@@ -1,8 +1,14 @@
 import { User } from '@prisma/client';
 import { Refine, ResourceProps } from '@refinedev/core';
 import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
-import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
-import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import routerProvider, { UnsavedChangesNotifier } from '@refinedev/react-router';
+import * as Sentry from '@sentry/react-router';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Loader } from 'lucide-react';
+import nProgress from 'nprogress';
+import nProgressStyles from 'nprogress/nprogress.css?url';
+import { type PropsWithChildren, useEffect } from 'react';
 import {
   data,
   isRouteErrorResponse,
@@ -14,15 +20,8 @@ import {
   useLoaderData,
   useNavigation,
   useRouteError,
-} from '@remix-run/react';
-import * as Sentry from '@sentry/remix';
-import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
-import { Analytics } from '@vercel/analytics/remix';
-import { SpeedInsights } from '@vercel/speed-insights/remix';
-import { Loader } from 'lucide-react';
-import nProgress from 'nprogress';
-import nProgressStyles from 'nprogress/nprogress.css?url';
-import { type PropsWithChildren, useEffect } from 'react';
+} from 'react-router';
+import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 
 import { NotFound } from '@/components/404';
@@ -50,6 +49,7 @@ import { getUser } from '@/services/session.server';
 import baseStyles from '@/styles/base.css?url';
 import tailwindStyles from '@/styles/tailwind.css?url';
 import { PermissionRule } from '@/types/casbin';
+import { captureReactRouterErrorBoundaryError } from '@/utils/capture-react-router-error-boundary-error';
 import { generateSignature } from '@/utils/signature';
 
 /** 元数据 */
@@ -254,12 +254,15 @@ function App() {
 }
 
 /** 根组件 */
-export default withSentry(App);
+export default App;
 
 /** 全局错误边界处理 */
 export function ErrorBoundary() {
   const error = useRouteError() as ErrorResponse | Error;
-  captureRemixErrorBoundaryError(error);
+
+  useEffect(() => {
+    captureReactRouterErrorBoundaryError(error);
+  }, [error]);
 
   if (isRouteErrorResponse(error)) {
     return (

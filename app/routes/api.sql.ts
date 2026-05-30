@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs } from 'react-router';
 
 import { getEnhancedDb } from '@/services/db.server';
 import { requireUser } from '@/services/session.server';

@@ -1,6 +1,7 @@
-import { RemixBrowser } from '@remix-run/react';
+import { sentryOnError } from '@sentry/react-router';
 import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
+import { HydratedRouter } from 'react-router/dom';
 
 import { initSentry } from '@/clients/sentry.client';
 
@@ -30,7 +31,7 @@ startTransition(() => {
   hydrateRoot(
     document,
     <StrictMode>
-      <RemixBrowser />
+      <HydratedRouter onError={sentryOnError} />
     </StrictMode>
   );
 });

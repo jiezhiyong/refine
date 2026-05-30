@@ -668,7 +668,9 @@ export function DataTableFilterInput<TData>({
 
 const CRUD_OPERATOR_LABELS: Record<Exclude<CrudOperators, 'or' | 'and'>, { i18nKey: string; defaultLabel: string }> = {
   eq: { i18nKey: 'table.filter.operator.eq', defaultLabel: 'Equals' },
+  eqs: { i18nKey: 'table.filter.operator.eqs', defaultLabel: 'Equals (strict)' },
   ne: { i18nKey: 'table.filter.operator.ne', defaultLabel: 'Not equals' },
+  nes: { i18nKey: 'table.filter.operator.nes', defaultLabel: 'Not equals (strict)' },
   lt: { i18nKey: 'table.filter.operator.lt', defaultLabel: 'Less than' },
   gt: { i18nKey: 'table.filter.operator.gt', defaultLabel: 'Greater than' },
   lte: {

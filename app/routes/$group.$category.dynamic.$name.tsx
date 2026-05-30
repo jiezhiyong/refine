@@ -14,12 +14,12 @@ import {
   useResourceParams,
   useUserFriendlyName,
 } from '@refinedev/core';
-import { ActionFunctionArgs, data, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useActionData, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
+import { Table } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { CalendarIcon, CheckCheck, EyeIcon, Link2 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { ActionFunctionArgs, data, LoaderFunctionArgs, MetaFunction , useActionData, useLoaderData, useNavigate, useSubmit } from 'react-router';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -79,7 +79,7 @@ import { get } from '@/utils/get';
 import { getChangedValues } from '@/utils/get-changed-values';
 import { parseSql, parseTableFieldArrayFromSql, parseTablenameFromSql } from '@/utils/sql';
 import { schemaJson } from '@/zod';
-import { Table } from '@tanstack/react-table';
+
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.config?.title || '配置化CRUD页面' }];
@@ -100,7 +100,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   // 如果没找到匹配的配置，返回404
   if (!config) {
     console.error('配置化CRUD页面不存在、或未激活');
-    return Response.json({ message: '配置化CRUD页面不存在、或未激活' }, { status: 404 });
+    throw data({ message: '配置化CRUD页面不存在、或未激活' }, { status: 404 });
   }
 
   // 获取表名和查询条件
@@ -121,7 +121,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const total = Array.isArray(resTotal) && resTotal.length > 0 ? Number(resTotal[0].count) : 0;
   return data({
     config,
-    tableData: { data: resList, total },
+    tableData: { data: resList as BaseRecord[], total },
     resourceTable,
   });
 }
@@ -191,7 +191,7 @@ export async function action({ request }: ActionFunctionArgs) {
  * 根据配置化显示不同CRUD页面内容
  */
 export default function DynamicPageIndex() {
-  const { tableData = { data: [], total: 0 }, config = {}, resourceTable } = useLoaderData<typeof loader>();
+  const { tableData, config, resourceTable } = useLoaderData<typeof loader>();
 
   const actionData = useActionData<typeof action>();
   const submit = useSubmit();
@@ -354,10 +354,10 @@ export default function DynamicPageIndex() {
       );
     }
 
-    const { enableDelete, enableEdit, enableClone, tableRecordLink } = config;
+    const { enableDelete, enableEdit, enableClone } = config;
 
     // 添加操作列
-    const enableActions = enableEdit || enableClone || enableDelete || tableRecordLink?.length;
+    const enableActions = enableEdit || enableClone || enableDelete || tableRecordLinkArray.length > 0;
     columns.push(
       <TableEasy.Column
         key="actions"

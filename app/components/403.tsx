@@ -1,5 +1,5 @@
 import { useBack } from '@refinedev/core';
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 

@@ -1,5 +1,5 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect } from 'react-router';
 
 import { LoginForm } from '@/components/form-login';
 import { dashboardResource } from '@/config/resources';

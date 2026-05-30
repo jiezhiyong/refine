@@ -1,7 +1,7 @@
 import { TreeMenuItem, useMenu, useResourceParams } from '@refinedev/core';
-import { Link } from '@remix-run/react';
 import { t } from 'i18next';
 import { ChevronRight } from 'lucide-react';
+import { Link } from 'react-router';
 
 import { DynamicIcon } from '@/components/dynamic-icon';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';

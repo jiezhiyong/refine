@@ -1,5 +1,5 @@
-import { useNavigation } from '@remix-run/react';
 import { Loader } from 'lucide-react';
+import { useNavigation } from 'react-router';
 
 export function Spinner() {
   const navigation = useNavigation();

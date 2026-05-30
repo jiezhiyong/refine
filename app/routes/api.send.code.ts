@@ -1,5 +1,5 @@
-import type { ActionFunction } from '@remix-run/node';
-import { data } from '@remix-run/node';
+import type { ActionFunction } from 'react-router';
+import { data } from 'react-router';
 
 import { sendVerificationEmail } from '@/services/email.server';
 

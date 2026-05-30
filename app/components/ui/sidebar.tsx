@@ -1,8 +1,8 @@
 import { Slot } from '@radix-ui/react-slot';
-import { useFetcher } from '@remix-run/react';
 import { cva, VariantProps } from 'class-variance-authority';
 import { PanelLeftIcon } from 'lucide-react';
 import * as React from 'react';
+import { useFetcher } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

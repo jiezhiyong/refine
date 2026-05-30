@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 
 /** 登录、注册时的隐私政策 */
 export function PrivacyPolicy() {

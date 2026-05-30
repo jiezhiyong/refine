@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { type ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 import { dataService, isValidDataServiceAction } from '@/services/data.server';
 import { isPrismaModel } from '@/services/db.server';

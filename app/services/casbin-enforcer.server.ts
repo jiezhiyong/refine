@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/remix';
+import * as Sentry from '@sentry/react-router';
 import { newEnforcer } from 'casbin';
 import { PrismaAdapter } from 'casbin-prisma-adapter';
 

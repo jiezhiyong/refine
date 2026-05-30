@@ -1,5 +1,5 @@
 import { CanAccess } from '@refinedev/core';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from 'react-router';
 
 import { PermissionDenied } from '@/components/403';
 import { PageError } from '@/components/500';

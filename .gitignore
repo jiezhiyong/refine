@@ -32,6 +32,7 @@ Thumbs.db
 
 # Remix specific
 /.cache
+.react-router/
 /api/index.js
 /api/index.js.map
 
@@ -48,3 +49,6 @@ me.ly.com+3.pem
 
 # tests
 test-results
+
+# build
+build

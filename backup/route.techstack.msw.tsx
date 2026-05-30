@@ -1,6 +1,6 @@
 // import { useState } from 'react';
-// import type { LoaderFunction, MetaFunction } from '@remix-run/node';
-// import { useLoaderData } from '@remix-run/react';
+// import type { LoaderFunction, MetaFunction } from 'react-router';
+// import { useLoaderData } from 'react-router';
 // import { Button } from '@/components-shadcn/button';
 // import { getDefaultTitle } from '@/utils/get-default-title';
 // import { PageError} from '@/components/500';

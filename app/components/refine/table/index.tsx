@@ -11,9 +11,10 @@ import {
   Table,
   TableOptionsResolved,
 } from '@tanstack/react-table';
-import React, { FC, ReactElement, useCallback, useMemo } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { DeleteProvider } from '@/components/refine/providers/deleteProvider';
+import { getCommonStyles } from '@/components/refine-ui/data-table/data-table';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as TableUi } from '@/components/ui/table';
 import { DEFAULT_PAGE_SIZE } from '@/config/pagination';
 import { TAny } from '@/types/any';
@@ -107,6 +108,12 @@ export function TableEasy<
         column['cell'] = cell;
       }
 
+      if (id === 'actions') {
+        column.enablePinning = true;
+        column.size = 100;
+        column.minSize = 80;
+      }
+
       return column;
     },
     []
@@ -122,6 +129,7 @@ export function TableEasy<
 
   const tableResult = useTable({
     columns,
+    enablePinning: true,
     refineCoreProps: {
       pagination: {
         pageSize: DEFAULT_PAGE_SIZE,
@@ -129,9 +137,39 @@ export function TableEasy<
       ...refineCoreProps,
     },
     ...props,
+    initialState: {
+      ...props.initialState,
+      columnPinning: {
+        ...props.initialState?.columnPinning,
+        right: ['actions', ...(props.initialState?.columnPinning?.right ?? [])],
+      },
+    },
   });
 
   const { reactTable, refineCore } = tableResult;
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLTableElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState({ horizontal: false, vertical: false });
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (!tableRef.current || !tableContainerRef.current) return;
+
+      setIsOverflowing({
+        horizontal: tableRef.current.offsetWidth > tableContainerRef.current.clientWidth,
+        vertical: tableRef.current.offsetHeight > tableContainerRef.current.clientHeight,
+      });
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    const timeoutId = setTimeout(checkOverflow, 100);
+
+    return () => {
+      window.removeEventListener('resize', checkOverflow);
+      clearTimeout(timeoutId);
+    };
+  }, [refineCore.tableQuery.data?.data, reactTable.getState().pagination.pageSize]);
   const tableOptions = useMemo<TableOptionsResolved<TData>>(() => reactTable.options, [reactTable]);
 
   const isFilterable = useMemo<boolean>(
@@ -139,12 +177,26 @@ export function TableEasy<
     [tableOptions]
   );
 
+  const getColumnStyles = useCallback(
+    (column: Column<TData>) => {
+      const styles = getCommonStyles({ column, isOverflowing });
+
+      if (!column.getIsPinned()) {
+        const { width: _width, ...rest } = styles;
+        return rest;
+      }
+
+      return styles;
+    },
+    [isOverflowing]
+  );
+
   return (
     <DeleteProvider>
       <div className="mt-1 space-y-4">
         <DataTableToolbar table={reactTable} toolbar={toolbar} />
         <div className="border-border rounded-md border">
-          <TableUi>
+          <TableUi ref={tableRef} containerRef={tableContainerRef}>
             {showHeader && (
               <TableHeader>
                 {reactTable.getHeaderGroups().map((headerGroup) => (
@@ -152,7 +204,10 @@ export function TableEasy<
                     {headerGroup.headers.map((header) => {
                       const columnDef = header.column.columnDef as CustomColumnDef<TData, TError>;
                       return (
-                        <TableHead key={header.id}>
+                        <TableHead
+                          key={header.id}
+                          style={getColumnStyles(header.column)}
+                        >
                           <div className="inline-flex flex-row items-center gap-x-2.5">
                             {header.isPlaceholder
                               ? null
@@ -187,7 +242,11 @@ export function TableEasy<
                 reactTable.getRowModel().rows.map((row: TAny) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                     {row.getVisibleCells().map((cell: TAny) => (
-                      <TableCell key={cell.id} className="text-nowrap">
+                      <TableCell
+                        key={cell.id}
+                        className="text-nowrap"
+                        style={getColumnStyles(cell.column)}
+                      >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}

@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs, type MetaFunction, redirect } from '@remix-run/node';
+import { type ActionFunctionArgs, type MetaFunction, redirect } from 'react-router';
 
 import { RegisterForm } from '@/components/form-register';
 import { EnumAuthProvider } from '@/constants/user';

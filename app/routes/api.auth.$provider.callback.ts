@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, redirect } from '@remix-run/node';
+import type { AuthProvider } from '@prisma/client';
+import { LoaderFunctionArgs, redirect } from 'react-router';
 
 import { dashboardResource } from '@/config/resources';
 import { EnumAuthProvider } from '@/constants/user';
@@ -32,7 +33,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     if (existingUser?.id) {
       session.set('user', existingUser);
     } else {
-      const userNew = await createUser({ email, name, provider: EnumAuthProvider.TC_SHUKE });
+      const userNew = await createUser({
+        email,
+        name,
+        provider: EnumAuthProvider.TC_SHUKE as AuthProvider,
+      });
       session.set('user', userNew);
     }
 

@@ -2,12 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Category } from '@prisma/client';
 import { HttpError, useDelete, useModal, useNotification, useSelect, useTranslation, useUpdate } from '@refinedev/core';
 import { useModalForm, useStepsForm } from '@refinedev/react-hook-form';
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Link, useViewTransitionState } from '@remix-run/react';
 import { CheckCheck, Undo2 } from 'lucide-react';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { FieldValues } from 'react-hook-form';
+import { ActionFunctionArgs, Link , LoaderFunctionArgs, MetaFunction, useViewTransitionState } from 'react-router';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
 import { PageError } from '@/components/500';

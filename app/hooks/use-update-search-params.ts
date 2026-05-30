@@ -1,4 +1,4 @@
-import { useSearchParams } from '@remix-run/react';
+import { useSearchParams } from 'react-router';
 
 /**
  * 更新搜索参数

@@ -1,18 +1,11 @@
 import path from 'path';
 
-import { vitePlugin as remix } from '@remix-run/dev';
+import { reactRouter } from '@react-router/dev/vite';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
-import { vercelPreset } from '@vercel/remix/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
-declare module '@remix-run/node' {
-  interface Future {
-    v3_singleFetch: true;
-  }
-}
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -44,18 +37,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       tailwindcss(),
-      remix({
-        presets: [vercelPreset()],
-        ssr: true, // 是否启用服务端渲染、设置为 `false` 时启用SPA模式
-        manifest: true,
-        future: {
-          v3_fetcherPersist: true,
-          v3_relativeSplatPath: true,
-          v3_throwAbortReason: true,
-          v3_singleFetch: true,
-          v3_lazyRouteDiscovery: true,
-        },
-      }),
+      reactRouter(),
       tsconfigPaths(),
       visualizer({ emitFile: true }), // 生成构建产物的可视化分析报告 stats.html
 
@@ -69,7 +51,7 @@ export default defineConfig(({ mode }) => {
           filesToDeleteAfterUpload: ['**/*.map'],
         },
         release: {
-          name: 'remix@' + process.env.npm_package_version,
+          name: 'refine@' + process.env.npm_package_version,
           uploadLegacySourcemaps: {
             paths: ['.'],
           },

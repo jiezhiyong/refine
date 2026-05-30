@@ -21,12 +21,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { DynamicPage, Menu } from '@prisma/client';
 import { FormAction, RedirectAction, useResourceParams } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
-import { ActionFunctionArgs, data, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useActionData, useLoaderData, useSubmit } from '@remix-run/react';
 import { isEqual } from 'es-toolkit';
 import { CheckCheck, Edit, GripVertical, Lightbulb, Plus, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm as useHookForm } from 'react-hook-form';
+import { ActionFunctionArgs, data, LoaderFunctionArgs , MetaFunction, useActionData, useLoaderData, useSubmit } from 'react-router';
 import { toast } from 'sonner';
 import { z } from 'zod';
 

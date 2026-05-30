@@ -1,4 +1,4 @@
-import { ActionFunction } from '@remix-run/node';
+import { ActionFunction } from 'react-router';
 
 import { getPreferencesNextCookie } from '@/services/cookie.server';
 import { getRequestData } from '@/utils/get-request-data';

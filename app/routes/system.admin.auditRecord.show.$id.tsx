@@ -1,8 +1,7 @@
 import { AuditRecord, LogAction, Prisma } from '@prisma/client';
-import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { useActionData, useLoaderData, useNavigation, useSubmit } from '@remix-run/react';
 import { AlertCircle, Ban, CalendarIcon, CheckCheck, Info, LeafyGreen, Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { ActionFunctionArgs, data, LoaderFunctionArgs , useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
 import { toast } from 'sonner';
 
 import { PageError } from '@/components/500';
@@ -58,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   // 检查用户权限
   if (user?.role !== EnumRole.administrator) {
-    return Response.json({ success: false, message: '无权限执行此操作' }, { status: 403 });
+    return data({ success: false, message: '无权限执行此操作' }, { status: 403 });
   }
 
   // 获取表单数据
@@ -69,24 +68,24 @@ export async function action({ request }: ActionFunctionArgs) {
 
   // 数据验证
   if (!id) {
-    return Response.json({ success: false, message: '缺少审核记录ID' }, { status: 400 });
+    return data({ success: false, message: '缺少审核记录ID' }, { status: 400 });
   }
   if (!action || !['approve', 'reject'].includes(action)) {
-    return Response.json({ success: false, message: '无效的操作类型' }, { status: 400 });
+    return data({ success: false, message: '无效的操作类型' }, { status: 400 });
   }
 
   // 审核通过
   if (action === 'approve') {
     const result = await AuditProcessor.approve(id);
-    return Response.json(result);
+    return data(result);
   }
 
   // 审核拒绝
   if (!reason) {
-    return Response.json({ success: false, message: '拒绝时必须提供原因' }, { status: 400 });
+    return data({ success: false, message: '拒绝时必须提供原因' }, { status: 400 });
   }
   const result = await AuditProcessor.reject(id, reason);
-  return Response.json(result);
+  return data(result);
 }
 
 export default function AuditRecordShow() {

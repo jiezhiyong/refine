@@ -2,9 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Category } from '@prisma/client';
 import { FormAction, RedirectAction, useResourceParams } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
 import { useCallback } from 'react';
+import { LoaderFunctionArgs, MetaFunction , useLoaderData } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { DeleteButton } from '@/components/refine/buttons/delete';
