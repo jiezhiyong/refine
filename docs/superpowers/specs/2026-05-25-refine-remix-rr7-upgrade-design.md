@@ -14,13 +14,13 @@ Refine 官方立场（[#6670](https://github.com/refinedev/refine/issues/6670)�
 
 ## 决策摘要
 
-| 决策项 | 选择 |
-|--------|------|
+| 决策项   | 选择                                                       |
+| -------- | ---------------------------------------------------------- |
 | 升级目标 | React Router v7 Framework Mode + `@refinedev/react-router` |
-| 迁移方案 | 方案 1：官方 Codemod + 手动收尾 |
-| 生产部署 | Vercel（`@vercel/react-router`） |
-| Docker | 保留兼容（更新 `start` script 与构建产物路径） |
-| 范围拆分 | PR1 框架迁移；PR2 `app/lib/` fork 清理 |
+| 迁移方案 | 方案 1：官方 Codemod + 手动收尾                            |
+| 生产部署 | Vercel（`@vercel/react-router`）                           |
+| Docker   | 保留兼容（更新 `start` script 与构建产物路径）             |
+| 范围拆分 | PR1 框架迁移；PR2 `app/lib/` fork 清理                     |
 
 ## 当前状态
 
@@ -41,12 +41,12 @@ Refine 官方立场（[#6670](https://github.com/refinedev/refine/issues/6670)�
 
 ### 自定义 `app/lib/`（PR2 范围，PR1 不动）
 
-| 目录 | 引用情况 | PR2 计划 |
-|------|----------|----------|
-| `refinedev-kbar` | 4 处引用 | 对比 `@refinedev/kbar` 后回归官方包 |
-| `refinedev-ably` | 定制 Live Provider | 评估是否保留最小定制 |
-| `refinedev-react-table` | 无引用（死代码） | 删除 |
-| `remix-auth-oauth2` | OAuth2 定制 | 不在 PR2 范围 |
+| 目录                    | 引用情况           | PR2 计划                            |
+| ----------------------- | ------------------ | ----------------------------------- |
+| `refinedev-kbar`        | 4 处引用           | 对比 `@refinedev/kbar` 后回归官方包 |
+| `refinedev-ably`        | 定制 Live Provider | 评估是否保留最小定制                |
+| `refinedev-react-table` | 无引用（死代码）   | 删除                                |
+| `remix-auth-oauth2`     | OAuth2 定制        | 不在 PR2 范围                       |
 
 ## 架构变更
 
@@ -88,14 +88,14 @@ react-router-dom
 
 ### 2. 配置文件
 
-| 文件 | 变更 |
-|------|------|
-| `vite.config.ts` | `remix()` → `reactRouter()`；`vercelPreset` 改从 `@vercel/react-router/vite` 导入；移除 `future` flags 和 `declare module '@remix-run/node'` |
-| `react-router.config.ts` | **新建**，迁出 `ssr: true` 等配置 |
-| `app/routes.ts` | **新建**，`flatRoutes()` |
-| `package.json` scripts | `react-router dev/build/typegen` |
-| `tsconfig.json` | types 改为 `@react-router/node`；include `.react-router/types/**/*`；添加 `rootDirs` |
-| `.gitignore` | 添加 `.react-router/` |
+| 文件                     | 变更                                                                                                                                         |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vite.config.ts`         | `remix()` → `reactRouter()`；`vercelPreset` 改从 `@vercel/react-router/vite` 导入；移除 `future` flags 和 `declare module '@remix-run/node'` |
+| `react-router.config.ts` | **新建**，迁出 `ssr: true` 等配置                                                                                                            |
+| `app/routes.ts`          | **新建**，`flatRoutes()`                                                                                                                     |
+| `package.json` scripts   | `react-router dev/build/typegen`                                                                                                             |
+| `tsconfig.json`          | types 改为 `@react-router/node`；include `.react-router/types/**/*`；添加 `rootDirs`                                                         |
+| `.gitignore`             | 添加 `.react-router/`                                                                                                                        |
 
 ### 3. Codemod
 
@@ -131,10 +131,10 @@ import routerProvider, { UnsavedChangesNotifier } from '@refinedev/react-router'
 
 ### 6. Entry 文件
 
-| 文件 | 变更 |
-|------|------|
+| 文件                   | 变更                                                         |
+| ---------------------- | ------------------------------------------------------------ |
 | `app/entry.client.tsx` | `RemixBrowser` → `HydratedRouter`（from `react-router/dom`） |
-| `app/entry.server.tsx` | `RemixServer` → `ServerRouter`；`EntryContext` 类型来源变更 |
+| `app/entry.server.tsx` | `RemixServer` → `ServerRouter`；`EntryContext` 类型来源变更  |
 
 ### 7. Sentry 适配
 
@@ -192,21 +192,21 @@ Dockerfile 本身无需结构性变更（仍 `pnpm run build` + `pnpm run start`
 
 ## 风险与缓解
 
-| 风险 | 缓解 |
-|------|------|
-| Codemod 漏改 edge case | `pnpm typecheck` + 全路由冒烟测试 |
-| `remix-auth` 与 RR v7 | peer dep 已支持 `react-router ^7`；OAuth callback 重点测试 |
-| `parseTableParams` 行为差异 | vendored 源码保持一致，列表页回归 |
-| Sentry source maps 路径 | 构建后验证上传路径（TODO 已有相关问题） |
-| Vercel Analytics 导入路径 | 查 package exports，必要时改用 `/react` 入口 |
-| Docker Node 18 vs engines 25 | PR1 不改镜像；文档标注 |
+| 风险                         | 缓解                                                       |
+| ---------------------------- | ---------------------------------------------------------- |
+| Codemod 漏改 edge case       | `pnpm typecheck` + 全路由冒烟测试                          |
+| `remix-auth` 与 RR v7        | peer dep 已支持 `react-router ^7`；OAuth callback 重点测试 |
+| `parseTableParams` 行为差异  | vendored 源码保持一致，列表页回归                          |
+| Sentry source maps 路径      | 构建后验证上传路径（TODO 已有相关问题）                    |
+| Vercel Analytics 导入路径    | 查 package exports，必要时改用 `/react` 入口               |
+| Docker Node 18 vs engines 25 | PR1 不改镜像；文档标注                                     |
 
 ## 预估工时
 
-| PR | 内容 | 预估 |
-|----|------|------|
+| PR  | 内容                     | 预估   |
+| --- | ------------------------ | ------ |
 | PR1 | Remix 2 → RR v7 框架迁移 | 2–3 天 |
-| PR2 | `app/lib/` fork 清理 | 1–2 天 |
+| PR2 | `app/lib/` fork 清理     | 1–2 天 |
 
 ## 参考
 

@@ -1,9 +1,9 @@
 import { Category, Prisma } from '@prisma/client';
 import { BaseRecord, useCan, useDeleteMany, useUserFriendlyName } from '@refinedev/core';
-import { parseTableParams } from '@/utils/parse-table-params';
-import { LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { useLoaderData } from 'react-router';
+import { Table } from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import { LoaderFunctionArgs, MetaFunction , useLoaderData } from 'react-router';
+
 
 import { PageError } from '@/components/500';
 import { CreateButton } from '@/components/refine/buttons/create';
@@ -17,8 +17,9 @@ import { EnumResource } from '@/constants/resource';
 import { EnumRole } from '@/constants/roles';
 import { dataService } from '@/services/data.server';
 import { getDefaultTitle } from '@/utils/get-default-title';
+import { parseTableParams } from '@/utils/parse-table-params';
 import { buildTableParams } from '@/utils/request';
-import { Table } from '@tanstack/react-table';
+
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];

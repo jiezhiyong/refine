@@ -1,5 +1,5 @@
-import { Form, Link, useActionData, useNavigation, useSearchParams } from 'react-router';
 import { t } from 'i18next';
+import { Form, Link, useActionData, useNavigation, useSearchParams } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

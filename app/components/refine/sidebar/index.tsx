@@ -1,7 +1,7 @@
 import { TreeMenuItem, useMenu, useResourceParams } from '@refinedev/core';
-import { Link } from 'react-router';
 import { t } from 'i18next';
 import { ChevronRight } from 'lucide-react';
+import { Link } from 'react-router';
 
 import { DynamicIcon } from '@/components/dynamic-icon';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -36,7 +36,7 @@ export function SidebarEasy() {
 
   return menuItems.map((menus_1, index) => (
     // <CanAccess key={menus_1.key} resource={menus_1.name} action="list">
-    (<SidebarGroup key={index}>
+    <SidebarGroup key={index}>
       <SidebarGroupLabel>{menus_1.meta?.label || t(`menus.${menus_1.name}`, menus_1.name)}</SidebarGroupLabel>
       <SidebarMenu>
         {menus_1.children.map((menus_2, idx) => {
@@ -49,7 +49,7 @@ export function SidebarEasy() {
           return (
             // <CanAccess key={menus_2.key} resource={menus_2.name} action="list">
             // </CanAccess>
-            (<Collapsible key={idx} asChild defaultOpen={isCollapsibleOpen} className="group/collapsible">
+            <Collapsible key={idx} asChild defaultOpen={isCollapsibleOpen} className="group/collapsible">
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton tooltip={menu2Name}>
@@ -71,7 +71,7 @@ export function SidebarEasy() {
                       return (
                         // <CanAccess key={item.key} resource={item.name} action="list">
                         // </CanAccess>
-                        (<SidebarMenuSubItem key={item.key}>
+                        <SidebarMenuSubItem key={item.key}>
                           <SidebarMenuSubButton
                             asChild
                             isActive={isActive}
@@ -81,17 +81,17 @@ export function SidebarEasy() {
                               <span className="capitalize">{menu3Name}</span>
                             </Link>
                           </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>)
+                        </SidebarMenuSubItem>
                       );
                     })}
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenuItem>
-            </Collapsible>)
+            </Collapsible>
           );
         })}
       </SidebarMenu>
-    </SidebarGroup>)
+    </SidebarGroup>
     // </CanAccess>
   ));
 }

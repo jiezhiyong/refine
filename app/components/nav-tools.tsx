@@ -1,5 +1,5 @@
-import { useMatches, useSearchParams } from 'react-router';
 import { Filter, FilterX, Search } from 'lucide-react';
+import { useMatches, useSearchParams } from 'react-router';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

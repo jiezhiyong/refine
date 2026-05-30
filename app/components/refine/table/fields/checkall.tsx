@@ -1,5 +1,6 @@
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { BaseRecord, useTranslate } from '@refinedev/core';
+import { Table } from '@tanstack/react-table';
 import { FC, PropsWithChildren } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { Table } from '@tanstack/react-table';
 
 type CheckAllProps = React.ComponentProps<typeof Checkbox> &
   PropsWithChildren<{

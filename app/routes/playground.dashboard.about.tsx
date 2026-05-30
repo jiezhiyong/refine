@@ -1,6 +1,4 @@
 import { useTranslation } from '@refinedev/core';
-import { LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { Form, UIMatch, useSearchParams } from 'react-router';
 import { t } from 'i18next';
 import {
   ArrowDown,
@@ -24,6 +22,7 @@ import {
 } from 'lucide-react';
 import React from 'react';
 import { DateRange } from 'react-day-picker';
+import { Form, LoaderFunctionArgs, MetaFunction , UIMatch, useSearchParams } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { Badge } from '@/components/ui/badge';
@@ -218,7 +217,7 @@ function UiFilter() {
       <SidebarContent>
         <SidebarGroup className="p-0">
           <Calendar
-            className="[&_[role=gridcell]]:w-[33px]"
+            className="w-full [&_.rdp-week]:justify-between"
             mode="range"
             selected={dateRange}
             onSelect={(res) => {

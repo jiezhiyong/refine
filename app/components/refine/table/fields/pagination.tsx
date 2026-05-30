@@ -16,12 +16,12 @@ export const Pagination = <TData extends BaseRecord = BaseRecord>({ table }: Dat
 
   return (
     <>
-      <div className="sm-gap-y-0 bg-background sticky bottom-4 mt-0! flex flex-col items-center justify-between gap-y-4 pt-4 sm:flex-row">
+      <div className="sm-gap-y-0 bg-background sticky bottom-4 z-10 mt-0! flex flex-col items-center justify-between gap-y-4 pt-4 sm:flex-row">
         <div className="text-muted-foreground flex-1 text-sm">
           {reactTable.getFilteredSelectedRowModel().rows.length} of {reactTable.getFilteredRowModel().rows.length}{' '}
           row(s) selected.
         </div>
-        <div className="relative flex flex-col-reverse items-center gap-y-4 space-x-6 sm:flex-row sm:gap-y-0 lg:space-x-8">
+        <div className="relative flex flex-col-reverse items-center space-x-6 gap-y-4 sm:flex-row sm:gap-y-0 lg:space-x-8">
           <p className="text-sm font-medium">Total: {refineCore?.tableQuery?.data?.total ?? 0}</p>
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>
@@ -86,7 +86,7 @@ export const Pagination = <TData extends BaseRecord = BaseRecord>({ table }: Dat
           </div>
         </div>
       </div>
-      <div className="bg-background fixed bottom-0 m-0! h-4 w-full" />
+      <div className="bg-background fixed bottom-0 z-10 m-0! h-4 w-full" />
     </>
   );
 };

@@ -1,5 +1,5 @@
-import { useMatches, useSearchParams } from 'react-router';
 import * as React from 'react';
+import { useMatches, useSearchParams } from 'react-router';
 
 import { Sidebar } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';

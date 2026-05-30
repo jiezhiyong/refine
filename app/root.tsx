@@ -2,13 +2,13 @@ import { User } from '@prisma/client';
 import { Refine, ResourceProps } from '@refinedev/core';
 import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
 import routerProvider, { UnsavedChangesNotifier } from '@refinedev/react-router';
-import type {
-  ErrorResponse,
-  HeadersFunction,
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from 'react-router';
+import * as Sentry from '@sentry/react-router';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Loader } from 'lucide-react';
+import nProgress from 'nprogress';
+import nProgressStyles from 'nprogress/nprogress.css?url';
+import { type PropsWithChildren, useEffect } from 'react';
 import {
   data,
   isRouteErrorResponse,
@@ -21,13 +21,7 @@ import {
   useNavigation,
   useRouteError,
 } from 'react-router';
-import * as Sentry from '@sentry/react-router';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
-import { Loader } from 'lucide-react';
-import nProgress from 'nprogress';
-import nProgressStyles from 'nprogress/nprogress.css?url';
-import { type PropsWithChildren, useEffect } from 'react';
+import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { PreventFlashOnWrongTheme, Theme, ThemeProvider } from 'remix-themes';
 
 import { NotFound } from '@/components/404';

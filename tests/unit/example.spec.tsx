@@ -1,6 +1,5 @@
-import { useLoaderData } from 'react-router';
-import { createRoutesStub } from 'react-router';
 import { render, screen, waitFor } from '@testing-library/react';
+import { createRoutesStub , useLoaderData } from 'react-router';
 
 test('renders loader data', async () => {
   // ⚠️ This would usually be a component you import from your app code

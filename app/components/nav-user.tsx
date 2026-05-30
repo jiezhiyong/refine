@@ -1,7 +1,7 @@
 import { useLogout } from '@refinedev/core';
-import { Link, useRouteLoaderData } from 'react-router';
 import { t } from 'i18next';
 import { Baby, ChevronsUpDown, LogOut } from 'lucide-react';
+import { Link, useRouteLoaderData } from 'react-router';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
