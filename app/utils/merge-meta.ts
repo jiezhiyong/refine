@@ -1,4 +1,4 @@
-import type { MetaDescriptor, MetaFunction } from '@remix-run/node';
+import type { MetaDescriptor, MetaFunction } from 'react-router';
 
 /**
  * 将当前路由的 meta 和父路由的 meta 进行合并，或者重写 [-> Github Gist](https://gist.github.com/ryanflorence/ec1849c6d690cfbffcb408ecd633e069)
@@ -17,7 +17,7 @@ export const mergeMeta = (overrideFn: MetaFunction, appendFn?: MetaFunction): Me
     }, [] as MetaDescriptor[]);
 
     // replace any parent meta with the same name or property with the override
-    const overrides = overrideFn(arg);
+    const overrides = overrideFn(arg) ?? [];
 
     for (const override of overrides) {
       const index = mergedMeta.findIndex(
@@ -34,7 +34,7 @@ export const mergeMeta = (overrideFn: MetaFunction, appendFn?: MetaFunction): Me
 
     // append any additional meta
     if (appendFn) {
-      mergedMeta = mergedMeta.concat(appendFn(arg));
+      mergedMeta = mergedMeta.concat(appendFn(arg) ?? []);
     }
 
     return mergedMeta;

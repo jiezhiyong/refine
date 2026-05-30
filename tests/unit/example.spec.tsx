@@ -1,5 +1,5 @@
-import { useLoaderData } from '@remix-run/react';
-import { createRemixStub } from '@remix-run/testing';
+import { useLoaderData } from 'react-router';
+import { createRoutesStub } from 'react-router';
 import { render, screen, waitFor } from '@testing-library/react';
 
 test('renders loader data', async () => {
@@ -10,7 +10,7 @@ test('renders loader data', async () => {
     return <p>Message: {data.message}</p>;
   }
 
-  const RemixStub = createRemixStub([
+  const RemixStub = createRoutesStub([
     {
       path: '/',
       Component: MyComponent,
