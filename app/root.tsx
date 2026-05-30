@@ -49,6 +49,7 @@ import { getUser } from '@/services/session.server';
 import baseStyles from '@/styles/base.css?url';
 import tailwindStyles from '@/styles/tailwind.css?url';
 import { PermissionRule } from '@/types/casbin';
+import { captureReactRouterErrorBoundaryError } from '@/utils/capture-react-router-error-boundary-error';
 import { generateSignature } from '@/utils/signature';
 
 /** 元数据 */
@@ -258,11 +259,10 @@ export default App;
 /** 全局错误边界处理 */
 export function ErrorBoundary() {
   const error = useRouteError() as ErrorResponse | Error;
-  if (error instanceof Error) {
-    Sentry.captureException(error);
-  } else if (isRouteErrorResponse(error) && error.status >= 500) {
-    Sentry.captureException(new Error(`${error.status} ${error.statusText}`));
-  }
+
+  useEffect(() => {
+    captureReactRouterErrorBoundaryError(error);
+  }, [error]);
 
   if (isRouteErrorResponse(error)) {
     return (
