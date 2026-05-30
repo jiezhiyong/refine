@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { AuthActionResponse, AuthProvider, CheckResponse } from '@refinedev/core';
-import * as Sentry from '@sentry/remix';
+import * as Sentry from '@sentry/react-router';
 
 import { apiBase } from '@/config/base-url';
 import { dashboardResource } from '@/config/resources';

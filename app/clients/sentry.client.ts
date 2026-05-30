@@ -1,7 +1,5 @@
 /* eslint-disable import/namespace */
-import { useLocation, useMatches } from '@remix-run/react';
-import * as Sentry from '@sentry/remix';
-import { useEffect } from 'react';
+import * as Sentry from '@sentry/react-router';
 
 import { baseUrl } from '@/config/base-url';
 import { TAny } from '@/types/any';
@@ -22,7 +20,7 @@ export function initSentry() {
 
     integrations: [
       Sentry.browserSessionIntegration(),
-      Sentry.browserTracingIntegration({ useEffect, useLocation, useMatches }),
+      Sentry.reactRouterTracingIntegration(),
       Sentry.browserProfilingIntegration(),
       Sentry.contextLinesIntegration(),
       Sentry.replayIntegration({ maskAllText: false, blockAllMedia: false }),

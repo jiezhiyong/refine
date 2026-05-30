@@ -1,5 +1,5 @@
-import { type ActionFunctionArgs } from '@remix-run/node';
-import * as Sentry from '@sentry/remix';
+import { type ActionFunctionArgs } from 'react-router';
+import * as Sentry from '@sentry/react-router';
 
 import { EnumAuthProvider } from '@/constants/user';
 import { authenticator } from '@/services/auth.server';

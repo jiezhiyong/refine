@@ -1,8 +1,8 @@
 import { Post, Prisma } from '@prisma/client';
 import { BaseRecord, useCan, useDeleteMany, useModal, useUserFriendlyName } from '@refinedev/core';
-import { parseTableParams } from '@refinedev/remix-router';
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { parseTableParams } from '@/utils/parse-table-params';
+import { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { useLoaderData } from 'react-router';
 import dayjs from 'dayjs';
 import { t } from 'i18next';
 import { Paperclip } from 'lucide-react';

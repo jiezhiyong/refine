@@ -1,8 +1,14 @@
 import { User } from '@prisma/client';
 import { Refine, ResourceProps } from '@refinedev/core';
 import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
-import routerProvider, { UnsavedChangesNotifier } from '@refinedev/remix-router';
-import type { ErrorResponse, HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import routerProvider, { UnsavedChangesNotifier } from '@refinedev/react-router';
+import type {
+  ErrorResponse,
+  HeadersFunction,
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from 'react-router';
 import {
   data,
   isRouteErrorResponse,
@@ -14,11 +20,10 @@ import {
   useLoaderData,
   useNavigation,
   useRouteError,
-} from '@remix-run/react';
-import * as Sentry from '@sentry/remix';
-import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
-import { Analytics } from '@vercel/analytics/remix';
-import { SpeedInsights } from '@vercel/speed-insights/remix';
+} from 'react-router';
+import * as Sentry from '@sentry/react-router';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Loader } from 'lucide-react';
 import nProgress from 'nprogress';
 import nProgressStyles from 'nprogress/nprogress.css?url';
@@ -254,12 +259,16 @@ function App() {
 }
 
 /** 根组件 */
-export default withSentry(App);
+export default App;
 
 /** 全局错误边界处理 */
 export function ErrorBoundary() {
   const error = useRouteError() as ErrorResponse | Error;
-  captureRemixErrorBoundaryError(error);
+  if (error instanceof Error) {
+    Sentry.captureException(error);
+  } else if (isRouteErrorResponse(error) && error.status >= 500) {
+    Sentry.captureException(new Error(`${error.status} ${error.statusText}`));
+  }
 
   if (isRouteErrorResponse(error)) {
     return (

@@ -1,5 +1,5 @@
 /* eslint-disable import/namespace */
-import * as Sentry from '@sentry/remix';
+import * as Sentry from '@sentry/react-router';
 import { t } from 'i18next';
 import { Activity, Bookmark, Bug } from 'lucide-react';
 import { useRef } from 'react';

@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/remix';
+import * as Sentry from '@sentry/react-router';
 
 let isInitialized = true; // 暂时关闭
 
