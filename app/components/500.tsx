@@ -1,5 +1,5 @@
 import { useBack } from '@refinedev/core';
-import { ErrorResponse , isRouteErrorResponse, useRouteError } from 'react-router';
+import { ErrorResponse, isRouteErrorResponse, useRouteError } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { useMountEffect } from '@/hooks/use-mount-effect';

@@ -3,7 +3,7 @@ import { BaseRecord, useCan, useDeleteMany, useUserFriendlyName } from '@refined
 import { Table } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useCallback } from 'react';
-import { LoaderFunctionArgs, MetaFunction , useLoaderData } from 'react-router';
+import { LoaderFunctionArgs, MetaFunction, useLoaderData } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { ExportButton } from '@/components/refine/buttons/export';
@@ -20,7 +20,6 @@ import { TAny } from '@/types/any';
 import { getDefaultTitle } from '@/utils/get-default-title';
 import { parseTableParams } from '@/utils/parse-table-params';
 import { buildTableParams } from '@/utils/request';
-
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];

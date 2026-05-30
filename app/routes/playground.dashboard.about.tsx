@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import React from 'react';
 import { DateRange } from 'react-day-picker';
-import { Form, LoaderFunctionArgs, MetaFunction , UIMatch, useSearchParams } from 'react-router';
+import { Form, LoaderFunctionArgs, MetaFunction, UIMatch, useSearchParams } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { Badge } from '@/components/ui/badge';

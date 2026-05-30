@@ -63,22 +63,22 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
       visualizer({ emitFile: true }), // 生成构建产物的可视化分析报告 stats.html
 
-      sentryVitePlugin({
-        debug: false,
-        org: env.SENTRY_ORG,
-        project: env.SENTRY_PROJECT,
-        authToken: env.SENTRY_AUTH_TOKEN,
-        url: env.SENTRY_URL,
-        sourcemaps: {
-          filesToDeleteAfterUpload: ['**/*.map'],
-        },
-        release: {
-          name: 'refine@' + process.env.npm_package_version,
-          uploadLegacySourcemaps: {
-            paths: ['.'],
-          },
-        },
-      }),
+      // sentryVitePlugin({
+      //   debug: false,
+      //   org: env.SENTRY_ORG,
+      //   project: env.SENTRY_PROJECT,
+      //   authToken: env.SENTRY_AUTH_TOKEN,
+      //   url: env.SENTRY_URL,
+      //   sourcemaps: {
+      //     filesToDeleteAfterUpload: ['**/*.map'],
+      //   },
+      //   release: {
+      //     name: 'refine@' + process.env.npm_package_version,
+      //     uploadLegacySourcemaps: {
+      //       paths: ['.'],
+      //     },
+      //   },
+      // }),
     ],
     resolve: {
       alias: {
@@ -90,7 +90,8 @@ export default defineConfig(({ mode }) => {
       noExternal: ['@refinedev/react-table', 'lodash', 'lodash-es'],
     },
     build: {
-      sourcemap: 'hidden',
+      sourcemap: false,
+      // Rollup 报告 "use client" 指令时若无法解析 sourcemap 位置，会输出误导性 meta 告警
       rollupOptions: {
         onwarn(warning, warn) {
           if (warning.message?.includes('Error when using sourcemap for reporting an error')) {
@@ -99,6 +100,8 @@ export default defineConfig(({ mode }) => {
           warn(warning);
         },
       },
+      // pdf-renderer 为弹窗内 lazy 加载的 demo chunk，@react-pdf/renderer 压缩后约 1.5MB 属正常体积
+      chunkSizeWarningLimit: 1600,
     },
   };
 });

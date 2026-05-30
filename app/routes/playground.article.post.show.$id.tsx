@@ -1,7 +1,7 @@
 import { Category, Post, Prisma, User } from '@prisma/client';
 import dayjs from 'dayjs';
 import { CalendarIcon, ClockIcon, LeafyGreen, MailIcon } from 'lucide-react';
-import { LoaderFunctionArgs, MetaFunction , useLoaderData } from 'react-router';
+import { LoaderFunctionArgs, MetaFunction, useLoaderData } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { CloneButton } from '@/components/refine/buttons/clone';

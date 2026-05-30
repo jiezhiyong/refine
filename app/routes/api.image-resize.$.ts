@@ -17,7 +17,7 @@ import { createReadStream, statSync } from 'fs';
 import path from 'path';
 import { PassThrough } from 'stream';
 
-import type { LoaderFunction , Params } from 'react-router';
+import type { LoaderFunction, Params } from 'react-router';
 import type { FitEnum } from 'sharp';
 import sharp from 'sharp';
 

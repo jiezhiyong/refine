@@ -19,7 +19,16 @@ import dayjs from 'dayjs';
 import { CalendarIcon, CheckCheck, EyeIcon, Link2 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { ActionFunctionArgs, data, LoaderFunctionArgs, MetaFunction , useActionData, useLoaderData, useNavigate, useSubmit } from 'react-router';
+import {
+  ActionFunctionArgs,
+  data,
+  LoaderFunctionArgs,
+  MetaFunction,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useSubmit,
+} from 'react-router';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -79,7 +88,6 @@ import { get } from '@/utils/get';
 import { getChangedValues } from '@/utils/get-changed-values';
 import { parseSql, parseTableFieldArrayFromSql, parseTablenameFromSql } from '@/utils/sql';
 import { schemaJson } from '@/zod';
-
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.config?.title || '配置化CRUD页面' }];

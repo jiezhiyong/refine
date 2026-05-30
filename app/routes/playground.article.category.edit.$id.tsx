@@ -3,7 +3,7 @@ import { Category } from '@prisma/client';
 import { FormAction, RedirectAction, useResourceParams } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { useCallback } from 'react';
-import { LoaderFunctionArgs, MetaFunction , useLoaderData } from 'react-router';
+import { LoaderFunctionArgs, MetaFunction, useLoaderData } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { DeleteButton } from '@/components/refine/buttons/delete';

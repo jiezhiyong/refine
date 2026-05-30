@@ -4,7 +4,7 @@ import { BaseOption } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { t } from 'i18next';
 import { useEffect, useMemo, useState } from 'react';
-import { LoaderFunctionArgs, MetaFunction , useLoaderData } from 'react-router';
+import { LoaderFunctionArgs, MetaFunction, useLoaderData } from 'react-router';
 import { z } from 'zod';
 
 import { PageError } from '@/components/500';

@@ -4,7 +4,7 @@ import { Table } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { EyeIcon } from 'lucide-react';
 import { useRef } from 'react';
-import { LoaderFunctionArgs, MetaFunction , useLoaderData, useNavigate } from 'react-router';
+import { LoaderFunctionArgs, MetaFunction, useLoaderData, useNavigate } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { CloneButton } from '@/components/refine/buttons/clone';
@@ -24,7 +24,6 @@ import { dataService } from '@/services/data.server';
 import { getDefaultTitle } from '@/utils/get-default-title';
 import { parseTableParams } from '@/utils/parse-table-params';
 import { buildTableParams } from '@/utils/request';
-
 
 export const meta: MetaFunction = ({ matches }) => {
   return [{ title: getDefaultTitle(matches) }];

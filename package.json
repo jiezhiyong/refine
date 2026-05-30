@@ -93,7 +93,6 @@
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "casbin": "^5.36.0",
-    "casbin-prisma-adapter": "^1.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
@@ -166,6 +165,7 @@
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "husky": "^9.1.7",
+    "dotenv": "^16.4.7",
     "jsdom": "^25.0.1",
     "lint-staged": "^15.3.0",
     "msw": "^2.7.0",
@@ -183,12 +183,6 @@
     "vite": "^5.1.6",
     "vite-tsconfig-paths": "^5.1.4",
     "zenstack": "^2.22.1"
-  },
-  "engines": {
-    "node": "24.x"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   },
   "msw": {
     "workerDirectory": "mock"

@@ -1,7 +1,6 @@
 [ ] 审查各功能是否符合最佳实践
 [ ] 接入 Sentr、Sentry source maps 文件路径不匹配
 [ ] 为什么要自定义 app/lib ?
-[x] 升级 Remix v3 / React Router v7 — PR1 完成（feat/rr7-migration），PR2 fork 清理待做
 [ ] Refine devtool 选择器无法使用
 [ ] Refine Live Provider 使用 SSE
 [ ] 服务状态监控 https://github.com/louislam/uptime-kuma?tab=readme-ov-file、https://prometheus.io

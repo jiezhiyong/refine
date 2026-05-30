@@ -4,15 +4,16 @@ import { Table } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { t } from 'i18next';
 import { Paperclip } from 'lucide-react';
-import { useCallback, useRef } from 'react';
+import { lazy, Suspense, useCallback, useRef } from 'react';
 import { LoaderFunctionArgs, MetaFunction, useLoaderData } from 'react-router';
 
+const LazyPdfLayout = lazy(() => import('@/components/pdf').then((m) => ({ default: m.PdfLayout })));
 import { PageError } from '@/components/500';
-import { PdfLayout } from '@/components/pdf';
 import { CreateButton } from '@/components/refine/buttons/create';
 import { ExportButton } from '@/components/refine/buttons/export';
 import { ImportButton } from '@/components/refine/buttons/import';
 import { ShowButton } from '@/components/refine/buttons/show';
+import { Loader } from '@/components/refine/loader';
 import { TableEasy, TableFilterProps } from '@/components/refine/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -287,7 +288,19 @@ export default function PostIndex() {
             <DialogTitle>View PDF</DialogTitle>
             <DialogDescription>This is a Demo for View PDF on Modal.</DialogDescription>
           </DialogHeader>
-          <PdfLayout record={recordRef.current} />
+          {useModalReturn2.visible && (
+            <Suspense
+              fallback={
+                <div className="flex justify-center">
+                  <div className="flex min-h-40 w-20">
+                    <Loader />
+                  </div>
+                </div>
+              }
+            >
+              <LazyPdfLayout record={recordRef.current} />
+            </Suspense>
+          )}
         </DialogContent>
       </Dialog>
     </>

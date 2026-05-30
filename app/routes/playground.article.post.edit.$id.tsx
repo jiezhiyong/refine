@@ -4,7 +4,7 @@ import { FormAction, RedirectAction, useModalReturnType, useResourceParams, useS
 import { useForm } from '@refinedev/react-hook-form';
 import { isEqual } from 'es-toolkit';
 import { useCallback } from 'react';
-import { LoaderFunctionArgs, MetaFunction , useLoaderData } from 'react-router';
+import { LoaderFunctionArgs, MetaFunction, useLoaderData } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { CloneButton } from '@/components/refine/buttons/clone';

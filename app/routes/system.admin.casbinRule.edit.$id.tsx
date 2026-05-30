@@ -3,7 +3,7 @@ import { CasbinRule } from '@prisma/client';
 import { FormAction, RedirectAction, useResourceParams, useSelect } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { useCallback } from 'react';
-import { LoaderFunctionArgs, MetaFunction , UIMatch, useLoaderData } from 'react-router';
+import { LoaderFunctionArgs, MetaFunction, UIMatch, useLoaderData } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { DeleteButton } from '@/components/refine/buttons/delete';

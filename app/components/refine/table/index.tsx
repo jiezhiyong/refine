@@ -204,10 +204,7 @@ export function TableEasy<
                     {headerGroup.headers.map((header) => {
                       const columnDef = header.column.columnDef as CustomColumnDef<TData, TError>;
                       return (
-                        <TableHead
-                          key={header.id}
-                          style={getColumnStyles(header.column)}
-                        >
+                        <TableHead key={header.id} style={getColumnStyles(header.column)}>
                           <div className="inline-flex flex-row items-center gap-x-2.5">
                             {header.isPlaceholder
                               ? null
@@ -242,11 +239,7 @@ export function TableEasy<
                 reactTable.getRowModel().rows.map((row: TAny) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                     {row.getVisibleCells().map((cell: TAny) => (
-                      <TableCell
-                        key={cell.id}
-                        className="text-nowrap"
-                        style={getColumnStyles(cell.column)}
-                      >
+                      <TableCell key={cell.id} className="text-nowrap" style={getColumnStyles(cell.column)}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
