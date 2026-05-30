@@ -1,4 +1,4 @@
-import { Outlet, useRouteLoaderData } from '@remix-run/react';
+import { Outlet, useRouteLoaderData } from 'react-router';
 
 import { Breadcrumbs } from '@/components/refine/breadcrumbs';
 import { SidebarLeft } from '@/components/sidebar-left';

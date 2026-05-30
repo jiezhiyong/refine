@@ -1,4 +1,4 @@
-import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
+import { Form, Link, useActionData, useNavigation, useSearchParams } from 'react-router';
 import { t } from 'i18next';
 
 import { Button } from '@/components/ui/button';

@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from 'react-router';
 
 import { db } from '@/services/db.server';
 import { TAny } from '@/types/any';

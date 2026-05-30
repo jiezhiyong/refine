@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BaseOption, HttpError, useCustom } from '@refinedev/core';
-import { ActionFunctionArgs, data } from '@remix-run/node';
-import { useActionData, useLoaderData, useSubmit } from '@remix-run/react';
+import { ActionFunctionArgs, data } from 'react-router';
+import { useActionData, useLoaderData, useSubmit } from 'react-router';
 import { isEqual } from 'es-toolkit';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';

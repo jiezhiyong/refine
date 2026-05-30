@@ -1,6 +1,6 @@
 import { useBack } from '@refinedev/core';
-import { ErrorResponse } from '@remix-run/node';
-import { isRouteErrorResponse, useRouteError } from '@remix-run/react';
+import { ErrorResponse } from 'react-router';
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { useMountEffect } from '@/hooks/use-mount-effect';

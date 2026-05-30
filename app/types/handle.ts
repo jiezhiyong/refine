@@ -1,4 +1,4 @@
-import { UIMatch } from '@remix-run/react';
+import { UIMatch } from 'react-router';
 import type { JSX } from 'react';
 
 // 自定义处理函数类型

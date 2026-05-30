@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { redirect } from 'react-router';
 
 import { getDashboardResource } from '@/config/resources';
 

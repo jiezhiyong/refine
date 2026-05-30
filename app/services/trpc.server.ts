@@ -1,4 +1,4 @@
-// import * as Sentry from '@sentry/remix';
+// import * as Sentry from '@sentry/react-router';
 // import { initTRPC } from '@trpc/server';
 
 // const t = initTRPC.context().create();

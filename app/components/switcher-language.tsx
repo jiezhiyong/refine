@@ -1,5 +1,5 @@
 import { useTranslation } from '@refinedev/core';
-import { useRouteLoaderData, useSearchParams } from '@remix-run/react';
+import { useRouteLoaderData, useSearchParams } from 'react-router';
 import { Languages } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';

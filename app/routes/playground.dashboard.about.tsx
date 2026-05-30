@@ -1,6 +1,6 @@
 import { useTranslation } from '@refinedev/core';
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Form, UIMatch, useSearchParams } from '@remix-run/react';
+import { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { Form, UIMatch, useSearchParams } from 'react-router';
 import { t } from 'i18next';
 import {
   ArrowDown,

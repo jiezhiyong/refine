@@ -1,6 +1,6 @@
 import { Log, LogAction, Prisma } from '@prisma/client';
-import { LoaderFunctionArgs } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { LoaderFunctionArgs } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { CalendarIcon, LeafyGreen } from 'lucide-react';
 
 import { PageError } from '@/components/500';

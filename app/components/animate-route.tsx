@@ -1,4 +1,4 @@
-import { useLocation, useOutlet } from '@remix-run/react';
+import { useLocation, useOutlet } from 'react-router';
 import { AnimatePresence, motion } from 'framer-motion';
 
 /**

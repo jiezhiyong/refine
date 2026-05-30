@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from 'react-router';
 
 import { checkPermission } from '@/services/casbin-permission.server';
 import { db } from '@/services/db.server';

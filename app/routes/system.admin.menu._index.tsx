@@ -1,7 +1,7 @@
 import { useCan } from '@refinedev/core';
-import { data } from '@remix-run/node';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { useActionData, useLoaderData, useSubmit } from '@remix-run/react';
+import { data } from 'react-router';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { useActionData, useLoaderData, useSubmit } from 'react-router';
 import { Plus } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';

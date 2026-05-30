@@ -1,4 +1,4 @@
-import { MetaFunction } from '@remix-run/node';
+import { MetaFunction } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { DynamicPageForm } from '@/routes/playground.dashboard.dynamicPage.edit.$id';

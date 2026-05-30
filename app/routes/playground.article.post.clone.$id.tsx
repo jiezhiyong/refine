@@ -1,6 +1,6 @@
 import { Post } from '@prisma/client';
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { useLoaderData } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { dataService } from '@/services/data.server';

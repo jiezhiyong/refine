@@ -1,7 +1,7 @@
 // //github.com/aws/aws-sdk-js-v3
 // import { PassThrough } from 'stream';
-// import type { UploadHandler } from '@remix-run/node';
-// import { writeAsyncIterableToWritable } from '@remix-run/node';
+// import type { UploadHandler } from '@react-router/node';
+// import { writeAsyncIterableToWritable } from '@react-router/node';
 // import AWS from 'aws-sdk';
 // import { TAny } from '@/types/any';
 

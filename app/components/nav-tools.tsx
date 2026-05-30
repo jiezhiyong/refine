@@ -1,4 +1,4 @@
-import { useMatches, useSearchParams } from '@remix-run/react';
+import { useMatches, useSearchParams } from 'react-router';
 import { Filter, FilterX, Search } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';

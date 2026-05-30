@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs } from 'react-router';
 
 import { TRole } from '@/constants/roles';
 import { commitSession, requireUser } from '@/services/session.server';

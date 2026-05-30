@@ -1,4 +1,4 @@
-import { useNavigate } from '@remix-run/react';
+import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 import { HomeIcon } from 'lucide-react';
 

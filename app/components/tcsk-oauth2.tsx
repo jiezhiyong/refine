@@ -1,4 +1,4 @@
-import { useFetcher } from '@remix-run/react';
+import { useFetcher } from 'react-router';
 import { t } from 'i18next';
 
 import { Button } from '@/components/ui/button';

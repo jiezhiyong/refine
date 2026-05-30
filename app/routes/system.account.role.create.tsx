@@ -1,4 +1,4 @@
-import { MetaFunction } from '@remix-run/node';
+import { MetaFunction } from 'react-router';
 
 import { PageError } from '@/components/500';
 import { RoleForm } from '@/routes/system.account.role.edit.$id';

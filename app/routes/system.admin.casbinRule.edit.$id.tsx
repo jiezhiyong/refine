@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CasbinRule } from '@prisma/client';
 import { FormAction, RedirectAction, useResourceParams, useSelect } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { UIMatch, useLoaderData } from '@remix-run/react';
+import { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { UIMatch, useLoaderData } from 'react-router';
 import { useCallback } from 'react';
 
 import { PageError } from '@/components/500';

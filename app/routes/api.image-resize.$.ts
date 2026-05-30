@@ -17,8 +17,8 @@ import { createReadStream, statSync } from 'fs';
 import path from 'path';
 import { PassThrough } from 'stream';
 
-import type { LoaderFunction } from '@remix-run/node';
-import type { Params } from '@remix-run/react';
+import type { LoaderFunction } from 'react-router';
+import type { Params } from 'react-router';
 import type { FitEnum } from 'sharp';
 import sharp from 'sharp';
 

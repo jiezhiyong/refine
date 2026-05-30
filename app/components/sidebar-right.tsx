@@ -1,4 +1,4 @@
-import { useMatches, useSearchParams } from '@remix-run/react';
+import { useMatches, useSearchParams } from 'react-router';
 import * as React from 'react';
 
 import { Sidebar } from '@/components/ui/sidebar';
