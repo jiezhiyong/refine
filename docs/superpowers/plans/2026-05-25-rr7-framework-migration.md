@@ -14,27 +14,28 @@
 
 ## 文件变更地图
 
-| 文件 | 职责 |
-|------|------|
-| `package.json` | 依赖与 scripts 切换 |
-| `vite.config.ts` | Vite 插件从 remix → reactRouter |
-| `react-router.config.ts` | **新建** — SSR 等框架配置 |
-| `app/routes.ts` | **新建** — flat routes 注册 |
-| `app/utils/parse-table-params.ts` | **新建** — vendored parseTableParams |
-| `app/root.tsx` | Refine router + Sentry + Vercel 导入 |
-| `app/entry.client.tsx` | HydratedRouter |
-| `app/entry.server.tsx` | ServerRouter + Sentry handleError |
-| `tsconfig.json` | RR v7 类型配置 |
-| `.gitignore` | 忽略 `.react-router/` |
-| `Dockerfile` | 无需改结构（start script 在 package.json） |
-| `app/routes/*._index.tsx` (×8) | parseTableParams import 路径 |
-| ~90 个 route/service/component 文件 | codemod 自动改 import |
+| 文件                                | 职责                                       |
+| ----------------------------------- | ------------------------------------------ |
+| `package.json`                      | 依赖与 scripts 切换                        |
+| `vite.config.ts`                    | Vite 插件从 remix → reactRouter            |
+| `react-router.config.ts`            | **新建** — SSR 等框架配置                  |
+| `app/routes.ts`                     | **新建** — flat routes 注册                |
+| `app/utils/parse-table-params.ts`   | **新建** — vendored parseTableParams       |
+| `app/root.tsx`                      | Refine router + Sentry + Vercel 导入       |
+| `app/entry.client.tsx`              | HydratedRouter                             |
+| `app/entry.server.tsx`              | ServerRouter + Sentry handleError          |
+| `tsconfig.json`                     | RR v7 类型配置                             |
+| `.gitignore`                        | 忽略 `.react-router/`                      |
+| `Dockerfile`                        | 无需改结构（start script 在 package.json） |
+| `app/routes/*._index.tsx` (×8)      | parseTableParams import 路径               |
+| ~90 个 route/service/component 文件 | codemod 自动改 import                      |
 
 ---
 
 ### Task 1: 创建迁移分支并记录基线
 
 **Files:**
+
 - Modify: 无（仅 git 操作）
 
 - [ ] **Step 1: 创建功能分支**
@@ -69,6 +70,7 @@ EOF
 ### Task 2: 运行官方 Codemod
 
 **Files:**
+
 - Modify: `package.json`, `vite.config.ts`, `tsconfig.json`, ~90 个源文件（codemod 自动）
 
 - [ ] **Step 1: 运行 codemod**
@@ -98,6 +100,7 @@ Expected: 大量文件变更；确认无意外删除
 ### Task 3: 补充 codemod 未覆盖的依赖
 
 **Files:**
+
 - Modify: `package.json`
 
 - [ ] **Step 1: 添加 Refine router 与生态包**
@@ -146,6 +149,7 @@ EOF
 ### Task 4: 新建 react-router.config.ts 与 app/routes.ts
 
 **Files:**
+
 - Create: `react-router.config.ts`
 - Create: `app/routes.ts`
 - Modify: `vite.config.ts`
@@ -213,7 +217,7 @@ export default defineConfig(({ mode }) => {
           filesToDeleteAfterUpload: ['**/*.map'],
         },
         release: {
-          name: 'remix@' + process.env.npm_package_version,
+          name: 'refine@' + process.env.npm_package_version,
           uploadLegacySourcemaps: {
             paths: ['.'],
           },
@@ -254,6 +258,7 @@ EOF
 ### Task 5: 更新 TypeScript 与 gitignore
 
 **Files:**
+
 - Modify: `tsconfig.json`
 - Modify: `.gitignore`
 
@@ -309,6 +314,7 @@ EOF
 ### Task 6: Refine router 切换
 
 **Files:**
+
 - Modify: `app/root.tsx`
 
 - [ ] **Step 1: 更新 import**
@@ -353,6 +359,7 @@ EOF
 ### Task 7: parseTableParams 本地化
 
 **Files:**
+
 - Create: `app/utils/parse-table-params.ts`
 - Modify: 8 个 `*._index.tsx` 列表页
 
@@ -396,6 +403,7 @@ export const parseTableParams = (search: string) => {
 ```
 
 文件列表：
+
 - `app/routes/system.account.user._index.tsx`
 - `app/routes/system.account.role._index.tsx`
 - `app/routes/system.admin.casbinRule._index.tsx`
@@ -421,6 +429,7 @@ EOF
 ### Task 8: Sentry 适配
 
 **Files:**
+
 - Modify: `app/root.tsx`
 - Modify: `app/entry.server.tsx`
 - Modify: `app/clients/sentry.client.ts`（如需更新 import 来源）
@@ -472,6 +481,7 @@ EOF
 ### Task 9: Vercel Analytics 适配
 
 **Files:**
+
 - Modify: `app/root.tsx`
 
 - [ ] **Step 1: 更新 Vercel 导入**
@@ -499,6 +509,7 @@ EOF
 ### Task 10: Entry 文件确认
 
 **Files:**
+
 - Modify: `app/entry.client.tsx`
 - Modify: `app/entry.server.tsx`
 
@@ -543,6 +554,7 @@ EOF
 ### Task 11: 修复 codemod 遗漏
 
 **Files:**
+
 - Modify: 任何仍引用 `@remix-run/*` 的文件
 
 - [ ] **Step 1: 搜索残留引用**
@@ -559,6 +571,7 @@ Expected: 零匹配
 - [ ] **Step 2: 手动修复每个残留**
 
 常见遗漏位置：
+
 - `app/services/session.server.ts`
 - `app/hooks/use-update-search-params.ts`
 - `tests/unit/example.spec.tsx`
@@ -586,6 +599,7 @@ EOF
 ### Task 12: 类型检查与构建验证
 
 **Files:**
+
 - Modify: 类型错误涉及的文件
 
 - [ ] **Step 1: 生成路由类型**
@@ -634,6 +648,7 @@ EOF
 ### Task 13: 功能回归测试
 
 **Files:**
+
 - 无代码变更（手动测试）
 
 - [ ] **Step 1: 开发模式冒烟**
@@ -643,6 +658,7 @@ pnpm dev
 ```
 
 测试路径：
+
 1. `/login` — 登录表单渲染
 2. OAuth 回调 — GitHub 登录流程
 3. `/system/account/user` — 列表分页/筛选/排序
@@ -687,17 +703,17 @@ EOF
 
 ### Spec 覆盖
 
-| Spec 要求 | 对应 Task |
-|-----------|-----------|
-| 官方 Codemod | Task 2 |
-| Refine router 切换 | Task 6 |
-| parseTableParams 本地化 | Task 7 |
-| Sentry 适配 | Task 8 |
-| Vercel 适配 | Task 9 |
-| Docker 兼容 | Task 3 (start script) + Task 13 (docker build) |
-| PR1 不动 app/lib | 全 plan 无 app/lib 修改 |
-| tsconfig / routes.ts | Task 4, Task 5 |
-| 验证清单 | Task 12, Task 13 |
+| Spec 要求               | 对应 Task                                      |
+| ----------------------- | ---------------------------------------------- |
+| 官方 Codemod            | Task 2                                         |
+| Refine router 切换      | Task 6                                         |
+| parseTableParams 本地化 | Task 7                                         |
+| Sentry 适配             | Task 8                                         |
+| Vercel 适配             | Task 9                                         |
+| Docker 兼容             | Task 3 (start script) + Task 13 (docker build) |
+| PR1 不动 app/lib        | 全 plan 无 app/lib 修改                        |
+| tsconfig / routes.ts    | Task 4, Task 5                                 |
+| 验证清单                | Task 12, Task 13                               |
 
 ### 无占位符
 

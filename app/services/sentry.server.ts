@@ -10,7 +10,7 @@ export function initSentry() {
   Sentry.init({
     dsn: process.env.VITE_SENTRY_DSN,
     environment: process.env.NODE_ENV,
-    release: 'remix@' + process.env.npm_package_version,
+    release: 'refine@' + process.env.npm_package_version,
     tracesSampleRate: 1,
     integrations: [Sentry.prismaIntegration(), Sentry.extraErrorDataIntegration()],
   });

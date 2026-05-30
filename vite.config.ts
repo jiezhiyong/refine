@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
           filesToDeleteAfterUpload: ['**/*.map'],
         },
         release: {
-          name: 'remix@' + process.env.npm_package_version,
+          name: 'refine@' + process.env.npm_package_version,
           uploadLegacySourcemaps: {
             paths: ['.'],
           },

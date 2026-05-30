@@ -16,7 +16,7 @@ export function initSentry() {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     environment: import.meta.env.MODE,
-    release: 'remix@' + import.meta.env.npm_package_version,
+    release: 'refine@' + import.meta.env.npm_package_version,
 
     integrations: [
       Sentry.browserSessionIntegration(),
