@@ -195,6 +195,9 @@ importers:
       casbin:
         specifier: ^5.36.0
         version: 5.48.0
+      casbin-prisma-adapter:
+        specifier: ^1.9.0
+        version: 1.9.0(@prisma/client@6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3))(casbin@5.48.0)(prisma@6.19.2(typescript@5.9.3))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -3844,6 +3847,13 @@ packages:
   cardinal@2.1.1:
     resolution: {integrity: sha512-JSr5eOgoEymtYHBjNWyjrMqet9Am2miJhlfKNdqLp6zoeAh0KN5dRAcxlecj5mAJrmQomgiOBj35xHLrFjqBpw==}
     hasBin: true
+
+  casbin-prisma-adapter@1.9.0:
+    resolution: {integrity: sha512-+Bn4LvyPEFCdM9swHFc5MXA6DdA7O5Rm6SOSNTJTjVmyQaWFW+UzW/jJtGJitkW+wBHKeeqvFibzgb/24+JesQ==}
+    peerDependencies:
+      '@prisma/client': ^6.0.0
+      casbin: ^5.16.0
+      prisma: ^6.0.0
 
   casbin@5.48.0:
     resolution: {integrity: sha512-s5xGNHxb2sOXze7U6rewnkZPtIrTFQaHFKkjh73xYC9nEKwEoAiQ3nasGwpB55wWVRbHxSkjGLoMjocpZAy+iQ==}
@@ -11772,6 +11782,12 @@ snapshots:
     dependencies:
       ansicolors: 0.3.2
       redeyed: 2.1.1
+
+  casbin-prisma-adapter@1.9.0(@prisma/client@6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3))(casbin@5.48.0)(prisma@6.19.2(typescript@5.9.3)):
+    dependencies:
+      '@prisma/client': 6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3)
+      casbin: 5.48.0
+      prisma: 6.19.2(typescript@5.9.3)
 
   casbin@5.48.0:
     dependencies:
