@@ -32,6 +32,7 @@ Thumbs.db
 
 # Remix specific
 /.cache
+.react-router/
 /api/index.js
 /api/index.js.map
 
