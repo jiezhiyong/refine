@@ -123,7 +123,7 @@
     "remix-auth": "^4.1.0",
     "remix-auth-form": "^3.0.0",
     "remix-auth-oauth2": "^3.2.2",
-    "remix-themes": "^1.5.1",
+    "remix-themes": "^2.0.4",
     "remix-utils": "^8.0.0",
     "sharp": "^0.33.5",
     "socket.io": "^4.8.1",
@@ -195,5 +195,22 @@
   },
   "refine": {
     "projectId": "WYVW2v-jZ8p3m-yjM2Ba"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@remix-run/react",
+        "@sveltejs/kit",
+        "next",
+        "nuxt",
+        "svelte",
+        "vue",
+        "vue-router"
+      ]
+    },
+    "overrides": {
+      "@remix-run/react": "-",
+      "react-router-dom": "-"
+    }
   }
 }
