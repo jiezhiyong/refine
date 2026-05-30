@@ -185,7 +185,7 @@
     "zenstack": "^2.22.1"
   },
   "engines": {
-    "node": "25.x"
+    "node": "24.x"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
