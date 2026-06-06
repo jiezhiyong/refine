@@ -14,7 +14,7 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed:production": "tsx prisma/seed-production.ts",
     "db:deploy": "pnpm run db:migrate:deploy && pnpm run db:seed:production",
-    "start": "cross-env NODE_ENV=production react-router-serve ./build/server/index.js",
+    "start": "node ./scripts/start-react-router-server.mjs",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint . --fix --debug",
     "typecheck": "react-router typegen && tsc",
     "prettier": "prettier --write --ignore-unknown .",
