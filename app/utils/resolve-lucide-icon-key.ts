@@ -1,7 +1,10 @@
-import dynamicIconImports from 'lucide-react/dynamicIconImports';
+import * as LucideIcons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-/** PascalCase 名称 → lucide dynamicIconImports 的 kebab-case key */
-const pascalToIconKey = new Map<string, string>();
+const { icons } = LucideIcons;
+
+/** PascalCase 名称 → lucide-react 静态导出名 */
+const pascalToExportName = new Map<string, string>();
 
 function kebabToPascal(kebab: string): string {
   return kebab
@@ -17,33 +20,72 @@ function pascalToKebab(name: string): string {
     .toLowerCase();
 }
 
+function isLucideIcon(value: unknown): value is LucideIcon {
+  return typeof value === 'object' && value !== null;
+}
+
 /** 与 lucide 导出名不一致、但业务里使用的 PascalCase 别名 */
 const PASCAL_ICON_ALIASES: Record<string, string> = {
-  PieChart: 'chart-pie',
+  PieChart: 'ChartPie',
 };
 
-for (const key of Object.keys(dynamicIconImports)) {
-  pascalToIconKey.set(key, key);
-  const pascal = kebabToPascal(key);
-  if (!pascalToIconKey.has(pascal)) {
-    pascalToIconKey.set(pascal, key);
-  }
+for (const key of Object.keys(icons)) {
+  pascalToExportName.set(key, key);
+  pascalToExportName.set(pascalToKebab(key), key);
+}
+
+for (const key of Object.keys(LucideIcons)) {
+  if (!/^[A-Z]/.test(key)) continue;
+
+  const value = LucideIcons[key as keyof typeof LucideIcons];
+  if (!isLucideIcon(value)) continue;
+
+  pascalToExportName.set(key, key);
 }
 
 /**
- * 将菜单/配置中的 PascalCase 图标名解析为 lucide dynamic 导入 key
+ * 将菜单/配置中的图标名解析为 lucide-react 静态导出名
  */
 export function resolveLucideIconKey(name: string): string | undefined {
-  if (name in dynamicIconImports) return name;
+  if (name in icons) return name;
+
+  const topLevel = LucideIcons[name as keyof typeof LucideIcons];
+  if (isLucideIcon(topLevel)) return name;
 
   const alias = PASCAL_ICON_ALIASES[name];
-  if (alias && alias in dynamicIconImports) return alias;
+  if (alias) {
+    if (alias in icons) return alias;
+    const aliasExport = LucideIcons[alias as keyof typeof LucideIcons];
+    if (isLucideIcon(aliasExport)) return alias;
+  }
 
-  const fromMap = pascalToIconKey.get(name);
+  const fromMap = pascalToExportName.get(name);
   if (fromMap) return fromMap;
 
+  if (name.includes('-')) {
+    const fromKebab = pascalToExportName.get(name);
+    if (fromKebab) return fromKebab;
+
+    const pascal = kebabToPascal(name);
+    if (pascal in icons) return pascal;
+
+    const pascalExport = LucideIcons[pascal as keyof typeof LucideIcons];
+    if (isLucideIcon(pascalExport)) return pascal;
+  }
+
   const kebab = pascalToKebab(name);
-  if (kebab in dynamicIconImports) return kebab;
+  const fromPascal = pascalToExportName.get(kebab);
+  if (fromPascal) return fromPascal;
+
+  return undefined;
+}
+
+export function getLucideIcon(exportName: string): LucideIcon | undefined {
+  const fromIcons = icons[exportName as keyof typeof icons];
+  if (fromIcons) return fromIcons;
+
+  const fromExport = LucideIcons[exportName as keyof typeof LucideIcons];
+  if (isLucideIcon(fromExport)) return fromExport;
 
   return undefined;
 }
